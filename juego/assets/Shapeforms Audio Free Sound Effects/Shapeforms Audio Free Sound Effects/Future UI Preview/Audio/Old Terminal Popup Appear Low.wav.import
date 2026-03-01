@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://6337cotuqdj1"
+path="res://.godot/imported/Old Terminal Popup Appear Low.wav-7f9de6f98700adb31674eb80434ec7d0.sample"
+
+[deps]
+
+source_file="res://assets/Shapeforms Audio Free Sound Effects/Shapeforms Audio Free Sound Effects/Future UI Preview/Audio/Old Terminal Popup Appear Low.wav"
+dest_files=["res://.godot/imported/Old Terminal Popup Appear Low.wav-7f9de6f98700adb31674eb80434ec7d0.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2
