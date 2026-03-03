@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://csiibx4t5qx64"
+path="res://.godot/imported/Whoosh Short Light 03.wav-29bac3f27bd031445a2cf49706e759ba.sample"
+
+[deps]
+
+source_file="res://assets/Shapeforms Audio Free Sound Effects/Shapeforms Audio Free Sound Effects/Hack and Slash Melee Combat Preview/Whoosh Short Light 03.wav"
+dest_files=["res://.godot/imported/Whoosh Short Light 03.wav-29bac3f27bd031445a2cf49706e759ba.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2
