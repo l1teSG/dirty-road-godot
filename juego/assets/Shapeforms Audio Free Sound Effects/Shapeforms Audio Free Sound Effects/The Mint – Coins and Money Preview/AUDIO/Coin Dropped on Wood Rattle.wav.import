@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://bqg0q8jncud0o"
+path="res://.godot/imported/Coin Dropped on Wood Rattle.wav-4d4149f14b70a74f79e635444e172192.sample"
+
+[deps]
+
+source_file="res://assets/Shapeforms Audio Free Sound Effects/Shapeforms Audio Free Sound Effects/The Mint – Coins and Money Preview/AUDIO/Coin Dropped on Wood Rattle.wav"
+dest_files=["res://.godot/imported/Coin Dropped on Wood Rattle.wav-4d4149f14b70a74f79e635444e172192.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

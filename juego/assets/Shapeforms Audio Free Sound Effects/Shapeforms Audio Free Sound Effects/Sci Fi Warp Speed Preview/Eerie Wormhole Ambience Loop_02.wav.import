@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://bau2a8kl7fgdh"
+path="res://.godot/imported/Eerie Wormhole Ambience Loop_02.wav-252559671e4523df566d638afe73210d.sample"
+
+[deps]
+
+source_file="res://assets/Shapeforms Audio Free Sound Effects/Shapeforms Audio Free Sound Effects/Sci Fi Warp Speed Preview/Eerie Wormhole Ambience Loop_02.wav"
+dest_files=["res://.godot/imported/Eerie Wormhole Ambience Loop_02.wav-252559671e4523df566d638afe73210d.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2
