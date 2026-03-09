@@ -1,2 +1,6 @@
 # Normalize EOL for all files that Git considers text files.
 * text=auto eol=lf
+<<<<<<< HEAD
+=======
+*.zip filter=lfs diff=lfs merge=lfs -text
+>>>>>>> 8c658e55b4a1cff3f893ba32b701e3c8e5364dc8

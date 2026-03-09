@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://lragnid7evuq"
+path="res://.godot/imported/FARTDsgn_Bln Air Release Squeal-22_SFRMS_Bln.wav-1ea2836f0cf702d4c473af4e739b281e.sample"
+
+[deps]
+
+source_file="res://assets/Shapeforms Audio Free Sound Effects/Shapeforms Audio Free Sound Effects/Balloon Preview/FARTDsgn_Bln Air Release Squeal-22_SFRMS_Bln.wav"
+dest_files=["res://.godot/imported/FARTDsgn_Bln Air Release Squeal-22_SFRMS_Bln.wav-1ea2836f0cf702d4c473af4e739b281e.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

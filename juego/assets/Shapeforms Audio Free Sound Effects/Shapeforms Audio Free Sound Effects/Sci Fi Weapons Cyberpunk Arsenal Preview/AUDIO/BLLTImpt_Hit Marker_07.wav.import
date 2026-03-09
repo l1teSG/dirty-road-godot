@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://vi3vegljp36t"
+path="res://.godot/imported/BLLTImpt_Hit Marker_07.wav-de0cf3891b47a6c5c74f01f68404b355.sample"
+
+[deps]
+
+source_file="res://assets/Shapeforms Audio Free Sound Effects/Shapeforms Audio Free Sound Effects/Sci Fi Weapons Cyberpunk Arsenal Preview/AUDIO/BLLTImpt_Hit Marker_07.wav"
+dest_files=["res://.godot/imported/BLLTImpt_Hit Marker_07.wav-de0cf3891b47a6c5c74f01f68404b355.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

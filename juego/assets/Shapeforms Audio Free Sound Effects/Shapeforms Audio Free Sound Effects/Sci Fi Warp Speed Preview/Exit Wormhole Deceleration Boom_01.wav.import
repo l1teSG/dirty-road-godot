@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://c6tbe8p7l81yg"
+path="res://.godot/imported/Exit Wormhole Deceleration Boom_01.wav-90c5a3a6e54e7e4070df5ee973193793.sample"
+
+[deps]
+
+source_file="res://assets/Shapeforms Audio Free Sound Effects/Shapeforms Audio Free Sound Effects/Sci Fi Warp Speed Preview/Exit Wormhole Deceleration Boom_01.wav"
+dest_files=["res://.godot/imported/Exit Wormhole Deceleration Boom_01.wav-90c5a3a6e54e7e4070df5ee973193793.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2
