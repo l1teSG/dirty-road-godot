@@ -1,17 +1,53 @@
 ---
+import {Instagram, Twitter, Github, Youtube} from 'lucide-astro'
 ---
-<Footer>
-  <img src="#" alt="logo dirty road">
-  <div>
-    iconos o enlaces
+<footer class="p-5">
+  <section class="flex justify-evenly ">
+    <h2>
+      DIRTY ROAD
+    </h2>
+    <div class="flex gap-36 ">
+      <a href="#">
+        <Instagram/>
+      </a>
+      <a href="#">
+        <Twitter/>
+      </a>
+      <a href="#">
+        <Github/>
+      </a>
+      <a href="#">
+        <Youtube/>
+      </a>
+    </div>
+    <div>
+     <a
+     class="text-black/40"
+     href="#">juanfelipe123leo@gmail.com</a>
+    </div>
+  </section>
+
+  <section class="flex justify-evenly m-3">
+    <a href="#">
+      devlog
+    </a>
+    <a href="#">
+      1.0.0
+    </a>
+
+  </section>
+
+  <section class="flex justify-evenly m-3">
+    <p>
+      Copyright © 2026 dirty road. Todos los derechos reservados.
+    </p>
+    <p>
+      Built with: astro | TypeScript | Tailwind css | Cloudflare
+    </p>
+  </section>
+  <div class="flex justify-center">
+    <p>
+      colombia-boyaca-saboya/chiquinquira
+    </p>
   </div>
-  <div>
-    devlog
-    estado sistema
-  </div>
-  <div>
-    copi
-    Tech Stack
-    ubicacion
-  </div>
-</Footer>
+</footer>
