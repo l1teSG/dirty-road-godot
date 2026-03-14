@@ -18,6 +18,7 @@ config/icon="uid://b8qnh62esl2v1"
 
 folder_colors={
 "res://assets/": "purple",
+"res://demo-01-june/": "green",
 "res://demo/": "gray"
 }
 
