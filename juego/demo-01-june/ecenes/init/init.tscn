@@ -1,0 +1,86 @@
+[gd_scene format=3 uid="uid://c72cpq8b0xvcs"]
+
+[ext_resource type="Script" uid="uid://cc4bgsprsvq2p" path="res://demo/init.gd" id="1_arhci"]
+[ext_resource type="AudioStream" uid="uid://bjox4hffaotop" path="res://assets/dirty-road-juego_assets_audio_music_intro.mp3" id="1_vtxad"]
+[ext_resource type="Texture2D" uid="uid://bgl2nkjhwc17f" path="res://assets/godot_icon.jpeg" id="2_uv8yr"]
+[ext_resource type="Texture2D" uid="uid://dar5dr8lp4hnv" path="res://assets/letra_fondo_de_carga.jpg" id="3_uv8yr"]
+
+[sub_resource type="Animation" id="Animation_mspn2"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimationPlayer/TextureRect:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("2_uv8yr")]
+}
+
+[sub_resource type="Animation" id="Animation_arhci"]
+resource_name = "inti"
+length = 8.35
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimationPlayer/TextureRect:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("2_uv8yr"), ExtResource("3_uv8yr")]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_mspn2"]
+_data = {
+&"RESET": SubResource("Animation_mspn2"),
+&"inti": SubResource("Animation_arhci")
+}
+
+[node name="Control" type="Control" unique_id=1049677053]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_arhci")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=597614117]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=351208022]
+stream = ExtResource("1_vtxad")
+autoplay = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1679974390]
+libraries/ = SubResource("AnimationLibrary_mspn2")
+autoplay = &"inti"
+
+[node name="TextureRect" type="TextureRect" parent="AnimationPlayer" unique_id=1181004632]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -217.0
+offset_top = -126.0
+offset_right = 228.0
+offset_bottom = 182.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_uv8yr")
+expand_mode = 2
+
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
