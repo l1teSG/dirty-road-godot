@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://cvf48afm8fb5b"]
+
+[ext_resource type="AudioStream" uid="uid://q0gwu25kptk3" path="res://assets/music/Shapeforms Audio Free Sound Effects/Shapeforms Audio Free Sound Effects/Arcane Activations Preview/AUDIO/Activate Plinth 03.wav" id="1_t3wgg"]
+
+[node name="cominezo" type="Control" unique_id=913777954]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=621402743]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1268425429]
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1431152355]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1517359577]
+stream = ExtResource("1_t3wgg")
