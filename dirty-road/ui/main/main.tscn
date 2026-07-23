@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://c8ukhxusi8bqb"]
+
+[node name="Main" type="Control" unique_id=1207355306]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_vertical_guides_ = [457.0]
+
+[node name="fondo" type="ColorRect" parent="." unique_id=1267721134]
+layout_mode = 0
+offset_right = 456.6
+offset_bottom = 646.6
+color = Color(0.52156866, 0.27058825, 0.95686275, 1)
