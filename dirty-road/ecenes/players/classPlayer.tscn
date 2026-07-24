@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://b74nv28ce3acw"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xqmf3"]
+size = Vector2(5, 5)
+
+[node name="ClassPlayer" type="CharacterBody2D" unique_id=508460008]
+metadata/_edit_horizontal_guides_ = [468.0]
+
+[node name="shape" type="Polygon2D" parent="." unique_id=975757237]
+polygon = PackedVector2Array(0, 0, 0, 5, 5, 0, 0, 0)
+uv = PackedVector2Array(-93, -3, -38, -54, -9, 1)
+
+[node name="Collision" type="CollisionShape2D" parent="." unique_id=1015691357]
+position = Vector2(2.5, 2.5)
+shape = SubResource("RectangleShape2D_xqmf3")
+
+[node name="controls" type="CanvasLayer" parent="." unique_id=309147665]
+
+[node name="TouchScreenButton2" type="TouchScreenButton" parent="controls" unique_id=1313017331]
+
+[node name="VirtualJoystick" type="VirtualJoystick" parent="controls" unique_id=160610802]
+offset_left = 144.0
+offset_top = 454.0
+offset_right = 184.0
+offset_bottom = 494.0
+joystick_mode = 1
+
+[node name="TouchScreenButton" type="TouchScreenButton" parent="controls" unique_id=1257296167]
