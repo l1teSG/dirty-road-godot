@@ -6,7 +6,7 @@ class_name Player
 var ID: String = ""
 var life: int = 10
 var speed: float = 300.0
-var rangeArea = $range/rangeArea.shape.radius
+
 
 func move () :
 	var directionVector = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
