@@ -25,9 +25,9 @@ window/stretch/aspect="expand"
 
 folder_colors={
 "res://assets/": "orange",
-"res://assets/players/projectile/": "gray",
 "res://demo/": "red",
 "res://ecenes/": "blue",
+"res://ecenes/players/projectile/": "gray",
 "res://ui/": "teal"
 }
 

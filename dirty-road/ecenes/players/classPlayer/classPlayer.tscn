@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://b74nv28ce3acw"]
 
-[ext_resource type="Script" uid="uid://ynbiefubq3e6" path="res://ecenes/players/class_player.gd" id="1_fmujy"]
+[ext_resource type="Script" uid="uid://ynbiefubq3e6" path="res://ecenes/players/classPlayer/class_player.gd" id="1_fmujy"]
 [ext_resource type="Texture2D" uid="uid://dxkf2nnovbrcx" path="res://assets/mobile-controls-1/Vector/Style A/joystick_polygon_nub_c.svg" id="1_hwyn0"]
 [ext_resource type="Texture2D" uid="uid://c1uo4pa0g67pp" path="res://assets/mobile-controls-1/Vector/Style A/joystick_hexagon_nub_c.svg" id="2_1lupg"]
 [ext_resource type="Texture2D" uid="uid://c1ale6t41cws1" path="res://assets/mobile-controls-1/Vector/Style D/joystick_polygon_nub_c.svg" id="2_442uv"]
@@ -13,10 +13,6 @@ size = Vector2(5, 5)
 
 [node name="ClassPlayer" type="CharacterBody2D" unique_id=508460008]
 script = ExtResource("1_fmujy")
-
-[node name="shape" type="Polygon2D" parent="." unique_id=975757237]
-polygon = PackedVector2Array(0, 0, 0, 5, 5, 0, 0, 0)
-uv = PackedVector2Array(-93, -3, -38, -54, -9, 1)
 
 [node name="Collision" type="CollisionShape2D" parent="." unique_id=1015691357]
 position = Vector2(2.5, 2.5)

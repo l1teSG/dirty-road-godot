@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dkbpieysp4cx8"]
 
-[ext_resource type="Script" uid="uid://t67lbiov6npx" path="res://assets/players/projectile/class_proyectil.gd" id="1_odv4v"]
+[ext_resource type="Script" uid="uid://t67lbiov6npx" path="res://ecenes/players/projectile/class_proyectil.gd" id="1_odv4v"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_c0tfm"]
 
