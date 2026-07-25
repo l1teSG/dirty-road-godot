@@ -23,3 +23,5 @@ shape = SubResource("CircleShape2D_7cwo5")
 
 [node name="range" type="CollisionShape2D" parent="Area2D" index="0" unique_id=691136940]
 shape = SubResource("CircleShape2D_xqmf3")
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
