@@ -1,15 +1,16 @@
 [gd_scene format=3 uid="uid://b74nv28ce3acw"]
 
 [ext_resource type="Script" uid="uid://ynbiefubq3e6" path="res://ecenes/players/classPlayer/class_player.gd" id="1_fmujy"]
-[ext_resource type="Texture2D" uid="uid://dxkf2nnovbrcx" path="res://assets/mobile-controls-1/Vector/Style A/joystick_polygon_nub_c.svg" id="1_hwyn0"]
 [ext_resource type="Texture2D" uid="uid://c1uo4pa0g67pp" path="res://assets/mobile-controls-1/Vector/Style A/joystick_hexagon_nub_c.svg" id="2_1lupg"]
-[ext_resource type="Texture2D" uid="uid://c1ale6t41cws1" path="res://assets/mobile-controls-1/Vector/Style D/joystick_polygon_nub_c.svg" id="2_442uv"]
 [ext_resource type="Texture2D" uid="uid://bbtjqem4b0wry" path="res://assets/mobile-controls-1/Vector/Style A/button_bean.svg" id="3_k8sxh"]
 [ext_resource type="Texture2D" uid="uid://byy2i26ow28kv" path="res://assets/mobile-controls-1/Vector/Style D/joystick_hexagon_nub_c.svg" id="4_fmujy"]
 [ext_resource type="Texture2D" uid="uid://dkyrdvesklq6j" path="res://assets/mobile-controls-1/Vector/Style D/button_bean.svg" id="6_uvbr5"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xqmf3"]
 size = Vector2(5, 5)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_7cwo5"]
+radius = 29.017237
 
 [node name="ClassPlayer" type="CharacterBody2D" unique_id=508460008]
 script = ExtResource("1_fmujy")
@@ -19,12 +20,6 @@ position = Vector2(2.5, 2.5)
 shape = SubResource("RectangleShape2D_xqmf3")
 
 [node name="controls" type="CanvasLayer" parent="." unique_id=309147665]
-
-[node name="TouchScreenButton2" type="TouchScreenButton" parent="controls" unique_id=1313017331]
-position = Vector2(951, 326)
-scale = Vector2(1.171875, 1.125)
-texture_normal = ExtResource("1_hwyn0")
-texture_pressed = ExtResource("2_442uv")
 
 [node name="VirtualJoystick" type="VirtualJoystick" parent="controls" unique_id=160610802]
 offset_left = 144.0
@@ -46,3 +41,8 @@ position = Vector2(793, 426)
 scale = Vector2(1.9375, 2)
 texture_normal = ExtResource("3_k8sxh")
 texture_pressed = ExtResource("6_uvbr5")
+
+[node name="range" type="Area2D" parent="." unique_id=159766173]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="range" unique_id=1313454738]
+shape = SubResource("CircleShape2D_7cwo5")

@@ -1,5 +1,14 @@
 [gd_scene format=3 uid="uid://dogn08xliy6gi"]
 
 [ext_resource type="PackedScene" uid="uid://b74nv28ce3acw" path="res://ecenes/players/classPlayer/classPlayer.tscn" id="1_hr2c7"]
+[ext_resource type="PackedScene" uid="uid://egansfrgvqlu" path="res://assets/players/quark/shapeQuark.tscn" id="2_mvreb"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_7cwo5"]
 
 [node name="ClassPlayer" unique_id=508460008 instance=ExtResource("1_hr2c7")]
+
+[node name="Collision" parent="." index="0" unique_id=1015691357]
+position = Vector2(0, 0)
+shape = SubResource("CircleShape2D_7cwo5")
+
+[node name="ShapeQuark" parent="." index="2" unique_id=558741726 instance=ExtResource("2_mvreb")]
