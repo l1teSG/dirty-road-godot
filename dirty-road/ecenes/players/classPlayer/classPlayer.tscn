@@ -44,5 +44,5 @@ texture_pressed = ExtResource("6_uvbr5")
 
 [node name="range" type="Area2D" parent="." unique_id=159766173]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="range" unique_id=1313454738]
+[node name="rangeArea" type="CollisionShape2D" parent="range" unique_id=1313454738]
 shape = SubResource("CircleShape2D_7cwo5")
