@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://bgjmbqoyqaisg"]
+
+[ext_resource type="Script" uid="uid://bwvppxt3debh7" path="res://ecenes/enemies/classEnemi/enemi.gd" id="1_fo2jh"]
+[ext_resource type="Script" uid="uid://d0fnbfiengap3" path="res://ecenes/enemies/classEnemi/ai_controller_2d.gd" id="2_ouobo"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_sfya5"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_rvr16"]
+
+[node name="enemi" type="CharacterBody2D" unique_id=116509856]
+script = ExtResource("1_fo2jh")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2025229435]
+shape = SubResource("CircleShape2D_sfya5")
+
+[node name="hurt" type="Area2D" parent="." unique_id=2108652251]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="hurt" unique_id=1974278030]
+shape = SubResource("CircleShape2D_rvr16")
+
+[node name="AIController2D" type="Node2D" parent="." unique_id=203141268]
+script = ExtResource("2_ouobo")
+reset_after = null
+metadata/_custom_type_script = "uid://c2ahte0pt1iu7"

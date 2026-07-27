@@ -1,0 +1,25 @@
+# Ignorar una carpeta completa (y todo su contenido)
+.godot/
+.import/
+export/
+build/
+node_modules/
+addons/
+assets/
+# Entorno virtual de Python
+.venv/
+venv/
+ENV/
+env/
+
+*.sh
+*.sh.*
+Miniconda3-latest-Linux-x86_64*
+dirty-road/addons/godotty/bin/libgodotty.macos.dylib
+
+# Ignorar archivos específicos por extensión
+*.log
+*.tmp
+
+# Ignorar archivos ocultos o del sistema
+.DS_Store

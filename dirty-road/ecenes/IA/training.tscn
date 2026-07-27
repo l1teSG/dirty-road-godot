@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://bd1rwv2ka1oee"]
+
+[ext_resource type="PackedScene" uid="uid://dixwq1qmf6le6" path="res://ecenes/enemies/firstStage/carbonilla/carbonilla.tscn" id="1_k3wog"]
+[ext_resource type="PackedScene" uid="uid://dogn08xliy6gi" path="res://ecenes/players/quark/quark.tscn" id="2_wy44i"]
+[ext_resource type="Script" uid="uid://bb7aquy7jyxvv" path="res://addons/godot_rl_agents/sync.gd" id="3_42kam"]
+
+[node name="Training" type="Node2D" unique_id=1524915226]
+
+[node name="enemi" parent="." unique_id=116509856 instance=ExtResource("1_k3wog")]
+position = Vector2(286, 56)
+
+[node name="ClassPlayer" parent="." unique_id=508460008 groups=["jugador"] instance=ExtResource("2_wy44i")]
+position = Vector2(344, 182)
+
+[node name="Sync" type="Node" parent="." unique_id=214911037]
+script = ExtResource("3_42kam")
+metadata/_custom_type_script = "uid://bb7aquy7jyxvv"
