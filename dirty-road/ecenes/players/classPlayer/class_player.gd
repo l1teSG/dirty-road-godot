@@ -17,3 +17,7 @@ func damage(value):
 
 func _physics_process(delta: float) -> void:
 	move()
+
+
+func _on_auto_timeout() -> void:
+	pass # Replace with function body.

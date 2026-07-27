@@ -6,8 +6,9 @@
 sped = 300.0
 
 [node name="Polygon2D" parent="." index="0" unique_id=240919650]
+position = Vector2(0, 1)
 color = Color(0.22689298, 0.48934776, 0.63823897, 1)
-polygon = PackedVector2Array(-7, -6, 11, -6, 3, 9, -62.326355, 61.338654)
+polygon = PackedVector2Array(-2, -11, 9, -5, 9, 3, 4, 8, -6, 7, -10, -1)
 uv = PackedVector2Array(-65.54736, -48.17605, 130.93488, -48.17605, 143.81897, 51.675583, -62.326355, 61.338654)
 
 [node name="CPUParticles2D" parent="." index="2" unique_id=631609912]
