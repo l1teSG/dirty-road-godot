@@ -1,0 +1,5 @@
+[gd_scene format=3 uid="uid://bm4j7fsqw4y1u"]
+
+[node name="ShapeFlora" type="Polygon2D" unique_id=36380886]
+color = Color(0, 1, 0.4, 1)
+polygon = PackedVector2Array(0, -20, 17, -10, 17, 10, 0, 20, -17, 10, -17, -10)

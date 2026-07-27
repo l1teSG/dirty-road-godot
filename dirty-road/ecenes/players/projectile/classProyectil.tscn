@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://dkbpieysp4cx8"]
+
+[ext_resource type="Script" uid="uid://t67lbiov6npx" path="res://ecenes/players/projectile/class_proyectil.gd" id="1_odv4v"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_c0tfm"]
+
+[node name="ClassProyectil" type="Area2D" unique_id=20232324]
+script = ExtResource("1_odv4v")
+
+[node name="Polygon2D" type="Polygon2D" parent="." unique_id=240919650]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=420599671]
+shape = SubResource("CircleShape2D_c0tfm")
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="." unique_id=631609912]
+lifetime = 0.2
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="." unique_id=2084277774]

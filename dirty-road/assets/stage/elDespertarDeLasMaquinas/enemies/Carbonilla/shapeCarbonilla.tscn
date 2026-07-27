@@ -1,0 +1,5 @@
+[gd_scene format=3 uid="uid://dp3eoelg5320d"]
+
+[node name="ShapeCarbonilla" type="Polygon2D" unique_id=1925689287]
+color = Color(1, 0, 0.33333334, 1)
+polygon = PackedVector2Array(0, -12, 8, 12, -8, 12)

@@ -1,0 +1,5 @@
+[gd_scene format=3 uid="uid://yqyxllemdp8w"]
+
+[node name="ShapeCronos" type="Polygon2D" unique_id=441965019]
+color = Color(1, 0.9019608, 0, 1)
+polygon = PackedVector2Array(0, -20, 18, 15, -18, 15)
