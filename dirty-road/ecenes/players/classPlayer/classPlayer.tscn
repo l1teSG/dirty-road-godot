@@ -26,14 +26,14 @@ offset_bottom = 494.0
 joystick_mode = 1
 tip_size = 85.0
 
-[node name="TouchScreenButton" type="TouchScreenButton" parent="controls" unique_id=1257296167]
+[node name="super" type="TouchScreenButton" parent="controls" unique_id=1257296167]
 texture_filter = 1
 position = Vector2(950, 432)
 scale = Vector2(1.125, 1.109375)
 texture_normal = ExtResource("2_1lupg")
 texture_pressed = ExtResource("4_fmujy")
 
-[node name="TouchScreenButton3" type="TouchScreenButton" parent="controls" unique_id=1220419793]
+[node name="mega" type="TouchScreenButton" parent="controls" unique_id=1220419793]
 position = Vector2(793, 426)
 scale = Vector2(1.9375, 2)
 texture_normal = ExtResource("3_k8sxh")
