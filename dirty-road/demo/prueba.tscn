@@ -1,0 +1,55 @@
+[gd_scene format=3 uid="uid://c5r3k4ggr02vr"]
+
+[ext_resource type="PackedScene" uid="uid://dixwq1qmf6le6" path="res://ecenes/enemies/firstStage/carbonilla/carbonilla.tscn" id="1_q6qkt"]
+[ext_resource type="PackedScene" uid="uid://dogn08xliy6gi" path="res://ecenes/players/quark/quark.tscn" id="2_6hot1"]
+[ext_resource type="Script" uid="uid://bd1e2qau3s4r1" path="res://addons/godot_rl_agents/sync.gd" id="3_6hot1"]
+
+[node name="Prueba" type="Node2D" unique_id=483475139]
+
+[node name="enemi" parent="." unique_id=116509856 groups=["enemi"] instance=ExtResource("1_q6qkt")]
+position = Vector2(146, 81)
+
+[node name="ClassPlayer" parent="." unique_id=508460008 groups=["jugador"] instance=ExtResource("2_6hot1")]
+position = Vector2(451, 231)
+
+[node name="enemi3" parent="." unique_id=1274468877 groups=["enemi"] instance=ExtResource("1_q6qkt")]
+position = Vector2(931, 375)
+
+[node name="Sync" type="Node" parent="." unique_id=194270289]
+script = ExtResource("3_6hot1")
+control_mode = 2
+onnx_model_path = "res://assets/IA/enemigo_fusionado.onnx"
+metadata/_custom_type_script = "uid://bd1e2qau3s4r1"
+
+[node name="enemi2" parent="." unique_id=137480629 groups=["enemi"] instance=ExtResource("1_q6qkt")]
+position = Vector2(816, 475)
+
+[node name="enemi4" parent="." unique_id=701200865 groups=["enemi"] instance=ExtResource("1_q6qkt")]
+position = Vector2(771, 569)
+
+[node name="enemi5" parent="." unique_id=1814309973 groups=["enemi"] instance=ExtResource("1_q6qkt")]
+position = Vector2(545, 592)
+
+[node name="enemi6" parent="." unique_id=1909183987 groups=["enemi"] instance=ExtResource("1_q6qkt")]
+position = Vector2(323, 586)
+
+[node name="enemi7" parent="." unique_id=25741194 groups=["enemi"] instance=ExtResource("1_q6qkt")]
+position = Vector2(860, 399)
+
+[node name="enemi8" parent="." unique_id=2112622565 groups=["enemi"] instance=ExtResource("1_q6qkt")]
+position = Vector2(931, 265)
+
+[node name="enemi9" parent="." unique_id=367431417 groups=["enemi"] instance=ExtResource("1_q6qkt")]
+position = Vector2(111, 352)
+
+[node name="enemi10" parent="." unique_id=120003134 groups=["enemi"] instance=ExtResource("1_q6qkt")]
+position = Vector2(898, 149)
+
+[node name="enemi11" parent="." unique_id=1474890373 groups=["enemi"] instance=ExtResource("1_q6qkt")]
+position = Vector2(747, 76)
+
+[node name="enemi12" parent="." unique_id=41107883 groups=["enemi"] instance=ExtResource("1_q6qkt")]
+position = Vector2(223, 7)
+
+[node name="enemi13" parent="." unique_id=1684223932 groups=["enemi"] instance=ExtResource("1_q6qkt")]
+position = Vector2(105, 173)

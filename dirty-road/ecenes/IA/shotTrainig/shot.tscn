@@ -1,8 +1,12 @@
 [gd_scene format=3 uid="uid://cuoae1h1m028b"]
 
 [ext_resource type="PackedScene" uid="uid://dogn08xliy6gi" path="res://ecenes/players/quark/quark.tscn" id="2_6wcyw"]
+[ext_resource type="PackedScene" uid="uid://dixwq1qmf6le6" path="res://ecenes/enemies/firstStage/carbonilla/carbonilla.tscn" id="2_aym7f"]
 
 [node name="Shot" type="Node2D" unique_id=1638527813]
 
 [node name="ClassPlayer" parent="." unique_id=508460008 groups=["jugador"] instance=ExtResource("2_6wcyw")]
 position = Vector2(436, 283)
+
+[node name="enemi" parent="." unique_id=116509856 groups=["enemi"] instance=ExtResource("2_aym7f")]
+position = Vector2(132, 41)

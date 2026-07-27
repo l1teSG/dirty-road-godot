@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bgjmbqoyqaisg"]
 
-[ext_resource type="Script" uid="uid://bwvppxt3debh7" path="res://ecenes/enemies/classEnemi/enemi.gd" id="1_fo2jh"]
-[ext_resource type="Script" uid="uid://d0fnbfiengap3" path="res://ecenes/enemies/classEnemi/ai_controller_2d.gd" id="2_ouobo"]
+[ext_resource type="Script" uid="uid://pd07ouhg7yye" path="res://ecenes/enemies/classEnemi/enemi.gd" id="1_fo2jh"]
+[ext_resource type="Script" uid="uid://cju5huu00ldsn" path="res://ecenes/enemies/firstStage/carbonilla/controller.gd" id="2_fo2jh"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_sfya5"]
 
@@ -19,6 +19,5 @@ shape = SubResource("CircleShape2D_sfya5")
 shape = SubResource("CircleShape2D_rvr16")
 
 [node name="AIController2D" type="Node2D" parent="." unique_id=203141268]
-script = ExtResource("2_ouobo")
-reset_after = null
+script = ExtResource("2_fo2jh")
 metadata/_custom_type_script = "uid://c2ahte0pt1iu7"

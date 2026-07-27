@@ -1,9 +1,17 @@
 extends Node3D
 class_name AIController3D
 
-enum ControlModes { INHERIT_FROM_SYNC, HUMAN, TRAINING, ONNX_INFERENCE, RECORD_EXPERT_DEMOS }
+enum ControlModes {
+	INHERIT_FROM_SYNC, ## Inherit setting from sync node
+	HUMAN, ## Test the environment manually
+	TRAINING, ## Train a model
+	ONNX_INFERENCE, ## Load a pretrained model using an .onnx file
+	RECORD_EXPERT_DEMOS ## Record observations and actions for expert demonstrations
+}
 @export var control_mode: ControlModes = ControlModes.INHERIT_FROM_SYNC
+## The path to a trained .onnx model file to use for inference (overrides the path set in sync node).
 @export var onnx_model_path := ""
+## Once the number of steps has passed, the flag 'needs_reset' will be set to 'true' for this instance.
 @export var reset_after := 1000
 
 @export_group("Record expert demos mode options")
@@ -41,7 +49,7 @@ func init(player: Node3D):
 	_player = player
 
 
-#-- Methods that need implementing using the "extend script" option in Godot --#
+#region Methods that need implementing using the "extend script" option in Godot
 func get_obs() -> Dictionary:
 	assert(false, "the get_obs method is not implemented when extending from ai_controller")
 	return {"obs": []}
@@ -54,8 +62,7 @@ func get_reward() -> float:
 
 func get_action_space() -> Dictionary:
 	assert(
-		false,
-		"the get_action_space method is not implemented when extending from ai_controller"
+		false, "the get_action_space method is not implemented when extending from ai_controller"
 	)
 	return {
 		"example_actions_continous": {"size": 2, "action_type": "continuous"},
@@ -67,16 +74,25 @@ func set_action(action) -> void:
 	assert(false, "the set_action method is not implemented when extending from ai_controller")
 
 
-#-----------------------------------------------------------------------------#
+#endregion
 
 
-#-- Methods that sometimes need implementing using the "extend script" option in Godot --#
+#region Methods that sometimes need implementing using the "extend script" option in Godot
 # Only needed if you are recording expert demos with this AIController
 func get_action() -> Array:
-	assert(false, "the get_action method is not implemented in extended AIController but demo_recorder is used")
+	assert(
+		false,
+		"the get_action method is not implemented in extended AIController but demo_recorder is used"
+	)
 	return []
 
-# -----------------------------------------------------------------------------#
+
+# For providing additional info (e.g. `is_success` for SB3 training)
+func get_info() -> Dictionary:
+	return {}
+
+
+#endregion
 
 
 func _physics_process(delta):

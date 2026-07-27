@@ -1,12 +1,22 @@
 extends Node
+class_name Sync
 
 # --fixed-fps 2000 --disable-render-loop
 
-enum ControlModes { HUMAN, TRAINING, ONNX_INFERENCE }
+enum ControlModes {
+	HUMAN, ## Test the environment manually
+	TRAINING, ## Train a model
+	ONNX_INFERENCE ## Load a pretrained model using an .onnx file
+}
 @export var control_mode: ControlModes = ControlModes.TRAINING
+## Action will be repeated for n frames (Godot physics steps).
 @export_range(1, 10, 1, "or_greater") var action_repeat := 8
+## Speeds up the physics in the environment to enable faster training.
 @export_range(0, 10, 0.1, "or_greater") var speed_up := 1.0
+## The path to a trained .onnx model file to use for inference (only needed for the 'Onnx Inference' control mode).
 @export var onnx_model_path := ""
+## Whether the inference will be deterministic (NOTE: Only applies to discrete actions in onnx inference mode)
+@export var deterministic_inference := true
 
 # Onnx model stored for each requested path
 var onnx_models: Dictionary
@@ -49,9 +59,10 @@ var _action_space_training: Array[Dictionary] = []
 var _action_space_inference: Array[Dictionary] = []
 var _obs_space_training: Array[Dictionary] = []
 
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	await get_tree().root.ready
+	await get_parent().ready
 	get_tree().set_pause(true)
 	_initialize()
 	await get_tree().create_timer(1.0).timeout
@@ -147,7 +158,7 @@ func _initialize_inference_agents():
 			agent.onnx_model = agent_onnx_model
 			if not agent_onnx_model.action_means_only_set:
 				agent_onnx_model.set_action_means_only(action_space)
-				
+
 		_set_heuristic("model", agents_inference)
 
 
@@ -190,11 +201,13 @@ func _training_process():
 	if connected:
 		get_tree().set_pause(true)
 
+		var obs = _get_obs_from_agents(agents_training)
+		var info = _get_info_from_agents(agents_training)
+
 		if just_reset:
 			just_reset = false
-			var obs = _get_obs_from_agents(agents_training)
 
-			var reply = {"type": "reset", "obs": obs}
+			var reply = {"type": "reset", "obs": obs, "info": info}
 			_send_dict_as_json_message(reply)
 			# this should go straight to getting the action and setting it checked the agent, no need to perform one phyics tick
 			get_tree().set_pause(false)
@@ -206,9 +219,7 @@ func _training_process():
 			var done = _get_done_from_agents()
 			#_reset_agents_if_done() # this ensures the new observation is from the next env instance : NEEDS REFACTOR
 
-			var obs = _get_obs_from_agents(agents_training)
-
-			var reply = {"type": "step", "obs": obs, "reward": reward, "done": done}
+			var reply = {"type": "step", "obs": obs, "reward": reward, "done": done, "info": info}
 			_send_dict_as_json_message(reply)
 
 		var handled = handle_message()
@@ -221,9 +232,7 @@ func _inference_process():
 
 		for agent_id in range(0, agents_inference.size()):
 			var model: ONNXModel = agents_inference[agent_id].onnx_model
-			var action = model.run_inference(
-				obs[agent_id]["obs"], 1.0
-			)
+			var action = model.run_inference(obs[agent_id], 1.0)
 			var action_dict = _extract_action_dict(
 				action["output"], _action_space_inference[agent_id], model.action_means_only
 			)
@@ -282,30 +291,56 @@ func _heuristic_process():
 func _extract_action_dict(action_array: Array, action_space: Dictionary, action_means_only: bool):
 	var index = 0
 	var result = {}
-	for key in action_space.keys():	
-		var size = action_space[key]["size"]	
+	for key in action_space.keys():
+		var size = action_space[key]["size"]
 		var action_type = action_space[key]["action_type"]
+
 		if action_type == "discrete":
-			var largest_logit: float # Value of the largest logit for this action in the actions array
-			var largest_logit_idx: int # Index of the largest logit for this action in the actions array
+			var largest_logit: float = -INF  # Value of the largest logit for this action in the actions array
+			var largest_logit_idx: int  # Index of the largest logit for this action in the actions array
 			for logit_idx in range(0, size):
 				var logit_value = action_array[index + logit_idx]
 				if logit_value > largest_logit:
 					largest_logit = logit_value
-					largest_logit_idx = logit_idx 
-			result[key] = largest_logit_idx # Index of the largest logit is the discrete action value
+					largest_logit_idx = logit_idx
+			if deterministic_inference:
+				result[key] = largest_logit_idx  # Index of the largest logit is the discrete action value
+			else:
+				var exp_logit_sum: float  # Sum of exp of each logit
+				var exp_logits: Array[float]
+
+				for logit_idx in range(0, size):
+					# Normalize using the max logit to add stability in case a logit would be huge after exp
+					exp_logits.append(exp(action_array[index + logit_idx] - largest_logit))
+					exp_logit_sum += exp_logits[logit_idx]
+
+				# Choose a random number, will be used to select an action
+				var random_value = randf_range(0, exp_logit_sum)
+
+				# Select the first index at which the sum is larger than the random number
+				var sum: float
+				for exp_logit_idx in exp_logits.size():
+					sum += exp_logits[exp_logit_idx]
+					if sum > random_value:
+						result[key] = exp_logit_idx
+						break
 			index += size
 		elif action_type == "continuous":
 			# For continous actions, we only take the action mean values
 			result[key] = clamp_array(action_array.slice(index, index + size), -1.0, 1.0)
 			if action_means_only:
-				index += size # model only outputs action means, so we move index by size
+				index += size  # model only outputs action means, so we move index by size
 			else:
-				index += size * 2 # model outputs logstd after action mean, we skip the logstd part
+				index += size * 2  # model outputs logstd after action mean, we skip the logstd part
 
 		else:
-			assert(false, 'Only "discrete" and "continuous" action types supported. Found: %s action type set.' % action_type)
-		
+			assert(
+				false,
+				(
+					'Only "discrete" and "continuous" action types supported. Found: %s action type set.'
+					% action_type
+				)
+			)
 
 	return result
 
@@ -341,12 +376,17 @@ func _get_agents():
 				"Currently only a single AIController can be used for recording expert demos."
 			)
 			agent_demo_record = agent
-	
+
 	var training_agent_count = agents_training.size()
 	agents_training_policy_names.resize(training_agent_count)
 	for i in range(0, training_agent_count):
 		agents_training_policy_names[i] = agents_training[i].policy_name
-
+	
+	print("Todos:", all_agents.size())
+	print("Training:", agents_training.size())
+	print("Inference:", agents_inference.size())
+	print("Human:", agents_heuristic.size())
+	
 
 func _set_heuristic(heuristic, agents: Array):
 	for agent in agents:
@@ -537,6 +577,13 @@ func _get_reward_from_agents(agents: Array = agents_training):
 		rewards.append(agent.get_reward())
 		agent.zero_reward()
 	return rewards
+
+
+func _get_info_from_agents(agents: Array = all_agents):
+	var info = []
+	for agent in agents:
+		info.append(agent.get_info())
+	return info
 
 
 func _get_done_from_agents(agents: Array = agents_training):

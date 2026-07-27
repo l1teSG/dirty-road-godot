@@ -13,13 +13,17 @@ config_version=5
 config/name="dirty road"
 config/version="1.0"
 run/main_scene="uid://c8ukhxusi8bqb"
-config/features=PackedStringArray("4.7", "Forward Plus")
+config/features=PackedStringArray("4.7", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
 [display]
 
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
+
+[dotnet]
+
+project/assembly_name="dirty road"
 
 [editor_plugins]
 
@@ -39,6 +43,8 @@ folder_colors={
 [global_group]
 
 jugador=""
+fire_player=""
+enemi=""
 
 [input]
 

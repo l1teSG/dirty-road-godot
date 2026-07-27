@@ -1,0 +1,39 @@
+#!/usr/bin/env python3
+import argparse, sys
+from pathlib import Path
+from godot_rl.wrappers.stable_baselines_wrapper import StableBaselinesGodotEnv
+from stable_baselines3 import PPO
+from godot_rl.wrappers.onnx.stable_baselines_export import export_model_as_onnx
+
+def main():
+    parser = argparse.ArgumentParser(description="CLI personalizada para entrenar en Godot RL y exportar a ONNX.")
+    parser.add_argument("--steps", type=int, default=200000, help="Timesteps totales (default: 200000)")
+    parser.add_argument("--speedup", type=int, default=8, help="Velocidad del motor Godot (default: 8)")
+    parser.add_argument("--lr", type=float, default=0.0003, help="Learning Rate para PPO (default: 0.0003)")
+    parser.add_argument("--name", type=str, default="enemigo_persecucion", help="Nombre base del archivo sin extensión")
+    parser.add_argument("--out-dir", type=str, default=None, help="Ruta de salida personalizada")
+    args = parser.parse_args()
+
+    out_path = Path(args.out_dir) if args.out_dir else Path.home() / "dirty-road" / "dirty-road" / "assets"
+    out_path.mkdir(parents=True, exist_ok=True)
+    zip_file, onnx_file = out_path / f"{args.name}.zip", out_path / f"{args.name}.onnx"
+
+    print(f"🚀 Iniciando entrenamiento:\n   • Pasos: {args.steps:,}\n   • Speedup: {args.speedup}x\n   • LR: {args.lr}\n   • Salida: {onnx_file}\n")
+    try:
+        env = StableBaselinesGodotEnv(speedup=args.speedup)
+        model = PPO("MultiInputPolicy", env, verbose=1, learning_rate=args.lr)
+        model.learn(total_timesteps=args.steps)
+        print("\n💾 Guardando modelo y exportando a ONNX...")
+        model.save(str(zip_file))
+        export_model_as_onnx(model, str(onnx_file))
+        print(f"\n✅ ¡COMPLETADO! Guardado en:\n   --> {onnx_file}")
+        env.close()
+    except KeyboardInterrupt:
+        print("\n⚠️ Interrumpido por el usuario.")
+        sys.exit(0)
+    except Exception as e:
+        print(f"\n❌ Error: {e}")
+        sys.exit(1)
+
+if __name__ == "__main__":
+    main()
