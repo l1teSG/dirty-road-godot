@@ -1,21 +1,8 @@
 [gd_scene format=3 uid="uid://cuoae1h1m028b"]
 
-[ext_resource type="PackedScene" uid="uid://rjcn6jhfhh6o" path="res://assets/stage/elDespertarDeLasMaquinas/enemies/Ignis/shapeIgniss.tscn" id="1_aym7f"]
 [ext_resource type="PackedScene" uid="uid://dogn08xliy6gi" path="res://ecenes/players/quark/quark.tscn" id="2_6wcyw"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_aym7f"]
-size = Vector2(12, 32)
 
 [node name="Shot" type="Node2D" unique_id=1638527813]
 
 [node name="ClassPlayer" parent="." unique_id=508460008 groups=["jugador"] instance=ExtResource("2_6wcyw")]
 position = Vector2(436, 283)
-
-[node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=1978473089 groups=["enemi"]]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D" unique_id=447776728]
-position = Vector2(178, 64)
-shape = SubResource("RectangleShape2D_aym7f")
-
-[node name="ShapeIgnis" parent="CharacterBody2D" unique_id=1321160181 instance=ExtResource("1_aym7f")]
-position = Vector2(178, 64)

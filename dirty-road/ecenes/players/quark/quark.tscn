@@ -32,6 +32,7 @@ shape = SubResource("CircleShape2D_xqmf3")
 
 [node name="Timer" type="Timer" parent="." index="4" unique_id=2127814807]
 wait_time = 0.5
+autostart = true
 
 [node name="aim" type="Marker2D" parent="." index="5" unique_id=182942934]
 
