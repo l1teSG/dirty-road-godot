@@ -1,6 +1,5 @@
 extends AIController2D
 
-
 var move_direction : Vector2 = Vector2.ZERO
 
 func get_obs() -> Dictionary:

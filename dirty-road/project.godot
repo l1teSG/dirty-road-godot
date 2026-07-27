@@ -43,6 +43,8 @@ folder_colors={
 [global_group]
 
 jugador=""
+fire_player=""
+enemi=""
 
 [input]
 

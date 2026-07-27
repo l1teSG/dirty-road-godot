@@ -25,4 +25,5 @@ shape = SubResource("RectangleShape2D_k2jso")
 
 [node name="AIController2D" type="Node2D" parent="." unique_id=1220445652]
 script = ExtResource("3_sic81")
-onnx_model_path = "res://assets/IA/enemigo_fusionado.onnx"
+
+[connection signal="area_entered" from="hurt" to="." method="_on_hurt_area_entered"]
