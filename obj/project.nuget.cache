@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "ymjYqRBjKN0=",
+  "success": true,
+  "projectFilePath": "/home/lite/dirty-road/DirtyRoad.csproj",
+  "expectedPackageFiles": [
+    "/home/lite/.nuget/packages/microsoft.aspnetcore.app.ref/10.0.10/microsoft.aspnetcore.app.ref.10.0.10.nupkg.sha512"
+  ],
+  "logs": []
+}

@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://dixwq1qmf6le6"]
 
-[ext_resource type="Script" uid="uid://bwvppxt3debh7" path="res://ecenes/enemies/classEnemi/enemi.gd" id="1_1dgfw"]
+[ext_resource type="Script" uid="uid://pd07ouhg7yye" path="res://ecenes/enemies/classEnemi/enemi.gd" id="1_1dgfw"]
 [ext_resource type="PackedScene" uid="uid://dp3eoelg5320d" path="res://assets/stage/elDespertarDeLasMaquinas/enemies/Carbonilla/shapeCarbonilla.tscn" id="2_k2jso"]
-[ext_resource type="Script" uid="uid://d0fnbfiengap3" path="res://ecenes/enemies/classEnemi/ai_controller_2d.gd" id="2_sic81"]
+[ext_resource type="Script" uid="uid://cju5huu00ldsn" path="res://ecenes/enemies/firstStage/carbonilla/controller.gd" id="3_sic81"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e3k85"]
 size = Vector2(16, 24)
@@ -23,7 +23,6 @@ shape = SubResource("RectangleShape2D_e3k85")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="hurt" unique_id=1974278030]
 shape = SubResource("RectangleShape2D_k2jso")
 
-[node name="AIController2D" type="Node2D" parent="." unique_id=203141268]
-script = ExtResource("2_sic81")
-reset_after = null
-metadata/_custom_type_script = "uid://c2ahte0pt1iu7"
+[node name="AIController2D" type="Node2D" parent="." unique_id=1220445652]
+script = ExtResource("3_sic81")
+onnx_model_path = "res://assets/IA/enemigo_fusionado.onnx"

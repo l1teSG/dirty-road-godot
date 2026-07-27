@@ -1,9 +1,10 @@
+class_name EnemigoBase
 extends CharacterBody2D
 
 
 @export var speed = 120.0
 @export var damage = 10
-@export var damage_cooldown = 0.5
+@export var damage_cooldown = 0.5  # evita hacer daño cada frame de contacto
 
 @onready var player = get_tree().get_first_node_in_group('jugador')
 @onready var ai_controller = $AIController2D
@@ -36,6 +37,7 @@ func _physics_process(delta):
 	velocity = movement * speed
 	move_and_slide()
 
+	# --- Daño por contacto directo ---
 	damage_timer -= delta
 	for i in get_slide_collision_count():
 		var collision = get_slide_collision(i)
@@ -44,6 +46,7 @@ func _physics_process(delta):
 			ai_controller.reward += 1.0
 			damage_timer = damage_cooldown
 
+	# --- Recompensa por acercarse ---
 	var distance = global_position.distance_to(player.global_position)
 	ai_controller.reward += (last_distance_to_player - distance) * 0.1
 	last_distance_to_player = distance

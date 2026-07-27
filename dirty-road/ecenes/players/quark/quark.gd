@@ -33,3 +33,6 @@ func _on_super_pressed() -> void:
 
 func _on_mega_pressed() -> void:
 	power = 'mega'
+
+func take_damage(damage):
+	pass
