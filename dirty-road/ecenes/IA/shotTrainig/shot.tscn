@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://cuoae1h1m028b"]
+
+[ext_resource type="PackedScene" uid="uid://dogn08xliy6gi" path="res://ecenes/players/quark/quark.tscn" id="2_6wcyw"]
+
+[node name="Shot" type="Node2D" unique_id=1638527813]
+
+[node name="ClassPlayer" parent="." unique_id=508460008 groups=["jugador"] instance=ExtResource("2_6wcyw")]
+position = Vector2(436, 283)

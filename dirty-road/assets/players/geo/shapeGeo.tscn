@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://dvh0j73ml0p02"]
+
+[node name="ShapeGeo" type="Polygon2D" unique_id=1963714918]
+color = Color(1, 0.41960785, 0, 1)
+polygon = PackedVector2Array(-15, -15, 15, -15, 15, 15, -15, 15)
+uv = PackedVector2Array(-15, -15, 15, -15, 15, 15, -15, 15)

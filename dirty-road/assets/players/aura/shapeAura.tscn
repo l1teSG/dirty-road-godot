@@ -1,0 +1,5 @@
+[gd_scene format=3 uid="uid://4y4jgybbbumg"]
+
+[node name="ShapeAura" type="Polygon2D" unique_id=501702585]
+antialiased = true
+polygon = PackedVector2Array(0, -20, 14, -14, 20, 0, 14, 14, 0, 20, -14, 14, -20, 0, -14, -14)

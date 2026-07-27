@@ -1,0 +1,5 @@
+[gd_scene format=3 uid="uid://egansfrgvqlu"]
+
+[node name="ShapeQuark" type="Polygon2D" unique_id=558741726]
+color = Color(0, 0.9411765, 1, 1)
+polygon = PackedVector2Array(0, -20, 15, 0, 0, 20, -15, 0)

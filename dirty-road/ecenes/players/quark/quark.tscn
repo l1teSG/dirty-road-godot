@@ -1,0 +1,42 @@
+[gd_scene format=3 uid="uid://dogn08xliy6gi"]
+
+[ext_resource type="PackedScene" uid="uid://b74nv28ce3acw" path="res://ecenes/players/classPlayer/classPlayer.tscn" id="1_hr2c7"]
+[ext_resource type="Script" uid="uid://34jfhhctw6kb" path="res://ecenes/players/quark/quark.gd" id="2_lx2x3"]
+[ext_resource type="PackedScene" uid="uid://egansfrgvqlu" path="res://assets/players/quark/shapeQuark.tscn" id="2_mvreb"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_7cwo5"]
+radius = 0.01
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_xqmf3"]
+radius = 266.75082
+
+[node name="ClassPlayer" unique_id=508460008 instance=ExtResource("1_hr2c7")]
+script = ExtResource("2_lx2x3")
+
+[node name="Collision" parent="." index="0" unique_id=1015691357]
+position = Vector2(0, 0)
+shape = SubResource("CircleShape2D_7cwo5")
+
+[node name="super" parent="controls" parent_id_path=PackedInt32Array(309147665) index="1" unique_id=1257296167]
+action = "super"
+
+[node name="mega" parent="controls" parent_id_path=PackedInt32Array(309147665) index="2" unique_id=1220419793]
+action = "mega"
+
+[node name="ShapeQuark" parent="." index="2" unique_id=558741726 instance=ExtResource("2_mvreb")]
+
+[node name="Area2D" type="Area2D" parent="." index="3" unique_id=541228221]
+
+[node name="range" type="CollisionShape2D" parent="Area2D" index="0" unique_id=691136940]
+shape = SubResource("CircleShape2D_xqmf3")
+
+[node name="Timer" type="Timer" parent="." index="4" unique_id=2127814807]
+wait_time = 0.5
+autostart = true
+
+[node name="aim" type="Marker2D" parent="." index="5" unique_id=182942934]
+
+[connection signal="pressed" from="controls/super" to="." method="_on_super_pressed"]
+[connection signal="pressed" from="controls/mega" to="." method="_on_mega_pressed"]
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

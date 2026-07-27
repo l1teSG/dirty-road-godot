@@ -1,0 +1,5 @@
+[gd_scene format=3 uid="uid://dt44sx038y7xs"]
+
+[node name="ShapeTitan" type="Polygon2D" unique_id=1160185156]
+color = Color(0.8, 0, 0.26666668, 1)
+polygon = PackedVector2Array(0, -22, 19, -11, 19, 11, 0, 22, -19, 10, -19, -11)
