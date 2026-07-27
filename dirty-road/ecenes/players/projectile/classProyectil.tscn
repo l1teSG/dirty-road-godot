@@ -14,5 +14,3 @@ shape = SubResource("CircleShape2D_c0tfm")
 
 [node name="CPUParticles2D" type="CPUParticles2D" parent="." unique_id=631609912]
 lifetime = 0.2
-
-[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="." unique_id=2084277774]
