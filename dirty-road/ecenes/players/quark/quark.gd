@@ -35,10 +35,13 @@ func _on_mega_pressed() -> void:
 	power = 'mega'
 
 func take_damage(damage):
-	pass
+	life -= damage
 
 
 func _on_area_2d_body_exited(body: Node2D) -> void:
 	if body.is_in_group('enemi'):
 		onFire = false
 	
+func _physics_process(delta: float) -> void:
+	if life == 0:
+		self.queue_free()

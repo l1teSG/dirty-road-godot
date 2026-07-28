@@ -12,6 +12,8 @@ radius = 266.75082
 
 [node name="ClassPlayer" unique_id=508460008 instance=ExtResource("1_hr2c7")]
 script = ExtResource("2_lx2x3")
+ID = "quark"
+speed = 420.0
 
 [node name="Collision" parent="." index="0" unique_id=1015691357]
 position = Vector2(0, 0)

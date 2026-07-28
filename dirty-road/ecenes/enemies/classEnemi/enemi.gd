@@ -2,7 +2,7 @@
 extends CharacterBody2D
 
 @export var speed = 120.0
-@export var damage = 10
+@export var damage = 1
 @export var damage_cooldown = 0.5
 @export var max_health = 30
 
@@ -27,6 +27,7 @@ func _physics_process(delta):
 	if player == null:
 		player = get_tree().get_first_node_in_group('jugador')
 		return
+		
 
 	if ai_controller.needs_reset:
 		ai_controller.reset()

@@ -3,9 +3,9 @@ class_name Player
 
 @onready var shape = $shape
 
-var ID: String = ""
-var life: int = 10
-var speed: float = 300.0
+@export var ID: String = ""
+@export var life: int = 10
+@export var speed: float = 300.0
 
 
 func move () :
