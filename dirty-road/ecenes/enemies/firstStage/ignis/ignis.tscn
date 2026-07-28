@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://cbr62w1hv17eb"]
+
+[ext_resource type="PackedScene" uid="uid://bgjmbqoyqaisg" path="res://ecenes/enemies/classEnemi/enemi.tscn" id="1_12vow"]
+[ext_resource type="PackedScene" uid="uid://rjcn6jhfhh6o" path="res://assets/stage/elDespertarDeLasMaquinas/enemies/Ignis/shapeIgniss.tscn" id="2_0hjxm"]
+[ext_resource type="Script" uid="uid://buddj1xodxfhf" path="res://ecenes/enemies/firstStage/ignis/ignis.gd" id="2_alsc0"]
+[ext_resource type="Script" uid="uid://j88dy8uubje3" path="res://ecenes/enemies/firstStage/ignis/controller.gd" id="3_0hjxm"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7cwo5"]
+size = Vector2(12, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xqmf3"]
+size = Vector2(12, 31)
+
+[node name="enemi" unique_id=116509856 instance=ExtResource("1_12vow")]
+script = ExtResource("2_alsc0")
+speed = 100.0
+max_health = 20
+ideal_min_distance = 150.0
+ideal_max_distance = 300.0
+shoot_cooldown = 1.0
+melee_penalty_distance = 60.0
+
+[node name="CollisionShape2D" parent="." index="0" unique_id=2025229435]
+shape = SubResource("RectangleShape2D_7cwo5")
+
+[node name="CollisionShape2D" parent="hurt" parent_id_path=PackedInt32Array(2108652251) index="0" unique_id=1974278030]
+position = Vector2(0, -0.5)
+shape = SubResource("RectangleShape2D_xqmf3")
+
+[node name="ShapeIgnis" parent="." index="2" unique_id=1321160181 instance=ExtResource("2_0hjxm")]
+
+[node name="AimPoint" type="Marker2D" parent="." index="3" unique_id=1865592211]
+
+[node name="AIController2D" type="Node2D" parent="." index="4" unique_id=830065144]
+script = ExtResource("3_0hjxm")
+metadata/_custom_type_script = "uid://dj00uo2l2bb4h"
