@@ -6,6 +6,10 @@ var power = 'basic' #basic super mega
 var onFire: bool = false
 var enemi: Node
 
+func move():
+	var vectorDireccion = Input.get_vector('ui_left','ui_right','ui_up','ui_down')
+	velocity = vectorDireccion * speed
+	move_and_slide()
 
 func shot(enemi, power):
 	if onFire:
@@ -25,7 +29,8 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 
 
 func _on_timer_timeout() -> void:
-	shot(enemi, power)
+	if onFire == true:
+		shot(enemi, power)
 
 func _on_super_pressed() -> void:
 	power = 'super'
@@ -43,5 +48,6 @@ func _on_area_2d_body_exited(body: Node2D) -> void:
 		onFire = false
 	
 func _physics_process(delta: float) -> void:
+	move()
 	if life == 0:
 		self.queue_free()

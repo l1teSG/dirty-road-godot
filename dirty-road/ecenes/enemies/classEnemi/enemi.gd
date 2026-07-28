@@ -4,7 +4,7 @@ extends CharacterBody2D
 @export var speed = 120.0
 @export var damage = 1
 @export var damage_cooldown = 0.5
-@export var max_health = 30
+@export var max_health = 1
 
 @onready var player = get_tree().get_first_node_in_group('jugador')
 @onready var ai_controller = $AIController2D
