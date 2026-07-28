@@ -31,7 +31,7 @@ action = "mega"
 shape = SubResource("CircleShape2D_xqmf3")
 
 [node name="Timer" type="Timer" parent="." index="4" unique_id=2127814807]
-wait_time = 0.5
+wait_time = 0.2
 autostart = true
 
 [node name="aim" type="Marker2D" parent="." index="5" unique_id=182942934]
@@ -39,4 +39,5 @@ autostart = true
 [connection signal="pressed" from="controls/super" to="." method="_on_super_pressed"]
 [connection signal="pressed" from="controls/mega" to="." method="_on_mega_pressed"]
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
