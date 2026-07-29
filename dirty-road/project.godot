@@ -63,6 +63,13 @@ mega={
 
 pointing/emulate_touch_from_mouse=true
 
+[layer_names]
+
+2d_physics/layer_1="player_body"
+2d_physics/layer_2="enemies"
+2d_physics/layer_5="player_range_detector"
+2d_physics/layer_6="enemy_bullets"
+
 [physics]
 
 3d/physics_engine="Jolt Physics"

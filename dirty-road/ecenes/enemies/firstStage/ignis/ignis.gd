@@ -8,33 +8,33 @@ extends CharacterBody2D
 @export var shoot_cooldown = 1.0
 @export var melee_penalty_distance = 60.0
 
-@onready var player = get_tree().get_first_node_in_group('jugador')
 @onready var ai_controller = $AIController2D
 @onready var hurtbox = $hurt
 @onready var aim_point = $AimPoint
-@onready var proyectil = preload("res://ecenes/players/projectile/quark/proyectilQuark.tscn") # cambia por proyectil propio del enemigo
+@onready var proyectil = preload("res://ecenes/enemies/firstStage/ignis/bullets/enemi_bullet.tscn")
 
+var player: Node2D
 var spawn_position : Vector2
 var health : int
 var is_dead = false
 var shoot_timer = 0.0
 
 func _ready():
+	player = get_tree().get_first_node_in_group('jugador')
 	ai_controller.init(self)
 	spawn_position = global_position
 	health = max_health
 
-	# conecta la señal por código, o hazlo desde el editor (Node -> Signals)
 	hurtbox.area_entered.connect(_on_hurtbox_area_entered)
-	hurtbox.body_entered.connect(_on_hurtbox_body_entered)
 
 func _physics_process(delta):
 	if is_dead:
 		return
 
-	if player == null:
+	if player == null or not is_instance_valid(player):
 		player = get_tree().get_first_node_in_group('jugador')
-		return
+		if player == null:
+			return
 
 	if ai_controller.needs_reset:
 		ai_controller.reset()
@@ -60,9 +60,9 @@ func _physics_process(delta):
 		shoot_at_player()
 		shoot_timer = shoot_cooldown
 
-	_apply_rewards(delta)
+	_apply_rewards()
 
-func _apply_rewards(delta):
+func _apply_rewards():
 	var distance = global_position.distance_to(player.global_position)
 
 	if distance < ideal_min_distance:
@@ -79,22 +79,15 @@ func _apply_rewards(delta):
 
 func shoot_at_player():
 	var bullet = proyectil.instantiate()
-	bullet.add_to_group('enemy_bullet')
 	var direction = (player.global_position - global_position).normalized()
 	bullet.positionEnemi = direction
 	get_tree().root.add_child(bullet)
 	bullet.global_position = aim_point.global_position
 
-# --- Detección de daño a través del hurtbox ---
-
 func _on_hurtbox_area_entered(area: Area2D) -> void:
 	if area.is_in_group('bullet'):
 		take_hit_from_bullet(1)
-		area.queue_free()  # o que la propia bala se destruya en su script
-
-func _on_hurtbox_body_entered(body: Node2D) -> void:
-	if body.is_in_group('jugador'):
-		take_melee_hit(1)
+		area.queue_free()
 
 func take_hit_from_bullet(amount: int):
 	health -= amount

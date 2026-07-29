@@ -1,7 +1,6 @@
 extends CharacterBody2D
 class_name Player
 
-@onready var shape = $shape
 
 @export var ID: String = ""
 @export var life: int = 10

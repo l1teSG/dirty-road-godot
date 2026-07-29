@@ -1,7 +1,5 @@
 extends AIController2D
 
-
-
 var move_direction : Vector2 = Vector2.ZERO
 var shoot_action : int = 0
 
@@ -9,7 +7,7 @@ const MAX_BULLETS_OBSERVED = 2
 const OBS_RANGE = 500.0
 
 func get_obs() -> Dictionary:
-	if _player.player == null:
+	if _player == null or not is_instance_valid(_player) or _player.player == null or not is_instance_valid(_player.player):
 		return {"obs": _empty_obs()}
 
 	var player_pos = _player.player.global_position
@@ -23,8 +21,8 @@ func get_obs() -> Dictionary:
 		direction_norm.x,
 		direction_norm.y,
 		distance / OBS_RANGE,
-		_player.velocity.x / 200.0,
-		_player.velocity.y / 200.0,
+		_player.player.velocity.x / 200.0,
+		_player.player.velocity.y / 200.0,
 	]
 
 	var bullets = get_tree().get_nodes_in_group("bullet")
@@ -42,8 +40,8 @@ func get_obs() -> Dictionary:
 			var b = bullets_with_dist[i]["node"]
 			var rel_pos = (b.global_position - enemy_pos) / OBS_RANGE
 			var vel = Vector2.ZERO
-			if "positionEnemi" in b and "sped" in b:
-				vel = b.positionEnemi * b.sped / 400.0
+			if "positionEnemi" in b and "speed" in b:
+				vel = b.positionEnemi * b.speed / 400.0
 			obs.append(rel_pos.x)
 			obs.append(rel_pos.y)
 			obs.append(vel.x)
@@ -67,14 +65,8 @@ func get_reward() -> float:
 
 func get_action_space() -> Dictionary:
 	return {
-		"move" : {
-			"size": 2,
-			"action_type": "continuous"
-		},
-		"shoot" : {
-			"size": 2,
-			"action_type": "discrete"
-		},
+		"move" : {"size": 2, "action_type": "continuous"},
+		"shoot" : {"size": 2, "action_type": "discrete"},
 	}
 
 func set_action(action) -> void:
