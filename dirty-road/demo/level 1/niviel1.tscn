@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://bp5tkglvay4l"]
+
+[ext_resource type="PackedScene" uid="uid://bogoxnlkavc7x" path="res://assets/stage/elDespertarDeLasMaquinas/ship/nave.tscn" id="1_0i2a5"]
+
+[sub_resource type="Environment" id="Environment_ckgak"]
+glow_enabled = true
+
+[node name="Niviel1" type="Node2D" unique_id=1415381483]
+
+[node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=457741389]
+color = Color(0.0627451, 0.07058824, 0.08627451, 1)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1336534250]
+environment = SubResource("Environment_ckgak")
+
+[node name="nave" parent="." unique_id=260111917 instance=ExtResource("1_0i2a5")]
+position = Vector2(82, 67)
