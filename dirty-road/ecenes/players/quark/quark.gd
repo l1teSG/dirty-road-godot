@@ -2,7 +2,7 @@ extends Player
 
 @onready var rangeArea = $Area2D/range
 @onready var labelVida = $controls/Label
-var proyectil = preload("res://ecenes/players/projectile/quark/proyectilQuark.tscn")
+var proyectil = preload("res://ecenes/players/projectile/quark/playerProyectil.tscn")
 var power = 'basic' #basic super mega
 var onFire: bool = false
 var enemi: Node
@@ -16,6 +16,7 @@ func shot(enemi, power):
 	if onFire:
 		var direction = (enemi.global_position - $aim.global_position).normalized()
 		var bullet = proyectil.instantiate()
+		bullet.scale = Vector2(0.5,0.5)
 		bullet.add_to_group('bullet')
 		bullet.global_position = $aim.global_position
 		bullet.positionEnemi = direction

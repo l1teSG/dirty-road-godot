@@ -1,13 +1,16 @@
 [gd_scene format=3 uid="uid://dx5ahbv0nxyet"]
 
-[sub_resource type="Gradient" id="Gradient_rbule"]
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_v8n67"]
-gradient = SubResource("Gradient_rbule")
-fill = 1
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7cwo5"]
 size = Vector2(78, 47)
+
+[sub_resource type="Gradient" id="Gradient_rbule"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 1, 0.53333336, 0.007843138)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_7cwo5"]
+gradient = SubResource("Gradient_rbule")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
 
 [node name="Arbol" type="Area2D" unique_id=157670480]
 
@@ -27,13 +30,12 @@ polygon = PackedVector2Array(0, -260, 70, -210, 120, -160, 80, -110, 40, -90, 0,
 color = Color(0, 1, 0.53333336, 1)
 polygon = PackedVector2Array(-10, -280, 50, -230, 90, -180, 45, -140, 0, -120, -45, -130, -100, -170, -60, -230)
 
-[node name="PointLight2D" type="PointLight2D" parent="." unique_id=1040132096]
-position = Vector2(0, -170)
-color = Color(0, 1, 0.53333336, 1)
-energy = 2.2
-texture = SubResource("GradientTexture2D_v8n67")
-texture_scale = 3.5
-
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1355414515]
 position = Vector2(0, -9.5)
 shape = SubResource("RectangleShape2D_7cwo5")
+
+[node name="PointLight2D" type="PointLight2D" parent="." unique_id=46945719]
+position = Vector2(0, -160)
+energy = 2.5
+texture = SubResource("GradientTexture2D_7cwo5")
+texture_scale = 5.0

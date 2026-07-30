@@ -2,15 +2,49 @@
 
 [ext_resource type="Script" uid="uid://t67lbiov6npx" path="res://ecenes/players/projectile/class_proyectil.gd" id="1_odv4v"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_c0tfm"]
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_xqmf3"]
+height = 38.0
+
+[sub_resource type="Gradient" id="Gradient_6c5mb"]
+colors = PackedColorArray(0, 1, 0.53333336, 1, 0, 1, 0.53333336, 0)
+
+[sub_resource type="Gradient" id="Gradient_v7vnx"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_7cwo5"]
+gradient = SubResource("Gradient_v7vnx")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
 
 [node name="ClassProyectil" type="Area2D" unique_id=20232324]
 script = ExtResource("1_odv4v")
 
-[node name="Polygon2D" type="Polygon2D" parent="." unique_id=240919650]
+[node name="hoja" type="Polygon2D" parent="." unique_id=240919650]
+color = Color(0, 1, 0.53333336, 1)
+polygon = PackedVector2Array(-16, 0, -6, -8, 6, -6, 22, 0, 6, 6, -6, 8)
+
+[node name="nucleo" type="Polygon2D" parent="hoja" unique_id=103970638]
+scale = Vector2(0.7, 0.7)
+polygon = PackedVector2Array(-16, 0, -6, -8, 6, -6, 22, 0, 6, 6, -6, 8)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=420599671]
-shape = SubResource("CircleShape2D_c0tfm")
+position = Vector2(2.6, 0)
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_xqmf3")
 
 [node name="CPUParticles2D" type="CPUParticles2D" parent="." unique_id=631609912]
-lifetime = 0.2
+amount = 20
+lifetime = 0.35000000000000003
+direction = Vector2(-1, 0)
+spread = 25.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 40.0
+initial_velocity_max = 80.0
+color_ramp = SubResource("Gradient_6c5mb")
+
+[node name="PointLight2D" type="PointLight2D" parent="." unique_id=1188274702]
+color = Color(0, 1, 0.53333336, 1)
+energy = 1.8
+texture = SubResource("GradientTexture2D_7cwo5")
+texture_scale = 1.8
