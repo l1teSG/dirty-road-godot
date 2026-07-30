@@ -3,7 +3,7 @@ extends AIController2D
 var move_direction : Vector2 = Vector2.ZERO
 
 func get_obs() -> Dictionary:
-	if _player.player == null:
+	if _player == null or not is_instance_valid(_player) or _player.player == null or not is_instance_valid(_player.player):
 		return {"obs": [0.0, 0.0, 1.0, 0.0, 0.0]}
 
 	var player_pos = _player.player.global_position

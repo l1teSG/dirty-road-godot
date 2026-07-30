@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://pd07ouhg7yye" path="res://ecenes/enemies/classEnemi/enemi.gd" id="1_1dgfw"]
 [ext_resource type="PackedScene" uid="uid://dp3eoelg5320d" path="res://assets/stage/elDespertarDeLasMaquinas/enemies/Carbonilla/shapeCarbonilla.tscn" id="2_k2jso"]
-[ext_resource type="Script" uid="uid://cju5huu00ldsn" path="res://ecenes/enemies/firstStage/carbonilla/controller.gd" id="3_sic81"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e3k85"]
 size = Vector2(16, 24)
@@ -22,8 +21,5 @@ shape = SubResource("RectangleShape2D_e3k85")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="hurt" unique_id=1974278030]
 shape = SubResource("RectangleShape2D_k2jso")
-
-[node name="AIController2D" type="Node2D" parent="." unique_id=1220445652]
-script = ExtResource("3_sic81")
 
 [connection signal="area_entered" from="hurt" to="." method="_on_hurt_area_entered"]

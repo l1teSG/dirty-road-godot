@@ -1,6 +1,10 @@
 [gd_scene format=3 uid="uid://bp5tkglvay4l"]
 
 [ext_resource type="PackedScene" uid="uid://bogoxnlkavc7x" path="res://assets/stage/elDespertarDeLasMaquinas/ship/nave.tscn" id="1_0i2a5"]
+[ext_resource type="PackedScene" uid="uid://c5182832ylop2" path="res://ecenes/ecenarios/valle.tscn" id="2_ckgak"]
+[ext_resource type="PackedScene" uid="uid://dogn08xliy6gi" path="res://ecenes/players/quark/quark.tscn" id="3_k6hvo"]
+[ext_resource type="PackedScene" uid="uid://dixwq1qmf6le6" path="res://ecenes/enemies/firstStage/carbonilla/carbonilla.tscn" id="4_ak3nb"]
+[ext_resource type="PackedScene" uid="uid://cbr62w1hv17eb" path="res://ecenes/enemies/firstStage/ignis/ignis.tscn" id="6_f3ssa"]
 
 [sub_resource type="Environment" id="Environment_ckgak"]
 glow_enabled = true
@@ -8,10 +12,105 @@ glow_enabled = true
 [node name="Niviel1" type="Node2D" unique_id=1415381483]
 
 [node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=457741389]
-color = Color(0.0627451, 0.07058824, 0.08627451, 1)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1336534250]
 environment = SubResource("Environment_ckgak")
 
 [node name="nave" parent="." unique_id=260111917 instance=ExtResource("1_0i2a5")]
-position = Vector2(82, 67)
+position = Vector2(0, -1)
+
+[node name="valle" parent="." unique_id=1723520595 instance=ExtResource("2_ckgak")]
+position = Vector2(0, -2)
+
+[node name="ClassPlayer" parent="." unique_id=508460008 groups=["jugador"] instance=ExtResource("3_k6hvo")]
+position = Vector2(-55, -259)
+
+[node name="enemi" parent="." unique_id=116509856 groups=["enemi"] instance=ExtResource("4_ak3nb")]
+position = Vector2(-464, 929)
+
+[node name="enemi2" parent="." unique_id=303690200 groups=["enemi"] instance=ExtResource("4_ak3nb")]
+position = Vector2(249, 1051)
+
+[node name="enemi3" parent="." unique_id=944000892 groups=["enemi"] instance=ExtResource("4_ak3nb")]
+position = Vector2(-57, 1033)
+
+[node name="enemi4" parent="." unique_id=1259879582 groups=["enemi"] instance=ExtResource("4_ak3nb")]
+position = Vector2(68, 1030)
+
+[node name="enemi5" parent="." unique_id=1374247013 groups=["enemi"] instance=ExtResource("4_ak3nb")]
+position = Vector2(-578, 929)
+
+[node name="enemi6" parent="." unique_id=1975402649 groups=["enemi"] instance=ExtResource("4_ak3nb")]
+position = Vector2(-690, 898)
+
+[node name="enemi7" parent="." unique_id=1929411435 groups=["enemi"] instance=ExtResource("4_ak3nb")]
+position = Vector2(-350, 986)
+
+[node name="enemi8" parent="." unique_id=191025231 groups=["enemi"] instance=ExtResource("4_ak3nb")]
+position = Vector2(-866, 833)
+
+[node name="enemi9" parent="." unique_id=892316053 groups=["enemi"] instance=ExtResource("4_ak3nb")]
+position = Vector2(-184, 1007)
+
+[node name="enemi10" parent="." unique_id=2107181701 groups=["enemi"] instance=ExtResource("4_ak3nb")]
+position = Vector2(708, 1020)
+
+[node name="enemi11" parent="." unique_id=1965738732 groups=["enemi"] instance=ExtResource("4_ak3nb")]
+position = Vector2(625, 1053)
+
+[node name="enemi12" parent="." unique_id=1054791884 groups=["enemi"] instance=ExtResource("4_ak3nb")]
+position = Vector2(470, 1051)
+
+[node name="enemi13" parent="." unique_id=82312792 groups=["enemi"] instance=ExtResource("4_ak3nb")]
+position = Vector2(348, 1043)
+
+[node name="enemi14" parent="." unique_id=856514405 groups=["enemi"] instance=ExtResource("4_ak3nb")]
+position = Vector2(-1079, 571)
+
+[node name="enemi15" parent="." unique_id=282497469 groups=["enemi"] instance=ExtResource("4_ak3nb")]
+position = Vector2(-1014, 690)
+
+[node name="enemi16" parent="." unique_id=645828465 groups=["enemi"] instance=ExtResource("4_ak3nb")]
+position = Vector2(-970, 766)
+
+[node name="enemi17" parent="." unique_id=1482707064 groups=["enemi"] instance=ExtResource("6_f3ssa")]
+position = Vector2(-517, -733)
+
+[node name="enemi18" parent="." unique_id=415841515 groups=["enemi"] instance=ExtResource("6_f3ssa")]
+position = Vector2(-603, -622)
+
+[node name="enemi19" parent="." unique_id=1897452358 groups=["enemi"] instance=ExtResource("6_f3ssa")]
+position = Vector2(1121, -308)
+
+[node name="enemi20" parent="." unique_id=866408325 groups=["enemi"] instance=ExtResource("6_f3ssa")]
+position = Vector2(-477, -632)
+
+[node name="enemi21" parent="." unique_id=744401874 groups=["enemi"] instance=ExtResource("6_f3ssa")]
+position = Vector2(297, -698)
+
+[node name="enemi22" parent="." unique_id=1075720632 groups=["enemi"] instance=ExtResource("6_f3ssa")]
+position = Vector2(-1174, -627)
+
+[node name="enemi23" parent="." unique_id=299539192 groups=["enemi"] instance=ExtResource("6_f3ssa")]
+position = Vector2(934, -480)
+
+[node name="enemi24" parent="." unique_id=524544422 groups=["enemi"] instance=ExtResource("6_f3ssa")]
+position = Vector2(676, -516)
+
+[node name="enemi25" parent="." unique_id=839389538 groups=["enemi"] instance=ExtResource("6_f3ssa")]
+position = Vector2(539, -632)
+
+[node name="enemi26" parent="." unique_id=1222231459 groups=["enemi"] instance=ExtResource("6_f3ssa")]
+position = Vector2(110, -718)
+
+[node name="enemi27" parent="." unique_id=845597579 groups=["enemi"] instance=ExtResource("6_f3ssa")]
+position = Vector2(-340, -728)
+
+[node name="enemi28" parent="." unique_id=1539545532 groups=["enemi"] instance=ExtResource("6_f3ssa")]
+position = Vector2(-739, -627)
+
+[node name="enemi29" parent="." unique_id=487935087 groups=["enemi"] instance=ExtResource("6_f3ssa")]
+position = Vector2(-967, -627)
+
+[node name="enemi30" parent="." unique_id=1722182943 groups=["enemi"] instance=ExtResource("6_f3ssa")]
+position = Vector2(-183, -733)

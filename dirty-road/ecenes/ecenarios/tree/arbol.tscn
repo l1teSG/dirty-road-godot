@@ -1,0 +1,39 @@
+[gd_scene format=3 uid="uid://dx5ahbv0nxyet"]
+
+[sub_resource type="Gradient" id="Gradient_rbule"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_v8n67"]
+gradient = SubResource("Gradient_rbule")
+fill = 1
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7cwo5"]
+size = Vector2(78, 47)
+
+[node name="Arbol" type="Area2D" unique_id=157670480]
+
+[node name="sombra" type="Polygon2D" parent="." unique_id=532215091]
+color = Color(0, 0, 0, 0.39215687)
+polygon = PackedVector2Array(-90, 10, -50, -15, 50, -15, 90, 10, 50, 35, -50, 35)
+
+[node name="tronco" type="Polygon2D" parent="." unique_id=531873623]
+color = Color(0.14901961, 0.10980392, 0.078431375, 1)
+polygon = PackedVector2Array(-40, 0, -20, -40, -15, -120, 15, -120, 20, -40, 40, 0, 0, 15)
+
+[node name="copa" type="Polygon2D" parent="." unique_id=1274045138]
+color = Color(0.043137256, 0.23921569, 0.14901961, 1)
+polygon = PackedVector2Array(0, -260, 70, -210, 120, -160, 80, -110, 40, -90, 0, -100, -40, -90, -80, -110, -120, -160, -70, -210)
+
+[node name="copa2" type="Polygon2D" parent="." unique_id=1378694837]
+color = Color(0, 1, 0.53333336, 1)
+polygon = PackedVector2Array(-10, -280, 50, -230, 90, -180, 45, -140, 0, -120, -45, -130, -100, -170, -60, -230)
+
+[node name="PointLight2D" type="PointLight2D" parent="." unique_id=1040132096]
+position = Vector2(0, -170)
+color = Color(0, 1, 0.53333336, 1)
+energy = 2.2
+texture = SubResource("GradientTexture2D_v8n67")
+texture_scale = 3.5
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1355414515]
+position = Vector2(0, -9.5)
+shape = SubResource("RectangleShape2D_7cwo5")

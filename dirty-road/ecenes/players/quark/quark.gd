@@ -1,6 +1,7 @@
 extends Player
 
 @onready var rangeArea = $Area2D/range
+@onready var labelVida = $controls/Label
 var proyectil = preload("res://ecenes/players/projectile/quark/proyectilQuark.tscn")
 var power = 'basic' #basic super mega
 var onFire: bool = false
@@ -19,7 +20,7 @@ func shot(enemi, power):
 		bullet.global_position = $aim.global_position
 		bullet.positionEnemi = direction
 		get_tree().current_scene.add_child(bullet)
-		print('enemigo en rango ')
+		
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body.is_in_group('enemi'):
@@ -41,6 +42,8 @@ func _on_mega_pressed() -> void:
 
 func take_damage(damage):
 	life -= damage
+	if life == 0:
+		get_tree().change_scene_to_file('res://demo/muerte.tscn')
 
 
 func _on_area_2d_body_exited(body: Node2D) -> void:
@@ -48,6 +51,7 @@ func _on_area_2d_body_exited(body: Node2D) -> void:
 		onFire = false
 	
 func _physics_process(delta: float) -> void:
+	labelVida.text = 'vida: ' + str(life)
 	move()
-	if life == 0:
+	if life <= 0:
 		self.queue_free()
