@@ -2,7 +2,10 @@
 
 [ext_resource type="PackedScene" uid="uid://c5182832ylop2" path="res://ecenes/ecenarios/valle.tscn" id="2_ckgak"]
 [ext_resource type="PackedScene" uid="uid://dogn08xliy6gi" path="res://ecenes/players/quark/quark.tscn" id="3_k6hvo"]
+[ext_resource type="PackedScene" uid="uid://cae2il55vhlpd" path="res://ecenes/mareaNegra/mareaNegra.tscn" id="4_50qco"]
+[ext_resource type="PackedScene" uid="uid://c4msn7to5j3in" path="res://ecenes/enemies/nubeGas/nubeGas.tscn" id="5_f3ssa"]
 [ext_resource type="PackedScene" uid="uid://dx5ahbv0nxyet" path="res://ecenes/ecenarios/tree/arbol.tscn" id="5_q0v6s"]
+[ext_resource type="PackedScene" uid="uid://p208rapbv3d0" path="res://ecenes/enemies/microplastico/microPlastico.tscn" id="6_bfnr7"]
 
 [sub_resource type="Environment" id="Environment_ckgak"]
 background_mode = 3
@@ -50,3 +53,12 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 texture = SubResource("GradientTexture2D_7cwo5")
+
+[node name="MareaNegra" parent="." unique_id=431012733 instance=ExtResource("4_50qco")]
+position = Vector2(-122, 139)
+
+[node name="NubeGas" parent="." unique_id=1201918821 instance=ExtResource("5_f3ssa")]
+position = Vector2(-39, 145)
+
+[node name="MicroPlastico" parent="." unique_id=888619048 instance=ExtResource("6_bfnr7")]
+position = Vector2(52, 144)
