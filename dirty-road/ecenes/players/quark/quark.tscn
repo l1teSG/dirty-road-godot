@@ -5,7 +5,7 @@
 [ext_resource type="Theme" uid="uid://hau5fs7dt6rv" path="res://themes/mainTheme.tres" id="3_j4fag"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_7cwo5"]
-radius = 0.01
+radius = 20.22375
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_xqmf3"]
 radius = 266.75082
@@ -29,6 +29,7 @@ fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.5, 0)
 
 [node name="ClassPlayer" unique_id=508460008 instance=ExtResource("1_hr2c7")]
+z_index = 10
 script = ExtResource("2_lx2x3")
 ID = "quark"
 life = 100
