@@ -8,6 +8,8 @@ colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_y0nir"]
 gradient = SubResource("Gradient_intna")
 fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
 
 [node name="NubeGas" type="CharacterBody2D" unique_id=1201918821]
 script = ExtResource("1_intna")
