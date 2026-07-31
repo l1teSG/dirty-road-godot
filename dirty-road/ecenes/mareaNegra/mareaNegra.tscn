@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://cae2il55vhlpd"]
+
+[ext_resource type="Script" uid="uid://dv1t0krrr7so1" path="res://ecenes/mareaNegra/marea_negra.gd" id="1_7smct"]
+
+[node name="MareaNegra" type="CharacterBody2D" unique_id=431012733]
+script = ExtResource("1_7smct")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1261843436]
+
+[node name="PointLight2D" type="PointLight2D" parent="." unique_id=399516680]
+
+[node name="sombra" type="Polygon2D" parent="." unique_id=74643988]
+position = Vector2(0, 18)
+color = Color(0, 0, 0, 0.39215687)
+polygon = PackedVector2Array(22, 0, 10, -8, -18, -8, -24, 0, -18, 8, 10, 8)
+
+[node name="CuerpoExterior" type="Polygon2D" parent="." unique_id=311032800]
+color = Color(0.101960786, 0, 0.2, 1)
+polygon = PackedVector2Array(26, 0, 14, -20, -14, -22, -24, -12, -24, 12, -14, 22, 14, 20)
+
+[node name="CuerpoInterior" type="Polygon2D" parent="." unique_id=1271138965]
+scale = Vector2(0.82, 0.82)
+color = Color(0.54509807, 0, 1, 1)
+polygon = PackedVector2Array(26, 0, 14, -20, -14, -22, -24, -12, -24, 12, -14, 22, 14, 20)
+
+[node name="NucleoToxico" type="Polygon2D" parent="." unique_id=943814479]
+color = Color(0.83137256, 0, 1, 1)
+polygon = PackedVector2Array(10, 0, 4, -8, -6, -8, -10, 0, -6, 8, 4, 8)

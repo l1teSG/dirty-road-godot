@@ -1,6 +1,9 @@
 [gd_scene format=3 uid="uid://p208rapbv3d0"]
 
+[ext_resource type="Script" uid="uid://w3hn11vdxctt" path="res://ecenes/enemies/microplastico/micro_plastico.gd" id="1_b6yrb"]
+
 [node name="MicroPlastico" type="CharacterBody2D" unique_id=888619048]
+script = ExtResource("1_b6yrb")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1409593121]
 
