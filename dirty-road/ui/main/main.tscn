@@ -21,6 +21,7 @@ offset_bottom = 646.6
 color = Color(0.050980393, 0.05490196, 0.07058824, 1)
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="back" unique_id=339676304]
+z_index = 2
 layout_mode = 0
 offset_top = 42.0
 offset_right = 456.0
@@ -58,6 +59,5 @@ theme_override_font_sizes/font_size = 50
 text = "DIRTY ROAD	"
 horizontal_alignment = 1
 
-[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=2017076639]
-
+[connection signal="button_down" from="back/VBoxContainer2/play" to="." method="_on_play_button_down"]
 [connection signal="button_down" from="back/VBoxContainer2/exit" to="." method="_on_exit_button_down"]

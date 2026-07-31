@@ -1,0 +1,49 @@
+[gd_scene format=3 uid="uid://bwmlvfb6r7yfk"]
+
+[ext_resource type="Theme" uid="uid://hau5fs7dt6rv" path="res://themes/mainTheme.tres" id="1_7b5xp"]
+[ext_resource type="Script" uid="uid://cwmogbignwbb0" path="res://demo/muerte.gd" id="2_kgc7k"]
+
+[node name="Control" type="Control" unique_id=589148144]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_7b5xp")
+script = ExtResource("2_kgc7k")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=675243230]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.13713267, 0.38150144, 0.32825804, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=654252027]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_7b5xp")
+
+[node name="Label" type="Label" parent="VBoxContainer" unique_id=1499478861]
+layout_mode = 2
+text = "morisite"
+horizontal_alignment = 1
+
+[node name="Button" type="Button" parent="VBoxContainer" unique_id=1324365524]
+layout_mode = 2
+text = "reiniciar nivel"
+
+[connection signal="button_down" from="VBoxContainer/Button" to="." method="_on_button_button_down"]

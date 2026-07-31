@@ -1,0 +1,42 @@
+[gd_scene format=3 uid="uid://c4msn7to5j3in"]
+
+[ext_resource type="Script" uid="uid://bnd6p45ulna1e" path="res://ecenes/enemies/nubeGas/nube_gas.gd" id="1_intna"]
+
+[sub_resource type="Gradient" id="Gradient_intna"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_y0nir"]
+gradient = SubResource("Gradient_intna")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[node name="NubeGas" type="CharacterBody2D" unique_id=1201918821]
+script = ExtResource("1_intna")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1164621574]
+
+[node name="PointLight2D" type="PointLight2D" parent="." unique_id=1090883794]
+color = Color(0.8, 1, 0, 1)
+energy = 1.4
+texture = SubResource("GradientTexture2D_y0nir")
+texture_scale = 2.8
+
+[node name="Sombra" type="Polygon2D" parent="." unique_id=1653664540]
+position = Vector2(0, 14)
+color = Color(0, 0, 0, 0.3137255)
+polygon = PackedVector2Array(16, 0, 0, -6, -16, 0, 0, 6)
+
+[node name="CuerpoExterior" type="Polygon2D" parent="." unique_id=231728919]
+color = Color(0.2, 0.26666668, 0, 1)
+polygon = PackedVector2Array(18, 0, 9, -14, -5, -18, -18, -7, -18, 7, -5, 18, 9, 14)
+
+[node name="CuerpoInterior" type="Polygon2D" parent="." unique_id=1418987686]
+scale = Vector2(0.8, 0.8)
+color = Color(0.8, 1, 0, 1)
+polygon = PackedVector2Array(18, 0, 9, -14, -5, -18, -18, -7, -18, 7, -5, 18, 9, 14)
+
+[node name="NucleoToxico" type="Polygon2D" parent="." unique_id=856827493]
+scale = Vector2(0.4, 0.4)
+color = Color(1, 1, 0.53333336, 1)
+polygon = PackedVector2Array(12, 0, 0, -10, -12, 0, 0, 10)

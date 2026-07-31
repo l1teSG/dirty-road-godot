@@ -1,0 +1,5 @@
+[gd_scene format=3 uid="uid://dwal2klkq4mw"]
+
+[ext_resource type="PackedScene" uid="uid://dkbpieysp4cx8" path="res://ecenes/players/projectile/classProyectil.tscn" id="1_ce86m"]
+
+[node name="ClassProyectil" unique_id=20232324 instance=ExtResource("1_ce86m")]

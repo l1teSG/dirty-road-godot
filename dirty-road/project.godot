@@ -12,9 +12,13 @@ config_version=5
 
 config/name="dirty road"
 config/version="1.0"
-run/main_scene="uid://c8ukhxusi8bqb"
+run/main_scene="uid://bp5tkglvay4l"
 config/features=PackedStringArray("4.7", "C#", "Forward Plus")
 config/icon="res://icon.svg"
+
+[autoload]
+
+PhantomCameraManager="*uid://duq6jhf6unyis"
 
 [display]
 
@@ -27,7 +31,7 @@ project/assembly_name="dirty road"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/godot_rl_agents/plugin.cfg")
+enabled=PackedStringArray("res://addons/godot_rl_agents/plugin.cfg", "res://addons/phantom_camera/plugin.cfg")
 
 [file_customization]
 
@@ -62,6 +66,13 @@ mega={
 [input_devices]
 
 pointing/emulate_touch_from_mouse=true
+
+[layer_names]
+
+2d_physics/layer_1="player_body"
+2d_physics/layer_2="enemies"
+2d_physics/layer_5="player_range_detector"
+2d_physics/layer_6="enemy_bullets"
 
 [physics]
 

@@ -2,41 +2,106 @@
 
 [ext_resource type="PackedScene" uid="uid://b74nv28ce3acw" path="res://ecenes/players/classPlayer/classPlayer.tscn" id="1_hr2c7"]
 [ext_resource type="Script" uid="uid://34jfhhctw6kb" path="res://ecenes/players/quark/quark.gd" id="2_lx2x3"]
-[ext_resource type="PackedScene" uid="uid://egansfrgvqlu" path="res://assets/players/quark/shapeQuark.tscn" id="2_mvreb"]
+[ext_resource type="Theme" uid="uid://hau5fs7dt6rv" path="res://themes/mainTheme.tres" id="3_j4fag"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_7cwo5"]
-radius = 0.01
+radius = 20.22375
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_xqmf3"]
 radius = 266.75082
 
-[node name="ClassPlayer" unique_id=508460008 instance=ExtResource("1_hr2c7")]
-script = ExtResource("2_lx2x3")
+[sub_resource type="Gradient" id="Gradient_lx2x3"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
 
-[node name="Collision" parent="." index="0" unique_id=1015691357]
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_7cwo5"]
+gradient = SubResource("Gradient_lx2x3")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[sub_resource type="Gradient" id="Gradient_j4fag"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_s3sa1"]
+gradient = SubResource("Gradient_j4fag")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[node name="ClassPlayer" unique_id=508460008 instance=ExtResource("1_hr2c7")]
+z_index = 10
+script = ExtResource("2_lx2x3")
+ID = "quark"
+life = 100
+speed = 420.0
+
+[node name="sombra" type="Polygon2D" parent="." index="0" unique_id=556819228]
+light_mask = 2
+position = Vector2(0, 20)
+color = Color(0, 0, 0, 0.43137255)
+polygon = PackedVector2Array(20, 0, 8, -6, -12, -6, -20, 0, -12, 6, 8, 6)
+
+[node name="Nucleo" type="Polygon2D" parent="." index="1" unique_id=2099832002]
+polygon = PackedVector2Array(8, 0, 2, -2, 0, -8, -2, -2, -6, 0, -2, 2, 0, 8, 2, 2)
+
+[node name="Collision" parent="." index="2" unique_id=1015691357]
 position = Vector2(0, 0)
 shape = SubResource("CircleShape2D_7cwo5")
 
 [node name="super" parent="controls" parent_id_path=PackedInt32Array(309147665) index="1" unique_id=1257296167]
+visible = false
 action = "super"
 
 [node name="mega" parent="controls" parent_id_path=PackedInt32Array(309147665) index="2" unique_id=1220419793]
+visible = false
 action = "mega"
 
-[node name="ShapeQuark" parent="." index="2" unique_id=558741726 instance=ExtResource("2_mvreb")]
+[node name="Label" type="Label" parent="controls" parent_id_path=PackedInt32Array(309147665) index="3" unique_id=1031348185]
+offset_right = 84.0
+offset_bottom = 22.0
+theme = ExtResource("3_j4fag")
+text = "vida:"
 
-[node name="Area2D" type="Area2D" parent="." index="3" unique_id=541228221]
+[node name="Area2D" type="Area2D" parent="." index="4" unique_id=541228221]
 
 [node name="range" type="CollisionShape2D" parent="Area2D" index="0" unique_id=691136940]
 shape = SubResource("CircleShape2D_xqmf3")
 
-[node name="Timer" type="Timer" parent="." index="4" unique_id=2127814807]
-wait_time = 0.5
+[node name="Timer" type="Timer" parent="." index="5" unique_id=2127814807]
+wait_time = 0.2
 autostart = true
 
-[node name="aim" type="Marker2D" parent="." index="5" unique_id=182942934]
+[node name="aim" type="Marker2D" parent="." index="6" unique_id=182942934]
+position = Vector2(20, 0)
+
+[node name="Camera2D" type="Camera2D" parent="." index="7" unique_id=606811536]
+
+[node name="body" type="Polygon2D" parent="." index="8" unique_id=1249231259]
+color = Color(0, 0.16862746, 0.21176471, 1)
+polygon = PackedVector2Array(26, 0, 6, -6, 2, -20, -6, -6, -18, 0, -6, 6, 2, 20, 6, 6)
+uv = PackedVector2Array(41, 31)
+
+[node name="bodyInterior" type="Polygon2D" parent="body" index="0" unique_id=638481520]
+scale = Vector2(0.78, 0.78)
+color = Color(0.4509804, 1, 0, 1)
+polygon = PackedVector2Array(26, 0, 6, -6, 2, -20, -6, -6, -18, 0, -6, 6, 2, 20, 6, 6)
+uv = PackedVector2Array(41, 31)
+
+[node name="LuzBase" type="PointLight2D" parent="." index="9" unique_id=1641084232]
+color = Color(0, 1, 0.53333336, 1)
+energy = 1.2
+texture = SubResource("GradientTexture2D_7cwo5")
+texture_scale = 3.0
+
+[node name="LuzPunta" type="PointLight2D" parent="." index="10" unique_id=199815066]
+position = Vector2(26, 0)
+color = Color(0, 0.9411765, 1, 1)
+energy = 1.8
+texture = SubResource("GradientTexture2D_s3sa1")
+texture_scale = 1.2
 
 [connection signal="pressed" from="controls/super" to="." method="_on_super_pressed"]
 [connection signal="pressed" from="controls/mega" to="." method="_on_mega_pressed"]
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

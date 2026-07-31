@@ -1,7 +1,9 @@
 [gd_scene format=3 uid="uid://cuoae1h1m028b"]
 
 [ext_resource type="PackedScene" uid="uid://dogn08xliy6gi" path="res://ecenes/players/quark/quark.tscn" id="2_6wcyw"]
-[ext_resource type="PackedScene" uid="uid://dixwq1qmf6le6" path="res://ecenes/enemies/firstStage/carbonilla/carbonilla.tscn" id="2_aym7f"]
+[ext_resource type="PackedScene" uid="uid://cbr62w1hv17eb" path="res://ecenes/enemies/firstStage/ignis/ignis.tscn" id="2_aym7f"]
+[ext_resource type="Script" uid="uid://bd1e2qau3s4r1" path="res://addons/godot_rl_agents/sync.gd" id="3_6wcyw"]
+[ext_resource type="Script" uid="uid://y8sbj27wmei6" path="res://ecenes/IA/shotTrainig/EpisodeManager.gd" id="4_82y54"]
 
 [node name="Shot" type="Node2D" unique_id=1638527813]
 
@@ -9,4 +11,11 @@
 position = Vector2(436, 283)
 
 [node name="enemi" parent="." unique_id=116509856 groups=["enemi"] instance=ExtResource("2_aym7f")]
-position = Vector2(132, 41)
+position = Vector2(82, 61)
+
+[node name="Sync" type="Node" parent="." unique_id=1154227276]
+script = ExtResource("3_6wcyw")
+metadata/_custom_type_script = "uid://bd1e2qau3s4r1"
+
+[node name="Node" type="Node" parent="." unique_id=1866336890]
+script = ExtResource("4_82y54")
