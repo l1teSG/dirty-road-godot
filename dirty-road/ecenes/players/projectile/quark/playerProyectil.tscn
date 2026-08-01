@@ -3,3 +3,5 @@
 [ext_resource type="PackedScene" uid="uid://dkbpieysp4cx8" path="res://ecenes/players/projectile/classProyectil.tscn" id="1_ce86m"]
 
 [node name="ClassProyectil" unique_id=20232324 instance=ExtResource("1_ce86m")]
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
