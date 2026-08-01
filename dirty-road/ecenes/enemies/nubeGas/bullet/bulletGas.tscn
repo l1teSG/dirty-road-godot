@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://cb27e727vlose"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_uv853"]
+radius = 5.0990195
+
+[sub_resource type="Gradient" id="Gradient_uv853"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_uv853"]
+gradient = SubResource("Gradient_uv853")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[node name="BulletGas" type="Area2D" unique_id=1983240263]
+
+[node name="CuerpoExterior" type="Polygon2D" parent="." unique_id=954931773]
+color = Color(0.36078432, 0.5411765, 0.1254902, 0.8)
+polygon = PackedVector2Array(7, 0, 3, 4, -3, 3, -5, 0, -3, -3, 3, -4)
+
+[node name="CuerpoInterior" type="Polygon2D" parent="." unique_id=1365129341]
+color = Color(1, 1, 0, 1)
+polygon = PackedVector2Array(4, 0, 1, 2, -2, 1.5, -3, 0, -3, -1.5, 1, -2)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=733968694]
+shape = SubResource("CircleShape2D_uv853")
+
+[node name="CentroCaliente" type="Polygon2D" parent="." unique_id=1371829149]
+color = Color(1, 1, 0.8, 1)
+polygon = PackedVector2Array(1.5, 0, 0, 0.8, -1, 0, 0, -0.8)
+
+[node name="luz" type="PointLight2D" parent="." unique_id=1729569274]
+color = Color(0.83137256, 1, 0, 1)
+energy = 1.2
+texture = SubResource("GradientTexture2D_uv853")
+texture_scale = 0.8
+
+[node name="sombra" type="Polygon2D" parent="." unique_id=739836780]
+light_mask = 2
+position = Vector2(0, 6)
+scale = Vector2(0.2, 0.2)
+color = Color(0, 0, 0, 0.43137255)
+polygon = PackedVector2Array(20, 0, 8, -6, -12, -6, -20, 0, -12, 6, 8, 6)

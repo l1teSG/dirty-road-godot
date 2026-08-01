@@ -1,4 +1,4 @@
-class_name EnemigoBase
+class_name enemigoNuevo
 extends CharacterBody2D
 
 var tiempo_anim: float = randf() * 10.0 # Inicio aleatorio para que no se muevan idénticos

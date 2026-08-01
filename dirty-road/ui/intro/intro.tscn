@@ -1,0 +1,65 @@
+[gd_scene format=3 uid="uid://ddhuvi04qd00b"]
+
+[ext_resource type="Theme" uid="uid://hau5fs7dt6rv" path="res://themes/mainTheme.tres" id="1_c5cpu"]
+[ext_resource type="Script" uid="uid://ytedos84s5wi" path="res://ui/intro/intro.gd" id="1_qxmol"]
+
+[sub_resource type="Curve" id="Curve_qxmol"]
+_data = [Vector2(0.546875, 0.42696637), 0.0, 0.0, 0, 0]
+point_count = 1
+
+[sub_resource type="Gradient" id="Gradient_0ub06"]
+offsets = PackedFloat32Array(0, 0.50980395, 1)
+colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[node name="Intro" type="Control" unique_id=1290214049]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_qxmol")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=692463502]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Label" type="Label" parent="." unique_id=27346032]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_c5cpu")
+theme_override_colors/font_color = Color(0.6, 1, 0.2, 1)
+theme_override_font_sizes/font_size = 60
+text = "DIRTY ROAD"
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="." unique_id=330021974]
+position = Vector2(583, 322)
+amount = 200
+lifetime = 4.0
+direction = Vector2(0, -1)
+spread = 180.0
+gravity = Vector2(0, -8)
+initial_velocity_min = 10.0
+initial_velocity_max = 35.0
+scale_amount_min = 2.0
+scale_amount_max = 5.0
+split_scale = true
+scale_curve_x = SubResource("Curve_qxmol")
+scale_curve_y = null
+color = Color(0.6, 1, 0.2, 1)
+color_ramp = SubResource("Gradient_0ub06")

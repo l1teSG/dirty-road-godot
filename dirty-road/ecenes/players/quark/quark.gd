@@ -1,7 +1,6 @@
 extends Player
 
 @onready var rangeArea = $Area2D/range
-@onready var labelVida = $controls/Label
 var proyectil = preload("res://ecenes/players/projectile/quark/playerProyectil.tscn")
 var power = 'basic' #basic super mega
 var onFire: bool = false
@@ -55,17 +54,15 @@ func _on_area_2d_body_exited(body: Node2D) -> void:
 func _physics_process(delta: float) -> void:
 	aplicar_pulso_energia(delta)
 	animar_sombra(delta)
-	labelVida.text = 'vida: ' + str(life)
+	
 	move()
 	if life <= 0:
 		self.queue_free()
 
-# Variable para el ritmo continuo del latido (colócala fuera de la función, al inicio del script)
+
 var tiempo_pulso: float = 0.0
 
-# -------------------------------------------------------------------
-# FUNCIÓN DE PULSO DE ENERGÍA (Nodos referenciados internamente)
-# -------------------------------------------------------------------
+
 func aplicar_pulso_energia(delta: float) -> void:
 	# 1. Obtenemos las referencias a los nodos DENTRO de esta función
 	var nucleo = $Nucleo as Polygon2D

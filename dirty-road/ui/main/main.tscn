@@ -1,63 +1,153 @@
 [gd_scene format=3 uid="uid://c8ukhxusi8bqb"]
 
-[ext_resource type="Theme" uid="uid://hau5fs7dt6rv" path="res://themes/mainTheme.tres" id="1_3a1op"]
 [ext_resource type="Script" uid="uid://dheeekunktlt1" path="res://ui/main/main.gd" id="2_7mc2q"]
+[ext_resource type="Script" uid="uid://e6q8ogt147yq" path="res://ui/main/color_rect.gd" id="2_ircy7"]
 
-[node name="Main" type="Control" unique_id=1207355306]
-texture_filter = 1
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3a1op"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_color = Color(0.6, 1, 0.2, 1)
+border_blend = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7cwo5"]
+bg_color = Color(0.019607844, 0.039215688, 0.03137255, 0.48235294)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.6, 1, 0.2, 1)
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xqmf3"]
+bg_color = Color(0.6, 1, 0.2, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7mc2q"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.6, 1, 0.2, 1)
+border_blend = true
+
+[sub_resource type="Environment" id="Environment_7cwo5"]
+glow_enabled = true
+
+[node name="Main" type="Control" unique_id=607975645]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("1_3a1op")
 script = ExtResource("2_7mc2q")
 
-[node name="back" type="ColorRect" parent="." unique_id=1267721134]
-layout_mode = 0
-offset_right = 456.6
-offset_bottom = 646.6
-color = Color(0.050980393, 0.05490196, 0.07058824, 1)
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1797260839]
+layer = -2
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="back" unique_id=339676304]
-z_index = 2
-layout_mode = 0
-offset_top = 42.0
-offset_right = 456.0
-offset_bottom = 562.0
-theme = ExtResource("1_3a1op")
-alignment = 1
-
-[node name="play" type="Button" parent="back/VBoxContainer2" unique_id=5471011]
-layout_mode = 2
-theme_override_font_sizes/font_size = 30
-text = "jugar"
-
-[node name="settings" type="Button" parent="back/VBoxContainer2" unique_id=78479292]
-layout_mode = 2
-theme_override_font_sizes/font_size = 30
-text = "ajustes"
-
-[node name="exit" type="Button" parent="back/VBoxContainer2" unique_id=2106315898]
-layout_mode = 2
-theme_override_font_sizes/font_size = 30
-text = "salir"
-
-[node name="VBoxContainer" type="VBoxContainer" parent="back" unique_id=1620434191]
-layout_mode = 1
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer" unique_id=1301635943]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 14
+color = Color(0.019607844, 0.039215688, 0.03137255, 0.78431374)
+script = ExtResource("2_ircy7")
 
-[node name="Label" type="Label" parent="back/VBoxContainer" unique_id=48907296]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1981766110]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -197.0
+offset_top = -206.5
+offset_right = 216.0
+offset_bottom = 220.5
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer" unique_id=654017836]
 layout_mode = 2
-theme_override_font_sizes/font_size = 50
-text = "DIRTY ROAD	"
-horizontal_alignment = 1
+theme_override_constants/separation = 20
 
-[connection signal="button_down" from="back/VBoxContainer2/play" to="." method="_on_play_button_down"]
-[connection signal="button_down" from="back/VBoxContainer2/exit" to="." method="_on_exit_button_down"]
+[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer" unique_id=813626048]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 1, 0.2, 1)
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxFlat_3a1op")
+text = "DIRTY ROAD"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="Control" type="Control" parent="VBoxContainer/VBoxContainer" unique_id=803231444]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+
+[node name="VBoxContainer" type="PanelContainer" parent="VBoxContainer/VBoxContainer" unique_id=1077527873]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_7cwo5")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/VBoxContainer/VBoxContainer" unique_id=2001441284]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/VBoxContainer/VBoxContainer" unique_id=897860323]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.84705883, 1, 0.9019608, 1)
+text = " juan casas | emanuel rocero | miguel muricia "
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="Label2" type="Label" parent="VBoxContainer/VBoxContainer/VBoxContainer/VBoxContainer" unique_id=144754058]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.84705883, 1, 0.9019608, 1)
+text = "salva a los arboles!!!!"
+horizontal_alignment = 1
+uppercase = true
+
+[node name="ProgressBar" type="ProgressBar" parent="VBoxContainer/VBoxContainer/VBoxContainer/VBoxContainer" unique_id=379053897]
+custom_minimum_size = Vector2(0, 22)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_xqmf3")
+show_percentage = false
+
+[node name="Control2" type="Control" parent="VBoxContainer/VBoxContainer" unique_id=183111143]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="jugar" type="Button" parent="VBoxContainer/VBoxContainer" unique_id=645948470]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.84705883, 1, 0.9019608, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_7mc2q")
+text = "CONTINUAR"
+
+[node name="nuevaPartida" type="Button" parent="VBoxContainer/VBoxContainer" unique_id=1923487128]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.84705883, 1, 0.9019608, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_7mc2q")
+text = "NUEVA PARTIDA"
+
+[node name="salir" type="Button" parent="VBoxContainer/VBoxContainer" unique_id=1305349753]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.84705883, 1, 0.9019608, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_7mc2q")
+text = "SALIR"
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1311166310]
+environment = SubResource("Environment_7cwo5")
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="." unique_id=1360477686]
+position = Vector2(577, 341)
+amount = 40
+lifetime = 6.0
+emission_shape = 3
+emission_rect_extents = Vector2(574.5, 381.7)
+spread = 180.0
+gravity = Vector2(0, -10)
+scale_amount_max = 3.0
+color = Color(0.6, 1, 0.2, 0.44705883)
+
+[connection signal="button_down" from="VBoxContainer/VBoxContainer/salir" to="." method="_on_salir_button_down"]
