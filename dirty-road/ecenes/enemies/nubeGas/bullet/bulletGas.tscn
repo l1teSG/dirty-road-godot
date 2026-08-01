@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://cb27e727vlose"]
+
+[node name="BulletGas" type="Area2D" unique_id=1983240263]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=733968694]
+
+[node name="CuerpoInterior" type="Polygon2D" parent="." unique_id=1365129341]
+color = Color(0.6, 1, 0.2, 1)
+polygon = PackedVector2Array(4, 0, 1, 2.5, -3, 1.5, -2, 0, -3, -1.5, 1, -2.5)
+
+[node name="CuerpoExterior" type="Polygon2D" parent="." unique_id=954931773]
+color = Color(0.101960786, 0.2, 0.1254902, 0.6)
+polygon = PackedVector2Array(8, 0, 2, 5, -6, 3, -4, 0, -6, -3, 2, -5)

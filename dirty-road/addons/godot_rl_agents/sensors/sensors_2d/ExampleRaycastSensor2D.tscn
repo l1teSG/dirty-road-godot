@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://ddeq7mn1ealyc"]
+[gd_scene format=3 uid="uid://ddeq7mn1ealyc"]
 
 [ext_resource type="Script" path="res://addons/godot_rl_agents/sensors/sensors_2d/RaycastSensor2D.gd" id="1"]
 

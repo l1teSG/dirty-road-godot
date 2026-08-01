@@ -1,1 +1,1 @@
-extends EnemigoBase
+extends enemigoNuevo
