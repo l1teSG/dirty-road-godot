@@ -2,6 +2,9 @@
 
 [ext_resource type="Script" uid="uid://dv1t0krrr7so1" path="res://ecenes/mareaNegra/marea_negra.gd" id="1_7smct"]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_b6yrb"]
+radius = 28.01785
+
 [sub_resource type="Gradient" id="Gradient_7smct"]
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
 
@@ -15,6 +18,7 @@ fill_to = Vector2(0.5, 0)
 script = ExtResource("1_7smct")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1261843436]
+shape = SubResource("CircleShape2D_b6yrb")
 
 [node name="PointLight2D" type="PointLight2D" parent="." unique_id=399516680]
 color = Color(0.6392157, 0, 1, 1)

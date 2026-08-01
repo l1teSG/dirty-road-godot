@@ -2,10 +2,30 @@
 
 [ext_resource type="PackedScene" uid="uid://b74nv28ce3acw" path="res://ecenes/players/classPlayer/classPlayer.tscn" id="1_hr2c7"]
 [ext_resource type="Script" uid="uid://34jfhhctw6kb" path="res://ecenes/players/quark/quark.gd" id="2_lx2x3"]
-[ext_resource type="Theme" uid="uid://hau5fs7dt6rv" path="res://themes/mainTheme.tres" id="3_j4fag"]
+[ext_resource type="FontFile" uid="uid://344dhrkbi7ri" path="res://themes/Chakra_Petch/ChakraPetch-Bold.ttf" id="3_lx2x3"]
+[ext_resource type="Texture2D" uid="uid://cfdda0xumpkii" path="res://assets/mobile-controls-1/boton2.tres" id="3_qh7t8"]
+[ext_resource type="Texture2D" uid="uid://c4wd5anqrm0th" path="res://assets/mobile-controls-1/Vector/Icons/icon_pause.svg" id="4_j4fag"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_7cwo5"]
 radius = 20.22375
+
+[sub_resource type="Gradient" id="Gradient_jlxlp"]
+offsets = PackedFloat32Array(0, 0.7, 1)
+colors = PackedColorArray(0, 1, 0.53333336, 1, 0, 0.26666668, 0.13333334, 1, 0, 0.06666667, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_818wt"]
+gradient = SubResource("Gradient_jlxlp")
+width = 80
+height = 80
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_s3sa1"]
+radius = 40.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_v2d8e"]
+radius = 38.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_xqmf3"]
 radius = 266.75082
@@ -28,12 +48,23 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.5, 0)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mvreb"]
+bg_color = Color(0, 0, 0, 0.60784316)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lx2x3"]
+bg_color = Color(0, 1, 0.53333336, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
 [node name="ClassPlayer" unique_id=508460008 instance=ExtResource("1_hr2c7")]
 z_index = 10
 script = ExtResource("2_lx2x3")
 ID = "quark"
 life = 100
 speed = 420.0
+metadata/_edit_horizontal_guides_ = [475.0]
 
 [node name="sombra" type="Polygon2D" parent="." index="0" unique_id=556819228]
 light_mask = 2
@@ -48,19 +79,33 @@ polygon = PackedVector2Array(8, 0, 2, -2, 0, -8, -2, -2, -6, 0, -2, 2, 0, 8, 2, 
 position = Vector2(0, 0)
 shape = SubResource("CircleShape2D_7cwo5")
 
-[node name="super" parent="controls" parent_id_path=PackedInt32Array(309147665) index="1" unique_id=1257296167]
-visible = false
+[node name="ContenedorBotones" type="Control" parent="controls" parent_id_path=PackedInt32Array(309147665) index="1" unique_id=1894758059]
+layout_mode = 3
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -312.0
+offset_top = -212.0
+offset_right = -272.0
+offset_bottom = -172.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="BotonAtaque1" type="TouchScreenButton" parent="controls/ContenedorBotones" index="0" unique_id=814226946]
+position = Vector2(26, 0)
+texture_normal = SubResource("GradientTexture2D_818wt")
+texture_pressed = SubResource("GradientTexture2D_818wt")
+shape = SubResource("CircleShape2D_s3sa1")
 action = "super"
 
-[node name="mega" parent="controls" parent_id_path=PackedInt32Array(309147665) index="2" unique_id=1220419793]
-visible = false
+[node name="BotonAtaque2" type="TouchScreenButton" parent="controls/ContenedorBotones" index="1" unique_id=1668950582]
+position = Vector2(-71, 10)
+texture_normal = ExtResource("3_qh7t8")
+texture_pressed = ExtResource("3_qh7t8")
+shape = SubResource("CircleShape2D_v2d8e")
 action = "mega"
-
-[node name="Label" type="Label" parent="controls" parent_id_path=PackedInt32Array(309147665) index="3" unique_id=1031348185]
-offset_right = 84.0
-offset_bottom = 22.0
-theme = ExtResource("3_j4fag")
-text = "vida:"
 
 [node name="Area2D" type="Area2D" parent="." index="4" unique_id=541228221]
 
@@ -100,8 +145,60 @@ energy = 1.8
 texture = SubResource("GradientTexture2D_s3sa1")
 texture_scale = 1.2
 
-[connection signal="pressed" from="controls/super" to="." method="_on_super_pressed"]
-[connection signal="pressed" from="controls/mega" to="." method="_on_mega_pressed"]
+[node name="ui" type="CanvasLayer" parent="." index="11" unique_id=1985090240]
+
+[node name="ajustes" type="Button" parent="ui" index="0" unique_id=1655672500]
+modulate = Color(0, 1, 0.53333336, 1)
+offset_left = 1115.0
+offset_top = 9.0
+offset_right = 1171.0
+offset_bottom = 65.0
+scale = Vector2(0.5, 0.5)
+icon = ExtResource("4_j4fag")
+
+[node name="margenUi" type="MarginContainer" parent="ui" index="1" unique_id=957307684]
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+
+[node name="ContenedorVertical" type="VBoxContainer" parent="ui/margenUi" index="0" unique_id=97551753]
+layout_mode = 2
+alignment = 1
+
+[node name="FilaVida" type="HBoxContainer" parent="ui/margenUi/ContenedorVertical" index="0" unique_id=68475318]
+layout_mode = 2
+alignment = 1
+
+[node name="IconoVida" type="Label" parent="ui/margenUi/ContenedorVertical/FilaVida" index="0" unique_id=1555489899]
+layout_mode = 2
+text = "💚"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BarraVida" type="ProgressBar" parent="ui/margenUi/ContenedorVertical/FilaVida" index="1" unique_id=1067875394]
+custom_minimum_size = Vector2(180, 14)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_mvreb")
+theme_override_styles/fill = SubResource("StyleBoxFlat_lx2x3")
+value = 100.0
+show_percentage = false
+
+[node name="FilaBiomasa" type="HBoxContainer" parent="ui/margenUi/ContenedorVertical" index="1" unique_id=1860202100]
+layout_mode = 2
+
+[node name="IconoBiomasa" type="Label" parent="ui/margenUi/ContenedorVertical/FilaBiomasa" index="0" unique_id=1934158973]
+layout_mode = 2
+text = "🌱"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextoBiomasa" type="Label" parent="ui/margenUi/ContenedorVertical/FilaBiomasa" index="1" unique_id=1107437777]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.93333334, 0.33333334, 1)
+theme_override_fonts/font = ExtResource("3_lx2x3")
+text = "0 / 10"
+
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

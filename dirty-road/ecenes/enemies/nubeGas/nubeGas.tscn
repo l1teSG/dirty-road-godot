@@ -2,6 +2,9 @@
 
 [ext_resource type="Script" uid="uid://bnd6p45ulna1e" path="res://ecenes/enemies/nubeGas/nube_gas.gd" id="1_intna"]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_7smct"]
+radius = 20.024984
+
 [sub_resource type="Gradient" id="Gradient_intna"]
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
 
@@ -15,6 +18,7 @@ fill_to = Vector2(0.5, 0)
 script = ExtResource("1_intna")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1164621574]
+shape = SubResource("CircleShape2D_7smct")
 
 [node name="PointLight2D" type="PointLight2D" parent="." unique_id=1090883794]
 color = Color(0.8, 1, 0, 1)

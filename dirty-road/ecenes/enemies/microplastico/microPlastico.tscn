@@ -2,6 +2,9 @@
 
 [ext_resource type="Script" uid="uid://w3hn11vdxctt" path="res://ecenes/enemies/microplastico/micro_plastico.gd" id="1_b6yrb"]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_50qco"]
+radius = 19.026299
+
 [sub_resource type="Gradient" id="Gradient_b6yrb"]
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
 
@@ -15,6 +18,7 @@ fill_to = Vector2(0.5, 0)
 script = ExtResource("1_b6yrb")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1409593121]
+shape = SubResource("CircleShape2D_50qco")
 
 [node name="sombra" type="Polygon2D" parent="." unique_id=367230776]
 position = Vector2(0, 12)
