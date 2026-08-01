@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 BiomasaManager="*uid://c0ig2kjjs5is6"
+SaveManager="*uid://0l0kw8ttmen8"
 
 [display]
 
