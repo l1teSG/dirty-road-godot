@@ -18,7 +18,7 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-PhantomCameraManager="*uid://duq6jhf6unyis"
+BiomasaManager="*uid://c0ig2kjjs5is6"
 
 [display]
 

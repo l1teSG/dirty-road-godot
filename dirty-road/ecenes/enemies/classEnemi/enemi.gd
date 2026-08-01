@@ -26,4 +26,7 @@ func _physics_process(delta: float) -> void:
 func take_hit(damage: int = 10) -> void:
 	life -= damage
 	if life <= 0:
+		var label = get_tree().current_scene.find_child("TextoBiomasa", true, false)
+		if label:
+			BiomasaManager.emitir_biomasa(global_position, label.global_position, label.get_node("/root").find_child("ui", true, false))
 		self.queue_free()

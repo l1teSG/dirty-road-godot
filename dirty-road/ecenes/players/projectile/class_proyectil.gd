@@ -23,7 +23,7 @@ func shoot(dir: Vector2, delta: float) -> void:
 	global_position += delta * sped * dir
 
 func _on_body_entered(body: Node2D) -> void:
-	print("Colisión con: ", body.name, " grupos: ", body.get_groups())
+	
 	if body.is_in_group('enemi') and not _destruyendo:
 		if body.has_method('take_hit'):
 			body.take_hit(10)
