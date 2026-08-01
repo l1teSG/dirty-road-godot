@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://c4msn7to5j3in" path="res://ecenes/enemies/nubeGas/nubeGas.tscn" id="5_f3ssa"]
 [ext_resource type="PackedScene" uid="uid://dx5ahbv0nxyet" path="res://ecenes/ecenarios/tree/arbol.tscn" id="5_q0v6s"]
 [ext_resource type="PackedScene" uid="uid://p208rapbv3d0" path="res://ecenes/enemies/microplastico/microPlastico.tscn" id="6_bfnr7"]
+[ext_resource type="PackedScene" uid="uid://cb27e727vlose" path="res://ecenes/enemies/nubeGas/bullet/bulletGas.tscn" id="7_f3ssa"]
 
 [sub_resource type="Environment" id="Environment_ckgak"]
 background_mode = 3
@@ -62,3 +63,6 @@ position = Vector2(-18, 142)
 
 [node name="MicroPlastico" parent="." unique_id=888619048 instance=ExtResource("6_bfnr7")]
 position = Vector2(119, 146)
+
+[node name="BulletGas" parent="." unique_id=1983240263 instance=ExtResource("7_f3ssa")]
+position = Vector2(13, 325)
