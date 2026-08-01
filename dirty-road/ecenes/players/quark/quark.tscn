@@ -5,6 +5,7 @@
 [ext_resource type="FontFile" uid="uid://344dhrkbi7ri" path="res://themes/Chakra_Petch/ChakraPetch-Bold.ttf" id="3_lx2x3"]
 [ext_resource type="Texture2D" uid="uid://cfdda0xumpkii" path="res://assets/mobile-controls-1/boton2.tres" id="3_qh7t8"]
 [ext_resource type="Texture2D" uid="uid://f8dmk5pcnvgc" path="res://assets/mobile-controls-1/Vector/Icons/icon_pause.svg" id="4_j4fag"]
+[ext_resource type="PackedScene" uid="uid://bnsgn8vqai733" path="res://ecenes/players/pausa/pausa.tscn" id="6_ycxd3"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_7cwo5"]
 radius = 20.22375
@@ -199,6 +200,11 @@ theme_override_colors/font_color = Color(1, 0.93333334, 0.33333334, 1)
 theme_override_fonts/font = ExtResource("3_lx2x3")
 text = "0 / 10"
 
+[node name="Pausa" parent="." index="12" unique_id=565747821 instance=ExtResource("6_ycxd3")]
+layer = 200
+visible = false
+
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="button_down" from="ui/ajustes" to="." method="_on_ajustes_button_down"]

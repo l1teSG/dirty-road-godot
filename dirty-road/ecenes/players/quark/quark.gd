@@ -97,3 +97,7 @@ func animar_sombra(delta: float) -> void:
 	else:
 		# Al detenerse, la sombra vuelve suavemente a su tamaño normal
 		sombra.scale = sombra.scale.lerp(Vector2.ONE, delta * 10.0)
+
+
+func _on_ajustes_button_down() -> void:
+	$Pausa.visible = true
