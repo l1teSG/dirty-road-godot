@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bnsgn8vqai733"]
 
 [ext_resource type="Theme" uid="uid://hau5fs7dt6rv" path="res://themes/mainTheme.tres" id="1_1yxvs"]
+[ext_resource type="Script" uid="uid://cxutsimb0ms0q" path="res://ecenes/players/pausa/pausa.gd" id="1_b5l1p"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g2h5g"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
@@ -29,69 +30,66 @@ border_width_bottom = 2
 border_color = Color(0.6, 1, 0.2, 1)
 border_blend = true
 
-[node name="Pausa" type="Control" unique_id=654601819]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="Pausa" type="CanvasLayer" unique_id=565747821]
+script = ExtResource("1_b5l1p")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=96252024]
-
-[node name="ColorRect" type="ColorRect" parent="CanvasLayer" unique_id=1214515014]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.019607844, 0.039215688, 0.03137255, 0.2901961)
-
-[node name="CenterContainer" type="CenterContainer" parent="CanvasLayer" unique_id=1328952975]
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1328952975]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 20.0
-offset_bottom = 20.0
+offset_left = -62.0
+offset_top = -58.0
+offset_right = 62.0
+offset_bottom = 58.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/CenterContainer" unique_id=2113082568]
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=2113082568]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="CanvasLayer/CenterContainer/VBoxContainer" unique_id=268053565]
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer" unique_id=268053565]
 layout_mode = 2
 theme = ExtResource("1_1yxvs")
-theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_color = Color(0.20784314, 1, 0.16862746, 1)
 text = "MENU DE PAUSA"
 
-[node name="HSeparator" type="HSeparator" parent="CanvasLayer/CenterContainer/VBoxContainer" unique_id=2063077115]
+[node name="HSeparator" type="HSeparator" parent="CenterContainer/VBoxContainer" unique_id=2063077115]
 layout_mode = 2
 theme = ExtResource("1_1yxvs")
 
-[node name="Button" type="Button" parent="CanvasLayer/CenterContainer/VBoxContainer" unique_id=431089943]
+[node name="Button" type="Button" parent="CenterContainer/VBoxContainer" unique_id=431089943]
+z_index = 6
 layout_mode = 2
 theme = ExtResource("1_1yxvs")
 theme_override_styles/normal = SubResource("StyleBoxFlat_g2h5g")
 text = "continuar"
 
-[node name="Button2" type="Button" parent="CanvasLayer/CenterContainer/VBoxContainer" unique_id=724464612]
+[node name="Button2" type="Button" parent="CenterContainer/VBoxContainer" unique_id=724464612]
+z_index = 6
 layout_mode = 2
 theme = ExtResource("1_1yxvs")
 theme_override_styles/normal = SubResource("StyleBoxFlat_crj17")
 text = "nueva partida"
 
-[node name="Button3" type="Button" parent="CanvasLayer/CenterContainer/VBoxContainer" unique_id=290195262]
+[node name="Button3" type="Button" parent="CenterContainer/VBoxContainer" unique_id=290195262]
+z_index = 6
 layout_mode = 2
 theme = ExtResource("1_1yxvs")
 theme_override_styles/normal = SubResource("StyleBoxFlat_tap61")
 text = "salir"
 
-[node name="CPUParticles2D" type="CPUParticles2D" parent="CanvasLayer" unique_id=1303598093]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1214515014]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.019607844, 0.039215688, 0.03137255, 0.7647059)
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="." unique_id=1303598093]
 position = Vector2(577, 341)
 amount = 40
 lifetime = 6.0
@@ -101,3 +99,5 @@ spread = 180.0
 gravity = Vector2(0, -10)
 scale_amount_max = 3.0
 color = Color(0.6, 1, 0.2, 0.44705883)
+
+[connection signal="button_down" from="CenterContainer/VBoxContainer/Button" to="." method="_on_button_button_down"]

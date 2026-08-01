@@ -58,10 +58,10 @@ texture = SubResource("GradientTexture2D_7cwo5")
 [node name="MareaNegra" parent="." unique_id=431012733 instance=ExtResource("4_50qco")]
 position = Vector2(-219, 141)
 
-[node name="NubeGas" parent="." unique_id=1201918821 instance=ExtResource("5_f3ssa")]
+[node name="NubeGas" parent="." unique_id=1201918821 groups=["enemi"] instance=ExtResource("5_f3ssa")]
 position = Vector2(-18, 142)
 
-[node name="MicroPlastico" parent="." unique_id=888619048 instance=ExtResource("6_bfnr7")]
+[node name="MicroPlastico" parent="." unique_id=888619048 groups=["enemi"] instance=ExtResource("6_bfnr7")]
 position = Vector2(119, 146)
 
 [node name="BulletGas" parent="." unique_id=1983240263 instance=ExtResource("7_f3ssa")]
