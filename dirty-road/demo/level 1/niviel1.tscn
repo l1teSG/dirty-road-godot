@@ -1,6 +1,8 @@
 [gd_scene format=3 uid="uid://bp5tkglvay4l"]
 
+[ext_resource type="Script" uid="uid://bb0ijmririri3" path="res://demo/level 1/niviel_1.gd" id="1_bfnr7"]
 [ext_resource type="PackedScene" uid="uid://c5182832ylop2" path="res://ecenes/ecenarios/valle.tscn" id="2_ckgak"]
+[ext_resource type="FontFile" uid="uid://344dhrkbi7ri" path="res://themes/Chakra_Petch/ChakraPetch-Bold.ttf" id="2_trm6e"]
 [ext_resource type="PackedScene" uid="uid://dogn08xliy6gi" path="res://ecenes/players/quark/quark.tscn" id="3_k6hvo"]
 [ext_resource type="PackedScene" uid="uid://cae2il55vhlpd" path="res://ecenes/mareaNegra/mareaNegra.tscn" id="4_50qco"]
 [ext_resource type="PackedScene" uid="uid://c4msn7to5j3in" path="res://ecenes/enemies/nubeGas/nubeGas.tscn" id="5_f3ssa"]
@@ -24,6 +26,29 @@ fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.5, 0)
 
 [node name="Niviel1" type="Node2D" unique_id=1415381483]
+script = ExtResource("1_bfnr7")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=671132988]
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer" unique_id=1694550510]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextoHorda" type="Label" parent="CanvasLayer" unique_id=66871243]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_top = 79.0
+offset_right = 20.0
+offset_bottom = 102.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.6, 1, 0.2, 1)
+theme_override_fonts/font = ExtResource("2_trm6e")
+theme_override_font_sizes/font_size = 100
 
 [node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=457741389]
 color = Color(0.15686275, 0.20392157, 0.25882354, 1)

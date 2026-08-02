@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://c8ukhxusi8bqb"]
 
 [ext_resource type="Script" uid="uid://dheeekunktlt1" path="res://ui/main/main.gd" id="2_7mc2q"]
-[ext_resource type="Script" uid="uid://e6q8ogt147yq" path="res://ui/main/color_rect.gd" id="2_ircy7"]
+[ext_resource type="Script" uid="uid://dispbruetoi2r" path="res://ui/main/color_rect.gd" id="2_ircy7"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3a1op"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
@@ -150,4 +150,5 @@ gravity = Vector2(0, -10)
 scale_amount_max = 3.0
 color = Color(0.6, 1, 0.2, 0.44705883)
 
+[connection signal="button_down" from="VBoxContainer/VBoxContainer/nuevaPartida" to="." method="_on_nueva_partida_button_down"]
 [connection signal="button_down" from="VBoxContainer/VBoxContainer/salir" to="." method="_on_salir_button_down"]

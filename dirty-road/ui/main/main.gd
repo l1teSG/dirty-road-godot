@@ -1,40 +1,111 @@
 extends Control
 
-# Usamos '@onready' pero validaremos que no sean nulos
-@onready var ui_controles = $"." 
-@onready var fondo_oscuro = $CanvasLayer/ColorRect
-@onready var btn_continuar = $VBoxContainer/VBoxContainer/jugar
+@onready var fondo_oscuro: ColorRect = $CanvasLayer/ColorRect
+@onready var btn_continuar: Button = $VBoxContainer/VBoxContainer/jugar
+@onready var btn_salir: Button = $VBoxContainer/VBoxContainer/salir
+@onready var btn_nueva_partida: Button = $VBoxContainer/VBoxContainer/nuevaPartida
 
-func _ready():
-	
-	if btn_continuar:
-		btn_continuar.pressed.connect(_on_continuar_pressed)
-		$VBoxContainer/VBoxContainer/salir.pressed.connect(_on_continuar_pressed)
-		$VBoxContainer/VBoxContainer/nuevaPartida.pressed.connect(_on_continuar_pressed)
-	else:
-		print("¡Advertencia! No se encontró el botón 'Btn_Continuar' en la ruta especificada.")
+const RUTA_NIVEL := "res://demo/level 1/niviel1.tscn"
 
-func _on_continuar_pressed():
-	# Validación de seguridad para evitar el error de "rp_target is null"
-	if not ui_controles or not fondo_oscuro:
-		print("Error crítico: 'ui_controles' o 'fondo_oscuro' es nulo. Revisa los nombres de tus nodos.")
+const DURACION_ENTRADA := 0.8
+const RETRASO_ENTRE_BOTONES := 0.12
+
+
+func _init() -> void:
+	# se ejecuta ANTES de que el nodo entre al árbol y se dibuje el primer frame
+	pass
+
+
+func _ready() -> void:
+	if btn_continuar == null or btn_salir == null or btn_nueva_partida == null or fondo_oscuro == null:
+		push_error("MenuPrincipal: falta algún nodo, revisa las rutas @onready")
 		return
-		
-	btn_continuar.disabled = true
-	
+
+	# oculta TODO de inmediato, antes de cualquier otra cosa
+	_ocultar_para_entrada()
+
+	btn_continuar.pressed.connect(_on_continuar_pressed)
+	btn_salir.pressed.connect(_on_salir_pressed)
+	btn_nueva_partida.pressed.connect(_on_nueva_partida_pressed)
+
+	btn_continuar.disabled = not SaveManager.hay_partida_guardada()
+
+	# evita que el primer botón reciba foco automático y muestre su
+	# estilo de "focus" brillante al iniciar
+	btn_continuar.focus_mode = Control.FOCUS_NONE
+	btn_salir.focus_mode = Control.FOCUS_NONE
+	btn_nueva_partida.focus_mode = Control.FOCUS_NONE
+
+	_animar_entrada()
+
+
+func _ocultar_para_entrada() -> void:
+	fondo_oscuro.color.a = 0.0
+	btn_continuar.modulate.a = 0.0
+	btn_salir.modulate.a = 0.0
+	btn_nueva_partida.modulate.a = 0.0
+
+
+# ── Animación de entrada del menú ────────────────────────────────────
+
+func _animar_entrada() -> void:
+	var botones: Array[Button] = [btn_continuar, btn_nueva_partida, btn_salir]
+
 	var tween = create_tween()
 	tween.set_parallel(true)
-	
-	# Animaciones
-	tween.tween_property(ui_controles, "modulate:a", 0.0, 0.3)
-	tween.tween_property(fondo_oscuro, "color:a", 0.0, 1.5)
-	
-	tween.chain().tween_callback(_iniciar_juego)
 
-func _iniciar_juego():
-	
-	queue_free()
+	tween.tween_property(fondo_oscuro, "color:a", 1.0, DURACION_ENTRADA)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+
+	for i in botones.size():
+		var boton = botones[i]
+		tween.tween_property(boton, "modulate:a", 1.0, DURACION_ENTRADA)\
+			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)\
+			.set_delay(i * RETRASO_ENTRE_BOTONES)
 
 
-func _on_salir_button_down() -> void:
-	get_tree().quit()
+# ── Botones ────────────────────────────────────────────────────────
+
+func _on_continuar_pressed() -> void:
+	if not SaveManager.cargar_partida():
+		push_warning("No se pudo cargar la partida guardada")
+		return
+	_transicion_y_cambiar_escena(RUTA_NIVEL)
+
+
+func _on_nueva_partida_pressed() -> void:
+	SaveManager.nueva_partida()
+	_transicion_y_cambiar_escena(RUTA_NIVEL)
+
+
+func _on_salir_pressed() -> void:
+	_animar_salida_app()
+
+
+# ── Transiciones de salida ───────────────────────────────────────────
+
+func _transicion_y_cambiar_escena(ruta: String) -> void:
+	btn_continuar.disabled = true
+	btn_nueva_partida.disabled = true
+	btn_salir.disabled = true
+
+	var tween = create_tween()
+	tween.set_parallel(true)
+	tween.tween_property(self, "modulate:a", 0.0, 0.5)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	tween.tween_property(fondo_oscuro, "color:a", 0.0, 1.5)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	tween.chain().tween_callback(func():
+		get_tree().change_scene_to_file(ruta)
+	)
+
+
+func _animar_salida_app() -> void:
+	btn_continuar.disabled = true
+	btn_nueva_partida.disabled = true
+	btn_salir.disabled = true
+
+	var tween = create_tween()
+	tween.tween_property(self, "modulate:a", 0.0, 0.4)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	tween.tween_callback(get_tree().quit)

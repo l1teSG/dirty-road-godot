@@ -5,7 +5,7 @@
 [ext_resource type="FontFile" uid="uid://344dhrkbi7ri" path="res://themes/Chakra_Petch/ChakraPetch-Bold.ttf" id="3_lx2x3"]
 [ext_resource type="Texture2D" uid="uid://cfdda0xumpkii" path="res://assets/mobile-controls-1/boton2.tres" id="3_qh7t8"]
 [ext_resource type="Texture2D" uid="uid://f8dmk5pcnvgc" path="res://assets/mobile-controls-1/Vector/Icons/icon_pause.svg" id="4_j4fag"]
-[ext_resource type="Script" uid="uid://dw84nyojjo7rm" path="res://ecenes/players/quark/texto_biomasa.gd" id="6_tnb2i"]
+[ext_resource type="Script" uid="uid://6cs3m1ycepdt" path="res://ecenes/players/quark/texto_biomasa.gd" id="6_tnb2i"]
 [ext_resource type="PackedScene" uid="uid://bnsgn8vqai733" path="res://ecenes/players/pausa/pausa.tscn" id="6_ycxd3"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_7cwo5"]
