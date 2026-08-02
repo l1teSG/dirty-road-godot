@@ -23,3 +23,8 @@ dirty-road/addons/godotty/bin/libgodotty.macos.dylib
 
 # Ignorar archivos ocultos o del sistema
 .DS_Store
+
+apk/
+*.apk
+*.aab
+*.idsig

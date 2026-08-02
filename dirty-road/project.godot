@@ -14,15 +14,18 @@ config/name="dirty road"
 config/version="1.0"
 run/main_scene="uid://ddhuvi04qd00b"
 config/features=PackedStringArray("4.7", "C#", "Forward Plus")
+boot_splash/show_image=false
+boot_splash/use_filter=false
 config/icon="res://icon.svg"
 
 [autoload]
 
-BiomasaManager="*uid://c0ig2kjjs5is6"
-SaveManager="*uid://0l0kw8ttmen8"
+SaveManager="*uid://cvmav7awamy4b"
+BiomasaManager="*uid://b2o0ouq0f4sdb"
 
 [display]
 
+window/size/mode=3
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 
@@ -82,3 +85,4 @@ pointing/emulate_touch_from_mouse=true
 [rendering]
 
 rendering_device/driver.windows="d3d12"
+textures/vram_compression/import_etc2_astc=true
