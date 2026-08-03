@@ -115,11 +115,11 @@ func destruir_arbol() -> void:
 	canvas_layer.add_child(color_rect)
 
 	# Animación doble: el color pasa de rojo a negro mientras la opacidad sube a 1
-	# Duración total: 2.5 segundos para un efecto visual evidente y dramático
+	# Duración total: 1 segundo para una transición rápida
 	var tween = create_tween()
 	tween.set_parallel(true)
-	tween.tween_property(color_rect, "modulate:a", 1.0, 2.5).set_ease(Tween.EASE_IN)
-	tween.tween_property(color_rect, "color", Color.BLACK, 2.5).set_ease(Tween.EASE_IN)
+	tween.tween_property(color_rect, "modulate:a", 1.0, 1.0).set_ease(Tween.EASE_IN)
+	tween.tween_property(color_rect, "color", Color.BLACK, 1.0).set_ease(Tween.EASE_IN)
 	await tween.finished
 
 	# Cambiar a la escena de muerte
