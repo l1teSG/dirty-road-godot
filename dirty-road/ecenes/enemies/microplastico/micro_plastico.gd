@@ -62,7 +62,7 @@ func seleccionar_objetivo() -> void:
 		en_combate = false
 		return
 
-	# Aggro activo: perseguir a Quark si está dentro del rango máximo
+	# 1. Aggro activo: perseguir a Quark si le disparó
 	if en_aggro and jugador != null:
 		var dist_j = global_position.distance_to(jugador.global_position)
 		if dist_j <= distancia_max_aggro:
@@ -72,15 +72,20 @@ func seleccionar_objetivo() -> void:
 		else:
 			en_aggro = false
 
-	# Prioridad base: Árbol si existe
+	# 2. Proximidad activa: Si Quark (vivo) está cerca de MicroPlástico (ej. a menos de 180px)
+	# o si está más cerca de MicroPlástico que el Árbol, lo ataca a él primero.
+	if jugador != null:
+		var dist_j = global_position.distance_to(jugador.global_position)
+		var dist_a = global_position.distance_to(arbol.global_position) if arbol != null else INF
+		
+		if dist_j <= 180.0 or dist_j < dist_a:
+			objetivo = jugador
+			en_combate = false
+			return
+
+	# 3. Prioridad por defecto: Si Quark está lejos, marcha directo hacia el Árbol
 	if arbol != null:
 		objetivo = arbol
-		en_combate = false
-		return
-
-	# Secundario: Quark (vivo)
-	if jugador != null:
-		objetivo = jugador
 		en_combate = false
 		return
 
