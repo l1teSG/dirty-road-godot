@@ -60,10 +60,10 @@ func atacar(target: Node2D) -> void:
 	if not is_instance_valid(target):
 		return
 
-	if not target.has_method("take_damage"):
+	if not target.has_method("recibir_danio"):
 		return
 
-	target.call("take_damage", damage)
+	target.call("recibir_danio", damage)
 	can_attack = false
 
 	# Esperar el cooldown antes de poder atacar de nuevo
