@@ -59,21 +59,15 @@ func reaccionar_visualmente_al_danio() -> void:
 		tween.tween_property(luz, "color", color_original, 0.25)
 
 func destruir_arbol() -> void:
-	# Desactivar al jugador para que no pueda moverse ni disparar
-	# mientras se muestra la escena de muerte.
+	# Desactivar al jugador instantáneamente (sin transiciones) para que
+	# no pueda moverse ni disparar mientras se cambia a la escena de muerte.
 	var player = get_tree().get_first_node_in_group("player")
 	if player != null:
 		player.hide()
 		player.process_mode = Node.PROCESS_MODE_DISABLED
 
-	var ruta_muerte := "res://ui/dead/dead.tscn"
-	if ResourceLoader.exists(ruta_muerte):
-		var escena_muerte = load(ruta_muerte) as PackedScene
-		if escena_muerte != null:
-			var instancia = escena_muerte.instantiate()
-			get_tree().current_scene.add_child(instancia)
-	else:
-		push_error("No se encontró la escena de muerte en: " + ruta_muerte)
+	# Cambiar a la escena de muerte en lugar de añadirla como hijo.
+	get_tree().change_scene_to_file("res://ui/dead/dead.tscn")
 	
 func _ready() -> void:
 	vida_actual = vida_maxima
