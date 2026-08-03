@@ -88,21 +88,24 @@ func destruir_arbol() -> void:
 		tween_arbol.tween_property(luz, "texture_scale", 10.0, 0.8).set_ease(Tween.EASE_IN)
 		tween_arbol.tween_property(luz, "color", Color(1, 0, 0, 1), 0.8).set_ease(Tween.EASE_IN)
 
-	# Crear una capa de overlay para el desvanecimiento a negro
+	# Crear una capa de overlay para la transición dramática a pantalla completa
 	var canvas_layer = CanvasLayer.new()
 	canvas_layer.layer = 128
 	get_tree().current_scene.add_child(canvas_layer)
 
-	# ColorRect de pantalla completa, inicialmente transparente
+	# ColorRect de pantalla completa, inicialmente rojo semitransparente
 	var color_rect = ColorRect.new()
-	color_rect.color = Color.BLACK
+	color_rect.color = Color.RED
 	color_rect.modulate = Color(1, 1, 1, 0)
 	color_rect.anchors_preset = Control.PRESET_FULL_RECT
 	canvas_layer.add_child(color_rect)
 
-	# Animación suave de fade a negro (1.5 segundos)
+	# Animación doble: el color pasa de rojo a negro mientras la opacidad sube a 1
+	# Duración total: 2.5 segundos para un efecto visual evidente y dramático
 	var tween = create_tween()
-	tween.tween_property(color_rect, "modulate:a", 1.0, 1.5).set_ease(Tween.EASE_IN)
+	tween.set_parallel(true)
+	tween.tween_property(color_rect, "modulate:a", 1.0, 2.5).set_ease(Tween.EASE_IN)
+	tween.tween_property(color_rect, "color", Color.BLACK, 2.5).set_ease(Tween.EASE_IN)
 	await tween.finished
 
 	# Cambiar a la escena de muerte
