@@ -63,10 +63,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -197.0
-offset_top = -206.5
-offset_right = 216.0
-offset_bottom = 220.5
+offset_left = -405.5
+offset_top = -288.5
+offset_right = 494.5
+offset_bottom = 411.5
 grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
@@ -78,7 +78,7 @@ theme_override_constants/separation = 20
 [node name="Label" type="Label" parent="VBoxContainer/VBoxContainer" unique_id=813626048]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.6, 1, 0.2, 1)
-theme_override_font_sizes/font_size = 80
+theme_override_font_sizes/font_size = 100
 theme_override_styles/normal = SubResource("StyleBoxFlat_3a1op")
 text = "DIRTY ROAD"
 horizontal_alignment = 1
@@ -99,7 +99,7 @@ layout_mode = 2
 [node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/VBoxContainer/VBoxContainer" unique_id=897860323]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.84705883, 1, 0.9019608, 1)
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 40
 text = " juan casas | emanuel rocero | miguel muricia "
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -108,7 +108,7 @@ uppercase = true
 [node name="Label2" type="Label" parent="VBoxContainer/VBoxContainer/VBoxContainer/VBoxContainer" unique_id=144754058]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.84705883, 1, 0.9019608, 1)
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 40
 text = "salva a los arboles!!!!"
 horizontal_alignment = 1
 uppercase = true
@@ -126,21 +126,21 @@ layout_mode = 2
 [node name="jugar" type="Button" parent="VBoxContainer/VBoxContainer" unique_id=645948470]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.84705883, 1, 0.9019608, 1)
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 50
 theme_override_styles/normal = SubResource("StyleBoxFlat_7mc2q")
 text = "CONTINUAR"
 
 [node name="nuevaPartida" type="Button" parent="VBoxContainer/VBoxContainer" unique_id=1923487128]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.84705883, 1, 0.9019608, 1)
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 50
 theme_override_styles/normal = SubResource("StyleBoxFlat_7mc2q")
 text = "NUEVA PARTIDA"
 
 [node name="salir" type="Button" parent="VBoxContainer/VBoxContainer" unique_id=1305349753]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.84705883, 1, 0.9019608, 1)
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 50
 theme_override_styles/normal = SubResource("StyleBoxFlat_7mc2q")
 text = "SALIR"
 
