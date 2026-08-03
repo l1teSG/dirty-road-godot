@@ -37,9 +37,8 @@ environment = SubResource("Environment_ckgak")
 [node name="valle" parent="." unique_id=1723520595 instance=ExtResource("2_ckgak")]
 position = Vector2(0, -2)
 
-[node name="ClassPlayer" parent="." unique_id=508460008 groups=["jugador"] node_paths=PackedStringArray("respawn_manager") instance=ExtResource("3_k6hvo")]
+[node name="ClassPlayer" parent="." unique_id=508460008 node_paths=PackedStringArray("respawn_manager") groups=["jugador"] instance=ExtResource("3_k6hvo")]
 position = Vector2(373, -69)
-vida_maxima = 100
 respawn_manager = NodePath("../RespawnManager")
 
 [node name="Arbol" parent="." unique_id=157670480 instance=ExtResource("5_q0v6s")]

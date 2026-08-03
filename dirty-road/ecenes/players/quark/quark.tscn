@@ -83,6 +83,7 @@ radius = 38.0
 [node name="ClassPlayer" unique_id=508460008 instance=ExtResource("1_hr2c7")]
 z_index = 10
 script = ExtResource("2_lx2x3")
+vida_maxima = 100
 ID = "quark"
 life = 100
 speed = 420.0
@@ -216,12 +217,11 @@ offset_right = 120.0
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_color = Color(0, 1, 0.53333336, 1)
 theme_override_fonts/font = ExtResource("3_lx2x3")
-theme_override_font_sizes/font_size = 90
+theme_override_font_sizes/font_size = 200
 horizontal_alignment = 1
 vertical_alignment = 1
-visible = false
 
 [node name="Pausa" parent="." index="11" unique_id=565747821 instance=ExtResource("6_ycxd3")]
 layer = 200
