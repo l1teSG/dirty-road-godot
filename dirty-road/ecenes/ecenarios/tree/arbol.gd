@@ -59,8 +59,14 @@ func reaccionar_visualmente_al_danio() -> void:
 		tween.tween_property(luz, "color", color_original, 0.25)
 
 func destruir_arbol() -> void:
-	# Cambia a la escena de pantalla de muerte con botones interactivos
-	get_tree().change_scene_to_file("res://ecenes/ui/pantalla_muerte.tscn")
+	var ruta_muerte := "res://ui/dead/dead.tscn"
+	if ResourceLoader.exists(ruta_muerte):
+		var escena_muerte = load(ruta_muerte) as PackedScene
+		if escena_muerte != null:
+			var instancia = escena_muerte.instantiate()
+			get_tree().current_scene.add_child(instancia)
+	else:
+		push_error("No se encontró la escena de muerte en: " + ruta_muerte)
 	
 func _ready() -> void:
 	vida_actual = vida_maxima
