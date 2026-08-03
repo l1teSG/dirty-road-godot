@@ -204,6 +204,25 @@ custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 icon = ExtResource("4_j4fag")
 
+[node name="ContadorRespawn" type="Label" parent="ui" index="2" unique_id=1900412299]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -120.0
+offset_top = -80.0
+offset_right = 120.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("3_lx2x3")
+theme_override_font_sizes/font_size = 90
+horizontal_alignment = 1
+vertical_alignment = 1
+visible = false
+
 [node name="Pausa" parent="." index="11" unique_id=565747821 instance=ExtResource("6_ycxd3")]
 layer = 200
 visible = false

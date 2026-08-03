@@ -4,8 +4,13 @@ extends Player
 @onready var rangeArea = $Area2D/range
 @onready var aim: Node2D = $aim
 @onready var nucleo: Polygon2D = $Nucleo
+@onready var cuerpo: Polygon2D = $body
+@onready var luz_base: PointLight2D = $LuzBase
 @onready var luz_punta: PointLight2D = $LuzPunta
 @onready var sombra: Polygon2D = $sombra
+@onready var colision: CollisionShape2D = $Collision
+@onready var barra_vida: ProgressBar = $ui/margenUi/ContenedorVertical/FilaVida/BarraVida
+@onready var contador_respawn: Label = $ui/ContadorRespawn
 
 # ── Combate / disparo ─────────────────────────────────
 var proyectil: PackedScene = preload("res://ecenes/players/projectile/quark/playerProyectil.tscn")
@@ -18,14 +23,60 @@ var enemigos_en_rango: Array[Node2D] = []
 var tiempo_caminata: float = 0.0
 var tiempo_pulso: float = 0.0
 
+# ── Vida / respawn ─────────────────────────────────────
+## Vida máxima del jugador, usada para restaurarla al hacer respawn.
+@export var vida_maxima: int = 100
+
+## Referencia al RespawnManager de la escena, usada únicamente para
+## escuchar las señales "respawn_iniciado" / "respawn_finalizado" y así
+## manejar el contador visual de respawn. Debe asignarse desde el editor
+## (cableado en la escena del nivel, p. ej. niviel1.tscn).
+##
+## NOTE: tipada como Node porque "respawn_iniciado"/"respawn_finalizado"
+## pertenecen al script propio de respawn_manager.gd, no a la clase base
+## Node. Se accede de forma dinámica (has_signal / connect por String)
+## por el mismo motivo que RespawnManager accede al jugador de forma
+## dinámica: el chequeo estático de tipos de GDScript rechazaría señales
+## o métodos que no existen en el tipo declarado.
+@export var respawn_manager: Node
+
+## Emitida cuando la vida llega a 0. RespawnManager escucha esta señal
+## para iniciar la secuencia de respawn.
+signal died
+
+## Evita que el jugador siga recibiendo daño (y re-emitiendo "died")
+## mientras ya está esperando a que RespawnManager lo reposicione.
+var _muerto: bool = false
+
+
+func _ready() -> void:
+	_actualizar_barra_vida()
+	_conectar_respawn_manager()
+
+
+## Conecta las señales del RespawnManager asignado, si existe, para poder
+## mostrar el contador de respawn en pantalla.
+func _conectar_respawn_manager() -> void:
+	if respawn_manager == null:
+		push_warning("Quark: falta asignar la referencia a RespawnManager (contador de respawn deshabilitado)")
+		return
+
+	if respawn_manager.has_signal("respawn_iniciado"):
+		respawn_manager.connect("respawn_iniciado", _on_respawn_iniciado)
+
+	if respawn_manager.has_signal("respawn_finalizado"):
+		respawn_manager.connect("respawn_finalizado", _on_respawn_finalizado)
+
 
 func _physics_process(delta: float) -> void:
+	# Salvaguarda: si el jugador está muerto (esperando respawn), no debe
+	# procesar movimiento ni animaciones.
+	if _muerto:
+		return
+
 	aplicar_pulso_energia(delta)
 	animar_sombra(delta)
 	move()
-
-	if life <= 0:
-		queue_free()
 
 
 func move() -> void:
@@ -37,6 +88,11 @@ func move() -> void:
 # ── Disparo ────────────────────────────────────────────
 
 func shot(target: Node2D, power_actual: String) -> void:
+	# Guarda estricta: si el jugador está muerto, no puede disparar
+	# mientras espera el respawn.
+	if _muerto:
+		return
+
 	if not onFire or not is_instance_valid(target):
 		return
 
@@ -110,9 +166,122 @@ func _on_mega_pressed() -> void:
 # ── Vida / daño ────────────────────────────────────────
 
 func take_damage(damage: int) -> void:
+	# Si ya está esperando el respawn, ignoramos daño adicional para no
+	# seguir bajando "life" indefinidamente ni re-emitir "died".
+	if _muerto:
+		return
+
 	life -= damage
+	_actualizar_barra_vida()
+
 	if life <= 0:
-		get_tree().change_scene_to_file('res://demo/muerte.tscn')
+		_muerto = true
+		_ocultar_al_morir()
+		died.emit()
+
+
+## Restaura la vida al máximo y reposiciona al jugador.
+## Llamado por RespawnManager una vez transcurrido el tiempo de espera.
+func respawn_at(posicion: Vector2) -> void:
+	life = vida_maxima
+	global_position = posicion
+	_actualizar_barra_vida()
+	_restaurar_al_reaparecer()
+	_muerto = false
+
+
+## Oculta y desactiva únicamente los elementos gráficos y de colisión del
+## cuerpo del jugador (no el nodo raíz), para que la UI —incluyendo
+## "ui/ajuste/ajustes" y el contador de respawn— permanezca visible y
+## funcional mientras el jugador viaja invisible hacia el punto de origen.
+func _ocultar_al_morir() -> void:
+	if sombra != null:
+		sombra.visible = false
+	if nucleo != null:
+		nucleo.visible = false
+	if cuerpo != null:
+		cuerpo.visible = false  # oculta también a "bodyInterior", su hijo
+	if luz_base != null:
+		luz_base.enabled = false
+	if luz_punta != null:
+		luz_punta.enabled = false
+	if colision != null:
+		colision.disabled = true
+
+
+## Revierte "_ocultar_al_morir": restaura visibilidad de los gráficos,
+## vuelve a encender las luces y reactiva la colisión del jugador.
+func _restaurar_al_reaparecer() -> void:
+	if sombra != null:
+		sombra.visible = true
+	if nucleo != null:
+		nucleo.visible = true
+	if cuerpo != null:
+		cuerpo.visible = true
+	if luz_base != null:
+		luz_base.enabled = true
+	if luz_punta != null:
+		luz_punta.enabled = true
+	if colision != null:
+		colision.disabled = false
+
+
+## Sincroniza la barra de vida de la UI con el valor actual de "life".
+func _actualizar_barra_vida() -> void:
+	if barra_vida == null:
+		return
+	barra_vida.max_value = vida_maxima
+	barra_vida.value = clamp(life, 0, vida_maxima)
+
+
+# ── Contador de respawn (UI) ────────────────────────────
+
+## Llamado cuando RespawnManager emite "respawn_iniciado".
+func _on_respawn_iniciado(tiempo_espera: float) -> void:
+	_iniciar_contador_respawn(tiempo_espera)
+
+
+## Llamado cuando RespawnManager emite "respawn_finalizado". Garantiza que
+## el contador quede oculto aunque haya algún desajuste de redondeo entre
+## este bucle local y el tiempo real de espera de RespawnManager.
+func _on_respawn_finalizado() -> void:
+	if contador_respawn != null:
+		contador_respawn.visible = false
+
+
+## Muestra el Label del contador y lo va actualizando segundo a segundo
+## hasta llegar a 0, con una pequeña animación de "pop" en cada cambio.
+func _iniciar_contador_respawn(tiempo_espera: float) -> void:
+	if contador_respawn == null:
+		return
+
+	var segundos_restantes: int = int(ceil(tiempo_espera))
+	contador_respawn.visible = true
+	_actualizar_texto_contador(segundos_restantes)
+
+	while segundos_restantes > 0:
+		await get_tree().create_timer(1.0).timeout
+		segundos_restantes -= 1
+		_actualizar_texto_contador(segundos_restantes)
+
+	contador_respawn.visible = false
+
+
+## Actualiza el texto del contador y aplica el efecto de "pop": el Label
+## aparece agrandado y se anima suavemente hasta su escala normal.
+func _actualizar_texto_contador(segundos: int) -> void:
+	contador_respawn.text = str(segundos)
+
+	# se espera un frame para que el Label recalcule su tamaño real con el
+	# nuevo texto antes de fijar el pivote de escala en su centro
+	await get_tree().process_frame
+	contador_respawn.pivot_offset = contador_respawn.size / 2.0
+
+	contador_respawn.scale = Vector2(1.4, 1.4)
+
+	var tween = create_tween()
+	tween.tween_property(contador_respawn, "scale", Vector2.ONE, 0.25)\
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 
 
 # ── Animaciones visuales ───────────────────────────────
@@ -141,3 +310,7 @@ func animar_sombra(delta: float) -> void:
 
 func _on_ajustes_button_down() -> void:
 	$Pausa.visible = true
+
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("debug_kill"):
+		take_damage(9999)

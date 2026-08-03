@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://c4msn7to5j3in" path="res://ecenes/enemies/nubeGas/nubeGas.tscn" id="5_f3ssa"]
 [ext_resource type="PackedScene" uid="uid://dx5ahbv0nxyet" path="res://ecenes/ecenarios/tree/arbol.tscn" id="5_q0v6s"]
 [ext_resource type="PackedScene" uid="uid://p208rapbv3d0" path="res://ecenes/enemies/microplastico/microPlastico.tscn" id="6_bfnr7"]
+[ext_resource type="Script" uid="uid://do1tyxx2ogdi1" path="res://ecenes/respawn/respawn_manager.gd" id="7_rspwn1"]
 
 [sub_resource type="Environment" id="Environment_ckgak"]
 background_mode = 3
@@ -36,8 +37,10 @@ environment = SubResource("Environment_ckgak")
 [node name="valle" parent="." unique_id=1723520595 instance=ExtResource("2_ckgak")]
 position = Vector2(0, -2)
 
-[node name="ClassPlayer" parent="." unique_id=508460008 groups=["jugador"] instance=ExtResource("3_k6hvo")]
+[node name="ClassPlayer" parent="." unique_id=508460008 groups=["jugador"] node_paths=PackedStringArray("respawn_manager") instance=ExtResource("3_k6hvo")]
 position = Vector2(373, -69)
+vida_maxima = 100
+respawn_manager = NodePath("../RespawnManager")
 
 [node name="Arbol" parent="." unique_id=157670480 instance=ExtResource("5_q0v6s")]
 
@@ -87,3 +90,11 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 texture = SubResource("GradientTexture2D_7cwo5")
+
+[node name="RespawnManager" type="Node" parent="." unique_id=1900412233 node_paths=PackedStringArray("jugador", "punto_respawn")]
+script = ExtResource("7_rspwn1")
+jugador = NodePath("../ClassPlayer")
+punto_respawn = NodePath("PuntoRespawn")
+
+[node name="PuntoRespawn" type="Marker2D" parent="RespawnManager" unique_id=1900412234]
+position = Vector2(373, -69)
