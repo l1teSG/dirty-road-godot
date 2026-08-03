@@ -43,23 +43,30 @@ func seleccionar_objetivo() -> void:
 		else:
 			en_combate = false
 
-	# Si Quark está muerto, ir a su punto de reaparición
+	# Si Quark está muerto: Prioridad absoluta volver al Árbol
 	if quark_muerto:
+		en_aggro = false
+		en_combate = false
+
+		# 1. Si el Árbol sigue en pie, atacarlo inmediatamente
+		if arbol != null:
+			objetivo = arbol
+			return
+
+		# 2. Si el Árbol ya fue destruido, ir al punto de respawn
 		var spawn_nodes = get_tree().get_nodes_in_group("player_spawn")
 		if spawn_nodes.size() > 0 and is_instance_valid(spawn_nodes[0]):
 			objetivo = spawn_nodes[0] as Node2D
-			en_combate = false
 			return
-		# Fallback: buscar RespawnManager
+
 		var respawn_manager = get_tree().get_first_node_in_group("respawn_manager")
 		if respawn_manager != null and respawn_manager.has_method("get_punto_respawn"):
 			var punto = respawn_manager.get_punto_respawn()
 			if punto != null:
 				objetivo = punto
-				en_combate = false
 				return
+
 		objetivo = null
-		en_combate = false
 		return
 
 	# 1. Aggro activo: perseguir a Quark si le disparó
