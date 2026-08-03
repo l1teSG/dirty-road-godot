@@ -79,7 +79,16 @@ func destruir_arbol() -> void:
 		player.hide()
 		player.process_mode = Node.PROCESS_MODE_DISABLED
 
-	# Crear una capa de overlay para la animación de desvanecimiento a negro
+	# Animar intensamente la luz del árbol antes del fade (paralelo)
+	var luz = $LuzArbol as PointLight2D
+	if luz != null:
+		var tween_arbol = create_tween()
+		tween_arbol.set_parallel(true)
+		tween_arbol.tween_property(luz, "energy", 10.0, 0.8).set_ease(Tween.EASE_IN)
+		tween_arbol.tween_property(luz, "texture_scale", 10.0, 0.8).set_ease(Tween.EASE_IN)
+		tween_arbol.tween_property(luz, "color", Color(1, 0, 0, 1), 0.8).set_ease(Tween.EASE_IN)
+
+	# Crear una capa de overlay para el desvanecimiento a negro
 	var canvas_layer = CanvasLayer.new()
 	canvas_layer.layer = 128
 	get_tree().current_scene.add_child(canvas_layer)
@@ -91,8 +100,7 @@ func destruir_arbol() -> void:
 	color_rect.anchors_preset = Control.PRESET_FULL_RECT
 	canvas_layer.add_child(color_rect)
 
-	# Animación suave de fade a negro (duración de 1.5 segundos para que
-	# el efecto visual se aprecie claramente)
+	# Animación suave de fade a negro (1.5 segundos)
 	var tween = create_tween()
 	tween.tween_property(color_rect, "modulate:a", 1.0, 1.5).set_ease(Tween.EASE_IN)
 	await tween.finished
