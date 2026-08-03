@@ -6,7 +6,6 @@ extends Player
 @onready var nucleo: Polygon2D = $Nucleo
 @onready var luz_punta: PointLight2D = $LuzPunta
 @onready var sombra: Polygon2D = $sombra
-@onready var joystick: VirtualJoystick = $controls/Joystick  # Joystick virtual
 
 # ── Combate / disparo ─────────────────────────────────
 var proyectil: PackedScene = preload("res://ecenes/players/projectile/quark/playerProyectil.tscn")
@@ -30,17 +29,8 @@ func _physics_process(delta: float) -> void:
 
 
 func move() -> void:
-	# Obtener dirección desde el joystick virtual
-	var vector_direccion: Vector2 = Vector2.ZERO
-	if joystick != null:
-		vector_direccion = joystick.get_value()
-
-	# Si el joystick apenas se usa, complementar con teclado
-	if vector_direccion.length() < 0.1:
-		vector_direccion = Input.get_vector('ui_left', 'ui_right', 'ui_up', 'ui_down')
-
-	# Suavizar el movimiento (sin aceleración brusca)
-	velocity = vector_direccion * speed
+	var vectorDireccion = Input.get_vector('ui_left', 'ui_right', 'ui_up', 'ui_down')
+	velocity = vectorDireccion * speed
 	move_and_slide()
 
 
