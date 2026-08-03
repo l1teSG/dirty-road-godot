@@ -4,16 +4,18 @@ extends CharacterBody2D
 var tiempo_anim: float = randf() * 10.0
 var life: int = 30  # ajusta a la vida que quieras
 
-# ── Parámetros de ataque (editable desde Inspector) ──
-@export_category("Parámetros de Ataque")
+# ── Comportamiento y Prioridad (editable desde Inspector) ──
+@export_category("Comportamiento y Prioridad")
+@export var prioridad_objetivo: String = "mas_cercano"
+@export var rango_deteccion: float = 300.0
 @export var distancia_ataque: float = 100.0
 @export var danio_ataque: int = 10
 @export var tiempo_recarga: float = 1.5
-@export var requiere_linea_vision: bool = false
 
 # ── Control interno ───────────────────────────────────
 var puede_atacar: bool = true
 var objetivo: Node2D = null
+
 
 func animar_cuerpo_enemigo(delta: float) -> void:
 	var cuerpo_int = $CuerpoInterior as Polygon2D
@@ -31,8 +33,12 @@ func animar_cuerpo_enemigo(delta: float) -> void:
 	if nucleo != null:
 		nucleo.rotation += delta * 2.0
 
+
 func _physics_process(delta: float) -> void:
 	animar_cuerpo_enemigo(delta)
+	seleccionar_objetivo()
+	evaluar_y_ejecutar_ataque()
+
 
 func take_hit(damage: int = 10) -> void:
 	life -= damage
@@ -41,6 +47,51 @@ func take_hit(damage: int = 10) -> void:
 		if label:
 			BiomasaManager.emitir_biomasa(global_position, label.global_position, label.get_node("/root").find_child("ui", true, false))
 		self.queue_free()
+
+
+# ── Búsqueda dinámica de objetivos ─────────────────────
+func seleccionar_objetivo() -> void:
+	var jugador: Node2D = null
+	var arbol: Node2D = null
+
+	var players = get_tree().get_nodes_in_group("player")
+	if players.size() > 0 and is_instance_valid(players[0]):
+		jugador = players[0] as Node2D
+
+	var arboles = get_tree().get_nodes_in_group("arbol")
+	if arboles.size() > 0 and is_instance_valid(arboles[0]):
+		arbol = arboles[0] as Node2D
+
+	match prioridad_objetivo:
+		"prioridad_arbol":
+			if arbol != null and global_position.distance_to(arbol.global_position) <= rango_deteccion:
+				objetivo = arbol
+			elif jugador != null and global_position.distance_to(jugador.global_position) <= rango_deteccion:
+				objetivo = jugador
+			else:
+				objetivo = null
+		"prioridad_jugador":
+			if jugador != null and global_position.distance_to(jugador.global_position) <= rango_deteccion:
+				objetivo = jugador
+			else:
+				objetivo = null
+		"mas_cercano":
+			var closest: Node2D = null
+			var min_dist: float = INF
+			if jugador != null:
+				var d = global_position.distance_to(jugador.global_position)
+				if d <= rango_deteccion and d < min_dist:
+					closest = jugador
+					min_dist = d
+			if arbol != null:
+				var d = global_position.distance_to(arbol.global_position)
+				if d <= rango_deteccion and d < min_dist:
+					closest = arbol
+					min_dist = d
+			objetivo = closest
+		_:
+			objetivo = null
+
 
 # ── Método principal de ataque ────────────────────────
 func evaluar_y_ejecutar_ataque() -> void:
@@ -53,9 +104,6 @@ func evaluar_y_ejecutar_ataque() -> void:
 	var distancia = global_position.distance_to(objetivo.global_position)
 	if distancia > distancia_ataque:
 		return
-
-	# Si se requiere línea de visión, podrías implementar un raycast aquí
-	# (por simplicidad, se omite en este ejemplo)
 
 	# Ejecutar ataque según el tipo de objetivo
 	if objetivo.has_method("take_damage"):
