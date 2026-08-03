@@ -4,60 +4,18 @@ extends CharacterBody2D
 var tiempo_anim: float = randf() * 10.0
 var life: int = 30  # ajusta a la vida que quieras
 
-# ── Comportamiento y Prioridad (editable desde Inspector) ──
-@export_category("Comportamiento y Prioridad")
-@export var prioridad_objetivo: String = "mas_cercano"
-@export var rango_deteccion: float = 300.0
+# ── Parámetros de Ataque y Aggro (editable desde Inspector) ──
+@export_category("Parámetros de Ataque y Aggro")
 @export var distancia_ataque: float = 100.0
 @export var danio_ataque: int = 10
 @export var tiempo_recarga: float = 1.5
-
-# ── Sistema de Aggro ──────────────────────────────────────
-@export_category("Sistema de Aggro")
 @export var tiempo_aggro: float = 4.0
 
+# ── Control interno ───────────────────────────────────
+var puede_atacar: bool = true
 var en_aggro: bool = false
-var _aggro_timer: Timer
+var objetivo: Node2D = null
 
-
-func _ready() -> void:
-	_aggro_timer = Timer.new()
-	_aggro_timer.one_shot = true
-	_aggro_timer.timeout.connect(_on_aggro_timeout)
-	add_child(_aggro_timer)
-
-
-func _on_aggro_timeout() -> void:
-	en_aggro = false
-
-
-# ── Recepción de daño (con aggro) ────────────────────────
-
-func take_hit(damage: int = 10) -> void:
-	recibir_danio(damage)
-
-
-func recibir_danio(cantidad: int, atacante: Node2D = null) -> void:
-	# Aggro: si el atacante es el jugador o un proyectil, entra en modo aggro
-	if atacante != null and (atacante.is_in_group("player") or atacante.is_in_group("bullet")):
-		en_aggro = true
-		_aggro_timer.stop()
-		_aggro_timer.start(tiempo_aggro)
-
-	life -= cantidad
-	if life <= 0:
-		var label = get_tree().current_scene.find_child("TextoBiomasa", true, false)
-		if label:
-			# Llamada original de take_hit (ajusta según tu implementación de BiomasaManager)
-			BiomasaManager.emitir_biomasa(
-				global_position,
-				label.global_position,
-				label.get_node("/root").find_child("ui", true, false)
-			)
-		self.queue_free()
-
-
-# ── Animación ────────────────────────────────────────────
 
 func animar_cuerpo_enemigo(delta: float) -> void:
 	var cuerpo_int = $CuerpoInterior as Polygon2D
@@ -82,6 +40,33 @@ func _physics_process(delta: float) -> void:
 	evaluar_y_ejecutar_ataque()
 
 
+func take_hit(damage: int = 10) -> void:
+	recibir_danio(damage)
+
+
+# ── Recepción de daño (con aggro) ────────────────────────
+
+func recibir_danio(cantidad: int, atacante: Node2D = null) -> void:
+	# Aggro: si el atacante es el jugador o un proyectil, entra en modo aggro
+	if atacante != null and (atacante.is_in_group("player") or atacante.is_in_group("bullet")):
+		en_aggro = true
+		# Iniciar temporizador asíncrono para desactivar aggro
+		await get_tree().create_timer(tiempo_aggro).timeout
+		en_aggro = false
+
+	life -= cantidad
+	if life <= 0:
+		var label = get_tree().current_scene.find_child("TextoBiomasa", true, false)
+		if label:
+			# Llamada original de take_hit (ajusta según tu implementación de BiomasaManager)
+			BiomasaManager.emitir_biomasa(
+				global_position,
+				label.global_position,
+				label.get_node("/root").find_child("ui", true, false)
+			)
+		self.queue_free()
+
+
 # ── Búsqueda dinámica de objetivos ─────────────────────
 
 func seleccionar_objetivo() -> void:
@@ -91,7 +76,7 @@ func seleccionar_objetivo() -> void:
 		var players = get_tree().get_nodes_in_group("player")
 		if players.size() > 0 and is_instance_valid(players[0]):
 			var player = players[0] as Node2D
-			if global_position.distance_to(player.global_position) <= rango_deteccion:
+			if global_position.distance_to(player.global_position) <= distancia_ataque:
 				objetivo = player
 				return
 
@@ -106,35 +91,20 @@ func seleccionar_objetivo() -> void:
 	if arboles.size() > 0 and is_instance_valid(arboles[0]):
 		arbol = arboles[0] as Node2D
 
-	match prioridad_objetivo:
-		"prioridad_arbol":
-			if arbol != null and global_position.distance_to(arbol.global_position) <= rango_deteccion:
-				objetivo = arbol
-			elif jugador != null and global_position.distance_to(jugador.global_position) <= rango_deteccion:
-				objetivo = jugador
-			else:
-				objetivo = null
-		"prioridad_jugador":
-			if jugador != null and global_position.distance_to(jugador.global_position) <= rango_deteccion:
-				objetivo = jugador
-			else:
-				objetivo = null
-		"mas_cercano":
-			var closest: Node2D = null
-			var min_dist: float = INF
-			if jugador != null:
-				var d = global_position.distance_to(jugador.global_position)
-				if d <= rango_deteccion and d < min_dist:
-					closest = jugador
-					min_dist = d
-			if arbol != null:
-				var d = global_position.distance_to(arbol.global_position)
-				if d <= rango_deteccion and d < min_dist:
-					closest = arbol
-					min_dist = d
-			objetivo = closest
-		_:
-			objetivo = null
+	# Seleccionar el objetivo más cercano (dentro de distancia_ataque)
+	var closest: Node2D = null
+	var min_dist: float = INF
+	if jugador != null:
+		var d = global_position.distance_to(jugador.global_position)
+		if d <= distancia_ataque and d < min_dist:
+			closest = jugador
+			min_dist = d
+	if arbol != null:
+		var d = global_position.distance_to(arbol.global_position)
+		if d <= distancia_ataque and d < min_dist:
+			closest = arbol
+			min_dist = d
+	objetivo = closest
 
 
 # ── Método principal de ataque ────────────────────────
