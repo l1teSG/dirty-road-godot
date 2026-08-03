@@ -57,6 +57,7 @@ folder_colors={
 jugador=""
 fire_player=""
 enemi=""
+arbol=""
 
 [input]
 

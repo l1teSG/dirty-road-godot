@@ -41,7 +41,7 @@ position = Vector2(0, -2)
 position = Vector2(373, -69)
 respawn_manager = NodePath("../RespawnManager")
 
-[node name="Arbol" parent="." unique_id=157670480 instance=ExtResource("5_q0v6s")]
+[node name="Arbol" parent="." unique_id=157670480 groups=["arbol"] instance=ExtResource("5_q0v6s")]
 
 [node name="MareaNegra" parent="." unique_id=431012733 instance=ExtResource("4_50qco")]
 position = Vector2(-219, 141)
