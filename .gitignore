@@ -28,3 +28,4 @@ apk/
 *.apk
 *.aab
 *.idsig
+.aider*
