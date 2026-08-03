@@ -8,7 +8,6 @@
 [ext_resource type="PackedScene" uid="uid://c4msn7to5j3in" path="res://ecenes/enemies/nubeGas/nubeGas.tscn" id="5_f3ssa"]
 [ext_resource type="PackedScene" uid="uid://dx5ahbv0nxyet" path="res://ecenes/ecenarios/tree/arbol.tscn" id="5_q0v6s"]
 [ext_resource type="PackedScene" uid="uid://p208rapbv3d0" path="res://ecenes/enemies/microplastico/microPlastico.tscn" id="6_bfnr7"]
-[ext_resource type="PackedScene" uid="uid://cb27e727vlose" path="res://ecenes/enemies/nubeGas/bullet/bulletGas.tscn" id="7_f3ssa"]
 
 [sub_resource type="Environment" id="Environment_ckgak"]
 background_mode = 3
@@ -27,6 +26,29 @@ fill_to = Vector2(0.5, 0)
 
 [node name="Niviel1" type="Node2D" unique_id=1415381483]
 script = ExtResource("1_bfnr7")
+
+[node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=457741389]
+color = Color(0.15686275, 0.20392157, 0.25882354, 1)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1336534250]
+environment = SubResource("Environment_ckgak")
+
+[node name="valle" parent="." unique_id=1723520595 instance=ExtResource("2_ckgak")]
+position = Vector2(0, -2)
+
+[node name="ClassPlayer" parent="." unique_id=508460008 groups=["jugador"] instance=ExtResource("3_k6hvo")]
+position = Vector2(373, -69)
+
+[node name="Arbol" parent="." unique_id=157670480 instance=ExtResource("5_q0v6s")]
+
+[node name="MareaNegra" parent="." unique_id=431012733 instance=ExtResource("4_50qco")]
+position = Vector2(-219, 141)
+
+[node name="NubeGas" parent="." unique_id=1201918821 groups=["enemi"] instance=ExtResource("5_f3ssa")]
+position = Vector2(-18, 142)
+
+[node name="MicroPlastico" parent="." unique_id=888619048 groups=["enemi"] instance=ExtResource("6_bfnr7")]
+position = Vector2(119, 146)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=671132988]
 
@@ -50,20 +72,6 @@ theme_override_colors/font_color = Color(0.6, 1, 0.2, 1)
 theme_override_fonts/font = ExtResource("2_trm6e")
 theme_override_font_sizes/font_size = 100
 
-[node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=457741389]
-color = Color(0.15686275, 0.20392157, 0.25882354, 1)
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1336534250]
-environment = SubResource("Environment_ckgak")
-
-[node name="valle" parent="." unique_id=1723520595 instance=ExtResource("2_ckgak")]
-position = Vector2(0, -2)
-
-[node name="ClassPlayer" parent="." unique_id=508460008 groups=["jugador"] instance=ExtResource("3_k6hvo")]
-position = Vector2(373, -69)
-
-[node name="Arbol" parent="." unique_id=157670480 instance=ExtResource("5_q0v6s")]
-
 [node name="viñeta" type="CanvasLayer" parent="." unique_id=1770415234]
 layer = 10
 
@@ -79,15 +87,3 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 texture = SubResource("GradientTexture2D_7cwo5")
-
-[node name="MareaNegra" parent="." unique_id=431012733 instance=ExtResource("4_50qco")]
-position = Vector2(-219, 141)
-
-[node name="NubeGas" parent="." unique_id=1201918821 groups=["enemi"] instance=ExtResource("5_f3ssa")]
-position = Vector2(-18, 142)
-
-[node name="MicroPlastico" parent="." unique_id=888619048 groups=["enemi"] instance=ExtResource("6_bfnr7")]
-position = Vector2(119, 146)
-
-[node name="BulletGas" parent="." unique_id=1983240263 instance=ExtResource("7_f3ssa")]
-position = Vector2(13, 325)
