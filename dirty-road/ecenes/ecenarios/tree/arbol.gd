@@ -4,6 +4,8 @@ extends Area2D
 var tiempo_latido: float = 0.0
 @export var vida_maxima: int = 100
 var vida_actual: int
+var esta_destruido: bool = false
+
 # -------------------------------------------------------------------
 # FUNCIÓN VISUAL: LATIDO Y CHISPEO DE LUZ MÍSTICA DEL ÁRBOL
 # -------------------------------------------------------------------
@@ -32,6 +34,8 @@ func animar_luz_mistica(delta: float) -> void:
 	luz.color = color_verde.lerp(color_cian, factor_color)
 	
 func _process(delta: float) -> void:
+	if esta_destruido:
+		return
 	animar_luz_mistica(delta)
 
 func recibir_danio(cantidad: int) -> void:
@@ -86,41 +90,73 @@ func reaccionar_visualmente_al_danio() -> void:
 	tween.tween_property(luz, "texture_scale", escala_original, 0.25).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BACK)
 
 func destruir_arbol() -> void:
-	# Desactivar al jugador instantáneamente (sin transiciones) para que
-	# no pueda moverse ni disparar mientras se reproduce la animación.
+	esta_destruido = true
+
+	# Desactivar colisiones del árbol
+	monitoring = false
+	monitorable = false
+	if has_node("StaticBody2D"):
+		var static_body = $StaticBody2D as StaticBody2D
+		static_body.collision_layer = 0
+		static_body.collision_mask = 0
+
+	# Desactivar al jugador instantáneamente
 	var player = get_tree().get_first_node_in_group("player")
 	if player != null:
 		player.hide()
 		player.process_mode = Node.PROCESS_MODE_DISABLED
 
-	# Animar intensamente la luz del árbol antes del fade (paralelo)
+	# ── Fase 1: Muerte agónica del árbol (2.0 segundos) ──────────────
 	var luz = $LuzArbol as PointLight2D
 	if luz != null:
-		var tween_arbol = create_tween()
-		tween_arbol.set_parallel(true)
-		tween_arbol.tween_property(luz, "energy", 10.0, 1.5).set_ease(Tween.EASE_IN)
-		tween_arbol.tween_property(luz, "texture_scale", 10.0, 1.5).set_ease(Tween.EASE_IN)
-		tween_arbol.tween_property(luz, "color", Color(1, 0, 0, 1), 1.5).set_ease(Tween.EASE_IN)
+		# Animación de color y escala
+		var tween_agonia = create_tween()
+		tween_agonia.set_parallel(true)
+		tween_agonia.tween_property(luz, "color", Color("#FF0022"), 2.0).set_ease(Tween.EASE_IN)
+		tween_agonia.tween_property(luz, "texture_scale", 1.0, 2.0).set_ease(Tween.EASE_IN)
 
-	# Crear una capa de overlay para la transición dramática a pantalla completa
+		# Oscilación salvaje de energía
+		var tween_energia = create_tween()
+		tween_energia.set_parallel(false)
+		tween_energia.tween_property(luz, "energy", 8.0, 0.5)
+		tween_energia.tween_property(luz, "energy", 0.5, 0.5)
+		tween_energia.tween_property(luz, "energy", 8.0, 0.5)
+		tween_energia.tween_property(luz, "energy", 0.5, 0.5)
+
+	# Sacudida violenta del tronco (shake continuo)
+	var pos_original = position
+	var shake_tween = create_tween()
+	shake_tween.set_parallel(false)
+	for i in range(10):
+		var offset = Vector2(randf_range(-6.0, 6.0), randf_range(-6.0, 6.0))
+		shake_tween.tween_property(self, "position", pos_original + offset, 0.1)
+		shake_tween.tween_property(self, "position", pos_original, 0.1)
+	shake_tween.tween_callback(func(): position = pos_original)
+
+	# Esperar a que termine la fase agónica (2.0 segundos)
+	await shake_tween.finished
+
+	# ── Fase 2: Cobertura de pantalla completa (2.5 segundos) ────────
 	var canvas_layer = CanvasLayer.new()
 	canvas_layer.layer = 128
 	get_tree().current_scene.add_child(canvas_layer)
 
-	# ColorRect de pantalla completa, inicialmente rojo semitransparente
 	var color_rect = ColorRect.new()
 	color_rect.color = Color.RED
 	color_rect.modulate = Color(1, 1, 1, 0)
 	color_rect.anchors_preset = Control.PRESET_FULL_RECT
 	canvas_layer.add_child(color_rect)
 
-	# Animación doble: el color pasa de rojo a negro mientras la opacidad sube a 1
-	# Duración total: 1.5 segundos para una transición clara y evidente
-	var tween = create_tween()
-	tween.set_parallel(true)
-	tween.tween_property(color_rect, "modulate:a", 1.0, 1.5).set_ease(Tween.EASE_IN)
-	tween.tween_property(color_rect, "color", Color.BLACK, 1.5).set_ease(Tween.EASE_IN)
-	await tween.finished
+	var tween_pantalla = create_tween()
+	tween_pantalla.set_parallel(true)
+	tween_pantalla.tween_property(color_rect, "modulate:a", 1.0, 2.5)\
+		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
+	tween_pantalla.tween_property(color_rect, "color", Color.BLACK, 2.5)\
+		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
+	await tween_pantalla.finished
+
+	# Limpiar overlay
+	canvas_layer.queue_free()
 
 	# Cambiar a la escena de muerte
 	get_tree().change_scene_to_file("res://ui/dead/dead.tscn")
