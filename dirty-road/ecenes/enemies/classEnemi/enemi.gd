@@ -12,10 +12,52 @@ var life: int = 30  # ajusta a la vida que quieras
 @export var danio_ataque: int = 10
 @export var tiempo_recarga: float = 1.5
 
-# ── Control interno ───────────────────────────────────
-var puede_atacar: bool = true
-var objetivo: Node2D = null
+# ── Sistema de Aggro ──────────────────────────────────────
+@export_category("Sistema de Aggro")
+@export var tiempo_aggro: float = 4.0
 
+var en_aggro: bool = false
+var _aggro_timer: Timer
+
+
+func _ready() -> void:
+	_aggro_timer = Timer.new()
+	_aggro_timer.one_shot = true
+	_aggro_timer.timeout.connect(_on_aggro_timeout)
+	add_child(_aggro_timer)
+
+
+func _on_aggro_timeout() -> void:
+	en_aggro = false
+
+
+# ── Recepción de daño (con aggro) ────────────────────────
+
+func take_hit(damage: int = 10) -> void:
+	recibir_danio(damage)
+
+
+func recibir_danio(cantidad: int, atacante: Node2D = null) -> void:
+	# Aggro: si el atacante es el jugador o un proyectil, entra en modo aggro
+	if atacante != null and (atacante.is_in_group("player") or atacante.is_in_group("bullet")):
+		en_aggro = true
+		_aggro_timer.stop()
+		_aggro_timer.start(tiempo_aggro)
+
+	life -= cantidad
+	if life <= 0:
+		var label = get_tree().current_scene.find_child("TextoBiomasa", true, false)
+		if label:
+			# Llamada original de take_hit (ajusta según tu implementación de BiomasaManager)
+			BiomasaManager.emitir_biomasa(
+				global_position,
+				label.global_position,
+				label.get_node("/root").find_child("ui", true, false)
+			)
+		self.queue_free()
+
+
+# ── Animación ────────────────────────────────────────────
 
 func animar_cuerpo_enemigo(delta: float) -> void:
 	var cuerpo_int = $CuerpoInterior as Polygon2D
@@ -40,17 +82,19 @@ func _physics_process(delta: float) -> void:
 	evaluar_y_ejecutar_ataque()
 
 
-func take_hit(damage: int = 10) -> void:
-	life -= damage
-	if life <= 0:
-		var label = get_tree().current_scene.find_child("TextoBiomasa", true, false)
-		if label:
-			BiomasaManager.emitir_biomasa(global_position, label.global_position, label.get_node("/root").find_child("ui", true, false))
-		self.queue_free()
-
-
 # ── Búsqueda dinámica de objetivos ─────────────────────
+
 func seleccionar_objetivo() -> void:
+	# Aggro: si está en modo aggro y el jugador está dentro del rango de detección,
+	# lo fija como objetivo inmediato (ignora la prioridad habitual).
+	if en_aggro:
+		var players = get_tree().get_nodes_in_group("player")
+		if players.size() > 0 and is_instance_valid(players[0]):
+			var player = players[0] as Node2D
+			if global_position.distance_to(player.global_position) <= rango_deteccion:
+				objetivo = player
+				return
+
 	var jugador: Node2D = null
 	var arbol: Node2D = null
 
@@ -94,6 +138,7 @@ func seleccionar_objetivo() -> void:
 
 
 # ── Método principal de ataque ────────────────────────
+
 func evaluar_y_ejecutar_ataque() -> void:
 	if not is_instance_valid(objetivo):
 		return
