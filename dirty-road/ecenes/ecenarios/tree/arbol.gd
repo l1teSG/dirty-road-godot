@@ -60,13 +60,30 @@ func reaccionar_visualmente_al_danio() -> void:
 
 func destruir_arbol() -> void:
 	# Desactivar al jugador instantáneamente (sin transiciones) para que
-	# no pueda moverse ni disparar mientras se cambia a la escena de muerte.
+	# no pueda moverse ni disparar mientras se reproduce la animación.
 	var player = get_tree().get_first_node_in_group("player")
 	if player != null:
 		player.hide()
 		player.process_mode = Node.PROCESS_MODE_DISABLED
 
-	# Cambiar a la escena de muerte en lugar de añadirla como hijo.
+	# Crear una capa de overlay para la animación de desvanecimiento a negro
+	var canvas_layer = CanvasLayer.new()
+	canvas_layer.layer = 128
+	get_tree().current_scene.add_child(canvas_layer)
+
+	# ColorRect de pantalla completa, inicialmente transparente
+	var color_rect = ColorRect.new()
+	color_rect.color = Color.BLACK
+	color_rect.modulate = Color(1, 1, 1, 0)
+	color_rect.anchors_preset = Control.PRESET_FULL_RECT
+	canvas_layer.add_child(color_rect)
+
+	# Animación suave de fade a negro
+	var tween = create_tween()
+	tween.tween_property(color_rect, "modulate:a", 1.0, 1.0).set_ease(Tween.EASE_IN)
+	await tween.finished
+
+	# Cambiar a la escena de muerte
 	get_tree().change_scene_to_file("res://ui/dead/dead.tscn")
 	
 func _ready() -> void:
