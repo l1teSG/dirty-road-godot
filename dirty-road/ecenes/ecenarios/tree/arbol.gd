@@ -98,9 +98,9 @@ func destruir_arbol() -> void:
 	if luz != null:
 		var tween_arbol = create_tween()
 		tween_arbol.set_parallel(true)
-		tween_arbol.tween_property(luz, "energy", 10.0, 0.8).set_ease(Tween.EASE_IN)
-		tween_arbol.tween_property(luz, "texture_scale", 10.0, 0.8).set_ease(Tween.EASE_IN)
-		tween_arbol.tween_property(luz, "color", Color(1, 0, 0, 1), 0.8).set_ease(Tween.EASE_IN)
+		tween_arbol.tween_property(luz, "energy", 10.0, 1.5).set_ease(Tween.EASE_IN)
+		tween_arbol.tween_property(luz, "texture_scale", 10.0, 1.5).set_ease(Tween.EASE_IN)
+		tween_arbol.tween_property(luz, "color", Color(1, 0, 0, 1), 1.5).set_ease(Tween.EASE_IN)
 
 	# Crear una capa de overlay para la transición dramática a pantalla completa
 	var canvas_layer = CanvasLayer.new()
@@ -115,11 +115,11 @@ func destruir_arbol() -> void:
 	canvas_layer.add_child(color_rect)
 
 	# Animación doble: el color pasa de rojo a negro mientras la opacidad sube a 1
-	# Duración total: 1 segundo para una transición rápida
+	# Duración total: 1.5 segundos para una transición clara y evidente
 	var tween = create_tween()
 	tween.set_parallel(true)
-	tween.tween_property(color_rect, "modulate:a", 1.0, 1.0).set_ease(Tween.EASE_IN)
-	tween.tween_property(color_rect, "color", Color.BLACK, 1.0).set_ease(Tween.EASE_IN)
+	tween.tween_property(color_rect, "modulate:a", 1.0, 1.5).set_ease(Tween.EASE_IN)
+	tween.tween_property(color_rect, "color", Color.BLACK, 1.5).set_ease(Tween.EASE_IN)
 	await tween.finished
 
 	# Cambiar a la escena de muerte
