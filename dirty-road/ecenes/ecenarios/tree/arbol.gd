@@ -51,12 +51,25 @@ func actualizar_barra_vida() -> void:
 # Efecto de destello rojo en la luz al recibir un golpe
 func reaccionar_visualmente_al_danio() -> void:
 	var luz = $LuzArbol as PointLight2D
-	if luz != null:
-		var color_original = luz.color
-		luz.color = Color("#FF0044") # Destello rojo neón de daño
-		
-		var tween = create_tween()
-		tween.tween_property(luz, "color", color_original, 0.25)
+	if luz == null:
+		return
+
+	# Guardar valores originales antes de la alerta
+	var color_original = luz.color
+	var energia_original = luz.energy
+	var escala_original = luz.texture_scale
+
+	# Valores de alerta intensa (instante)
+	luz.color = Color("#FF0044") # Rojo neón de advertencia
+	luz.energy = 8.0
+	luz.texture_scale = 9.0
+
+	# Tween para devolver suavemente a los valores originales
+	var tween = create_tween()
+	tween.set_parallel(true)
+	tween.tween_property(luz, "color", color_original, 0.3)
+	tween.tween_property(luz, "energy", energia_original, 0.3)
+	tween.tween_property(luz, "texture_scale", escala_original, 0.3)
 
 func destruir_arbol() -> void:
 	# Desactivar al jugador instantáneamente (sin transiciones) para que
