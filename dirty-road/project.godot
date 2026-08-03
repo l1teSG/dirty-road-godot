@@ -14,9 +14,10 @@ config/name="dirty road"
 config/version="1.0"
 run/main_scene="uid://ddhuvi04qd00b"
 config/features=PackedStringArray("4.7", "C#", "Forward Plus")
+boot_splash/bg_color=Color(0.6, 1, 0.2, 1)
 boot_splash/show_image=false
 boot_splash/use_filter=false
-config/icon="res://icon.svg"
+config/icon="uid://dqcco4yhy6ldm"
 
 [autoload]
 
@@ -25,9 +26,12 @@ BiomasaManager="*uid://b2o0ouq0f4sdb"
 
 [display]
 
+window/size/viewport_width=1920
+window/size/viewport_height=1080
 window/size/mode=3
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
+window/bg_color=Color(0.37817338, 0.70103526, 0.57091427, 1)
 
 [dotnet]
 

@@ -8,27 +8,6 @@
 [ext_resource type="Script" uid="uid://6cs3m1ycepdt" path="res://ecenes/players/quark/texto_biomasa.gd" id="6_tnb2i"]
 [ext_resource type="PackedScene" uid="uid://bnsgn8vqai733" path="res://ecenes/players/pausa/pausa.tscn" id="6_ycxd3"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_7cwo5"]
-radius = 20.22375
-
-[sub_resource type="Gradient" id="Gradient_jlxlp"]
-offsets = PackedFloat32Array(0, 0.7, 1)
-colors = PackedColorArray(0, 1, 0.53333336, 1, 0, 0.26666668, 0.13333334, 1, 0, 0.06666667, 0, 0)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_818wt"]
-gradient = SubResource("Gradient_jlxlp")
-width = 80
-height = 80
-fill = 1
-fill_from = Vector2(0.5, 0.5)
-fill_to = Vector2(0.5, 0)
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_s3sa1"]
-radius = 40.0
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_v2d8e"]
-radius = 38.0
-
 [sub_resource type="CircleShape2D" id="CircleShape2D_xqmf3"]
 radius = 266.75082
 
@@ -50,6 +29,9 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.5, 0)
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_7cwo5"]
+radius = 20.22375
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mvreb"]
 bg_color = Color(0, 0, 0, 0.60784316)
 
@@ -60,70 +42,71 @@ corner_radius_top_right = 3
 corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 
+[sub_resource type="Gradient" id="Gradient_jlxlp"]
+offsets = PackedFloat32Array(0, 0.7, 1)
+colors = PackedColorArray(0, 1, 0.53333336, 1, 0, 0.26666668, 0.13333334, 1, 0, 0.06666667, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_818wt"]
+gradient = SubResource("Gradient_jlxlp")
+width = 80
+height = 80
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[sub_resource type="Gradient" id="Gradient_tnb2i"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_e5t18"]
+gradient = SubResource("Gradient_tnb2i")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_s3sa1"]
+radius = 40.0
+
+[sub_resource type="Gradient" id="Gradient_fm6mt"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_fm6mt"]
+gradient = SubResource("Gradient_fm6mt")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_v2d8e"]
+radius = 38.0
+
 [node name="ClassPlayer" unique_id=508460008 instance=ExtResource("1_hr2c7")]
 z_index = 10
 script = ExtResource("2_lx2x3")
 ID = "quark"
 life = 100
 speed = 420.0
-metadata/_edit_horizontal_guides_ = [475.0]
+metadata/_edit_horizontal_guides_ = [759.0]
 
-[node name="sombra" type="Polygon2D" parent="." index="0" unique_id=556819228]
+[node name="Camera2D" type="Camera2D" parent="." index="0" unique_id=606811536]
+
+[node name="Area2D" type="Area2D" parent="." index="1" unique_id=541228221]
+
+[node name="range" type="CollisionShape2D" parent="Area2D" index="0" unique_id=691136940]
+shape = SubResource("CircleShape2D_xqmf3")
+
+[node name="Timer" type="Timer" parent="." index="2" unique_id=2127814807]
+wait_time = 0.2
+autostart = true
+
+[node name="sombra" type="Polygon2D" parent="." index="3" unique_id=556819228]
 light_mask = 2
 position = Vector2(0, 20)
 color = Color(0, 0, 0, 0.43137255)
 polygon = PackedVector2Array(20, 0, 8, -6, -12, -6, -20, 0, -12, 6, 8, 6)
 
-[node name="Nucleo" type="Polygon2D" parent="." index="1" unique_id=2099832002]
+[node name="Nucleo" type="Polygon2D" parent="." index="4" unique_id=2099832002]
 polygon = PackedVector2Array(8, 0, 2, -2, 0, -8, -2, -2, -6, 0, -2, 2, 0, 8, 2, 2)
 
-[node name="Collision" parent="." index="2" unique_id=1015691357]
-position = Vector2(0, 0)
-shape = SubResource("CircleShape2D_7cwo5")
-
-[node name="ContenedorBotones" type="Control" parent="controls" parent_id_path=PackedInt32Array(309147665) index="1" unique_id=1894758059]
-layout_mode = 3
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -312.0
-offset_top = -212.0
-offset_right = -272.0
-offset_bottom = -172.0
-grow_horizontal = 0
-grow_vertical = 0
-
-[node name="BotonAtaque1" type="TouchScreenButton" parent="controls/ContenedorBotones" index="0" unique_id=814226946]
-position = Vector2(26, 0)
-texture_normal = SubResource("GradientTexture2D_818wt")
-texture_pressed = SubResource("GradientTexture2D_818wt")
-shape = SubResource("CircleShape2D_s3sa1")
-action = "super"
-
-[node name="BotonAtaque2" type="TouchScreenButton" parent="controls/ContenedorBotones" index="1" unique_id=1668950582]
-position = Vector2(-71, 10)
-texture_normal = ExtResource("3_qh7t8")
-texture_pressed = ExtResource("3_qh7t8")
-shape = SubResource("CircleShape2D_v2d8e")
-action = "mega"
-
-[node name="Area2D" type="Area2D" parent="." index="4" unique_id=541228221]
-
-[node name="range" type="CollisionShape2D" parent="Area2D" index="0" unique_id=691136940]
-shape = SubResource("CircleShape2D_xqmf3")
-
-[node name="Timer" type="Timer" parent="." index="5" unique_id=2127814807]
-wait_time = 0.2
-autostart = true
-
-[node name="aim" type="Marker2D" parent="." index="6" unique_id=182942934]
-position = Vector2(20, 0)
-
-[node name="Camera2D" type="Camera2D" parent="." index="7" unique_id=606811536]
-
-[node name="body" type="Polygon2D" parent="." index="8" unique_id=1249231259]
+[node name="body" type="Polygon2D" parent="." index="5" unique_id=1249231259]
 color = Color(0, 0.16862746, 0.21176471, 1)
 polygon = PackedVector2Array(26, 0, 6, -6, 2, -20, -6, -6, -18, 0, -6, 6, 2, 20, 6, 6)
 uv = PackedVector2Array(41, 31)
@@ -134,35 +117,34 @@ color = Color(0.4509804, 1, 0, 1)
 polygon = PackedVector2Array(26, 0, 6, -6, 2, -20, -6, -6, -18, 0, -6, 6, 2, 20, 6, 6)
 uv = PackedVector2Array(41, 31)
 
-[node name="LuzBase" type="PointLight2D" parent="." index="9" unique_id=1641084232]
+[node name="LuzBase" type="PointLight2D" parent="." index="6" unique_id=1641084232]
 color = Color(0, 1, 0.53333336, 1)
 energy = 1.2
 texture = SubResource("GradientTexture2D_7cwo5")
 texture_scale = 3.0
 
-[node name="LuzPunta" type="PointLight2D" parent="." index="10" unique_id=199815066]
+[node name="LuzPunta" type="PointLight2D" parent="." index="7" unique_id=199815066]
 position = Vector2(26, 0)
 color = Color(0, 0.9411765, 1, 1)
 energy = 1.8
 texture = SubResource("GradientTexture2D_s3sa1")
 texture_scale = 1.2
 
-[node name="ui" type="CanvasLayer" parent="." index="11" unique_id=1985090240]
+[node name="Collision" parent="." index="8" unique_id=1015691357]
+position = Vector2(0, 0)
+shape = SubResource("CircleShape2D_7cwo5")
 
-[node name="ajustes" type="Button" parent="ui" index="0" unique_id=1655672500]
-modulate = Color(0, 1, 0.53333336, 1)
-offset_left = 1115.0
-offset_top = 9.0
-offset_right = 1171.0
-offset_bottom = 65.0
-scale = Vector2(0.5, 0.5)
-icon = ExtResource("4_j4fag")
+[node name="aim" type="Marker2D" parent="." index="9" unique_id=182942934]
+position = Vector2(20, 0)
 
-[node name="margenUi" type="MarginContainer" parent="ui" index="1" unique_id=957307684]
+[node name="ui" type="CanvasLayer" parent="." index="10" unique_id=1985090240]
+layer = 0
+
+[node name="margenUi" type="MarginContainer" parent="ui" index="0" unique_id=957307684]
 offset_right = 40.0
 offset_bottom = 40.0
-theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 20
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 50
 
 [node name="ContenedorVertical" type="VBoxContainer" parent="ui/margenUi" index="0" unique_id=97551753]
 layout_mode = 2
@@ -170,16 +152,15 @@ alignment = 1
 
 [node name="FilaVida" type="HBoxContainer" parent="ui/margenUi/ContenedorVertical" index="0" unique_id=68475318]
 layout_mode = 2
-alignment = 1
 
 [node name="IconoVida" type="Label" parent="ui/margenUi/ContenedorVertical/FilaVida" index="0" unique_id=1555489899]
 layout_mode = 2
+theme_override_font_sizes/font_size = 40
 text = "💚"
 horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="BarraVida" type="ProgressBar" parent="ui/margenUi/ContenedorVertical/FilaVida" index="1" unique_id=1067875394]
-custom_minimum_size = Vector2(180, 14)
+custom_minimum_size = Vector2(360, 14)
 layout_mode = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_mvreb")
 theme_override_styles/fill = SubResource("StyleBoxFlat_lx2x3")
@@ -191,6 +172,7 @@ layout_mode = 2
 
 [node name="IconoBiomasa" type="Label" parent="ui/margenUi/ContenedorVertical/FilaBiomasa" index="0" unique_id=1934158973]
 layout_mode = 2
+theme_override_font_sizes/font_size = 40
 text = "🌱"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -199,14 +181,74 @@ vertical_alignment = 1
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.93333334, 0.33333334, 1)
 theme_override_fonts/font = ExtResource("3_lx2x3")
+theme_override_font_sizes/font_size = 40
 text = "0 / 10"
 script = ExtResource("6_tnb2i")
 
-[node name="Pausa" parent="." index="12" unique_id=565747821 instance=ExtResource("6_ycxd3")]
+[node name="ajuste" type="MarginContainer" parent="ui" index="1" unique_id=1341644146]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -56.0
+offset_bottom = 56.0
+grow_horizontal = 0
+scale = Vector2(2, 2)
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 100
+
+[node name="ajustes" type="Button" parent="ui/ajuste" index="0" unique_id=1655672500]
+modulate = Color(0, 1, 0.53333336, 1)
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+icon = ExtResource("4_j4fag")
+
+[node name="Pausa" parent="." index="11" unique_id=565747821 instance=ExtResource("6_ycxd3")]
 layer = 200
 visible = false
+
+[node name="controls" type="CanvasLayer" parent="." index="12" unique_id=30969760]
+
+[node name="VirtualJoystick" type="VirtualJoystick" parent="controls" index="0" unique_id=309025352]
+offset_left = 340.0
+offset_top = 739.0
+offset_right = 380.0
+offset_bottom = 779.0
+joystick_size = 345.0
+tip_size = 250.0
+
+[node name="ContenedorBotones" type="Control" parent="controls" index="1" unique_id=1982211562]
+layout_mode = 3
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -416.0
+offset_top = -412.0
+offset_right = -336.0
+offset_bottom = -379.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(2.5, 2.5)
+mouse_filter = 2
+
+[node name="super" type="TouchScreenButton" parent="controls/ContenedorBotones" index="0" unique_id=1034237733]
+position = Vector2(26, 0)
+texture_normal = SubResource("GradientTexture2D_818wt")
+texture_pressed = SubResource("GradientTexture2D_e5t18")
+shape = SubResource("CircleShape2D_s3sa1")
+action = "super"
+
+[node name="mega" type="TouchScreenButton" parent="controls/ContenedorBotones" index="1" unique_id=1816283221]
+position = Vector2(-71, 10)
+texture_normal = ExtResource("3_qh7t8")
+texture_pressed = SubResource("GradientTexture2D_fm6mt")
+shape = SubResource("CircleShape2D_v2d8e")
+action = "mega"
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
-[connection signal="button_down" from="ui/ajustes" to="." method="_on_ajustes_button_down"]
+[connection signal="button_down" from="ui/ajuste/ajustes" to="." method="_on_ajustes_button_down"]
+[connection signal="pressed" from="controls/ContenedorBotones/super" to="." method="_on_super_pressed"]
+[connection signal="pressed" from="controls/ContenedorBotones/mega" to="." method="_on_mega_pressed"]
