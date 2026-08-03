@@ -39,9 +39,7 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	# Salvaguarda: si el jugador está muerto (esperando respawn), no debe
-	# procesar movimiento ni animaciones. En la práctica esto ya queda
-	# cubierto por process_mode = PROCESS_MODE_DISABLED en take_damage(),
-	# pero se deja esta guarda explícita como protección adicional.
+	# procesar movimiento ni animaciones.
 	if _muerto:
 		return
 
@@ -143,7 +141,6 @@ func take_damage(damage: int) -> void:
 	if life <= 0:
 		_muerto = true
 		hide()
-		process_mode = Node.PROCESS_MODE_DISABLED
 		died.emit()
 
 
@@ -154,7 +151,6 @@ func respawn_at(posicion: Vector2) -> void:
 	global_position = posicion
 	_actualizar_barra_vida()
 	show()
-	process_mode = Node.PROCESS_MODE_INHERIT
 	_muerto = false
 
 

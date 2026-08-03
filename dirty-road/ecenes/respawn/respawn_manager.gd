@@ -75,6 +75,14 @@ func _on_jugador_died() -> void:
 		return
 
 	_esperando_respawn = true
+
+	# Teletransporta al jugador (ya invisible) de inmediato al punto de
+	# respawn. Como el jugador sigue en el árbol de escena (no se
+	# deshabilita su process_mode), la Camera2D que lo sigue hará un
+	# paneo suave hacia la base durante la espera del temporizador,
+	# creando el efecto cinemático de respawn.
+	jugador.global_position = punto_respawn.global_position
+
 	respawn_iniciado.emit(tiempo_respawn)
 
 	await get_tree().create_timer(tiempo_respawn).timeout
