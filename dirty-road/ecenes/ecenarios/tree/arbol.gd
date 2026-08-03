@@ -91,9 +91,10 @@ func destruir_arbol() -> void:
 	color_rect.anchors_preset = Control.PRESET_FULL_RECT
 	canvas_layer.add_child(color_rect)
 
-	# Animación suave de fade a negro
+	# Animación suave de fade a negro (duración de 1.5 segundos para que
+	# el efecto visual se aprecie claramente)
 	var tween = create_tween()
-	tween.tween_property(color_rect, "modulate:a", 1.0, 1.0).set_ease(Tween.EASE_IN)
+	tween.tween_property(color_rect, "modulate:a", 1.0, 1.5).set_ease(Tween.EASE_IN)
 	await tween.finished
 
 	# Cambiar a la escena de muerte
