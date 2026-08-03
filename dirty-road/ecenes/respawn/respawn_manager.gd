@@ -7,8 +7,8 @@ extends Node
 ## asks the player to respawn at that point.
 ##
 ## It emits its own signals when a respawn sequence starts and finishes,
-## so other systems (e.g. a future UI countdown) can react without any
-## changes to this script.
+## so other systems (e.g. the UI countdown in quark.gd) can react without
+## any changes to this script.
 
 ## Reference to the player that will be respawned.
 ## Must be assigned manually from the editor.
@@ -29,10 +29,12 @@ extends Node
 
 ## Time, in seconds, to wait between death and respawn.
 ## Exposed in the Inspector so designers can tune it without touching code.
+## This is also used as the duration of the camera pan tween below, so
+## the pan always finishes exactly when the respawn happens.
 @export var tiempo_respawn: float = 5.0
 
 ## Emitted right when the respawn sequence starts, after the player dies.
-## Carries the wait time so a future UI could show a countdown.
+## Carries the wait time so the UI can show a countdown.
 signal respawn_iniciado(tiempo_espera: float)
 
 ## Emitted right after the player has been repositioned and restored.
@@ -75,17 +77,17 @@ func _on_jugador_died() -> void:
 		return
 
 	_esperando_respawn = true
-
-	# Teletransporta al jugador (ya invisible) de inmediato al punto de
-	# respawn. Como el jugador sigue en el árbol de escena (no se
-	# deshabilita su process_mode), la Camera2D que lo sigue hará un
-	# paneo suave hacia la base durante la espera del temporizador,
-	# creando el efecto cinemático de respawn.
-	jugador.global_position = punto_respawn.global_position
-
 	respawn_iniciado.emit(tiempo_respawn)
 
-	await get_tree().create_timer(tiempo_respawn).timeout
+	# En vez de teletransportar al jugador instantáneamente, lo movemos con
+	# un Tween a lo largo de "tiempo_respawn". Como la Camera2D es hija del
+	# jugador, esto produce un paneo fluido de cámara por el mapa mientras
+	# el jugador (invisible gracias a modulate.a = 0.0 en quark.gd) viaja
+	# de vuelta al punto de respawn.
+	if is_instance_valid(jugador):
+		var tween = create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+		tween.tween_property(jugador, "global_position", punto_respawn.global_position, tiempo_respawn)
+		await tween.finished
 
 	# El jugador podría haber sido liberado de la escena mientras esperábamos.
 	if is_instance_valid(jugador):
