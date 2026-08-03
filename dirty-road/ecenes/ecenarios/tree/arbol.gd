@@ -59,17 +59,31 @@ func reaccionar_visualmente_al_danio() -> void:
 	var energia_original = luz.energy
 	var escala_original = luz.texture_scale
 
-	# Valores de alerta intensa (instante)
-	luz.color = Color("#FF0044") # Rojo neón de advertencia
-	luz.energy = 8.0
-	luz.texture_scale = 9.0
+	# Estallido inmediato de alerta intensa
+	luz.color = Color("#FF0055")
+	luz.energy = 12.0
+	luz.texture_scale = 14.0
 
-	# Tween para devolver suavemente a los valores originales
+	# Sacudida rápida del tronco (shake) para dar sensación de impacto físico
+	var pos_original = position
+	var shake_offset = Vector2(randf_range(-4.0, 4.0), randf_range(-4.0, 4.0))
+	var shake_tween = create_tween()
+	shake_tween.tween_property(self, "position", pos_original + shake_offset, 0.05)
+	shake_tween.tween_property(self, "position", pos_original, 0.1).set_ease(Tween.EASE_OUT)
+
+	# Animación de la luz: overshoot (valores aún más altos) y luego vuelta suave con rebote
 	var tween = create_tween()
 	tween.set_parallel(true)
-	tween.tween_property(luz, "color", color_original, 0.3)
-	tween.tween_property(luz, "energy", energia_original, 0.3)
-	tween.tween_property(luz, "texture_scale", escala_original, 0.3)
+	tween.tween_property(luz, "color", Color("#FF0088"), 0.08)
+	tween.tween_property(luz, "energy", 16.0, 0.08)
+	tween.tween_property(luz, "texture_scale", 18.0, 0.08)
+
+	# Retorno a los valores originales con un efecto de rebote (BACK) para que
+	# la transición se sienta viva y orgánica
+	tween.chain().set_parallel(true)
+	tween.tween_property(luz, "color", color_original, 0.25).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BACK)
+	tween.tween_property(luz, "energy", energia_original, 0.25).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BACK)
+	tween.tween_property(luz, "texture_scale", escala_original, 0.25).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BACK)
 
 func destruir_arbol() -> void:
 	# Desactivar al jugador instantáneamente (sin transiciones) para que
