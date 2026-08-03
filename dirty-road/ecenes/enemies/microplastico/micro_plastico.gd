@@ -9,7 +9,6 @@ extends enemigoNuevo
 
 # ── Referencias a objetivos ────────────────────────────
 var tree_target: Node2D = null
-var player_target: Node2D = null
 var current_target: Node2D = null
 
 # ── Estado de ataque ───────────────────────────────────
@@ -18,7 +17,6 @@ var can_attack: bool = true
 
 func _ready() -> void:
 	tree_target = get_tree().get_first_node_in_group("arbol")
-	player_target = get_tree().get_first_node_in_group("player")
 
 
 func _physics_process(delta: float) -> void:
@@ -41,29 +39,14 @@ func _physics_process(delta: float) -> void:
 		move_and_slide()
 
 
-## Selecciona el objetivo actual según prioridad:
-## 1. Si el jugador está dentro del rango de agresión, se convierte en objetivo.
-## 2. Si no, el árbol (si existe) es el objetivo principal.
-## 3. Si el árbol ha sido destruido, el jugador es el objetivo por defecto.
+## Selecciona el objetivo actual: exclusivamente el árbol.
+## Si el árbol ha sido destruido (no existe o dejó de ser válido),
+## el enemigo se queda sin objetivo.
 func _elegir_objetivo() -> void:
-	# Verificar si el jugador está dentro del rango de agresión
-	if player_target != null and is_instance_valid(player_target):
-		var dist_player = global_position.distance_to(player_target.global_position)
-		if dist_player <= aggro_range:
-			current_target = player_target
-			return
-
-	# Si el árbol existe y es válido, es el objetivo principal
 	if tree_target != null and is_instance_valid(tree_target):
 		current_target = tree_target
 		return
 
-	# Si no hay árbol, el jugador es el objetivo por defecto
-	if player_target != null and is_instance_valid(player_target):
-		current_target = player_target
-		return
-
-	# Si no hay ningún objetivo válido, se queda sin objetivo
 	current_target = null
 
 
