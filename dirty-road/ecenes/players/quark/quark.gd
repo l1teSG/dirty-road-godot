@@ -33,8 +33,8 @@ func move() -> void:
 	# Obtener dirección desde el joystick virtual
 	var vector_direccion: Vector2 = Vector2.ZERO
 	if joystick != null:
-		# Usar el método get_vector() (Godot 4.7)
-		vector_direccion = joystick.get_vector()
+		# Usar la propiedad 'value' (Godot 4.7)
+		vector_direccion = joystick.value
 
 	# Si el joystick apenas se usa, complementar con teclado
 	if vector_direccion.length() < 0.1:
