@@ -33,7 +33,8 @@ func move() -> void:
 	# Obtener dirección desde el joystick virtual
 	var vector_direccion: Vector2 = Vector2.ZERO
 	if joystick != null:
-		vector_direccion = joystick.get_value()
+		# Usar la propiedad 'output' en lugar de get_value()
+		vector_direccion = joystick.output
 
 	# Si el joystick apenas se usa, complementar con teclado
 	if vector_direccion.length() < 0.1:
