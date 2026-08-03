@@ -75,10 +75,14 @@ func seleccionar_objetivo() -> void:
 	var jugador: Node2D = null
 	var arbol: Node2D = null
 
-	var players = get_tree().get_nodes_in_group("player")
-	if players.size() > 0 and is_instance_valid(players[0]):
-		jugador = players[0] as Node2D
+	# Buscar en grupo "player" o "jugador"
+	var jugadores = get_tree().get_nodes_in_group("player")
+	if jugadores.is_empty():
+		jugadores = get_tree().get_nodes_in_group("jugador")
+	if jugadores.size() > 0 and is_instance_valid(jugadores[0]):
+		jugador = jugadores[0] as Node2D
 
+	# Buscar en grupo "arbol"
 	var arboles = get_tree().get_nodes_in_group("arbol")
 	if arboles.size() > 0 and is_instance_valid(arboles[0]):
 		arbol = arboles[0] as Node2D

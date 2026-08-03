@@ -94,7 +94,7 @@ func move() -> void:
 
 # ── Disparo ────────────────────────────────────────────
 
-func shot(target: Node2D, power_actual: String) -> void:
+func shot(target: Node2D, _power_actual: String) -> void:
 	# Guarda estricta: si el jugador está muerto o el disparo desactivado, no puede disparar.
 	if _muerto or not disparoON:
 		return
