@@ -6,6 +6,7 @@ extends Player
 @onready var nucleo: Polygon2D = $Nucleo
 @onready var luz_punta: PointLight2D = $LuzPunta
 @onready var sombra: Polygon2D = $sombra
+@onready var barra_vida: ProgressBar = $ui/margenUi/ContenedorVertical/FilaVida/BarraVida
 
 # ── Combate / disparo ─────────────────────────────────
 var proyectil: PackedScene = preload("res://ecenes/players/projectile/quark/playerProyectil.tscn")
@@ -18,14 +19,24 @@ var enemigos_en_rango: Array[Node2D] = []
 var tiempo_caminata: float = 0.0
 var tiempo_pulso: float = 0.0
 
+# ── Vida / respawn ─────────────────────────────────────
+## Vida máxima del jugador, usada para restaurarla al hacer respawn.
+@export var vida_maxima: int = 100
+
+## Emitida cuando la vida llega a 0. RespawnManager escucha esta señal
+## para iniciar la secuencia de respawn.
+signal died
+
+
+func _ready() -> void:
+	super._ready()
+	_actualizar_barra_vida()
+
 
 func _physics_process(delta: float) -> void:
 	aplicar_pulso_energia(delta)
 	animar_sombra(delta)
 	move()
-
-	if life <= 0:
-		queue_free()
 
 
 func move() -> void:
@@ -111,8 +122,26 @@ func _on_mega_pressed() -> void:
 
 func take_damage(damage: int) -> void:
 	life -= damage
+	_actualizar_barra_vida()
+
 	if life <= 0:
-		get_tree().change_scene_to_file('res://demo/muerte.tscn')
+		died.emit()
+
+
+## Restaura la vida al máximo y reposiciona al jugador.
+## Llamado por RespawnManager una vez transcurrido el tiempo de espera.
+func respawn_at(posicion: Vector2) -> void:
+	life = vida_maxima
+	global_position = posicion
+	_actualizar_barra_vida()
+
+
+## Sincroniza la barra de vida de la UI con el valor actual de "life".
+func _actualizar_barra_vida() -> void:
+	if barra_vida == null:
+		return
+	barra_vida.max_value = vida_maxima
+	barra_vida.value = clamp(life, 0, vida_maxima)
 
 
 # ── Animaciones visuales ───────────────────────────────

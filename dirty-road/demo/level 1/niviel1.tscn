@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://c4msn7to5j3in" path="res://ecenes/enemies/nubeGas/nubeGas.tscn" id="5_f3ssa"]
 [ext_resource type="PackedScene" uid="uid://dx5ahbv0nxyet" path="res://ecenes/ecenarios/tree/arbol.tscn" id="5_q0v6s"]
 [ext_resource type="PackedScene" uid="uid://p208rapbv3d0" path="res://ecenes/enemies/microplastico/microPlastico.tscn" id="6_bfnr7"]
+[ext_resource type="Script" path="res://ecenes/respawn/respawn_manager.gd" id="7_rspwn1"]
 
 [sub_resource type="Environment" id="Environment_ckgak"]
 background_mode = 3
@@ -20,6 +21,15 @@ colors = PackedColorArray(0, 0, 0, 0, 0, 0, 0, 0.7058824)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_7cwo5"]
 gradient = SubResource("Gradient_k6hvo")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[sub_resource type="Gradient" id="Gradient_j4fag"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_s3sa1"]
+gradient = SubResource("Gradient_j4fag")
 fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.5, 0)
@@ -87,3 +97,12 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 texture = SubResource("GradientTexture2D_7cwo5")
+
+[node name="RespawnManager" type="Node" parent="." unique_id=1900412233]
+script = ExtResource("7_rspwn1")
+jugador = NodePath("../ClassPlayer")
+punto_respawn = NodePath("PuntoRespawn")
+tiempo_respawn = 2.0
+
+[node name="PuntoRespawn" type="Marker2D" parent="RespawnManager" unique_id=1900412234]
+position = Vector2(373, -69)
