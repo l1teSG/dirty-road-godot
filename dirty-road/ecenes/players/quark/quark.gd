@@ -11,6 +11,8 @@ extends Player
 @onready var colision: CollisionShape2D = $Collision
 @onready var barra_vida: ProgressBar = $ui/margenUi/ContenedorVertical/FilaVida/BarraVida
 @onready var contador_respawn: Label = $ui/ContadorRespawn
+@onready var ui_contenedor: Node = $ui/margenUi
+@onready var contendor_controles: CanvasLayer = $controls
 
 # ── Combate / disparo ─────────────────────────────────
 var proyectil: PackedScene = preload("res://ecenes/players/projectile/quark/playerProyectil.tscn")
@@ -69,6 +71,7 @@ func _conectar_respawn_manager() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	#debug()
 	# Salvaguarda: si el jugador está muerto (esperando respawn), no debe
 	# procesar movimiento ni animaciones.
 	if _muerto:
@@ -207,6 +210,10 @@ func _ocultar_al_morir() -> void:
 		luz_punta.enabled = false
 	if colision != null:
 		colision.disabled = true
+	if ui_contenedor != null:
+		ui_contenedor.visible = false
+	if contendor_controles != null:
+		contendor_controles.visible = false
 
 
 ## Revierte "_ocultar_al_morir": restaura visibilidad de los gráficos,
@@ -224,7 +231,10 @@ func _restaurar_al_reaparecer() -> void:
 		luz_punta.enabled = true
 	if colision != null:
 		colision.disabled = false
-
+	if ui_contenedor != null:
+		ui_contenedor.visible = true
+	if contendor_controles != null:
+		contendor_controles.visible = true
 
 ## Sincroniza la barra de vida de la UI con el valor actual de "life".
 func _actualizar_barra_vida() -> void:
@@ -314,3 +324,6 @@ func _on_ajustes_button_down() -> void:
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("debug_kill"):
 		take_damage(9999)
+
+func debug():
+	print(contador_respawn.visible)
