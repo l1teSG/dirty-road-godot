@@ -66,6 +66,12 @@ func atacar(target: Node2D) -> void:
 	target.call("recibir_danio", damage)
 	can_attack = false
 
-	# Esperar el cooldown antes de poder atacar de nuevo
-	await get_tree().create_timer(attack_cooldown).timeout
-	can_attack = true
+	# Esperar el cooldown antes de poder atacar de nuevo, pero sólo si
+	# todavía estamos en el árbol de escena. Si el nodo fue liberado justo
+	# en este frame, evitar usar get_tree() y restablecer la variable de
+	# ataque inmediatamente para no dejar al enemigo "bloqueado".
+	if is_inside_tree() and get_tree() != null:
+		await get_tree().create_timer(attack_cooldown).timeout
+		can_attack = true
+	else:
+		can_attack = true
