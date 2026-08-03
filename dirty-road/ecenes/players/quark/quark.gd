@@ -180,6 +180,7 @@ func take_damage(damage: int) -> void:
 	if life <= 0:
 		_muerto = true
 		_ocultar_al_morir()
+		BiomasaManager.reiniciar_biomasa()
 		died.emit()
 
 

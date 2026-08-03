@@ -42,3 +42,8 @@ func _incrementar() -> void:
 	if contador >= MAX_BIOMASA:
 		contador = 0
 	biomasa_incrementada.emit()
+
+
+func reiniciar_biomasa() -> void:
+	contador = 0
+	biomasa_incrementada.emit()
