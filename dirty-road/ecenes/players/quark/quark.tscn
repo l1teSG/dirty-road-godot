@@ -208,11 +208,12 @@ visible = false
 
 [node name="controls" type="CanvasLayer" parent="." index="12" unique_id=30969760]
 
-[node name="VirtualJoystick" type="VirtualJoystick" parent="controls" index="0" unique_id=309025352]
-offset_left = 340.0
-offset_top = 739.0
-offset_right = 380.0
-offset_bottom = 779.0
+[node name="Joystick" type="VirtualJoystick" parent="controls" index="0" unique_id=309025352]
+offset_left = 289.0
+offset_top = 634.0
+offset_right = 546.0
+offset_bottom = 889.0
+joystick_mode = 2
 joystick_size = 345.0
 tip_size = 250.0
 

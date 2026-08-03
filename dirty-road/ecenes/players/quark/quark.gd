@@ -98,12 +98,12 @@ func _actualizar_objetivo() -> void:
 # ── Poder de disparo ───────────────────────────────────
 
 func _on_super_pressed() -> void:
-	print('hola')
+	
 	power = 'super'
 
 
 func _on_mega_pressed() -> void:
-	print('hola mega')
+	
 	power = 'mega'
 
 
