@@ -42,6 +42,10 @@ var tiempo_pulso: float = 0.0
 ## o métodos que no existen en el tipo declarado.
 @export var respawn_manager: Node
 
+# ── Control de disparo (editable desde Inspector) ─────
+@export_category("Combate")
+@export var disparoON: bool = true
+
 ## Emitida cuando la vida llega a 0. RespawnManager escucha esta señal
 ## para iniciar la secuencia de respawn.
 signal died
@@ -91,9 +95,8 @@ func move() -> void:
 # ── Disparo ────────────────────────────────────────────
 
 func shot(target: Node2D, power_actual: String) -> void:
-	# Guarda estricta: si el jugador está muerto, no puede disparar
-	# mientras espera el respawn.
-	if _muerto:
+	# Guarda estricta: si el jugador está muerto o el disparo desactivado, no puede disparar.
+	if _muerto or not disparoON:
 		return
 
 	if not onFire or not is_instance_valid(target):
@@ -112,7 +115,7 @@ func shot(target: Node2D, power_actual: String) -> void:
 
 
 func _on_timer_timeout() -> void:
-	if onFire and is_instance_valid(enemi):
+	if onFire and disparoON and is_instance_valid(enemi):
 		shot(enemi, power)
 	else:
 		_actualizar_objetivo()
@@ -330,3 +333,12 @@ func _input(event: InputEvent) -> void:
 
 func debug():
 	print(contador_respawn.visible)
+
+# ── Helpers para control de disparo ────────────────────
+
+func activar_disparo() -> void:
+	disparoON = true
+
+
+func desactivar_disparo() -> void:
+	disparoON = false
