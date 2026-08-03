@@ -51,16 +51,79 @@ func actualizar_barra_vida() -> void:
 # Efecto de destello rojo en la luz al recibir un golpe
 func reaccionar_visualmente_al_danio() -> void:
 	var luz = $LuzArbol as PointLight2D
-	if luz != null:
-		var color_original = luz.color
-		luz.color = Color("#FF0044") # Destello rojo neón de daño
-		
-		var tween = create_tween()
-		tween.tween_property(luz, "color", color_original, 0.25)
+	if luz == null:
+		return
+
+	# Guardar valores originales antes de la alerta
+	var color_original = luz.color
+	var energia_original = luz.energy
+	var escala_original = luz.texture_scale
+
+	# Estallido inmediato de alerta intensa
+	luz.color = Color("#FF0055")
+	luz.energy = 12.0
+	luz.texture_scale = 14.0
+
+	# Sacudida rápida del tronco (shake) para dar sensación de impacto físico
+	var pos_original = position
+	var shake_offset = Vector2(randf_range(-4.0, 4.0), randf_range(-4.0, 4.0))
+	var shake_tween = create_tween()
+	shake_tween.tween_property(self, "position", pos_original + shake_offset, 0.05)
+	shake_tween.tween_property(self, "position", pos_original, 0.1).set_ease(Tween.EASE_OUT)
+
+	# Animación de la luz: overshoot (valores aún más altos) y luego vuelta suave con rebote
+	var tween = create_tween()
+	tween.set_parallel(true)
+	tween.tween_property(luz, "color", Color("#FF0088"), 0.08)
+	tween.tween_property(luz, "energy", 16.0, 0.08)
+	tween.tween_property(luz, "texture_scale", 18.0, 0.08)
+
+	# Retorno a los valores originales con un efecto de rebote (BACK) para que
+	# la transición se sienta viva y orgánica
+	tween.chain().set_parallel(true)
+	tween.tween_property(luz, "color", color_original, 0.25).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BACK)
+	tween.tween_property(luz, "energy", energia_original, 0.25).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BACK)
+	tween.tween_property(luz, "texture_scale", escala_original, 0.25).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BACK)
 
 func destruir_arbol() -> void:
-	# Aquí puedes cambiar de escena a "GAME OVER" o reiniciar el nivel
-	get_tree().reload_current_scene()
+	# Desactivar al jugador instantáneamente (sin transiciones) para que
+	# no pueda moverse ni disparar mientras se reproduce la animación.
+	var player = get_tree().get_first_node_in_group("player")
+	if player != null:
+		player.hide()
+		player.process_mode = Node.PROCESS_MODE_DISABLED
+
+	# Animar intensamente la luz del árbol antes del fade (paralelo)
+	var luz = $LuzArbol as PointLight2D
+	if luz != null:
+		var tween_arbol = create_tween()
+		tween_arbol.set_parallel(true)
+		tween_arbol.tween_property(luz, "energy", 10.0, 0.8).set_ease(Tween.EASE_IN)
+		tween_arbol.tween_property(luz, "texture_scale", 10.0, 0.8).set_ease(Tween.EASE_IN)
+		tween_arbol.tween_property(luz, "color", Color(1, 0, 0, 1), 0.8).set_ease(Tween.EASE_IN)
+
+	# Crear una capa de overlay para la transición dramática a pantalla completa
+	var canvas_layer = CanvasLayer.new()
+	canvas_layer.layer = 128
+	get_tree().current_scene.add_child(canvas_layer)
+
+	# ColorRect de pantalla completa, inicialmente rojo semitransparente
+	var color_rect = ColorRect.new()
+	color_rect.color = Color.RED
+	color_rect.modulate = Color(1, 1, 1, 0)
+	color_rect.anchors_preset = Control.PRESET_FULL_RECT
+	canvas_layer.add_child(color_rect)
+
+	# Animación doble: el color pasa de rojo a negro mientras la opacidad sube a 1
+	# Duración total: 1 segundo para una transición rápida
+	var tween = create_tween()
+	tween.set_parallel(true)
+	tween.tween_property(color_rect, "modulate:a", 1.0, 1.0).set_ease(Tween.EASE_IN)
+	tween.tween_property(color_rect, "color", Color.BLACK, 1.0).set_ease(Tween.EASE_IN)
+	await tween.finished
+
+	# Cambiar a la escena de muerte
+	get_tree().change_scene_to_file("res://ui/dead/dead.tscn")
 	
 func _ready() -> void:
 	vida_actual = vida_maxima

@@ -1,0 +1,111 @@
+[gd_scene format=3 uid="uid://mmyol1w5t2ps"]
+
+[ext_resource type="Theme" uid="uid://hau5fs7dt6rv" path="res://themes/mainTheme.tres" id="1_hduar"]
+[ext_resource type="Script" uid="uid://tdrji6ok0gat" path="res://ui/dead/dead.gd" id="1_yd0cx"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o43wt"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.6, 1, 0.2, 1)
+border_blend = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b14hx"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.6, 1, 0.2, 1)
+border_blend = true
+
+[sub_resource type="Curve" id="Curve_hduar"]
+_limits = [0.0, 1.0, 0.5, 1.0]
+_data = [Vector2(0.5, 0.84269667), 0.0, 0.0, 0, 0, Vector2(0.734375, 0.44943827), 0.0, 0.0, 0, 0, Vector2(0.875, 1), 0.0, 0.0, 0, 0, Vector2(0.9609375, 0.50561804), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[node name="Dead" type="CanvasLayer" unique_id=146740303]
+script = ExtResource("1_yd0cx")
+
+[node name="Contenedor" type="Control" parent="." unique_id=1946908455]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="Contenedor" unique_id=1096868665]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -307.5
+offset_top = -250.0
+offset_right = 307.5
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Contenedor/CenterContainer" unique_id=654128144]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Contenedor/CenterContainer/VBoxContainer" unique_id=1332421629]
+layout_mode = 2
+theme = ExtResource("1_hduar")
+theme_override_colors/font_color = Color(0.29564208, 0.5194653, 0.47586936, 1)
+theme_override_font_sizes/font_size = 200
+text = "murio el arbol!!!!"
+
+[node name="HSeparator" type="HSeparator" parent="Contenedor/CenterContainer/VBoxContainer" unique_id=97175232]
+layout_mode = 2
+theme = ExtResource("1_hduar")
+
+[node name="nuevaPartida" type="Button" parent="Contenedor/CenterContainer/VBoxContainer" unique_id=439654733]
+z_index = 6
+layout_mode = 2
+theme = ExtResource("1_hduar")
+theme_override_font_sizes/font_size = 80
+theme_override_styles/normal = SubResource("StyleBoxFlat_o43wt")
+text = "nueva partida"
+
+[node name="salir" type="Button" parent="Contenedor/CenterContainer/VBoxContainer" unique_id=761343034]
+z_index = 6
+layout_mode = 2
+theme = ExtResource("1_hduar")
+theme_override_font_sizes/font_size = 80
+theme_override_styles/normal = SubResource("StyleBoxFlat_b14hx")
+text = "salir"
+
+[node name="ColorRect" type="ColorRect" parent="Contenedor" unique_id=193978876]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.019607844, 0.039215688, 0.03137255, 0.7647059)
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="Contenedor" unique_id=265318783]
+position = Vector2(940, 534)
+amount = 100
+lifetime = 6.0
+emission_shape = 3
+emission_rect_extents = Vector2(1004.5, 781.7)
+spread = 180.0
+gravity = Vector2(0, -10)
+initial_velocity_max = 3.9
+scale_amount_min = 0.0
+scale_amount_max = 10.0
+split_scale = true
+scale_curve_x = SubResource("Curve_hduar")
+scale_curve_y = null
+color = Color(0.6, 0.043137256, 0.2, 1)
+
+[connection signal="button_down" from="Contenedor/CenterContainer/VBoxContainer/nuevaPartida" to="." method="_on_nueva_partida_button_down"]
+[connection signal="button_down" from="Contenedor/CenterContainer/VBoxContainer/salir" to="." method="_on_salir_button_down"]

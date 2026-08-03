@@ -11,6 +11,8 @@ extends Player
 @onready var colision: CollisionShape2D = $Collision
 @onready var barra_vida: ProgressBar = $ui/margenUi/ContenedorVertical/FilaVida/BarraVida
 @onready var contador_respawn: Label = $ui/ContadorRespawn
+@onready var ui_contenedor: Node = $ui/margenUi
+@onready var contendor_controles: CanvasLayer = $controls
 
 # ── Combate / disparo ─────────────────────────────────
 var proyectil: PackedScene = preload("res://ecenes/players/projectile/quark/playerProyectil.tscn")
@@ -69,6 +71,7 @@ func _conectar_respawn_manager() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	#debug()
 	# Salvaguarda: si el jugador está muerto (esperando respawn), no debe
 	# procesar movimiento ni animaciones.
 	if _muerto:
@@ -177,6 +180,7 @@ func take_damage(damage: int) -> void:
 	if life <= 0:
 		_muerto = true
 		_ocultar_al_morir()
+		BiomasaManager.reiniciar_biomasa()
 		died.emit()
 
 
@@ -207,6 +211,10 @@ func _ocultar_al_morir() -> void:
 		luz_punta.enabled = false
 	if colision != null:
 		colision.disabled = true
+	if ui_contenedor != null:
+		ui_contenedor.visible = false
+	if contendor_controles != null:
+		contendor_controles.visible = false
 
 
 ## Revierte "_ocultar_al_morir": restaura visibilidad de los gráficos,
@@ -224,7 +232,10 @@ func _restaurar_al_reaparecer() -> void:
 		luz_punta.enabled = true
 	if colision != null:
 		colision.disabled = false
-
+	if ui_contenedor != null:
+		ui_contenedor.visible = true
+	if contendor_controles != null:
+		contendor_controles.visible = true
 
 ## Sincroniza la barra de vida de la UI con el valor actual de "life".
 func _actualizar_barra_vida() -> void:
@@ -257,12 +268,12 @@ func _iniciar_contador_respawn(tiempo_espera: float) -> void:
 
 	var segundos_restantes: int = int(ceil(tiempo_espera))
 	contador_respawn.visible = true
-	_actualizar_texto_contador(segundos_restantes)
+	await _actualizar_texto_contador(segundos_restantes)
 
 	while segundos_restantes > 0:
 		await get_tree().create_timer(1.0).timeout
 		segundos_restantes -= 1
-		_actualizar_texto_contador(segundos_restantes)
+		await _actualizar_texto_contador(segundos_restantes)
 
 	contador_respawn.visible = false
 
@@ -275,6 +286,8 @@ func _actualizar_texto_contador(segundos: int) -> void:
 	# se espera un frame para que el Label recalcule su tamaño real con el
 	# nuevo texto antes de fijar el pivote de escala en su centro
 	await get_tree().process_frame
+	if contador_respawn == null:
+		return
 	contador_respawn.pivot_offset = contador_respawn.size / 2.0
 
 	contador_respawn.scale = Vector2(1.4, 1.4)
@@ -314,3 +327,6 @@ func _on_ajustes_button_down() -> void:
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("debug_kill"):
 		take_damage(9999)
+
+func debug():
+	print(contador_respawn.visible)

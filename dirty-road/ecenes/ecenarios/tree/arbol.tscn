@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dx5ahbv0nxyet"]
 
-[ext_resource type="Script" uid="uid://lg3j5antpdky" path="res://ecenes/ecenarios/tree/arbol.gd" id="1_v8n67"]
+[ext_resource type="Script" uid="uid://qw3vwiq5js6j" path="res://ecenes/ecenarios/tree/arbol.gd" id="1_v8n67"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7cwo5"]
 size = Vector2(78, 47)
@@ -74,10 +74,11 @@ position = Vector2(0, -66.5)
 shape = SubResource("RectangleShape2D_s3sa1")
 
 [node name="CPUParticles2D" type="CPUParticles2D" parent="." unique_id=1736610851]
+position = Vector2(0, -120)
 amount = 25
 lifetime = 3.0
-emission_shape = 1
-emission_sphere_radius = 40.0
+emission_shape = 3
+emission_rect_extents = Vector2(300, 200)
 direction = Vector2(0, -1)
 spread = 180.0
 gravity = Vector2(0, -10)
