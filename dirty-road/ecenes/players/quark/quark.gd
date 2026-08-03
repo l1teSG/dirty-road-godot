@@ -33,7 +33,7 @@ var _muerto: bool = false
 
 
 func _ready() -> void:
-	super._ready()
+	
 	_actualizar_barra_vida()
 
 
@@ -181,3 +181,7 @@ func animar_sombra(delta: float) -> void:
 
 func _on_ajustes_button_down() -> void:
 	$Pausa.visible = true
+
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("debug_kill"):
+		take_damage(9999)
