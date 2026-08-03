@@ -6,6 +6,7 @@ extends Player
 @onready var nucleo: Polygon2D = $Nucleo
 @onready var luz_punta: PointLight2D = $LuzPunta
 @onready var sombra: Polygon2D = $sombra
+@onready var joystick: VirtualJoystick = $controls/Joystick  # Joystick virtual
 
 # ── Combate / disparo ─────────────────────────────────
 var proyectil: PackedScene = preload("res://ecenes/players/projectile/quark/playerProyectil.tscn")
@@ -18,7 +19,22 @@ var enemigos_en_rango: Array[Node2D] = []
 var tiempo_caminata: float = 0.0
 var tiempo_pulso: float = 0.0
 
+# ── Dirección del joystick (event‑driven) ─────────────
+var joystick_direction: Vector2 = Vector2.ZERO
 
+# ── Inicialización ─────────────────────────────────────
+func _ready() -> void:
+	if joystick != null:
+		# Conectar la señal 'moved' que emite un Vector2 con la dirección
+		joystick.moved.connect(_on_joystick_moved)
+
+
+func _on_joystick_moved(direction: Vector2) -> void:
+	# Actualizar la dirección cada vez que el joystick envía la señal
+	joystick_direction = direction
+
+
+# ── Física ─────────────────────────────────────────────
 func _physics_process(delta: float) -> void:
 	aplicar_pulso_energia(delta)
 	animar_sombra(delta)
@@ -29,8 +45,17 @@ func _physics_process(delta: float) -> void:
 
 
 func move() -> void:
-	var vectorDireccion = Input.get_vector('ui_left', 'ui_right', 'ui_up', 'ui_down')
-	velocity = vectorDireccion * speed
+	# Obtener dirección desde el joystick virtual (recibida por señal)
+	var vector_direccion: Vector2 = Vector2.ZERO
+	if joystick != null:
+		vector_direccion = joystick_direction
+
+	# Si el joystick apenas se usa, complementar con teclado
+	if vector_direccion.length() < 0.1:
+		vector_direccion = Input.get_vector('ui_left', 'ui_right', 'ui_up', 'ui_down')
+
+	# Suavizar el movimiento (sin aceleración brusca)
+	velocity = vector_direccion * speed
 	move_and_slide()
 
 
