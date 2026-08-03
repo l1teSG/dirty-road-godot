@@ -4,11 +4,13 @@ extends CharacterBody2D
 var tiempo_anim: float = randf() * 10.0
 var life: int = 30  # ajusta a la vida que quieras
 
-# ── Parámetros de Ataque y Aggro (editable desde Inspector) ──
-@export_category("Parámetros de Ataque y Aggro")
+# ── Parámetros de Ataque y Proximidad (editable desde Inspector) ──
+@export_category("Parámetros de Ataque y Proximidad")
 @export var distancia_ataque: float = 100.0
 @export var danio_ataque: int = 10
 @export var tiempo_recarga: float = 1.5
+@export var distancia_urgencia_arbol: float = 60.0
+@export var distancia_max_aggro: float = 350.0
 @export var tiempo_aggro: float = 4.0
 
 # ── Control interno ───────────────────────────────────
@@ -67,19 +69,9 @@ func recibir_danio(cantidad: int, atacante: Node2D = null) -> void:
 		self.queue_free()
 
 
-# ── Búsqueda dinámica de objetivos ─────────────────────
+# ── Búsqueda dinámica de objetivos (híbrida) ────────────
 
 func seleccionar_objetivo() -> void:
-	# Aggro: si está en modo aggro y el jugador está dentro del rango de detección,
-	# lo fija como objetivo inmediato (ignora la prioridad habitual).
-	if en_aggro:
-		var players = get_tree().get_nodes_in_group("player")
-		if players.size() > 0 and is_instance_valid(players[0]):
-			var player = players[0] as Node2D
-			if global_position.distance_to(player.global_position) <= distancia_ataque:
-				objetivo = player
-				return
-
 	var jugador: Node2D = null
 	var arbol: Node2D = null
 
@@ -91,19 +83,37 @@ func seleccionar_objetivo() -> void:
 	if arboles.size() > 0 and is_instance_valid(arboles[0]):
 		arbol = arboles[0] as Node2D
 
-	# Seleccionar el objetivo más cercano (dentro de distancia_ataque)
+	var dist_jugador: float = INF
+	var dist_arbol: float = INF
+
+	if jugador != null:
+		dist_jugador = global_position.distance_to(jugador.global_position)
+	if arbol != null:
+		dist_arbol = global_position.distance_to(arbol.global_position)
+
+	# Regla 1: Urgencia Árbol (prioridad absoluta si está a quemarropa)
+	if arbol != null and dist_arbol <= distancia_urgencia_arbol:
+		objetivo = arbol
+		return
+
+	# Regla 2: Aggro con rango limitado
+	if en_aggro:
+		if jugador != null and dist_jugador <= distancia_max_aggro:
+			objetivo = jugador
+			return
+		else:
+			# Si el jugador está fuera del rango máximo, rompemos el aggro
+			en_aggro = false
+
+	# Regla 3: Proximidad pura (estado normal)
 	var closest: Node2D = null
 	var min_dist: float = INF
-	if jugador != null:
-		var d = global_position.distance_to(jugador.global_position)
-		if d <= distancia_ataque and d < min_dist:
-			closest = jugador
-			min_dist = d
-	if arbol != null:
-		var d = global_position.distance_to(arbol.global_position)
-		if d <= distancia_ataque and d < min_dist:
-			closest = arbol
-			min_dist = d
+	if jugador != null and dist_jugador < min_dist:
+		closest = jugador
+		min_dist = dist_jugador
+	if arbol != null and dist_arbol < min_dist:
+		closest = arbol
+		min_dist = dist_arbol
 	objetivo = closest
 
 
