@@ -29,7 +29,7 @@ extends Node
 
 ## Time, in seconds, to wait between death and respawn.
 ## Exposed in the Inspector so designers can tune it without touching code.
-@export var tiempo_respawn: float = 2.0
+@export var tiempo_respawn: float = 5.0
 
 ## Emitted right when the respawn sequence starts, after the player dies.
 ## Carries the wait time so a future UI could show a countdown.
