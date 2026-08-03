@@ -27,6 +27,10 @@ var tiempo_pulso: float = 0.0
 ## para iniciar la secuencia de respawn.
 signal died
 
+## Evita que el jugador siga recibiendo daño (y re-emitiendo "died")
+## mientras ya está esperando a que RespawnManager lo reposicione.
+var _muerto: bool = false
+
 
 func _ready() -> void:
 	super._ready()
@@ -121,10 +125,16 @@ func _on_mega_pressed() -> void:
 # ── Vida / daño ────────────────────────────────────────
 
 func take_damage(damage: int) -> void:
+	# Si ya está esperando el respawn, ignoramos daño adicional para no
+	# seguir bajando "life" indefinidamente ni re-emitir "died".
+	if _muerto:
+		return
+
 	life -= damage
 	_actualizar_barra_vida()
 
 	if life <= 0:
+		_muerto = true
 		died.emit()
 
 
@@ -134,6 +144,7 @@ func respawn_at(posicion: Vector2) -> void:
 	life = vida_maxima
 	global_position = posicion
 	_actualizar_barra_vida()
+	_muerto = false
 
 
 ## Sincroniza la barra de vida de la UI con el valor actual de "life".
