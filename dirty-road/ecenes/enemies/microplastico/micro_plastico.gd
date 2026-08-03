@@ -1,6 +1,20 @@
 extends enemigoNuevo
 
-@export var speed: float = 100.0
+@export var speed: float = 130.0
+
+func _ready() -> void:
+	tiempo_recarga = 0.5
+	distancia_ataque = 45.0
+
+func seleccionar_objetivo() -> void:
+	var jugadores = get_tree().get_nodes_in_group("player")
+	if jugadores.is_empty():
+		jugadores = get_tree().get_nodes_in_group("jugador")
+
+	if not jugadores.is_empty() and is_instance_valid(jugadores[0]):
+		objetivo = jugadores[0] as Node2D
+	else:
+		objetivo = null
 
 func _physics_process(delta: float) -> void:
 	super._physics_process(delta)
