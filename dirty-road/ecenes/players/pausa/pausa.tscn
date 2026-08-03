@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bnsgn8vqai733"]
 
 [ext_resource type="Theme" uid="uid://hau5fs7dt6rv" path="res://themes/mainTheme.tres" id="1_1yxvs"]
-[ext_resource type="Script" uid="uid://cxutsimb0ms0q" path="res://ecenes/players/pausa/pausa.gd" id="1_b5l1p"]
+[ext_resource type="Script" uid="uid://bstpgam4umvb4" path="res://ecenes/players/pausa/pausa.gd" id="1_b5l1p"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g2h5g"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
@@ -53,6 +53,7 @@ layout_mode = 2
 layout_mode = 2
 theme = ExtResource("1_1yxvs")
 theme_override_colors/font_color = Color(0.20784314, 1, 0.16862746, 1)
+theme_override_font_sizes/font_size = 50
 text = "MENU DE PAUSA"
 
 [node name="HSeparator" type="HSeparator" parent="CenterContainer/VBoxContainer" unique_id=2063077115]
@@ -63,6 +64,7 @@ theme = ExtResource("1_1yxvs")
 z_index = 6
 layout_mode = 2
 theme = ExtResource("1_1yxvs")
+theme_override_font_sizes/font_size = 40
 theme_override_styles/normal = SubResource("StyleBoxFlat_g2h5g")
 text = "continuar"
 
@@ -70,6 +72,7 @@ text = "continuar"
 z_index = 6
 layout_mode = 2
 theme = ExtResource("1_1yxvs")
+theme_override_font_sizes/font_size = 40
 theme_override_styles/normal = SubResource("StyleBoxFlat_crj17")
 text = "nueva partida"
 
@@ -77,6 +80,7 @@ text = "nueva partida"
 z_index = 6
 layout_mode = 2
 theme = ExtResource("1_1yxvs")
+theme_override_font_sizes/font_size = 40
 theme_override_styles/normal = SubResource("StyleBoxFlat_tap61")
 text = "salir"
 

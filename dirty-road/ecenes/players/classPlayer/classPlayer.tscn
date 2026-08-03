@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://b74nv28ce3acw"]
 
-[ext_resource type="Script" uid="uid://ynbiefubq3e6" path="res://ecenes/players/classPlayer/class_player.gd" id="1_fmujy"]
+[ext_resource type="Script" uid="uid://squsqr4aing1" path="res://ecenes/players/classPlayer/class_player.gd" id="1_fmujy"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xqmf3"]
 size = Vector2(5, 5)
@@ -11,13 +11,3 @@ script = ExtResource("1_fmujy")
 [node name="Collision" type="CollisionShape2D" parent="." unique_id=1015691357]
 position = Vector2(2.5, 2.5)
 shape = SubResource("RectangleShape2D_xqmf3")
-
-[node name="controls" type="CanvasLayer" parent="." unique_id=309147665]
-
-[node name="VirtualJoystick" type="VirtualJoystick" parent="controls" unique_id=160610802]
-offset_left = 144.0
-offset_top = 454.0
-offset_right = 184.0
-offset_bottom = 494.0
-joystick_mode = 1
-tip_size = 85.0

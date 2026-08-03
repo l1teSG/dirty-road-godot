@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://bvbiytnpyaqkb"]
+
+[node name="Control" type="Control" unique_id=1326634264]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="VirtualJoystick" type="VirtualJoystick" parent="." unique_id=1177875311]
+layout_mode = 0
+offset_left = 249.0
+offset_top = 757.0
+offset_right = 289.0
+offset_bottom = 883.0
