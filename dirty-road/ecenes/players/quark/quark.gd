@@ -4,8 +4,11 @@ extends Player
 @onready var rangeArea = $Area2D/range
 @onready var aim: Node2D = $aim
 @onready var nucleo: Polygon2D = $Nucleo
+@onready var cuerpo: Polygon2D = $body
+@onready var luz_base: PointLight2D = $LuzBase
 @onready var luz_punta: PointLight2D = $LuzPunta
 @onready var sombra: Polygon2D = $sombra
+@onready var colision: CollisionShape2D = $Collision
 @onready var barra_vida: ProgressBar = $ui/margenUi/ContenedorVertical/FilaVida/BarraVida
 @onready var contador_respawn: Label = $ui/ContadorRespawn
 
@@ -85,6 +88,11 @@ func move() -> void:
 # ── Disparo ────────────────────────────────────────────
 
 func shot(target: Node2D, power_actual: String) -> void:
+	# Guarda estricta: si el jugador está muerto, no puede disparar
+	# mientras espera el respawn.
+	if _muerto:
+		return
+
 	if not onFire or not is_instance_valid(target):
 		return
 
@@ -168,11 +176,7 @@ func take_damage(damage: int) -> void:
 
 	if life <= 0:
 		_muerto = true
-		# En vez de hide(): el jugador se vuelve totalmente transparente,
-		# pero sigue "visible" para el motor. Así la Camera2D (hija del
-		# jugador) puede seguir viajando con el Tween de RespawnManager
-		# sin que nada relacionado con la cámara se vea afectado.
-		modulate.a = 0.0
+		_ocultar_al_morir()
 		died.emit()
 
 
@@ -182,8 +186,44 @@ func respawn_at(posicion: Vector2) -> void:
 	life = vida_maxima
 	global_position = posicion
 	_actualizar_barra_vida()
-	modulate.a = 1.0
+	_restaurar_al_reaparecer()
 	_muerto = false
+
+
+## Oculta y desactiva únicamente los elementos gráficos y de colisión del
+## cuerpo del jugador (no el nodo raíz), para que la UI —incluyendo
+## "ui/ajuste/ajustes" y el contador de respawn— permanezca visible y
+## funcional mientras el jugador viaja invisible hacia el punto de origen.
+func _ocultar_al_morir() -> void:
+	if sombra != null:
+		sombra.visible = false
+	if nucleo != null:
+		nucleo.visible = false
+	if cuerpo != null:
+		cuerpo.visible = false  # oculta también a "bodyInterior", su hijo
+	if luz_base != null:
+		luz_base.enabled = false
+	if luz_punta != null:
+		luz_punta.enabled = false
+	if colision != null:
+		colision.disabled = true
+
+
+## Revierte "_ocultar_al_morir": restaura visibilidad de los gráficos,
+## vuelve a encender las luces y reactiva la colisión del jugador.
+func _restaurar_al_reaparecer() -> void:
+	if sombra != null:
+		sombra.visible = true
+	if nucleo != null:
+		nucleo.visible = true
+	if cuerpo != null:
+		cuerpo.visible = true
+	if luz_base != null:
+		luz_base.enabled = true
+	if luz_punta != null:
+		luz_punta.enabled = true
+	if colision != null:
+		colision.disabled = false
 
 
 ## Sincroniza la barra de vida de la UI con el valor actual de "life".
