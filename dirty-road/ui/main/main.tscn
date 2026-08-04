@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://c8ukhxusi8bqb"]
 
-[ext_resource type="Script" uid="uid://d0yifw3ixgw80" path="res://ui/main/main.gd" id="2_7mc2q"]
+[ext_resource type="Script" uid="uid://dheeekunktlt1" path="res://ui/main/main.gd" id="2_7mc2q"]
 [ext_resource type="Script" uid="uid://cm8ldnknxd1fs" path="res://ui/main/color_rect.gd" id="2_ircy7"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3a1op"]
@@ -76,6 +76,7 @@ layout_mode = 2
 theme_override_constants/separation = 20
 
 [node name="Label" type="Label" parent="VBoxContainer/VBoxContainer" unique_id=813626048]
+z_index = 3
 layout_mode = 2
 theme_override_colors/font_color = Color(0.6, 1, 0.2, 1)
 theme_override_font_sizes/font_size = 100

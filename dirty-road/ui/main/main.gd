@@ -11,9 +11,7 @@ const DURACION_ENTRADA := 0.8
 const RETRASO_ENTRE_BOTONES := 0.12
 
 
-func _init() -> void:
-	# se ejecuta ANTES de que el nodo entre al árbol y se dibuje el primer frame
-	pass
+
 
 
 func _ready() -> void:
