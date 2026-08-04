@@ -1,6 +1,6 @@
 extends Area2D
 
-@export var velocidad: float = 350.0
+@export var velocidad: float = 400.0
 @export var danio: int = 12
 
 var direction: Vector2 = Vector2.ZERO
@@ -12,11 +12,13 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	tiempo_vida += delta
-	if direction != Vector2.ZERO:
-		global_position += direction * velocidad * delta
 	
-	# Autodestrucción por distancia/tiempo (5 segundos)
-	if tiempo_vida > 5.0:
+	# Movimiento constante en la dirección asignada
+	if direction != Vector2.ZERO:
+		position += direction * velocidad * delta
+
+	# Autodestrucción de seguridad a los 4 segundos
+	if tiempo_vida > 4.0:
 		queue_free()
 
 func set_direction(dir: Vector2) -> void:
@@ -24,11 +26,11 @@ func set_direction(dir: Vector2) -> void:
 	rotation = direction.angle()
 
 func _on_body_entered(body: Node2D) -> void:
-	# Ignorar al propio enemigo que la disparó y a otros miembros del grupo "enemi"
+	# Ignorar al emisor y a otros miembros del grupo enemigo
 	if body.is_in_group("enemi") or body is NubeGas:
 		return
 
-	# Dañar al jugador o al árbol
+	# Infligir daño al jugador o al árbol
 	if body.has_method("take_damage"):
 		body.take_damage(danio)
 	elif body.has_method("recibir_danio"):
