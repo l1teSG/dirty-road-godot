@@ -3,27 +3,26 @@ extends enemigoNuevo
 
 ## ------------------------------------------------------------
 ## Enemigo a Rango "Nube de Gas"
-## Dispara proyectiles desde lejos, huye cuando el jugador
-## se acerca demasiado y nunca persigue al jugador.
+## Dispara proyectiles desde lejos y huye cuando el jugador
+## se acerca demasiado.
 ## ------------------------------------------------------------
 
 # Variables exportables (ajustables en Inspector)
 @export var velocidad_movimiento: float = 85.0
-@export var rango_ataque: float = 850.0
-@export var distancia_minima_jugador: float = 150.0   # el jugador disparará la huida
-@export var distancia_maxima_jugador: float = 400.0   # fuera de este rango la nube ignora al jugador
-@export var velocidad_retroceso: float = 100.0
-@export var danio_proyectil: int = 12
-@export var intervalo_disparo: float = 1.8
-@export var velocidad_proyectil: float = 400.0
+@export var rango_disparo: float = 850.0
+@export var rango_huida: float = 140.0
 @export var escena_proyectil: PackedScene = preload("res://ecenes/enemies/nubeGas/bullet/bulletGas.tscn")
+
+# Nuevas variables exportables para interacción con el jugador
+@export var distancia_minima_jugador: float = 150.0      # Si el jugador está más cerca, la nube retrocede
+@export var distancia_maxima_jugador: float = 400.0      # Si el jugador está más lejos, vuelve a centrarse en el árbol
+@export var velocidad_retroceso: float = 100.0           # Velocidad al alejarse del jugador
 
 # Referencias a nodos visuales (asignar en la escena)
 @onready var cuerpo_ext: Polygon2D = $CuerpoExterior
 @onready var luz: PointLight2D = $PointLight2D
 
 # Estado interno
-var puede_disparar: bool = true
 var target_tree: Node2D = null
 var target_player: Node2D = null
 
@@ -33,13 +32,13 @@ func _ready() -> void:
 
 	# Ajustar perfil de Nube de Gas sobreescribiendo parámetros heredados
 	life = 60
-	# Ajustamos también las variables heredadas para coherencia
-	danio_ataque = danio_proyectil
-	tiempo_recarga = intervalo_disparo
-	distancia_ataque = rango_ataque
-	distancia_urgencia_arbol = rango_ataque - 50.0
-	distancia_max_aggro = rango_ataque + 100.0
+	danio_ataque = 12
+	tiempo_recarga = 1.8
+	distancia_ataque = 850.0          # Coincide con el nuevo rango de disparo
+	distancia_urgencia_arbol = 400.0
+	distancia_max_aggro = 500.0
 	tiempo_aggro = 3.0
+
 
 # ─── Funciones de búsqueda ──────────────────────────────
 
@@ -59,6 +58,7 @@ func actualizar_objetivos() -> void:
 	target_tree = buscar_arbol()
 	target_player = buscar_jugador()
 
+
 # ─── Movimiento modular ──────────────────────────────────
 
 func mover() -> void:
@@ -74,95 +74,101 @@ func mover() -> void:
 			# Retroceder (alejarse del jugador)
 			var dir_retirada: Vector2 = (global_position - target_player.global_position).normalized()
 			velocity = dir_retirada * velocidad_retroceso
-			# Anular objetivo de ataque mientras se aleja
+			# Anular objetivo de ataque mientras se aleja (para no disparar en retroceso)
 			objetivo = null
 			return
 
 		# Si el jugador está dentro de la distancia máxima pero fuera de la mínima,
 		# mantener distancia: quedarse quieto (no perseguir)
-		if dist_player <= distancia_maxima_jugador and dist_player > distancia_minima_jugador:
+		if dist_player <= distancia_max_jugador and dist_player > distancia_minima_jugador:
+			# No moverse (velocidad nula) – la IA no avanza ni retrocede
 			velocity = Vector2.ZERO
-			objetivo = null
+			# No atacar al jugador; el disparo sigue dirigido al árbol si lo tenía
 			return
 
-	# Sin interferencia del jugador, volver a la lógica del árbol
+	# Si el jugador está fuera del rango máximo (o no existe), volver a la lógica del árbol
 	if tree_valid:
 		var dist_tree: float = global_position.distance_to(target_tree.global_position)
-		if dist_tree > rango_ataque:
+		if dist_tree > rango_disparo:
 			# Avanzar hacia el árbol
 			var dir_arbol: Vector2 = (target_tree.global_position - global_position).normalized()
 			velocity = dir_arbol * velocidad_movimiento
 		else:
-			# Dentro del rango de ataque, detenerse para disparar
+			# Dentro del rango de disparo, detenerse para atacar
 			velocity = Vector2.ZERO
-			objetivo = target_tree  # aseguramos que el árbol es el objetivo
 	else:
+		# Sin árbol ni jugador, detenerse
 		velocity = Vector2.ZERO
+
 
 # ─── Disparo modular ─────────────────────────────────────
 
 func disparar() -> void:
-	if not puede_disparar:
-		return
-	if not is_instance_valid(objetivo):
-		return
-	if global_position.distance_to(objetivo.global_position) > rango_ataque:
-		return
+	# Esta función se llama a través de evaluar_y_ejecutar_ataque (heredado)
+	# No necesitamos implementar nada extra aquí; el método padre se encarga.
+	pass
 
-	var bullet = escena_proyectil.instantiate()
-	var dir_disparo: Vector2 = (objetivo.global_position - global_position).normalized()
-
-	# Configurar el proyectil
-	bullet.danio = danio_proyectil
-	bullet.velocidad = velocidad_proyectil
-	bullet.inicializar(dir_disparo, global_position + (dir_disparo * 45.0))
-
-	get_tree().current_scene.add_child(bullet)
-
-	# Animación de retroceso
-	_animar_retroceso()
-
-	# Cooldown
-	puede_disparar = false
-	await get_tree().create_timer(intervalo_disparo).timeout
-	puede_disparar = true
 
 # ─── Física ──────────────────────────────────────────────
 
 func _physics_process(delta: float) -> void:
-	# Ejecuta comportamiento base (animación, selección de objetivo, etc.)
+	# Primero ejecuta comportamiento base (animación, selección de objetivo, etc.)
 	super(delta)
 
 	# Llamar a la lógica modular de movimiento
 	mover()
 
-	# Llamar a disparar si estamos en condiciones
-	disparar()
-
 	# Aplicar movimiento
 	move_and_slide()
+
 
 # ─── Selección de objetivo mejorada ─────────────────────
 
 func seleccionar_objetivo() -> void:
-	# La selección de objetivo la hacemos manualmente en mover/disparar,
-	# porque no queremos que la clase padre sobreescriba nuestro objetivo.
-	# Simplemente no hacemos nada aquí; el objetivo se asigna en mover().
-	pass
+	# Primero verificar si hay jugador cerca para priorizar la huída
+	var player: Node2D = buscar_jugador()
+	if is_instance_valid(player):
+		var dist: float = global_position.distance_to(player.global_position)
+		# Si el jugador está dentro del rango de huida, priorizarlo como objetivo
+		# (aunque la nube no ataque al jugador, necesita saber dónde está para huir)
+		if dist <= distancia_minima_jugador or en_aggro:
+			# No fijar objetivo de ataque, sino usarlo solo para movimiento
+			# Dejamos que mover() maneje la huida
+			# Pero necesitamos que objetivo esté vacío para que mover() lo gestione,
+			# así que no lo asignamos. El ataque lo maneja el timer heredado.
+			return
 
-# ─── Animación de retroceso ─────────────────────────────
+	# Si no hay prioridad de jugador, delegar a la clase padre (Árbol)
+	super()
+
+
+# ─── Ataque (se ejecuta desde el Timer heredado) ─────────
+
+func evaluar_y_ejecutar_ataque() -> void:
+	# Solo atacar si el jugador NO está interfiriendo (fuera de rango mínimo)
+	if is_instance_valid(target_player):
+		var dist_player: float = global_position.distance_to(target_player.global_position)
+		if dist_player <= distancia_minima_jugador:
+			# No atacar mientras huye
+			return
+
+	# Ejecutar lógica heredada (disparo al objetivo)
+	super()
 
 func _animar_retroceso() -> void:
+	# Pequeña animación visual de retroceso al disparar
 	if not is_instance_valid(cuerpo_ext):
 		return
 
 	var tween: Tween = create_tween()
 	tween.set_parallel(true)
 
+	# Comprimir escala brevemente
 	tween.tween_property(cuerpo_ext, "scale", Vector2(0.85, 0.85), 0.05)
 	if is_instance_valid(luz):
 		tween.tween_property(luz, "energy", 2.5, 0.05)
 
+	# Recuperar escala normal
 	tween.tween_property(cuerpo_ext, "scale", Vector2.ONE, 0.1).set_delay(0.05)
 	if is_instance_valid(luz):
 		tween.tween_property(luz, "energy", 1.0, 0.1).set_delay(0.05)
