@@ -16,7 +16,6 @@ extends enemigoNuevo
 var vector_knockback: Vector2 = Vector2.ZERO
 
 func _ready() -> void:
-	super()
 
 	# Registrar en el grupo de enemigos (usa "enemi" como el resto del proyecto)
 	add_to_group("enemi")
