@@ -96,19 +96,17 @@ func evaluar_y_ejecutar_ataque() -> void:
 	var bullet = escena_proyectil.instantiate()
 	var dir_disparo: Vector2 = (objetivo.global_position - global_position).normalized()
 
-	# 2. Agregar al árbol PRIMERO
-	get_tree().current_scene.add_child(bullet)
-
-	# 3. Posicionar fuera del cuerpo del enemigo (offset de 45px para evitar autocolisión)
-	bullet.global_position = global_position + (dir_disparo * 45.0)
-
-	# 4. Asignar dirección explícitamente
+	# 2. Asignar dirección y posición ANTES de agregar al árbol
 	if bullet.has_method("set_direction"):
 		bullet.set_direction(dir_disparo)
+	bullet.global_position = global_position + (dir_disparo * 40.0)
+
+	# 3. Agregar al árbol
+	get_tree().current_scene.add_child(bullet)
 
 	_animar_retroceso()
 
-	# 5. Cooldown de recarga
+	# 4. Cooldown de recarga
 	puede_atacar = false
 	await get_tree().create_timer(tiempo_recarga).timeout
 	puede_atacar = true

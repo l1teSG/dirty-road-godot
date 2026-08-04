@@ -15,7 +15,7 @@ func _physics_process(delta: float) -> void:
 	
 	# Movimiento constante en la dirección asignada
 	if direction != Vector2.ZERO:
-		position += direction * velocidad * delta
+		global_position += direction * velocidad * delta
 
 	# Autodestrucción de seguridad a los 4 segundos
 	if tiempo_vida > 4.0:
