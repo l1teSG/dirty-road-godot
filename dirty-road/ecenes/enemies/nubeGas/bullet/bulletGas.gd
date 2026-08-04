@@ -34,6 +34,13 @@ func _physics_process(delta: float) -> void:
 		print("[BulletGas Debug] Tiempo de vida superó 5s, destruyendo")
 		queue_free()
 
+## Método de inicialización directa (dirección y posición inicial)
+func inicializar(dir: Vector2, pos_inicial: Vector2) -> void:
+	direction = dir.normalized()
+	rotation = direction.angle()
+	global_position = pos_inicial
+	print("[BulletGas Debug] inicializar() llamada. direction=", direction, " pos=", pos_inicial)
+
 func set_direction(dir: Vector2) -> void:
 	print("[BulletGas Debug] set_direction() llamado con dir=", dir)
 	direction = dir.normalized()

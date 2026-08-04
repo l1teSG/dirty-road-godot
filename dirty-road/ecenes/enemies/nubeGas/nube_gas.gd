@@ -113,14 +113,9 @@ func evaluar_y_ejecutar_ataque() -> void:
 	get_tree().current_scene.add_child(bullet)
 	print("[NubeGas Debug] Bala agregada a la escena")
 
-	# Asignar posición global e inyectar dirección después de estar en el árbol
-	bullet.global_position = global_position + (dir_disparo * 45.0)
+	# Usar el método de inicialización directa (dirección + posición)
+	bullet.inicializar(dir_disparo, global_position + (dir_disparo * 45.0))
 	print("[NubeGas Debug] Bala instanciada en Posicion Global: ", bullet.global_position)
-
-	if bullet.has_method("set_direction"):
-		bullet.set_direction(dir_disparo)
-	else:
-		print("[NubeGas WARNING] El proyectil no tiene el método 'set_direction'")
 
 	_animar_retroceso()
 
