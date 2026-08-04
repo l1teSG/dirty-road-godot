@@ -73,12 +73,7 @@ func seleccionar_objetivo() -> void:
 	if is_instance_valid(player):
 		var dist: float = global_position.distance_to(player.global_position)
 		# Si el jugador está en rango de huida, priorizarlo para alejarse
-		if dist <= rango_huida:
-			objetivo = player
-			return
-
-		# Si está en modo aggro, también priorizar al jugador
-		if en_aggro:
+		if dist <= rango_huida or en_aggro:
 			objetivo = player
 			return
 
@@ -87,22 +82,44 @@ func seleccionar_objetivo() -> void:
 
 
 func evaluar_y_ejecutar_ataque() -> void:
-	if not puede_atacar or not is_instance_valid(objetivo):
+	# Debug: Imprimir cada vez que se llama al método
+	print("[NubeGas Debug] evaluar_y_ejecutar_ataque() llamado")
+
+	if not puede_atacar:
+		# print("[NubeGas Debug] No ataca: En recarga (puede_atacar = false)")
 		return
-	if global_position.distance_to(objetivo.global_position) > rango_disparo:
+	if not is_instance_valid(objetivo):
+		print("[NubeGas Debug] No ataca: Objetivo no es válido")
+		return
+
+	var dist = global_position.distance_to(objetivo.global_position)
+	if dist > rango_disparo:
+		print("[NubeGas Debug] No ataca: Distancia al objetivo (", dist, ") > rango_disparo (", rango_disparo, ")")
+		return
+
+	print("[NubeGas Debug] --- INICIANDO DISPARO ---")
+	print("[NubeGas Debug] Objetivo actual: ", objetivo.name, " a distancia: ", dist)
+
+	if escena_proyectil == null:
+		print("[NubeGas ERROR] 'escena_proyectil' es NULL. Revisa el Inspector.")
 		return
 
 	var bullet = escena_proyectil.instantiate()
 	var dir_disparo: Vector2 = (objetivo.global_position - global_position).normalized()
+	print("[NubeGas Debug] Direccion de disparo calculada: ", dir_disparo)
 
-	# 1. Agregar a la escena primero
+	# Agregar a la escena primero
 	get_tree().current_scene.add_child(bullet)
+	print("[NubeGas Debug] Bala agregada a la escena")
 
-	# 2. Asignar posición global e inyectar dirección después de estar en el árbol
+	# Asignar posición global e inyectar dirección después de estar en el árbol
 	bullet.global_position = global_position + (dir_disparo * 45.0)
-	
+	print("[NubeGas Debug] Bala instanciada en Posicion Global: ", bullet.global_position)
+
 	if bullet.has_method("set_direction"):
 		bullet.set_direction(dir_disparo)
+	else:
+		print("[NubeGas WARNING] El proyectil no tiene el método 'set_direction'")
 
 	_animar_retroceso()
 
