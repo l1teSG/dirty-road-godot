@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cae2il55vhlpd"]
 
-[ext_resource type="Script" uid="uid://dx86vppkkkxb2" path="res://ecenes/mareaNegra/marea_negra.gd" id="1_7smct"]
+[ext_resource type="Script" uid="uid://dx86vppkkkxb2" path="res://ecenes/enemies/mareaNegra/marea_negra.gd" id="1_722t0"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_b6yrb"]
 radius = 28.01785
@@ -15,7 +15,9 @@ fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.5, 0)
 
 [node name="MareaNegra" type="CharacterBody2D" unique_id=431012733 groups=["enemi"]]
-script = ExtResource("1_7smct")
+script = ExtResource("1_722t0")
+danio_ataque = 20
+tiempo_recarga = 1.2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1261843436 groups=["enemi"]]
 shape = SubResource("CircleShape2D_b6yrb")

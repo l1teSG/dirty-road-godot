@@ -22,7 +22,7 @@ config/icon="uid://dqcco4yhy6ldm"
 [autoload]
 
 BiomasaManager="*uid://b2o0ouq0f4sdb"
-SaveManager="*uid://do47wk0x0tosx"
+SaveManager="*uid://cvmav7awamy4b"
 
 [display]
 
@@ -89,10 +89,13 @@ pointing/emulate_touch_from_mouse=true
 
 [layer_names]
 
-2d_physics/layer_1="player_body"
-2d_physics/layer_2="enemies"
+2d_physics/layer_1="world"
+2d_physics/layer_2="player_body"
+2d_physics/layer_3="enemies"
+2d_physics/layer_4="player_bullets"
 2d_physics/layer_5="player_range_detector"
 2d_physics/layer_6="enemy_bullets"
+2d_physics/layer_7="enemy_sensors"
 
 [physics]
 

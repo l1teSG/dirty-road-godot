@@ -7,7 +7,8 @@
 [ext_resource type="PackedScene" uid="uid://dx5ahbv0nxyet" path="res://ecenes/ecenarios/tree/arbol.tscn" id="5_q0v6s"]
 [ext_resource type="PackedScene" uid="uid://p208rapbv3d0" path="res://ecenes/enemies/microplastico/microPlastico.tscn" id="6_bfnr7"]
 [ext_resource type="Script" uid="uid://wubm8w5adwq2" path="res://ecenes/respawn/respawn_manager.gd" id="7_rspwn1"]
-[ext_resource type="Script" uid="uid://bbtnjdvvf5x44" path="res://scripts/wave_manager.gd" id="8_bfnr7"]
+[ext_resource type="Script" uid="uid://036a6w37ercn" path="res://scripts/wave_manager.gd" id="8_bfnr7"]
+[ext_resource type="PackedScene" uid="uid://c4msn7to5j3in" path="res://ecenes/enemies/nubeGas/nubeGas.tscn" id="9_trm6e"]
 
 [sub_resource type="Environment" id="Environment_ckgak"]
 background_mode = 3
@@ -28,7 +29,7 @@ fill_to = Vector2(0.5, 0)
 script = ExtResource("1_bfnr7")
 
 [node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=457741389]
-color = Color(0.30308014, 0.37790638, 0.46598375, 1)
+color = Color(0.37859777, 0.4628796, 0.56501806, 1)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1336534250]
 environment = SubResource("Environment_ckgak")
@@ -90,14 +91,19 @@ texture = SubResource("GradientTexture2D_7cwo5")
 script = ExtResource("7_rspwn1")
 jugador = NodePath("../ClassPlayer")
 punto_respawn = NodePath("PuntoRespawn")
+tiempo_respawn = 3.0
 
 [node name="PuntoRespawn" type="Marker2D" parent="RespawnManager" unique_id=1900412234]
 position = Vector2(0, 63)
 
 [node name="WaveManager" type="Node2D" parent="." unique_id=218025439 node_paths=PackedStringArray("puntos_spawn")]
 script = ExtResource("8_bfnr7")
-enemigos_disponibles = Array[PackedScene]([ExtResource("6_bfnr7")])
+enemigos_disponibles = Array[PackedScene]([ExtResource("9_trm6e")])
 puntos_spawn = [NodePath("1"), NodePath("2"), NodePath("3"), NodePath("4"), NodePath("5"), NodePath("6")]
+enemigos_base_por_oleada = 5
+tiempo_entre_spawns = 1.5
+tiempo_maximo_oleada = 60.0
+escalado_vida_por_oleada = 0.059
 
 [node name="1" type="Marker2D" parent="WaveManager" unique_id=1147606742]
 position = Vector2(1200, 0)
@@ -118,7 +124,7 @@ position = Vector2(1211, -1277)
 position = Vector2(1227, 1226)
 
 [node name="7" type="Marker2D" parent="WaveManager" unique_id=1878534211]
-position = Vector2(-1200, -1304)
+position = Vector2(-1292, -1330)
 
 [node name="8" type="Marker2D" parent="WaveManager" unique_id=1299852262]
 position = Vector2(-1200, 1100)

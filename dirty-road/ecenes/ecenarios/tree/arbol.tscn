@@ -78,10 +78,16 @@ position = Vector2(0, -120)
 amount = 25
 lifetime = 3.0
 emission_shape = 3
-emission_rect_extents = Vector2(300, 200)
+emission_rect_extents = Vector2(518, 400)
 direction = Vector2(0, -1)
 spread = 180.0
 gravity = Vector2(0, -10)
+initial_velocity_min = 42.25
+initial_velocity_max = 84.5
+angular_velocity_min = 405.64
+angular_velocity_max = 486.77
+scale_amount_min = 0.0
+scale_amount_max = 4.0
 color = Color(0.6666667, 1, 0, 1)
 
 [node name="BarraVida" type="ProgressBar" parent="." unique_id=1303220616]
