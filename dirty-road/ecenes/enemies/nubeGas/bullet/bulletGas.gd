@@ -66,6 +66,13 @@ func _on_body_entered(body: Node2D) -> void:
 		queue_free()
 		return
 
+	# Si el body pertenece al árbol, no destruir la bala.
+	# Esperar a que area_entered procese el Area2D del árbol.
+	if body.is_in_group("arbol"):
+		if debug_bullet:
+			print("Body del árbol detectado, esperando area_entered")
+		return
+
 	# Cualquier otro body (paredes, etc.) también destruye el proyectil
 	if debug_bullet:
 		print("Bullet destruida por: ", body.name)
