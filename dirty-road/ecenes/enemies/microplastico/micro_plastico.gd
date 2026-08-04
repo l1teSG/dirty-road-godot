@@ -3,8 +3,7 @@ extends enemigoNuevo
 @export var speed: float = 120.0
 
 var en_combate: bool = false
-var _animando_ataque: bool = false
-var _tween_ataque: Tween = null
+var atacando_anim: bool = false
 var _ataque_animado_en_recarga: bool = false
 
 
@@ -15,7 +14,7 @@ func _ready() -> void:
 
 
 func animar_cuerpo_enemigo(delta: float) -> void:
-	if _animando_ataque:
+	if atacando_anim:
 		return
 	super.animar_cuerpo_enemigo(delta)
 
@@ -171,48 +170,35 @@ func evaluar_y_ejecutar_ataque() -> void:
 
 
 func animar_ataque_impactante(target_pos: Vector2) -> void:
-	var cuerpo = $CuerpoInterior as Polygon2D
+	var cuerpo = $CuerpoInterior if has_node("CuerpoInterior") else find_child("CuerpoInterior", true, false) as Polygon2D
 	var nucleo = $NucleoToxico if has_node("NucleoToxico") else find_child("NucleoToxico", true, false)
 
 	if cuerpo == null:
 		return
 
-	# Matar cualquier tween anterior que esté en medio para evitar superposiciones
-	if _tween_ataque and _tween_ataque.is_valid() and _tween_ataque.is_running():
-		_tween_ataque.kill()
-
-	_animando_ataque = true
+	atacando_anim = true
 
 	var tween = create_tween().set_parallel(false)
-	_tween_ataque = tween
-
-	# Dirección hacia el objetivo para el impulso
 	var dir = (target_pos - global_position).normalized()
-	var offset_impulso = dir * 8.0 # Ligero desplazamiento hacia adelante
+	var offset_impulso = dir * 10.0
 
-	# 1. Carga Casi Instantánea (30ms - Micro-compresión)
-	tween.tween_property(cuerpo, "scale", Vector2(1.15, 0.85), 0.03)\
-		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	# 1. Micro-compresión de carga
+	tween.tween_property(cuerpo, "scale", Vector2(1.2, 0.8), 0.04).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 
-	# 2. Embate Explosivo + Snag (50ms - Estiramiento hacia el golpe)
-	tween.chain().tween_property(cuerpo, "scale", Vector2(0.7, 1.3), 0.05)\
-		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+	# 2. Embate de impacto
+	tween.chain().tween_property(cuerpo, "scale", Vector2(0.6, 1.4), 0.05).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
 	tween.parallel().tween_property(cuerpo, "position", offset_impulso, 0.05)
 
-	# Flash blanco sutil en el núcleo si existe
 	if nucleo != null:
-		# Destello blanco brillante al impactar
 		tween.parallel().tween_property(nucleo, "modulate", Color(2.5, 2.5, 2.5, 1.0), 0.03)
 		tween.chain().tween_property(nucleo, "modulate", Color.WHITE, 0.05)
 
-	# 3. Recuperación Elástica Instantánea (100ms - Rebote fluido a 1.0)
-	tween.chain().tween_property(cuerpo, "scale", Vector2(1.0, 1.0), 0.1)\
-		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	# 3. Recuperación a la escala original
+	tween.chain().tween_property(cuerpo, "scale", Vector2(0.8, 0.8), 0.1).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	tween.parallel().tween_property(cuerpo, "position", Vector2.ZERO, 0.1)
 
-	tween.finished.connect(func():
-		_animando_ataque = false
-	)
+	# Liberar la bandera de animación al terminar
+	tween.tween_callback(func(): atacando_anim = false)
 
 
 func _physics_process(delta: float) -> void:
