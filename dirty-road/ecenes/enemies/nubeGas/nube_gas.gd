@@ -9,8 +9,8 @@ extends enemigoNuevo
 
 # Variables exportables (ajustables en Inspector)
 @export var velocidad_movimiento: float = 85.0
-@export var rango_disparo: float = 220.0
-@export var rango_huida: float = 100.0
+@export var rango_disparo: float = 450.0
+@export var rango_huida: float = 140.0
 @export var escena_proyectil: PackedScene = preload("res://ecenes/enemies/nubeGas/bullet/bulletGas.tscn")
 
 # Referencias a nodos visuales (asignar en la escena)
@@ -27,9 +27,9 @@ func _ready() -> void:
 	life = 60
 	danio_ataque = 12
 	tiempo_recarga = 1.8
-	distancia_ataque = 220.0          # Coincide con rango de disparo
-	distancia_urgencia_arbol = 200.0
-	distancia_max_aggro = 300.0
+	distancia_ataque = 450.0          # Coincide con rango de disparo
+	distancia_urgencia_arbol = 400.0
+	distancia_max_aggro = 500.0
 	tiempo_aggro = 3.0
 
 
@@ -95,19 +95,19 @@ func evaluar_y_ejecutar_ataque() -> void:
 	if global_position.distance_to(objetivo.global_position) > rango_disparo:
 		return
 
-	# Instanciar proyectil y agregarlo al árbol ANTES de asignar posición
+	# 1. Instanciar proyectil en memoria
 	var bullet: Node2D = escena_proyectil.instantiate()
-	get_tree().current_scene.add_child(bullet)
-
-	# Calcular dirección y posición de spawn con offset
 	var direccion: Vector2 = (objetivo.global_position - global_position).normalized()
-	bullet.global_position = global_position + (direccion * 20.0) # Spawn offset
 
-	# Configurar dirección del proyectil
+	# 2. Inyectar la dirección PRIMERO (antes de añadir al árbol)
 	if bullet.has_method("set_direction"):
 		bullet.set_direction(direccion)
 	elif "direction" in bullet:
 		bullet.direction = direccion
+
+	# 3. Montar en el árbol de la escena y desplazar fuera de la colisión del enemigo (40px)
+	get_tree().current_scene.add_child(bullet)
+	bullet.global_position = global_position + (direccion * 40.0)
 
 	# Animación de retroceso (recoil) con Tween
 	_animar_retroceso()
