@@ -4,6 +4,7 @@ extends CanvasLayer
 @export var label_oleada: Label
 @export var label_tiempo: Label
 
+
 func _ready() -> void:
 	await get_tree().process_frame
 	
@@ -15,21 +16,32 @@ func _ready() -> void:
 		wave_manager.oleada_iniciada.connect(_on_oleada_iniciada)
 		wave_manager.descanso_iniciado.connect(_on_descanso_iniciado)
 		wave_manager.tiempo_actualizado.connect(_on_tiempo_actualizado)
+		wave_manager.enemigos_restantes_actualizado.connect(_on_enemigos_restantes_actualizado)
 		
-		if label_oleada != null:
-			label_oleada.text = "HORDA " + str(wave_manager.oleada_actual)
+		# Inicializar la UI con los valores actuales
 		_actualizar_numero_tiempo(wave_manager.tiempo_restante)
+		_on_enemigos_restantes_actualizado(wave_manager.obtener_enemigos_restantes())
+
 
 func _on_oleada_iniciada(num_oleada: int) -> void:
-	if label_oleada != null:
-		label_oleada.text = "HORDA " + str(num_oleada)
+	# No actualizamos el texto aquí porque la señal enemigos_restantes_actualizado
+	# se encargará de mostrar el número de enemigos restantes (incluyendo la oleada actual)
+	pass
+
 
 func _on_descanso_iniciado(_tiempo_total: float) -> void:
 	if label_oleada != null:
-		label_oleada.text = "¡COMPLETADA!"
+		label_oleada.text = "0"
+
 
 func _on_tiempo_actualizado(segundos_restantes: int, _es_descanso: bool) -> void:
 	_actualizar_numero_tiempo(segundos_restantes)
+
+
+func _on_enemigos_restantes_actualizado(cantidad: int) -> void:
+	if label_oleada != null:
+		label_oleada.text = "%d" % max(0, cantidad)
+
 
 func _actualizar_numero_tiempo(segundos: int) -> void:
 	if label_tiempo != null:

@@ -5,6 +5,7 @@ signal oleada_iniciada(numero_oleada: int)
 signal oleada_completada(numero_oleada: int)
 signal tiempo_actualizado(segundos_restantes: int, es_descanso: bool)
 signal descanso_iniciado(tiempo_total: float)
+signal enemigos_restantes_actualizado(cantidad: int)
 
 @export_category("Configuración")
 @export var enemigos_disponibles: Array[PackedScene] = []
@@ -85,6 +86,7 @@ func iniciar_oleada() -> void:
 
 	oleada_iniciada.emit(oleada_actual)
 	tiempo_actualizado.emit(tiempo_restante, false)  # Emitir inmediatamente
+	_notificar_enemigos_restantes()
 
 	# Iniciar timers
 	spawn_timer.start(tiempo_entre_spawns)
@@ -125,6 +127,8 @@ func _spawnear_siguiente_enemigo() -> void:
 	enemigos_vivos += 1
 	enemigos_por_spawnear -= 1
 
+	_notificar_enemigos_restantes()
+
 	if enemigos_por_spawnear <= 0:
 		spawn_timer.stop()
 
@@ -137,6 +141,8 @@ func _on_enemigo_derrotado() -> void:
 	# Si el WaveManager ya no está en el SceneTree (ej. cambio de escena), abortar
 	if not is_inside_tree():
 		return
+
+	_notificar_enemigos_restantes()
 
 	# Verificar si la oleada ha terminado (todos los enemigos derrotados)
 	if enemigos_vivos <= 0 and enemigos_por_spawnear <= 0:
@@ -169,6 +175,7 @@ func iniciar_fase_descanso() -> void:
 	oleada_completada.emit(oleada_actual)
 	descanso_iniciado.emit(tiempo_descanso)
 	tiempo_actualizado.emit(tiempo_restante, true)  # Emitir inmediatamente
+	_notificar_enemigos_restantes()
 
 	# Guardado automático mediante Autoload SaveManager
 	if SaveManager != null:
@@ -200,6 +207,11 @@ func _on_descanso_terminado() -> void:
 	iniciar_oleada()
 
 
+func _notificar_enemigos_restantes() -> void:
+	var total_restante: int = enemigos_vivos + enemigos_por_spawnear
+	enemigos_restantes_actualizado.emit(total_restante)
+
+
 ## Métodos públicos para consulta (pueden ser usados por UI, otros scripts, etc.)
 func obtener_oleada_actual() -> int:
 	return oleada_actual
@@ -211,3 +223,7 @@ func hay_enemigos_vivos() -> bool:
 
 func esta_en_descanso() -> bool:
 	return en_descanso
+
+
+func obtener_enemigos_restantes() -> int:
+	return enemigos_vivos + enemigos_por_spawnear
