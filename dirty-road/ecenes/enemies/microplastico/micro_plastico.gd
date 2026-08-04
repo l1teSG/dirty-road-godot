@@ -3,11 +3,19 @@ extends enemigoNuevo
 @export var speed: float = 120.0
 
 var en_combate: bool = false
+var _animando_ataque: bool = false
+
 
 func _ready() -> void:
 	tiempo_recarga = 0.6
 	distancia_ataque = 45.0
 	distancia_max_aggro = 300.0
+
+
+func animar_cuerpo_enemigo(delta: float) -> void:
+	if _animando_ataque:
+		return
+	super.animar_cuerpo_enemigo(delta)
 
 
 func seleccionar_objetivo() -> void:
@@ -98,6 +106,61 @@ func seleccionar_objetivo() -> void:
 
 	objetivo = null
 	en_combate = false
+
+
+func evaluar_y_ejecutar_ataque() -> void:
+	super.evaluar_y_ejecutar_ataque()
+	# Si el padre inició un ataque (puede_atacar quedó en false), animamos
+	if not puede_atacar and is_instance_valid(objetivo):
+		animar_ataque_impactante(objetivo.global_position)
+
+
+func animar_ataque_impactante(target_pos: Vector2) -> void:
+	_animando_ataque = true
+
+	var cuerpo_int = $CuerpoInterior as Polygon2D
+	var nucleo = $NucleoToxico as Polygon2D
+
+	var pos_original = global_position
+	var dir = (target_pos - global_position).normalized()
+	var retroceso = global_position - dir * 10.0
+
+	var tween = create_tween()
+
+	# ── Fase 1: Anticipación (0.12 s) ──────────────────────────────
+	tween.set_parallel(true)
+	tween.tween_property(self, "global_position", retroceso, 0.12).set_ease(Tween.EASE_OUT)
+	if cuerpo_int:
+		tween.tween_property(cuerpo_int, "scale", Vector2(1.3, 0.6), 0.12).set_ease(Tween.EASE_OUT)
+
+	# ── Fase 2: Embate explosivo (0.08 s) ──────────────────────────
+	tween.chain().set_parallel(true)
+	if cuerpo_int:
+		tween.tween_property(cuerpo_int, "scale", Vector2(0.5, 1.5), 0.08)\
+			.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+	var rot = dir.angle()
+	tween.tween_property(self, "rotation", rot * 0.3, 0.08)\
+		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+
+	# ── Fase 3: Flash de impacto (0.05 s brillo, 0.1 s retorno) ──
+	if nucleo:
+		tween.chain().tween_property(nucleo, "modulate", Color(2.0, 2.0, 2.0), 0.05)
+		tween.chain().tween_property(nucleo, "modulate", Color.WHITE, 0.1).set_ease(Tween.EASE_OUT)
+
+	# ── Fase 4: Recuperación elástica (0.25 s) ─────────────────────
+	tween.chain().set_parallel(true)
+	if cuerpo_int:
+		tween.tween_property(cuerpo_int, "scale", Vector2.ONE, 0.25)\
+			.set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
+	tween.tween_property(self, "rotation", 0.0, 0.25)\
+		.set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
+	tween.tween_property(self, "global_position", pos_original, 0.25)\
+		.set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
+
+	# Una vez finalizada la animación, permitimos que el bucle normal retome el control
+	tween.tween_callback(func():
+		_animando_ataque = false
+	)
 
 
 func _physics_process(delta: float) -> void:
