@@ -18,6 +18,20 @@ func animar_cuerpo_enemigo(delta: float) -> void:
 	super.animar_cuerpo_enemigo(delta)
 
 
+func _arbol_valido(arbol_node: Node2D) -> bool:
+	if not is_instance_valid(arbol_node):
+		return false
+	if arbol_node.has_method("is_dead"):
+		return not arbol_node.is_dead()
+	var vida_actual = arbol_node.get("vida_actual")
+	if vida_actual != null:
+		return vida_actual > 0
+	var life = arbol_node.get("life")
+	if life != null:
+		return life > 0
+	return true
+
+
 func seleccionar_objetivo() -> void:
 	var jugador: Node2D = null
 	var arbol: Node2D = null
@@ -31,6 +45,8 @@ func seleccionar_objetivo() -> void:
 	var arboles = get_tree().get_nodes_in_group("arbol")
 	if not arboles.is_empty() and is_instance_valid(arboles[0]):
 		arbol = arboles[0] as Node2D
+		if not _arbol_valido(arbol):
+			arbol = null
 
 	# Detectar si Quark está muerto
 	var quark_muerto: bool = false
@@ -57,7 +73,7 @@ func seleccionar_objetivo() -> void:
 		en_combate = false
 
 		# 1. Si el Árbol sigue en pie, atacarlo inmediatamente
-		if arbol != null:
+		if arbol != null and _arbol_valido(arbol):
 			objetivo = arbol
 			return
 
@@ -99,7 +115,7 @@ func seleccionar_objetivo() -> void:
 			return
 
 	# 3. Prioridad por defecto: Si Quark está lejos, marcha directo hacia el Árbol
-	if arbol != null:
+	if arbol != null and _arbol_valido(arbol):
 		objetivo = arbol
 		en_combate = false
 		return
@@ -123,38 +139,40 @@ func animar_ataque_impactante(target_pos: Vector2) -> void:
 
 	var pos_original = global_position
 	var dir = (target_pos - global_position).normalized()
-	var retroceso = global_position - dir * 10.0
+	var retroceso = global_position - dir * 2.5  # 2-3 px hacia atrás
 
 	var tween = create_tween()
 
-	# ── Fase 1: Anticipación (0.12 s) ──────────────────────────────
+	# ── Fase 1: Carga sutil (0.06 s) ────────────────────────────────
 	tween.set_parallel(true)
-	tween.tween_property(self, "global_position", retroceso, 0.12).set_ease(Tween.EASE_OUT)
+	tween.tween_property(self, "global_position", retroceso, 0.06)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 	if cuerpo_int:
-		tween.tween_property(cuerpo_int, "scale", Vector2(1.3, 0.6), 0.12).set_ease(Tween.EASE_OUT)
+		tween.tween_property(cuerpo_int, "scale", Vector2(1.1, 0.85), 0.06)\
+			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 
-	# ── Fase 2: Embate explosivo (0.08 s) ──────────────────────────
+	# ── Fase 2: Embate rápido (0.07 s) ──────────────────────────────
 	tween.chain().set_parallel(true)
 	if cuerpo_int:
-		tween.tween_property(cuerpo_int, "scale", Vector2(0.5, 1.5), 0.08)\
+		tween.tween_property(cuerpo_int, "scale", Vector2(0.8, 1.25), 0.07)\
 			.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
 	var rot = dir.angle()
-	tween.tween_property(self, "rotation", rot * 0.3, 0.08)\
+	tween.tween_property(self, "rotation", rot * 0.3, 0.07)\
 		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
 
-	# ── Fase 3: Flash de impacto (0.05 s brillo, 0.1 s retorno) ──
+	# ── Fase 3: Flash de impacto (0.04 s) ───────────────────────────
 	if nucleo:
-		tween.chain().tween_property(nucleo, "modulate", Color(2.0, 2.0, 2.0), 0.05)
-		tween.chain().tween_property(nucleo, "modulate", Color.WHITE, 0.1).set_ease(Tween.EASE_OUT)
+		tween.chain().tween_property(nucleo, "modulate", Color(2.0, 2.0, 2.0), 0.04)
+		tween.chain().tween_property(nucleo, "modulate", Color.WHITE, 0.08).set_ease(Tween.EASE_OUT)
 
-	# ── Fase 4: Recuperación elástica (0.25 s) ─────────────────────
+	# ── Fase 4: Recuperación elástica (0.18 s) ─────────────────────
 	tween.chain().set_parallel(true)
 	if cuerpo_int:
-		tween.tween_property(cuerpo_int, "scale", Vector2.ONE, 0.25)\
+		tween.tween_property(cuerpo_int, "scale", Vector2.ONE, 0.18)\
 			.set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
-	tween.tween_property(self, "rotation", 0.0, 0.25)\
+	tween.tween_property(self, "rotation", 0.0, 0.18)\
 		.set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
-	tween.tween_property(self, "global_position", pos_original, 0.25)\
+	tween.tween_property(self, "global_position", pos_original, 0.18)\
 		.set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
 
 	# Una vez finalizada la animación, permitimos que el bucle normal retome el control
@@ -165,6 +183,12 @@ func animar_ataque_impactante(target_pos: Vector2) -> void:
 
 func _physics_process(delta: float) -> void:
 	super._physics_process(delta)
+
+	# Si el objetivo actual es el Árbol y ya no es válido / está sin vida,
+	# lo descartamos inmediatamente.
+	if is_instance_valid(objetivo) and objetivo.is_in_group("arbol"):
+		if not _arbol_valido(objetivo):
+			objetivo = null
 
 	if not is_instance_valid(objetivo):
 		velocity = Vector2.ZERO
