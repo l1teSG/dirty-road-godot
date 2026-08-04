@@ -21,8 +21,8 @@ config/icon="uid://dqcco4yhy6ldm"
 
 [autoload]
 
-SaveManager="*uid://cvmav7awamy4b"
 BiomasaManager="*uid://b2o0ouq0f4sdb"
+SaveManager="*uid://do47wk0x0tosx"
 
 [display]
 
@@ -49,6 +49,7 @@ folder_colors={
 "res://demo/": "red",
 "res://ecenes/": "blue",
 "res://ecenes/players/projectile/": "gray",
+"res://scripts/": "pink",
 "res://ui/": "teal"
 }
 

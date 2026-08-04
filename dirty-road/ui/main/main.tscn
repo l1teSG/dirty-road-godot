@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://c8ukhxusi8bqb"]
 
-[ext_resource type="Script" uid="uid://dheeekunktlt1" path="res://ui/main/main.gd" id="2_7mc2q"]
-[ext_resource type="Script" uid="uid://dispbruetoi2r" path="res://ui/main/color_rect.gd" id="2_ircy7"]
+[ext_resource type="Script" uid="uid://d0yifw3ixgw80" path="res://ui/main/main.gd" id="2_7mc2q"]
+[ext_resource type="Script" uid="uid://cm8ldnknxd1fs" path="res://ui/main/color_rect.gd" id="2_ircy7"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3a1op"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
@@ -148,14 +148,22 @@ text = "SALIR"
 environment = SubResource("Environment_7cwo5")
 
 [node name="CPUParticles2D" type="CPUParticles2D" parent="." unique_id=1360477686]
-position = Vector2(577, 341)
+position = Vector2(1002, 593)
 amount = 40
 lifetime = 6.0
+preprocess = 1.48
+explosiveness = 0.15
+randomness = 0.34
+lifetime_randomness = 0.44
 emission_shape = 3
-emission_rect_extents = Vector2(574.5, 381.7)
+emission_rect_extents = Vector2(1075.5, 721.7)
 spread = 180.0
 gravity = Vector2(0, -10)
-scale_amount_max = 3.0
+initial_velocity_min = 0.3
+initial_velocity_max = 267.91
+linear_accel_min = 28.17
+linear_accel_max = 45.07
+scale_amount_max = 10.8
 color = Color(0.6, 1, 0.2, 0.44705883)
 
 [connection signal="button_down" from="VBoxContainer/VBoxContainer/nuevaPartida" to="." method="_on_nueva_partida_button_down"]
