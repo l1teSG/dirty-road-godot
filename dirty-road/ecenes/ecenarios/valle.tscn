@@ -322,15 +322,19 @@ polygon = PackedVector2Array(-617, -2064, -686, -1959, -557, -1911, -353, -2027)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Node/StaticBody2D" unique_id=1388899825]
 position = Vector2(2076, 59.5)
 shape = SubResource("RectangleShape2D_7cwo5")
+debug_color = Color(0.56078434, 0.5529412, 0.2627451, 0.41960785)
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="Node/StaticBody2D" unique_id=1771306403]
 position = Vector2(-740, 1897)
 shape = SubResource("RectangleShape2D_xqmf3")
+debug_color = Color(0.56078434, 0.5529412, 0.2627451, 0.41960785)
 
 [node name="CollisionShape2D3" type="CollisionShape2D" parent="Node/StaticBody2D" unique_id=1807694320]
 position = Vector2(-2106, -523.5)
 shape = SubResource("RectangleShape2D_s3sa1")
+debug_color = Color(0.5594262, 0.55309296, 0.26348746, 0.41960785)
 
 [node name="CollisionShape2D4" type="CollisionShape2D" parent="Node/StaticBody2D" unique_id=467432266]
 position = Vector2(-13.5, -1904.5)
 shape = SubResource("RectangleShape2D_818wt")
+debug_color = Color(0.56078434, 0.5529412, 0.2627451, 0.41960785)
