@@ -4,6 +4,8 @@ extends enemigoNuevo
 
 var en_combate: bool = false
 var _animando_ataque: bool = false
+var _tween_ataque: Tween = null
+var _ataque_animado_en_recarga: bool = false
 
 
 func _ready() -> void:
@@ -125,58 +127,58 @@ func seleccionar_objetivo() -> void:
 
 
 func evaluar_y_ejecutar_ataque() -> void:
+	# Si el cooldown ya terminó, limpiar el flag de animación usada
+	if puede_atacar:
+		_ataque_animado_en_recarga = false
+
 	super.evaluar_y_ejecutar_ataque()
-	# Si el padre inició un ataque (puede_atacar quedó en false), animamos
-	if not puede_atacar and is_instance_valid(objetivo):
+
+	# Lanzamos la animación solo una vez por cada ciclo de ataque
+	if not puede_atacar and not _ataque_animado_en_recarga and is_instance_valid(objetivo):
+		_ataque_animado_en_recarga = true
 		animar_ataque_impactante(objetivo.global_position)
 
 
 func animar_ataque_impactante(target_pos: Vector2) -> void:
-	_animando_ataque = true
-
-	var cuerpo_int = $CuerpoInterior as Polygon2D
+	var cuerpo = $CuerpoInterior as Polygon2D
 	var nucleo = $NucleoToxico as Polygon2D
 
-	var pos_original = global_position
+	if cuerpo == null:
+		return
+
+	# Matar cualquier tween anterior que esté en medio para evitar superposiciones
+	if _tween_ataque and _tween_ataque.is_valid() and _tween_ataque.is_running():
+		_tween_ataque.kill()
+
+	_animando_ataque = true
+
+	var tween = create_tween().set_parallel(false)
+	_tween_ataque = tween
+
+	# Dirección hacia el objetivo para el impulso
 	var dir = (target_pos - global_position).normalized()
-	var retroceso = global_position - dir * 2.5  # 2-3 px hacia atrás
+	var offset_impulso = dir * 8.0 # Ligero desplazamiento hacia adelante
 
-	var tween = create_tween()
+	# 1. Carga Casi Instantánea (30ms - Micro-compresión)
+	tween.tween_property(cuerpo, "scale", Vector2(1.15, 0.85), 0.03)\
+		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 
-	# ── Fase 1: Carga sutil (0.06 s) ────────────────────────────────
-	tween.set_parallel(true)
-	tween.tween_property(self, "global_position", retroceso, 0.06)\
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-	if cuerpo_int:
-		tween.tween_property(cuerpo_int, "scale", Vector2(1.1, 0.85), 0.06)\
-			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-
-	# ── Fase 2: Embate rápido (0.07 s) ──────────────────────────────
-	tween.chain().set_parallel(true)
-	if cuerpo_int:
-		tween.tween_property(cuerpo_int, "scale", Vector2(0.8, 1.25), 0.07)\
-			.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
-	var rot = dir.angle()
-	tween.tween_property(self, "rotation", rot * 0.3, 0.07)\
+	# 2. Embate Explosivo + Snag (50ms - Estiramiento hacia el golpe)
+	tween.chain().tween_property(cuerpo, "scale", Vector2(0.7, 1.3), 0.05)\
 		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+	tween.parallel().tween_property(cuerpo, "position", offset_impulso, 0.05)
 
-	# ── Fase 3: Flash de impacto (0.04 s) ───────────────────────────
-	if nucleo:
-		tween.chain().tween_property(nucleo, "modulate", Color(2.0, 2.0, 2.0), 0.04)
-		tween.chain().tween_property(nucleo, "modulate", Color.WHITE, 0.08).set_ease(Tween.EASE_OUT)
+	# Flash blanco sutil en el núcleo si existe
+	if nucleo != null:
+		tween.parallel().tween_property(nucleo, "modulate", Color(2.5, 2.5, 2.5, 1.0), 0.02)
+		tween.chain().tween_property(nucleo, "modulate", Color.WHITE, 0.04)
 
-	# ── Fase 4: Recuperación elástica (0.18 s) ─────────────────────
-	tween.chain().set_parallel(true)
-	if cuerpo_int:
-		tween.tween_property(cuerpo_int, "scale", Vector2.ONE, 0.18)\
-			.set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
-	tween.tween_property(self, "rotation", 0.0, 0.18)\
-		.set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
-	tween.tween_property(self, "global_position", pos_original, 0.18)\
-		.set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
+	# 3. Recuperación Elástica Instantánea (100ms - Rebote fluido a 1.0)
+	tween.chain().tween_property(cuerpo, "scale", Vector2(1.0, 1.0), 0.1)\
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.parallel().tween_property(cuerpo, "position", Vector2.ZERO, 0.1)
 
-	# Una vez finalizada la animación, permitimos que el bucle normal retome el control
-	tween.tween_callback(func():
+	tween.finished.connect(func():
 		_animando_ataque = false
 	)
 
