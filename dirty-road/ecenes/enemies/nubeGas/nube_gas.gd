@@ -9,7 +9,7 @@ extends enemigoNuevo
 
 # Variables exportables (ajustables en Inspector)
 @export var velocidad_movimiento: float = 85.0
-@export var rango_disparo: float = 450.0
+@export var rango_disparo: float = 850.0
 @export var rango_huida: float = 140.0
 @export var escena_proyectil: PackedScene = preload("res://ecenes/enemies/nubeGas/bullet/bulletGas.tscn")
 
@@ -27,7 +27,7 @@ func _ready() -> void:
 	life = 60
 	danio_ataque = 12
 	tiempo_recarga = 1.8
-	distancia_ataque = 450.0          # Coincide con rango de disparo
+	distancia_ataque = 850.0          # Coincide con el nuevo rango de disparo
 	distancia_urgencia_arbol = 400.0
 	distancia_max_aggro = 500.0
 	tiempo_aggro = 3.0
@@ -44,18 +44,19 @@ func _physics_process(delta: float) -> void:
 
 	var player_valid: bool = is_instance_valid(player)
 
-	# Control de huida (kiting)
+	# Control de movimiento y persecución/huida
 	if player_valid and global_position.distance_to(player.global_position) <= rango_huida:
+		# Huir del jugador si está demasiado cerca
 		var dir_opuesta: Vector2 = (global_position - player.global_position).normalized()
 		velocity = dir_opuesta * velocidad_movimiento
 	elif is_instance_valid(objetivo):
 		var dist_objetivo: float = global_position.distance_to(objetivo.global_position)
 		if dist_objetivo > rango_disparo:
-			# Avanzar hacia el objetivo
+			# Avanzar hacia el objetivo si está fuera de rango de disparo
 			var direccion: Vector2 = (objetivo.global_position - global_position).normalized()
 			velocity = direccion * velocidad_movimiento
 		else:
-			# Dentro del rango de disparo, detenerse
+			# Dentro del rango de disparo, detenerse para atacar
 			velocity = Vector2.ZERO
 	else:
 		# Sin objetivo válido
