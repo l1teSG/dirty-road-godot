@@ -87,32 +87,28 @@ func seleccionar_objetivo() -> void:
 
 
 func evaluar_y_ejecutar_ataque() -> void:
-	# Verificar condiciones de ataque
-	if not puede_atacar:
-		return
-	if not is_instance_valid(objetivo):
+	if not puede_atacar or not is_instance_valid(objetivo):
 		return
 	if global_position.distance_to(objetivo.global_position) > rango_disparo:
 		return
 
-	# 1. Instanciar proyectil en memoria
-	var bullet: Node2D = escena_proyectil.instantiate()
-	var direccion: Vector2 = (objetivo.global_position - global_position).normalized()
+	# 1. Instanciar proyectil
+	var bullet = escena_proyectil.instantiate()
+	var dir_disparo: Vector2 = (objetivo.global_position - global_position).normalized()
 
-	# 2. Inyectar la dirección PRIMERO (antes de añadir al árbol)
-	if bullet.has_method("set_direction"):
-		bullet.set_direction(direccion)
-	elif "direction" in bullet:
-		bullet.direction = direccion
-
-	# 3. Montar en el árbol de la escena y desplazar fuera de la colisión del enemigo (40px)
+	# 2. Agregar al árbol PRIMERO
 	get_tree().current_scene.add_child(bullet)
-	bullet.global_position = global_position + (direccion * 40.0)
 
-	# Animación de retroceso (recoil) con Tween
+	# 3. Posicionar fuera del cuerpo del enemigo (offset de 45px para evitar autocolisión)
+	bullet.global_position = global_position + (dir_disparo * 45.0)
+
+	# 4. Asignar dirección explícitamente
+	if bullet.has_method("set_direction"):
+		bullet.set_direction(dir_disparo)
+
 	_animar_retroceso()
 
-	# Iniciar recarga (cooldown)
+	# 5. Cooldown de recarga
 	puede_atacar = false
 	await get_tree().create_timer(tiempo_recarga).timeout
 	puede_atacar = true
