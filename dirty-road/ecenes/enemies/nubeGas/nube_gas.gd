@@ -95,19 +95,19 @@ func evaluar_y_ejecutar_ataque() -> void:
 	if global_position.distance_to(objetivo.global_position) > rango_disparo:
 		return
 
-	# Instanciar proyectil
+	# Instanciar proyectil y agregarlo al árbol ANTES de asignar posición
 	var bullet: Node2D = escena_proyectil.instantiate()
-	bullet.global_position = global_position
+	get_tree().current_scene.add_child(bullet)
 
-	# Configurar dirección del proyectil (asumiendo que tiene una variable 'direction')
+	# Calcular dirección y posición de spawn con offset
 	var direccion: Vector2 = (objetivo.global_position - global_position).normalized()
+	bullet.global_position = global_position + (direccion * 20.0) # Spawn offset
+
+	# Configurar dirección del proyectil
 	if bullet.has_method("set_direction"):
 		bullet.set_direction(direccion)
 	elif "direction" in bullet:
 		bullet.direction = direccion
-
-	# Agregar al árbol de la escena
-	get_tree().current_scene.add_child(bullet)
 
 	# Animación de retroceso (recoil) con Tween
 	_animar_retroceso()
