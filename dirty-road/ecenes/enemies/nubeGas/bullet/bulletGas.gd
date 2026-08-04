@@ -1,4 +1,5 @@
 extends Area2D
+class_name BulletGas
 
 ## ------------------------------------------------------------
 ## Proyectil de la Nube de Gas
@@ -36,22 +37,24 @@ func _on_body_entered(body: Node2D) -> void:
 	if body.is_in_group("enemi"):
 		return
 
-	if body.has_method("take_damage"):
-		body.take_damage(danio)
-	elif body.has_method("recibir_danio"):
-		body.recibir_danio(danio)
+	if body.is_in_group("jugador"):
+		if body.has_method("recibir_danio"):
+			body.recibir_danio(danio)
+		queue_free()
+		return
 
+	# For any other body (e.g. walls) we also destroy the bullet
 	queue_free()
 
 func _on_area_entered(area: Area2D) -> void:
-	# Ignorar áreas del grupo enemigo
 	if area.is_in_group("enemi"):
 		return
 
-	# Si el área pertenece al grupo "arbol", aplicar daño
 	if area.is_in_group("arbol"):
 		if area.has_method("recibir_danio"):
 			area.recibir_danio(danio)
-		elif area.has_method("take_damage"):
-			area.take_damage(danio)
 		queue_free()
+		return
+
+	# For any other area we also destroy the bullet
+	queue_free()
