@@ -1,12 +1,15 @@
 [gd_scene format=3 uid="uid://bp5tkglvay4l"]
 
-[ext_resource type="Script" uid="uid://dialv8mg51o60" path="res://demo/level 1/niviel_1.gd" id="1_bfnr7"]
+[ext_resource type="Script" uid="uid://bb0ijmririri3" path="res://demo/level 1/niviel_1.gd" id="1_bfnr7"]
 [ext_resource type="PackedScene" uid="uid://c5182832ylop2" path="res://ecenes/ecenarios/valle.tscn" id="2_ckgak"]
 [ext_resource type="FontFile" uid="uid://344dhrkbi7ri" path="res://themes/Chakra_Petch/ChakraPetch-Bold.ttf" id="2_trm6e"]
 [ext_resource type="PackedScene" uid="uid://dogn08xliy6gi" path="res://ecenes/players/quark/quark.tscn" id="3_k6hvo"]
 [ext_resource type="PackedScene" uid="uid://dx5ahbv0nxyet" path="res://ecenes/ecenarios/tree/arbol.tscn" id="5_q0v6s"]
 [ext_resource type="PackedScene" uid="uid://p208rapbv3d0" path="res://ecenes/enemies/microplastico/microPlastico.tscn" id="6_bfnr7"]
 [ext_resource type="Script" uid="uid://wubm8w5adwq2" path="res://ecenes/respawn/respawn_manager.gd" id="7_rspwn1"]
+[ext_resource type="Script" uid="uid://bbtnjdvvf5x44" path="res://scripts/wave_manager.gd" id="8_bfnr7"]
+[ext_resource type="Script" uid="uid://b3thssvd7q4kf" path="res://scripts/wave_ui.gd" id="9_trm6e"]
+[ext_resource type="Theme" uid="uid://hau5fs7dt6rv" path="res://themes/mainTheme.tres" id="10_s682v"]
 
 [sub_resource type="Environment" id="Environment_ckgak"]
 background_mode = 3
@@ -27,7 +30,7 @@ fill_to = Vector2(0.5, 0)
 script = ExtResource("1_bfnr7")
 
 [node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=457741389]
-color = Color(0.15686275, 0.20392157, 0.25882354, 1)
+color = Color(0.30308014, 0.37790638, 0.46598375, 1)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1336534250]
 environment = SubResource("Environment_ckgak")
@@ -38,11 +41,12 @@ position = Vector2(0, -2)
 [node name="ClassPlayer" parent="." unique_id=508460008 node_paths=PackedStringArray("respawn_manager") groups=["player"] instance=ExtResource("3_k6hvo")]
 position = Vector2(373, -69)
 respawn_manager = NodePath("../RespawnManager")
-disparoON = false
+disparoON = true
 
 [node name="Arbol" parent="." unique_id=157670480 groups=["arbol"] instance=ExtResource("5_q0v6s")]
+vida_maxima = 1000
 
-[node name="MicroPlastico" parent="." unique_id=888619048 groups=["enemi"] instance=ExtResource("6_bfnr7")]
+[node name="MicroPlastico" parent="." unique_id=888619048 instance=ExtResource("6_bfnr7")]
 position = Vector2(119, 846)
 speed = 200.0
 distancia_ataque = 50.0
@@ -76,10 +80,10 @@ layer = 10
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -1363.0
-offset_top = -1420.0
-offset_right = 206.0
-offset_bottom = 683.0
+offset_left = -1482.0
+offset_top = -1604.0
+offset_right = 87.0
+offset_bottom = 499.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -92,3 +96,63 @@ punto_respawn = NodePath("PuntoRespawn")
 
 [node name="PuntoRespawn" type="Marker2D" parent="RespawnManager" unique_id=1900412234]
 position = Vector2(373, -69)
+
+[node name="WaveManager" type="Node2D" parent="." unique_id=218025439 node_paths=PackedStringArray("puntos_spawn")]
+script = ExtResource("8_bfnr7")
+enemigos_disponibles = Array[PackedScene]([ExtResource("6_bfnr7")])
+puntos_spawn = [NodePath("1"), NodePath("2"), NodePath("3"), NodePath("4"), NodePath("5"), NodePath("6")]
+
+[node name="1" type="Marker2D" parent="WaveManager" unique_id=1147606742]
+position = Vector2(2000, 0)
+
+[node name="2" type="Marker2D" parent="WaveManager" unique_id=51600969]
+position = Vector2(-1200, 0)
+
+[node name="3" type="Marker2D" parent="WaveManager" unique_id=269814143]
+position = Vector2(0, 1600)
+
+[node name="4" type="Marker2D" parent="WaveManager" unique_id=939465093]
+position = Vector2(0, -1300)
+
+[node name="5" type="Marker2D" parent="WaveManager" unique_id=864870252]
+position = Vector2(1211, -1277)
+
+[node name="6" type="Marker2D" parent="WaveManager" unique_id=1936858586]
+position = Vector2(1258, 1226)
+
+[node name="oleadas_ui" type="CanvasLayer" parent="." unique_id=1879835836 node_paths=PackedStringArray("label_oleada", "label_tiempo")]
+script = ExtResource("9_trm6e")
+label_oleada = NodePath("CenterContainer/enemigo")
+label_tiempo = NodePath("Control/HBoxContainer/tiempo")
+
+[node name="Control" type="Control" parent="oleadas_ui" unique_id=1665640298]
+layout_mode = 3
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_top = 64.0
+offset_bottom = 64.0
+grow_horizontal = 2
+theme = ExtResource("10_s682v")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="oleadas_ui/Control" unique_id=288507407]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/separation = 30
+
+[node name="tiempo" type="Label" parent="oleadas_ui/Control/HBoxContainer" unique_id=584380268]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 1, 0.2, 1)
+theme_override_font_sizes/font_size = 40
+
+[node name="CenterContainer" type="CenterContainer" parent="oleadas_ui" unique_id=777494088]
+offset_left = 39.0
+offset_top = 168.0
+offset_right = 40.0
+offset_bottom = 210.0
+
+[node name="enemigo" type="Label" parent="oleadas_ui/CenterContainer" unique_id=772512902]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.89012605, 0.39536163, 0.43238488, 1)
+theme_override_font_sizes/font_size = 30

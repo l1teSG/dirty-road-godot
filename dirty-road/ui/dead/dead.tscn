@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://mmyol1w5t2ps"]
 
 [ext_resource type="Theme" uid="uid://hau5fs7dt6rv" path="res://themes/mainTheme.tres" id="1_hduar"]
-[ext_resource type="Script" uid="uid://tdrji6ok0gat" path="res://ui/dead/dead.gd" id="1_yd0cx"]
+[ext_resource type="Script" uid="uid://bqwdqh2pkke5v" path="res://ui/dead/dead.gd" id="1_yd0cx"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o43wt"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
@@ -59,7 +59,7 @@ layout_mode = 2
 theme = ExtResource("1_hduar")
 theme_override_colors/font_color = Color(0.29564208, 0.5194653, 0.47586936, 1)
 theme_override_font_sizes/font_size = 200
-text = "murio el arbol!!!!"
+text = "Murio el arbol!!!!"
 
 [node name="HSeparator" type="HSeparator" parent="Contenedor/CenterContainer/VBoxContainer" unique_id=97175232]
 layout_mode = 2
@@ -71,7 +71,7 @@ layout_mode = 2
 theme = ExtResource("1_hduar")
 theme_override_font_sizes/font_size = 80
 theme_override_styles/normal = SubResource("StyleBoxFlat_o43wt")
-text = "nueva partida"
+text = "Nueva partida"
 
 [node name="salir" type="Button" parent="Contenedor/CenterContainer/VBoxContainer" unique_id=761343034]
 z_index = 6
@@ -79,7 +79,7 @@ layout_mode = 2
 theme = ExtResource("1_hduar")
 theme_override_font_sizes/font_size = 80
 theme_override_styles/normal = SubResource("StyleBoxFlat_b14hx")
-text = "salir"
+text = "Salir"
 
 [node name="ColorRect" type="ColorRect" parent="Contenedor" unique_id=193978876]
 layout_mode = 1

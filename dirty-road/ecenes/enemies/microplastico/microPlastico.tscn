@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://p208rapbv3d0"]
 
-[ext_resource type="Script" uid="uid://w3hn11vdxctt" path="res://ecenes/enemies/microplastico/micro_plastico.gd" id="1_b6yrb"]
+[ext_resource type="Script" uid="uid://baiv4ehdunhuq" path="res://ecenes/enemies/microplastico/micro_plastico.gd" id="1_b6yrb"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_50qco"]
 radius = 19.026299
@@ -14,7 +14,7 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.5, 0)
 
-[node name="MicroPlastico" type="CharacterBody2D" unique_id=888619048]
+[node name="MicroPlastico" type="CharacterBody2D" unique_id=888619048 groups=["enemi"]]
 script = ExtResource("1_b6yrb")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1409593121]
