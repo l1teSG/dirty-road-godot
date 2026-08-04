@@ -14,7 +14,8 @@ signal descanso_iniciado(tiempo_total: float)
 @export var enemigos_base_por_oleada: int = 4
 @export var incremento_enemigos_por_oleada: int = 3
 @export var tiempo_entre_spawns: float = 1.2
-@export var tiempo_descanso: float = 8.0
+@export var tiempo_maximo_oleada: float = 40.0
+@export var tiempo_descanso: float = 5.0
 @export var escalado_vida_por_oleada: float = 0.15
 
 var oleada_actual: int = 1
@@ -26,6 +27,7 @@ var tiempo_restante: int = 0
 var spawn_timer: Timer
 var rest_timer: Timer
 var ui_timer: Timer
+var duracion_timer: Timer
 
 
 func _ready() -> void:
@@ -45,13 +47,21 @@ func _ready() -> void:
 	add_child(rest_timer)
 	rest_timer.timeout.connect(_on_descanso_terminado)
 
-	# Crear y configurar ui_timer (se activa solo durante el descanso)
+	# Crear y configurar ui_timer (se activa durante oleada y descanso)
 	ui_timer = Timer.new()
 	ui_timer.one_shot = false
 	ui_timer.wait_time = 1.0
 	ui_timer.autostart = false
 	add_child(ui_timer)
 	ui_timer.timeout.connect(_on_ui_tick)
+
+	# Crear y configurar duracion_timer (controla el tiempo máximo de la oleada)
+	duracion_timer = Timer.new()
+	duracion_timer.one_shot = true
+	duracion_timer.wait_time = tiempo_maximo_oleada
+	duracion_timer.autostart = false
+	add_child(duracion_timer)
+	duracion_timer.timeout.connect(_on_tiempo_oleada_agotado)
 
 	# Leer la horda inicial desde SaveManager si existe
 	if SaveManager != null:
@@ -68,9 +78,15 @@ func iniciar_oleada() -> void:
 	if enemigos_por_spawnear < 1:
 		enemigos_por_spawnear = 1
 
+	# Inicializar contador de tiempo
+	tiempo_restante = int(tiempo_maximo_oleada)
+
 	oleada_iniciada.emit(oleada_actual)
 
+	# Iniciar timers
 	spawn_timer.start(tiempo_entre_spawns)
+	duracion_timer.start(tiempo_maximo_oleada)
+	ui_timer.start(1.0)
 
 
 func _spawnear_siguiente_enemigo() -> void:
@@ -119,30 +135,59 @@ func _on_enemigo_derrotado() -> void:
 	if not is_inside_tree():
 		return
 
-	# Verificar si la oleada ha terminado
+	# Verificar si la oleada ha terminado (todos los enemigos derrotados)
 	if enemigos_vivos <= 0 and enemigos_por_spawnear <= 0:
-		oleada_completada.emit(oleada_actual)
+		# Detener timers de oleada
+		duracion_timer.stop()
+		spawn_timer.stop()
+		ui_timer.stop()
 
-		# Guardado automático mediante Autoload SaveManager
-		if SaveManager != null:
-			SaveManager.set_horda(oleada_actual + 1)
-			SaveManager.guardar_partida()
+		# Pasar inmediatamente a la fase de descanso
+		iniciar_fase_descanso()
 
-		# Iniciar fase de descanso
-		en_descanso = true
-		tiempo_restante = int(tiempo_descanso)
-		descanso_iniciado.emit(tiempo_descanso)
 
-		if rest_timer.is_inside_tree():
-			rest_timer.start(tiempo_descanso)
-		if ui_timer.is_inside_tree():
-			ui_timer.start(1.0)
+func _on_tiempo_oleada_agotado() -> void:
+	# El tiempo máximo de la oleada se ha agotado
+	# Detener spawn_timer y ui_timer (duracion_timer ya se detuvo solo)
+	spawn_timer.stop()
+	ui_timer.stop()
+
+	# Pasar a la fase de descanso
+	iniciar_fase_descanso()
+
+
+func iniciar_fase_descanso() -> void:
+	if en_descanso:
+		return
+
+	en_descanso = true
+	tiempo_restante = int(tiempo_descanso)
+
+	oleada_completada.emit(oleada_actual)
+	descanso_iniciado.emit(tiempo_descanso)
+
+	# Guardado automático mediante Autoload SaveManager
+	if SaveManager != null:
+		SaveManager.set_horda(oleada_actual + 1)
+		SaveManager.guardar_partida()
+
+	# Iniciar timer de descanso
+	if rest_timer.is_inside_tree():
+		rest_timer.start(tiempo_descanso)
+
+	# Iniciar ui_timer para mostrar el contador de descanso
+	if ui_timer.is_inside_tree():
+		ui_timer.start(1.0)
 
 
 func _on_ui_tick() -> void:
-	if en_descanso:
-		tiempo_actualizado.emit(tiempo_restante, true)
-		tiempo_restante -= 1
+	if not is_inside_tree():
+		return
+
+	tiempo_actualizado.emit(tiempo_restante, en_descanso)
+	tiempo_restante -= 1
+	if tiempo_restante < 0:
+		tiempo_restante = 0
 
 
 func _on_descanso_terminado() -> void:
