@@ -34,27 +34,27 @@ func inicializar(dir: Vector2, pos_inicial: Vector2) -> void:
 	global_position = pos_inicial
 
 func _on_body_entered(body: Node2D) -> void:
+	# Ignorar enemigos
 	if body.is_in_group("enemi"):
 		return
 
+	# Dañar al jugador solo si es su CharacterBody2D
 	if body.is_in_group("jugador"):
 		if body.has_method("recibir_danio"):
 			body.recibir_danio(danio)
 		queue_free()
 		return
 
-	# For any other body (e.g. walls) we also destroy the bullet
+	# Cualquier otro body (paredes, etc.) también destruye el proyectil
 	queue_free()
 
 func _on_area_entered(area: Area2D) -> void:
-	if area.is_in_group("enemi"):
-		return
-
+	# Solo reaccionar a áreas del grupo "arbol"
 	if area.is_in_group("arbol"):
 		if area.has_method("recibir_danio"):
 			area.recibir_danio(danio)
 		queue_free()
 		return
 
-	# For any other area we also destroy the bullet
-	queue_free()
+	# Ignorar cualquier otra área (sensores, hitboxes, etc.)
+	# No destruir el proyectil
