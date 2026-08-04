@@ -4,7 +4,7 @@ extends enemigoNuevo
 
 var en_combate: bool = false
 var atacando_anim: bool = false
-var _ataque_animado_en_recarga: bool = false
+var _attack_tween: Tween = null
 
 
 func _ready() -> void:
@@ -32,9 +32,9 @@ func _arbol_valido(arbol_node: Node2D) -> bool:
 	var vida_actual = arbol_node.get("vida_actual")
 	if vida_actual != null:
 		return vida_actual > 0
-	var life = arbol_node.get("life")
-	if life != null:
-		return life > 0
+	var vida_nodo = arbol_node.get("life")
+	if vida_nodo != null:
+		return vida_nodo > 0
 	return true
 
 
@@ -49,10 +49,8 @@ func seleccionar_objetivo() -> void:
 		jugador = jugadores[0] as Node2D
 
 	var arboles = get_tree().get_nodes_in_group("arbol")
-	var tree_exists = false
 	var tree_dead = false
 	if not arboles.is_empty() and is_instance_valid(arboles[0]):
-		tree_exists = true
 		arbol = arboles[0] as Node2D
 		if not _arbol_valido(arbol):
 			arbol = null
@@ -157,19 +155,23 @@ func seleccionar_objetivo() -> void:
 
 
 func evaluar_y_ejecutar_ataque() -> void:
-	# Si el cooldown ya terminó, limpiar el flag de animación usada
-	if puede_atacar:
-		_ataque_animado_en_recarga = false
+	# Si el enemigo está listo para atacar y está en rango del objetivo
+	if puede_atacar and is_instance_valid(objetivo):
+		var dist = global_position.distance_to(objetivo.global_position)
+		if dist <= distancia_ataque:
+			# Disparar la animación JUSTO ANTES de entrar en cooldown
+			animar_ataque_impactante(objetivo.global_position)
 
+	# Llamar al padre para aplicar daño y reiniciar el temporizador de recarga
 	super.evaluar_y_ejecutar_ataque()
-
-	# Lanzamos la animación solo una vez por cada ciclo de ataque
-	if not puede_atacar and not _ataque_animado_en_recarga and is_instance_valid(objetivo):
-		_ataque_animado_en_recarga = true
-		animar_ataque_impactante(objetivo.global_position)
 
 
 func animar_ataque_impactante(target_pos: Vector2) -> void:
+	# Kill any existing tween to avoid overlapping
+	if _attack_tween != null:
+		_attack_tween.kill()
+		_attack_tween = null
+
 	var cuerpo = $CuerpoInterior if has_node("CuerpoInterior") else find_child("CuerpoInterior", true, false) as Polygon2D
 	var nucleo = $NucleoToxico if has_node("NucleoToxico") else find_child("NucleoToxico", true, false)
 
@@ -179,10 +181,12 @@ func animar_ataque_impactante(target_pos: Vector2) -> void:
 	atacando_anim = true
 
 	var tween = create_tween().set_parallel(false)
-	var dir = (target_pos - global_position).normalized()
-	var offset_impulso = dir * 10.0
+	_attack_tween = tween
 
-	# 1. Micro-compresión de carga
+	var dir = (target_pos - global_position).normalized()
+	var offset_impulso = dir * 12.0
+
+	# 1. Micro-compresión rápida
 	tween.tween_property(cuerpo, "scale", Vector2(1.2, 0.8), 0.04).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 
 	# 2. Embate de impacto
@@ -193,12 +197,15 @@ func animar_ataque_impactante(target_pos: Vector2) -> void:
 		tween.parallel().tween_property(nucleo, "modulate", Color(2.5, 2.5, 2.5, 1.0), 0.03)
 		tween.chain().tween_property(nucleo, "modulate", Color.WHITE, 0.05)
 
-	# 3. Recuperación a la escala original
-	tween.chain().tween_property(cuerpo, "scale", Vector2(0.8, 0.8), 0.1).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	# 3. Recuperación elástica
+	tween.chain().tween_property(cuerpo, "scale", Vector2(1.0, 1.0), 0.1).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	tween.parallel().tween_property(cuerpo, "position", Vector2.ZERO, 0.1)
 
-	# Liberar la bandera de animación al terminar
-	tween.tween_callback(func(): atacando_anim = false)
+	# Resetear bandera
+	tween.tween_callback(func():
+		atacando_anim = false
+		_attack_tween = null
+	)
 
 
 func _physics_process(delta: float) -> void:
