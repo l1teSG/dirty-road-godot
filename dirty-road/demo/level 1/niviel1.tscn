@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bp5tkglvay4l"]
 
-[ext_resource type="Script" uid="uid://bb0ijmririri3" path="res://demo/level 1/niviel_1.gd" id="1_bfnr7"]
+[ext_resource type="Script" uid="uid://dialv8mg51o60" path="res://demo/level 1/niviel_1.gd" id="1_bfnr7"]
 [ext_resource type="PackedScene" uid="uid://c5182832ylop2" path="res://ecenes/ecenarios/valle.tscn" id="2_ckgak"]
 [ext_resource type="FontFile" uid="uid://344dhrkbi7ri" path="res://themes/Chakra_Petch/ChakraPetch-Bold.ttf" id="2_trm6e"]
 [ext_resource type="PackedScene" uid="uid://dogn08xliy6gi" path="res://ecenes/players/quark/quark.tscn" id="3_k6hvo"]
@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://c4msn7to5j3in" path="res://ecenes/enemies/nubeGas/nubeGas.tscn" id="5_f3ssa"]
 [ext_resource type="PackedScene" uid="uid://dx5ahbv0nxyet" path="res://ecenes/ecenarios/tree/arbol.tscn" id="5_q0v6s"]
 [ext_resource type="PackedScene" uid="uid://p208rapbv3d0" path="res://ecenes/enemies/microplastico/microPlastico.tscn" id="6_bfnr7"]
-[ext_resource type="Script" uid="uid://do1tyxx2ogdi1" path="res://ecenes/respawn/respawn_manager.gd" id="7_rspwn1"]
+[ext_resource type="Script" uid="uid://wubm8w5adwq2" path="res://ecenes/respawn/respawn_manager.gd" id="7_rspwn1"]
 
 [sub_resource type="Environment" id="Environment_ckgak"]
 background_mode = 3
@@ -37,9 +37,10 @@ environment = SubResource("Environment_ckgak")
 [node name="valle" parent="." unique_id=1723520595 instance=ExtResource("2_ckgak")]
 position = Vector2(0, -2)
 
-[node name="ClassPlayer" parent="." unique_id=508460008 node_paths=PackedStringArray("respawn_manager") groups=["jugador"] instance=ExtResource("3_k6hvo")]
+[node name="ClassPlayer" parent="." unique_id=508460008 node_paths=PackedStringArray("respawn_manager") groups=["player"] instance=ExtResource("3_k6hvo")]
 position = Vector2(373, -69)
 respawn_manager = NodePath("../RespawnManager")
+disparoON = false
 
 [node name="Arbol" parent="." unique_id=157670480 groups=["arbol"] instance=ExtResource("5_q0v6s")]
 
@@ -50,7 +51,9 @@ position = Vector2(-219, 141)
 position = Vector2(-18, 142)
 
 [node name="MicroPlastico" parent="." unique_id=888619048 groups=["enemi"] instance=ExtResource("6_bfnr7")]
-position = Vector2(119, 146)
+position = Vector2(119, 846)
+speed = 200.0
+distancia_ataque = 50.0
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=671132988]
 

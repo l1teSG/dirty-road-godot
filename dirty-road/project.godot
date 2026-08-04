@@ -58,6 +58,7 @@ jugador=""
 fire_player=""
 enemi=""
 arbol=""
+player=""
 
 [input]
 
