@@ -3,25 +3,12 @@ extends enemigoNuevo
 @export var speed: float = 120.0
 
 var en_combate: bool = false
-var atacando_anim: bool = false
-var _attack_tween: Tween = null
 
 
 func _ready() -> void:
 	tiempo_recarga = 0.6
 	distancia_ataque = 45.0
 	distancia_max_aggro = 300.0
-
-
-func animar_cuerpo_enemigo(delta: float) -> void:
-	if atacando_anim:
-		return
-	super.animar_cuerpo_enemigo(delta)
-
-	# Rotación pasiva del núcleo tóxico (si existe)
-	var nucleo = $NucleoToxico if has_node("NucleoToxico") else find_child("NucleoToxico", true, false)
-	if nucleo != null:
-		nucleo.rotation += delta * 3.0
 
 
 func _arbol_valido(arbol_node: Node2D) -> bool:
@@ -155,56 +142,27 @@ func seleccionar_objetivo() -> void:
 
 
 func evaluar_y_ejecutar_ataque() -> void:
-	# Si el enemigo está listo para atacar y está en rango del objetivo
 	if puede_atacar and is_instance_valid(objetivo):
 		var dist = global_position.distance_to(objetivo.global_position)
 		if dist <= distancia_ataque:
-			# Disparar la animación JUSTO ANTES de entrar en cooldown
 			animar_ataque_impactante(objetivo.global_position)
 
-	# Llamar al padre para aplicar daño y reiniciar el temporizador de recarga
 	super.evaluar_y_ejecutar_ataque()
 
 
 func animar_ataque_impactante(target_pos: Vector2) -> void:
-	# Kill any existing tween to avoid overlapping
-	if _attack_tween != null:
-		_attack_tween.kill()
-		_attack_tween = null
+	# Flash de color en todo el cuerpo del enemigo
+	var color_original = modulate
+	modulate = Color(3.0, 0.5, 0.5, 1.0) # Flash rojo brillante tóxico
 
-	var cuerpo = $CuerpoInterior if has_node("CuerpoInterior") else find_child("CuerpoInterior", true, false) as Polygon2D
-	var nucleo = $NucleoToxico if has_node("NucleoToxico") else find_child("NucleoToxico", true, false)
-
-	if cuerpo == null:
-		return
-
-	atacando_anim = true
-
-	var tween = create_tween().set_parallel(false)
-	_attack_tween = tween
-
+	# Sacudida/Impulso visual directo
 	var dir = (target_pos - global_position).normalized()
-	var offset_impulso = dir * 12.0
+	position += dir * 8.0 # Impulso inmediato hacia la víctima
 
-	# 1. Micro-compresión rápida
-	tween.tween_property(cuerpo, "scale", Vector2(1.2, 0.8), 0.04).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-
-	# 2. Embate de impacto
-	tween.chain().tween_property(cuerpo, "scale", Vector2(0.6, 1.4), 0.05).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
-	tween.parallel().tween_property(cuerpo, "position", offset_impulso, 0.05)
-
-	if nucleo != null:
-		tween.parallel().tween_property(nucleo, "modulate", Color(2.5, 2.5, 2.5, 1.0), 0.03)
-		tween.chain().tween_property(nucleo, "modulate", Color.WHITE, 0.05)
-
-	# 3. Recuperación elástica
-	tween.chain().tween_property(cuerpo, "scale", Vector2(1.0, 1.0), 0.1).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	tween.parallel().tween_property(cuerpo, "position", Vector2.ZERO, 0.1)
-
-	# Resetear bandera
-	tween.tween_callback(func():
-		atacando_anim = false
-		_attack_tween = null
+	# Timer temporal para restaurar el estado en 0.1 segundos
+	get_tree().create_timer(0.08).timeout.connect(func():
+		modulate = color_original
+		position -= dir * 8.0
 	)
 
 
