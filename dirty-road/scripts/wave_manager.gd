@@ -54,7 +54,7 @@ func _ready() -> void:
 	ui_timer.timeout.connect(_on_ui_tick)
 
 	# Leer la horda inicial desde SaveManager si existe
-	if get_node_or_null("/root/SaveManager"):
+	if SaveManager != null:
 		oleada_actual = SaveManager.get_horda()
 
 	# Iniciar la primera oleada
@@ -115,12 +115,16 @@ func _on_enemigo_derrotado() -> void:
 	if enemigos_vivos < 0:
 		enemigos_vivos = 0
 
+	# Si el WaveManager ya no está en el SceneTree (ej. cambio de escena), abortar
+	if not is_inside_tree():
+		return
+
 	# Verificar si la oleada ha terminado
 	if enemigos_vivos <= 0 and enemigos_por_spawnear <= 0:
 		oleada_completada.emit(oleada_actual)
 
 		# Guardado automático mediante Autoload SaveManager
-		if get_node_or_null("/root/SaveManager"):
+		if SaveManager != null:
 			SaveManager.set_horda(oleada_actual + 1)
 			SaveManager.guardar_partida()
 
@@ -128,8 +132,11 @@ func _on_enemigo_derrotado() -> void:
 		en_descanso = true
 		tiempo_restante = int(tiempo_descanso)
 		descanso_iniciado.emit(tiempo_descanso)
-		rest_timer.start(tiempo_descanso)
-		ui_timer.start(1.0)
+
+		if rest_timer.is_inside_tree():
+			rest_timer.start(tiempo_descanso)
+		if ui_timer.is_inside_tree():
+			ui_timer.start(1.0)
 
 
 func _on_ui_tick() -> void:
