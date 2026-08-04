@@ -4,6 +4,21 @@ extends CharacterBody2D
 var tiempo_anim: float = randf() * 10.0
 var life: int = 30  # ajusta a la vida que quieras
 
+# ── Parámetros de Ataque y Proximidad (editable desde Inspector) ──
+@export_category("Parámetros de Ataque y Proximidad")
+@export var distancia_ataque: float = 100.0
+@export var danio_ataque: int = 10
+@export var tiempo_recarga: float = 1.5
+@export var distancia_urgencia_arbol: float = 60.0
+@export var distancia_max_aggro: float = 350.0
+@export var tiempo_aggro: float = 4.0
+
+# ── Control interno ───────────────────────────────────
+var puede_atacar: bool = true
+var en_aggro: bool = false
+var objetivo: Node2D = null
+
+
 func animar_cuerpo_enemigo(delta: float) -> void:
 	var cuerpo_int = $CuerpoInterior as Polygon2D
 	var nucleo = $NucleoToxico as Polygon2D
@@ -20,13 +35,112 @@ func animar_cuerpo_enemigo(delta: float) -> void:
 	if nucleo != null:
 		nucleo.rotation += delta * 2.0
 
+
 func _physics_process(delta: float) -> void:
 	animar_cuerpo_enemigo(delta)
+	seleccionar_objetivo()
+	evaluar_y_ejecutar_ataque()
+
 
 func take_hit(damage: int = 10) -> void:
-	life -= damage
+	recibir_danio(damage)
+
+
+# ── Recepción de daño (con aggro) ────────────────────────
+
+func recibir_danio(cantidad: int, atacante: Node2D = null) -> void:
+	# Aggro: si el atacante es el jugador o un proyectil, entra en modo aggro
+	if atacante != null and (atacante.is_in_group("player") or atacante.is_in_group("bullet")):
+		en_aggro = true
+		# Iniciar temporizador asíncrono para desactivar aggro
+		await get_tree().create_timer(tiempo_aggro).timeout
+		en_aggro = false
+
+	life -= cantidad
 	if life <= 0:
 		var label = get_tree().current_scene.find_child("TextoBiomasa", true, false)
 		if label:
-			BiomasaManager.emitir_biomasa(global_position, label.global_position, label.get_node("/root").find_child("ui", true, false))
+			# Llamada original de take_hit (ajusta según tu implementación de BiomasaManager)
+			BiomasaManager.emitir_biomasa(
+				global_position,
+				label.global_position,
+				label.get_node("/root").find_child("ui", true, false)
+			)
 		self.queue_free()
+
+
+# ── Búsqueda dinámica de objetivos (híbrida) ────────────
+
+func seleccionar_objetivo() -> void:
+	var jugador: Node2D = null
+	var arbol: Node2D = null
+
+	# Buscar en grupo "player" o "jugador"
+	var jugadores = get_tree().get_nodes_in_group("player")
+	if jugadores.is_empty():
+		jugadores = get_tree().get_nodes_in_group("jugador")
+	if jugadores.size() > 0 and is_instance_valid(jugadores[0]):
+		jugador = jugadores[0] as Node2D
+
+	# Buscar en grupo "arbol"
+	var arboles = get_tree().get_nodes_in_group("arbol")
+	if arboles.size() > 0 and is_instance_valid(arboles[0]):
+		arbol = arboles[0] as Node2D
+
+	var dist_jugador: float = INF
+	var dist_arbol: float = INF
+
+	if jugador != null:
+		dist_jugador = global_position.distance_to(jugador.global_position)
+	if arbol != null:
+		dist_arbol = global_position.distance_to(arbol.global_position)
+
+	# Regla 1: Urgencia Árbol (prioridad absoluta si está a quemarropa)
+	if arbol != null and dist_arbol <= distancia_urgencia_arbol:
+		objetivo = arbol
+		return
+
+	# Regla 2: Aggro con rango limitado
+	if en_aggro:
+		if jugador != null and dist_jugador <= distancia_max_aggro:
+			objetivo = jugador
+			return
+		else:
+			# Si el jugador está fuera del rango máximo, rompemos el aggro
+			en_aggro = false
+
+	# Regla 3: Proximidad pura (estado normal)
+	var closest: Node2D = null
+	var min_dist: float = INF
+	if jugador != null and dist_jugador < min_dist:
+		closest = jugador
+		min_dist = dist_jugador
+	if arbol != null and dist_arbol < min_dist:
+		closest = arbol
+		min_dist = dist_arbol
+	objetivo = closest
+
+
+# ── Método principal de ataque ────────────────────────
+
+func evaluar_y_ejecutar_ataque() -> void:
+	if not is_instance_valid(objetivo):
+		return
+
+	if not puede_atacar:
+		return
+
+	var distancia = global_position.distance_to(objetivo.global_position)
+	if distancia > distancia_ataque:
+		return
+
+	# Ejecutar ataque según el tipo de objetivo
+	if objetivo.has_method("take_damage"):
+		objetivo.take_damage(danio_ataque)
+	elif objetivo.has_method("recibir_danio"):
+		objetivo.recibir_danio(danio_ataque)
+
+	# Iniciar recarga
+	puede_atacar = false
+	await get_tree().create_timer(tiempo_recarga).timeout
+	puede_atacar = true
