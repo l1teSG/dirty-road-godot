@@ -15,6 +15,8 @@ func _ready() -> void:
 	top_level = true
 	if not body_entered.is_connected(_on_body_entered):
 		body_entered.connect(_on_body_entered)
+	if not area_entered.is_connected(_on_area_entered):
+		area_entered.connect(_on_area_entered)
 
 func _physics_process(delta: float) -> void:
 	tiempo_vida += delta
@@ -40,3 +42,16 @@ func _on_body_entered(body: Node2D) -> void:
 		body.recibir_danio(danio)
 
 	queue_free()
+
+func _on_area_entered(area: Area2D) -> void:
+	# Ignorar áreas del grupo enemigo
+	if area.is_in_group("enemi"):
+		return
+
+	# Si el área pertenece al grupo "arbol", aplicar daño
+	if area.is_in_group("arbol"):
+		if area.has_method("recibir_danio"):
+			area.recibir_danio(danio)
+		elif area.has_method("take_damage"):
+			area.take_damage(danio)
+		queue_free()
