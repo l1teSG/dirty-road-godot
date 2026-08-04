@@ -31,6 +31,8 @@ var duracion_timer: Timer
 
 
 func _ready() -> void:
+	add_to_group("wave_manager")
+	
 	# Crear y configurar spawn_timer
 	spawn_timer = Timer.new()
 	spawn_timer.one_shot = false
@@ -82,6 +84,7 @@ func iniciar_oleada() -> void:
 	tiempo_restante = int(tiempo_maximo_oleada)
 
 	oleada_iniciada.emit(oleada_actual)
+	tiempo_actualizado.emit(tiempo_restante, false)  # Emitir inmediatamente
 
 	# Iniciar timers
 	spawn_timer.start(tiempo_entre_spawns)
@@ -165,6 +168,7 @@ func iniciar_fase_descanso() -> void:
 
 	oleada_completada.emit(oleada_actual)
 	descanso_iniciado.emit(tiempo_descanso)
+	tiempo_actualizado.emit(tiempo_restante, true)  # Emitir inmediatamente
 
 	# Guardado automático mediante Autoload SaveManager
 	if SaveManager != null:
