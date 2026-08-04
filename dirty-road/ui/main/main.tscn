@@ -1,24 +1,12 @@
-[gd_scene format=3 uid="uid://c8ukhxusi8bqb"]
+[gd_scene format=3 uid="uid://c8ukhxusib8qb"]
 
-[ext_resource type="Script" uid="uid://d0yifw3ixgw80" path="res://ui/main/main.gd" id="2_7mc2q"]
+[ext_resource type="Script" uid="uid://dheeekunktlt1" path="res://ui/main/main.gd" id="2_7mc2q"]
 [ext_resource type="Script" uid="uid://cm8ldnknxd1fs" path="res://ui/main/color_rect.gd" id="2_ircy7"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3a1op"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
 border_color = Color(0.6, 1, 0.2, 1)
 border_blend = true
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7cwo5"]
-bg_color = Color(0.019607844, 0.039215688, 0.03137255, 0.48235294)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.6, 1, 0.2, 1)
-corner_detail = 1
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xqmf3"]
-bg_color = Color(0.6, 1, 0.2, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7mc2q"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
@@ -76,6 +64,7 @@ layout_mode = 2
 theme_override_constants/separation = 20
 
 [node name="Label" type="Label" parent="VBoxContainer/VBoxContainer" unique_id=813626048]
+z_index = 3
 layout_mode = 2
 theme_override_colors/font_color = Color(0.6, 1, 0.2, 1)
 theme_override_font_sizes/font_size = 100
@@ -87,40 +76,6 @@ uppercase = true
 
 [node name="Control" type="Control" parent="VBoxContainer/VBoxContainer" unique_id=803231444]
 custom_minimum_size = Vector2(0, 50)
-layout_mode = 2
-
-[node name="VBoxContainer" type="PanelContainer" parent="VBoxContainer/VBoxContainer" unique_id=1077527873]
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_7cwo5")
-
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/VBoxContainer/VBoxContainer" unique_id=2001441284]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/VBoxContainer/VBoxContainer" unique_id=897860323]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.84705883, 1, 0.9019608, 1)
-theme_override_font_sizes/font_size = 40
-text = " juan casas | emanuel rocero | miguel muricia "
-horizontal_alignment = 1
-vertical_alignment = 1
-uppercase = true
-
-[node name="Label2" type="Label" parent="VBoxContainer/VBoxContainer/VBoxContainer/VBoxContainer" unique_id=144754058]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.84705883, 1, 0.9019608, 1)
-theme_override_font_sizes/font_size = 40
-text = "salva a los arboles!!!!"
-horizontal_alignment = 1
-uppercase = true
-
-[node name="ProgressBar" type="ProgressBar" parent="VBoxContainer/VBoxContainer/VBoxContainer/VBoxContainer" unique_id=379053897]
-custom_minimum_size = Vector2(0, 22)
-layout_mode = 2
-theme_override_styles/background = SubResource("StyleBoxFlat_xqmf3")
-show_percentage = false
-
-[node name="Control2" type="Control" parent="VBoxContainer/VBoxContainer" unique_id=183111143]
-custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
 [node name="jugar" type="Button" parent="VBoxContainer/VBoxContainer" unique_id=645948470]
@@ -165,6 +120,34 @@ linear_accel_min = 28.17
 linear_accel_max = 45.07
 scale_amount_max = 10.8
 color = Color(0.6, 1, 0.2, 0.44705883)
+
+[node name="CreditosLabel" type="Label" parent="." unique_id=2000000001]
+layout_mode = 0
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 10.5
+offset_top = -32.0
+offset_right = 421.5
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.6, 1, 0.2, 0.6)
+theme_override_font_sizes/font_size = 14
+text = "Desarrollado por Juan Casas, Emanuel Rocero, Miguel Murcia"
+
+[node name="SalvaLabel" type="Label" parent="." unique_id=2000000002]
+layout_mode = 0
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -200.0
+offset_top = -32.0
+offset_right = -16.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.6, 1, 0.2, 0.6)
+theme_override_font_sizes/font_size = 14
+text = "SALVA A LOS ÁRBOLES"
 
 [connection signal="button_down" from="VBoxContainer/VBoxContainer/nuevaPartida" to="." method="_on_nueva_partida_button_down"]
 [connection signal="button_down" from="VBoxContainer/VBoxContainer/salir" to="." method="_on_salir_button_down"]

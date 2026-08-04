@@ -2,11 +2,13 @@
 
 [ext_resource type="PackedScene" uid="uid://b74nv28ce3acw" path="res://ecenes/players/classPlayer/classPlayer.tscn" id="1_hr2c7"]
 [ext_resource type="Script" uid="uid://bsg7cxgg4axoa" path="res://ecenes/players/quark/quark.gd" id="2_lx2x3"]
+[ext_resource type="Script" uid="uid://b3thssvd7q4kf" path="res://scripts/wave_ui.gd" id="3_fm6mt"]
 [ext_resource type="FontFile" uid="uid://344dhrkbi7ri" path="res://themes/Chakra_Petch/ChakraPetch-Bold.ttf" id="3_lx2x3"]
 [ext_resource type="Texture2D" uid="uid://cfdda0xumpkii" path="res://assets/mobile-controls-1/boton2.tres" id="3_qh7t8"]
 [ext_resource type="Texture2D" uid="uid://f8dmk5pcnvgc" path="res://assets/mobile-controls-1/Vector/Icons/icon_pause.svg" id="4_j4fag"]
-[ext_resource type="Script" uid="uid://6cs3m1ycepdt" path="res://ecenes/players/quark/texto_biomasa.gd" id="6_tnb2i"]
+[ext_resource type="Script" uid="uid://cpnygtexsikdx" path="res://ecenes/players/quark/texto_biomasa.gd" id="6_tnb2i"]
 [ext_resource type="PackedScene" uid="uid://bnsgn8vqai733" path="res://ecenes/players/pausa/pausa.tscn" id="6_ycxd3"]
+[ext_resource type="FontFile" uid="uid://c57tlce3ingir" path="res://themes/Chakra_Petch/ChakraPetch-BoldItalic.ttf" id="7_ehraa"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_xqmf3"]
 radius = 266.75082
@@ -84,6 +86,7 @@ radius = 38.0
 z_index = 10
 script = ExtResource("2_lx2x3")
 vida_maxima = 100
+disparoON = true
 ID = "quark"
 life = 100
 speed = 420.0
@@ -140,8 +143,11 @@ shape = SubResource("CircleShape2D_7cwo5")
 [node name="aim" type="Marker2D" parent="." index="9" unique_id=182942934]
 position = Vector2(20, 0)
 
-[node name="ui" type="CanvasLayer" parent="." index="10" unique_id=1985090240]
+[node name="ui" type="CanvasLayer" parent="." index="10" unique_id=1985090240 node_paths=PackedStringArray("label_oleada", "label_tiempo")]
 layer = 0
+script = ExtResource("3_fm6mt")
+label_oleada = NodePath("margenUi/ContenedorVertical/enemigos")
+label_tiempo = NodePath("MarginContainer/contador")
 
 [node name="margenUi" type="MarginContainer" parent="ui" index="0" unique_id=957307684]
 offset_right = 40.0
@@ -188,6 +194,11 @@ theme_override_font_sizes/font_size = 40
 text = "0 / 10"
 script = ExtResource("6_tnb2i")
 
+[node name="enemigos" type="Label" parent="ui/margenUi/ContenedorVertical" index="2" unique_id=137329923]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.90922785, 0.50769645, 0.5711142, 1)
+theme_override_font_sizes/font_size = 40
+
 [node name="ajuste" type="MarginContainer" parent="ui" index="1" unique_id=1341644146]
 anchors_preset = 1
 anchor_left = 1.0
@@ -222,6 +233,24 @@ theme_override_fonts/font = ExtResource("3_lx2x3")
 theme_override_font_sizes/font_size = 200
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="ui" index="3" unique_id=111339484]
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.043
+anchor_right = 0.5
+anchor_bottom = 0.043
+offset_left = -0.5
+offset_top = -11.440002
+offset_right = 0.5
+offset_bottom = 11.559998
+grow_horizontal = 2
+
+[node name="contador" type="Label" parent="ui/MarginContainer" index="0" unique_id=466876069]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 1, 0.2, 1)
+theme_override_fonts/font = ExtResource("7_ehraa")
+theme_override_font_sizes/font_size = 100
 
 [node name="Pausa" parent="." index="11" unique_id=565747821 instance=ExtResource("6_ycxd3")]
 layer = 200

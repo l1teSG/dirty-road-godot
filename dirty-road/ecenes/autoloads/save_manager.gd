@@ -9,7 +9,7 @@ const DATOS_DEFECTO := {
 	"vida_maxima": 100,
 }
 
-var datos: Dictionary = DATOS_DEFECTO.duplicate()
+var datos: Dictionary = DATOS_DEFECTO.duplicate(true)
 
 
 func hay_partida_guardada() -> bool:
@@ -45,7 +45,7 @@ func cargar_partida() -> bool:
 
 	# combina con los valores por defecto, así si agregas campos nuevos
 	# en el futuro y cargas una partida vieja, no faltan claves
-	datos = DATOS_DEFECTO.duplicate()
+	datos = DATOS_DEFECTO.duplicate(true)
 	for clave in resultado.keys():
 		datos[clave] = resultado[clave]
 
@@ -53,9 +53,8 @@ func cargar_partida() -> bool:
 
 
 func nueva_partida() -> void:
-	datos = DATOS_DEFECTO.duplicate()
-	if hay_partida_guardada():
-		DirAccess.remove_absolute(RUTA_GUARDADO)
+	datos = DATOS_DEFECTO.duplicate(true)
+	guardar_partida()  # Sobrescribe el archivo inmediatamente con horda 1
 
 
 func borrar_partida() -> void:
