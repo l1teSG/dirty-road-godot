@@ -45,10 +45,20 @@ func seleccionar_objetivo() -> void:
 		jugador = jugadores[0] as Node2D
 
 	var arboles = get_tree().get_nodes_in_group("arbol")
+	var tree_exists = false
+	var tree_dead = false
 	if not arboles.is_empty() and is_instance_valid(arboles[0]):
+		tree_exists = true
 		arbol = arboles[0] as Node2D
 		if not _arbol_valido(arbol):
 			arbol = null
+			tree_dead = true
+
+	# Si el árbol está muerto, detener cualquier movimiento
+	# (más tarde podrá reanudar si Quark está cerca o en aggro)
+	if tree_dead:
+		objetivo = null
+		en_combate = false
 
 	# Detectar si Quark está muerto
 	var quark_muerto: bool = false
@@ -61,7 +71,8 @@ func seleccionar_objetivo() -> void:
 			quark_muerto = false
 
 	# Fijación de combate: si ya estamos golpeando a Quark vivo, no cambiar objetivo
-	if is_instance_valid(objetivo) and not quark_muerto:
+	# (excepto si el árbol ha muerto, en ese caso se debe detener)
+	if not tree_dead and is_instance_valid(objetivo) and not quark_muerto:
 		var dist = global_position.distance_to(objetivo.global_position)
 		if dist <= distancia_ataque:
 			en_combate = true
@@ -71,6 +82,12 @@ func seleccionar_objetivo() -> void:
 
 	# Si Quark está muerto: Prioridad absoluta volver al Árbol
 	if quark_muerto:
+		# Si el árbol está muerto, no hay a dónde ir; quedarse quieto
+		if tree_dead:
+			en_aggro = false
+			en_combate = false
+			return
+
 		en_aggro = false
 		en_combate = false
 
@@ -105,13 +122,22 @@ func seleccionar_objetivo() -> void:
 		else:
 			en_aggro = false
 
-	# 2. Proximidad activa: Si Quark (vivo) está cerca de MicroPlástico (ej. a menos de 180px)
-	# o si está más cerca de MicroPlástico que el Árbol, lo ataca a él primero.
+	# 2. Proximidad activa
 	if jugador != null:
 		var dist_j = global_position.distance_to(jugador.global_position)
 		var dist_a = global_position.distance_to(arbol.global_position) if arbol != null else INF
-		
-		if dist_j <= 180.0 or dist_j < dist_a:
+		var can_target_player = false
+
+		if tree_dead:
+			# Solo atacar a Quark si está dentro del rango de proximidad o aggro
+			if dist_j <= 180.0 or (en_aggro and dist_j <= distancia_max_aggro):
+				can_target_player = true
+		else:
+			# Comportamiento normal: si está más cerca que el árbol o dentro de 180px
+			if dist_j <= 180.0 or dist_j < dist_a:
+				can_target_player = true
+
+		if can_target_player:
 			objetivo = jugador
 			en_combate = false
 			return
