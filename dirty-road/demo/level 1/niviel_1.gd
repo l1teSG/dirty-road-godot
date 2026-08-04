@@ -67,42 +67,48 @@ func mostrar_mensaje(texto: String) -> void:
 	if texto_horda == null:
 		return
 
-	# Cancelar tween anterior si estaba corriendo
+	# Cancelar animación previa si existía
 	if tween_actual != null and tween_actual.is_running():
 		tween_actual.kill()
 
-	# Guardar o recuperar la posición base original del Inspector
-	if not texto_horda.has_meta("pos_base"):
-		texto_horda.set_meta("pos_base", texto_horda.position)
-
-	var pos_final: Vector2 = texto_horda.get_meta("pos_base")
-
 	texto_horda.text = texto
+	
+	# Configurar anclajes al centro de la pantalla
+	texto_horda.anchors_preset = Control.PRESET_CENTER
+	texto_horda.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	texto_horda.grow_vertical = Control.GROW_DIRECTION_BOTH
+	
 	await get_tree().process_frame
 
+	# Fijar pivote en el centro exacto del Label
 	texto_horda.pivot_offset = texto_horda.size / 2.0
+	
+	# Estado inicial de la animación
 	texto_horda.modulate.a = 0.0
-	texto_horda.scale = Vector2(0.92, 0.92)
-	texto_horda.position = pos_final - Vector2(0, DESPLAZAMIENTO_TEXTO)
+	texto_horda.scale = Vector2(0.9, 0.9)
+	
+	# Posición centrada base
+	var pos_centro: Vector2 = (get_viewport_rect().size / 2.0) - (texto_horda.size / 2.0)
+	texto_horda.position = pos_centro - Vector2(0, DESPLAZAMIENTO_TEXTO)
 
-	# Secuencia de animación
+	# Secuencia de animación en pantalla
 	tween_actual = create_tween()
 
-	# Entrada: fade + zoom + caída suave
+	# Entrada: Fade in + Zoom + Desplazamiento al centro exacto
 	tween_actual.set_parallel(true)
 	tween_actual.tween_property(texto_horda, "modulate:a", 1.0, DURACION_ENTRADA_TEXTO)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 	tween_actual.tween_property(texto_horda, "scale", Vector2.ONE, DURACION_ENTRADA_TEXTO)\
 		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-	tween_actual.tween_property(texto_horda, "position", pos_final, DURACION_ENTRADA_TEXTO)\
+	tween_actual.tween_property(texto_horda, "position", pos_centro, DURACION_ENTRADA_TEXTO)\
 		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 
 	# Mantener visible
 	tween_actual.chain().tween_interval(TIEMPO_VISIBLE_TEXTO)
 
-	# Salida: fade out + flotación hacia arriba
+	# Salida: Fade out + Flotación leve hacia arriba
 	tween_actual.chain().set_parallel(true)
 	tween_actual.tween_property(texto_horda, "modulate:a", 0.0, DURACION_SALIDA_TEXTO)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
-	tween_actual.tween_property(texto_horda, "position", pos_final + Vector2(0, -15.0), DURACION_SALIDA_TEXTO)\
+	tween_actual.tween_property(texto_horda, "position", pos_centro + Vector2(0, -15.0), DURACION_SALIDA_TEXTO)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
