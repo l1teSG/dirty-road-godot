@@ -102,7 +102,7 @@ func _spawnear_siguiente_enemigo() -> void:
 	var escena: PackedScene = enemigos_disponibles.pick_random()
 	var punto: Node2D = puntos_spawn.pick_random()
 
-	if escena == null or punto == null:
+	if escena == null or punto == null or not punto.is_inside_tree():
 		return
 
 	var enemigo: Node2D = escena.instantiate() as Node2D
