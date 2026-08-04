@@ -3,7 +3,7 @@ extends enemigoNuevo
 
 ## ------------------------------------------------------------
 ## Enemigo Tanque "Marea Negra"
-## Avan za lentamente hacia el Árbol, lo ataca en rango y es
+## Avanza lentamente hacia el Árbol, lo ataca en rango y es
 ## resistente al empuje.
 ## ------------------------------------------------------------
 
@@ -24,27 +24,15 @@ func _ready() -> void:
 	life = 300
 	danio_ataque = 25
 	tiempo_recarga = 2.5
-	distancia_ataque = 35.0
-	distancia_urgencia_arbol = 2000.0   # Prioridad absoluta al Árbol
-	distancia_max_aggro = 50.0          # Rango de aggro ultra reducido
-	tiempo_aggro = 0.5                  # Pierde el aggro del jugador casi de inmediato
+	distancia_ataque = 50.0          # Damos margen para golpear al jugador
+	distancia_urgencia_arbol = 250.0 # No anula la detección de proximidad
+	distancia_max_aggro = 50.0       # Rango de aggro ultra reducido
+	tiempo_aggro = 0.5               # Pierde el aggro del jugador casi de inmediato
 
 
 func _physics_process(delta: float) -> void:
 	# Ejecuta comportamiento base (animación, selección de objetivo, evaluación de ataque)
 	super(delta)
-
-	# Buscar al jugador (grupo "player" o "jugador")
-	var player: Node2D = get_tree().get_first_node_in_group("player")
-	if player == null:
-		player = get_tree().get_first_node_in_group("jugador")
-
-	# Si el jugador está en el rango de ataque cuerpo a cuerpo, forzarlo como objetivo,
-	# detener el avance, y forzar ataque inmediato
-	if is_instance_valid(player) and global_position.distance_to(player.global_position) <= distancia_ataque:
-		objetivo = player
-		velocity = vector_knockback
-		evaluar_y_ejecutar_ataque()
 
 	# Lógica de desplazamiento físico hacia el objetivo
 	if is_instance_valid(objetivo):
@@ -64,6 +52,20 @@ func _physics_process(delta: float) -> void:
 
 	# Aplicar movimiento en el motor de físicas 2D
 	move_and_slide()
+
+
+func seleccionar_objetivo() -> void:
+	# Prioriza al jugador si está en rango de ataque
+	var player: Node2D = get_tree().get_first_node_in_group("player")
+	if player == null:
+		player = get_tree().get_first_node_in_group("jugador")
+
+	if is_instance_valid(player) and global_position.distance_to(player.global_position) <= distancia_ataque:
+		objetivo = player
+		return
+
+	# Si no, ejecuta la lógica estándar de la clase padre
+	super()
 
 
 func recibir_danio(cantidad: int, atacante: Node2D = null) -> void:
