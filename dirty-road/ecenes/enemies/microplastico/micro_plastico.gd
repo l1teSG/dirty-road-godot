@@ -19,6 +19,11 @@ func animar_cuerpo_enemigo(delta: float) -> void:
 		return
 	super.animar_cuerpo_enemigo(delta)
 
+	# Rotación pasiva del núcleo tóxico (si existe)
+	var nucleo = $NucleoToxico if has_node("NucleoToxico") else find_child("NucleoToxico", true, false)
+	if nucleo != null:
+		nucleo.rotation += delta * 3.0
+
 
 func _arbol_valido(arbol_node: Node2D) -> bool:
 	if not is_instance_valid(arbol_node):
@@ -167,7 +172,7 @@ func evaluar_y_ejecutar_ataque() -> void:
 
 func animar_ataque_impactante(target_pos: Vector2) -> void:
 	var cuerpo = $CuerpoInterior as Polygon2D
-	var nucleo = $NucleoToxico as Polygon2D
+	var nucleo = $NucleoToxico if has_node("NucleoToxico") else find_child("NucleoToxico", true, false)
 
 	if cuerpo == null:
 		return
@@ -196,8 +201,9 @@ func animar_ataque_impactante(target_pos: Vector2) -> void:
 
 	# Flash blanco sutil en el núcleo si existe
 	if nucleo != null:
-		tween.parallel().tween_property(nucleo, "modulate", Color(2.5, 2.5, 2.5, 1.0), 0.02)
-		tween.chain().tween_property(nucleo, "modulate", Color.WHITE, 0.04)
+		# Destello blanco brillante al impactar
+		tween.parallel().tween_property(nucleo, "modulate", Color(2.5, 2.5, 2.5, 1.0), 0.03)
+		tween.chain().tween_property(nucleo, "modulate", Color.WHITE, 0.05)
 
 	# 3. Recuperación Elástica Instantánea (100ms - Rebote fluido a 1.0)
 	tween.chain().tween_property(cuerpo, "scale", Vector2(1.0, 1.0), 0.1)\
