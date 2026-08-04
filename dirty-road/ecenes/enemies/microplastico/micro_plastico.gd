@@ -3,21 +3,12 @@ extends enemigoNuevo
 @export var speed: float = 120.0
 
 var en_combate: bool = false
-var _animando_ataque: bool = false
-var _tween_ataque: Tween = null
-var _ataque_animado_en_recarga: bool = false
 
 
 func _ready() -> void:
 	tiempo_recarga = 0.6
 	distancia_ataque = 45.0
 	distancia_max_aggro = 300.0
-
-
-func animar_cuerpo_enemigo(delta: float) -> void:
-	if _animando_ataque:
-		return
-	super.animar_cuerpo_enemigo(delta)
 
 
 func _arbol_valido(arbol_node: Node2D) -> bool:
@@ -28,9 +19,9 @@ func _arbol_valido(arbol_node: Node2D) -> bool:
 	var vida_actual = arbol_node.get("vida_actual")
 	if vida_actual != null:
 		return vida_actual > 0
-	var life = arbol_node.get("life")
-	if life != null:
-		return life > 0
+	var vida_nodo = arbol_node.get("life")
+	if vida_nodo != null:
+		return vida_nodo > 0
 	return true
 
 
@@ -45,10 +36,18 @@ func seleccionar_objetivo() -> void:
 		jugador = jugadores[0] as Node2D
 
 	var arboles = get_tree().get_nodes_in_group("arbol")
+	var tree_dead = false
 	if not arboles.is_empty() and is_instance_valid(arboles[0]):
 		arbol = arboles[0] as Node2D
 		if not _arbol_valido(arbol):
 			arbol = null
+			tree_dead = true
+
+	# Si el árbol está muerto, detener cualquier movimiento
+	# (más tarde podrá reanudar si Quark está cerca o en aggro)
+	if tree_dead:
+		objetivo = null
+		en_combate = false
 
 	# Detectar si Quark está muerto
 	var quark_muerto: bool = false
@@ -61,7 +60,8 @@ func seleccionar_objetivo() -> void:
 			quark_muerto = false
 
 	# Fijación de combate: si ya estamos golpeando a Quark vivo, no cambiar objetivo
-	if is_instance_valid(objetivo) and not quark_muerto:
+	# (excepto si el árbol ha muerto, en ese caso se debe detener)
+	if not tree_dead and is_instance_valid(objetivo) and not quark_muerto:
 		var dist = global_position.distance_to(objetivo.global_position)
 		if dist <= distancia_ataque:
 			en_combate = true
@@ -71,6 +71,12 @@ func seleccionar_objetivo() -> void:
 
 	# Si Quark está muerto: Prioridad absoluta volver al Árbol
 	if quark_muerto:
+		# Si el árbol está muerto, no hay a dónde ir; quedarse quieto
+		if tree_dead:
+			en_aggro = false
+			en_combate = false
+			return
+
 		en_aggro = false
 		en_combate = false
 
@@ -105,13 +111,22 @@ func seleccionar_objetivo() -> void:
 		else:
 			en_aggro = false
 
-	# 2. Proximidad activa: Si Quark (vivo) está cerca de MicroPlástico (ej. a menos de 180px)
-	# o si está más cerca de MicroPlástico que el Árbol, lo ataca a él primero.
+	# 2. Proximidad activa
 	if jugador != null:
 		var dist_j = global_position.distance_to(jugador.global_position)
 		var dist_a = global_position.distance_to(arbol.global_position) if arbol != null else INF
-		
-		if dist_j <= 180.0 or dist_j < dist_a:
+		var can_target_player = false
+
+		if tree_dead:
+			# Solo atacar a Quark si está dentro del rango de proximidad o aggro
+			if dist_j <= 180.0 or (en_aggro and dist_j <= distancia_max_aggro):
+				can_target_player = true
+		else:
+			# Comportamiento normal: si está más cerca que el árbol o dentro de 180px
+			if dist_j <= 180.0 or dist_j < dist_a:
+				can_target_player = true
+
+		if can_target_player:
 			objetivo = jugador
 			en_combate = false
 			return
@@ -127,59 +142,27 @@ func seleccionar_objetivo() -> void:
 
 
 func evaluar_y_ejecutar_ataque() -> void:
-	# Si el cooldown ya terminó, limpiar el flag de animación usada
-	if puede_atacar:
-		_ataque_animado_en_recarga = false
+	if puede_atacar and is_instance_valid(objetivo):
+		var dist = global_position.distance_to(objetivo.global_position)
+		if dist <= distancia_ataque:
+			animar_ataque_impactante(objetivo.global_position)
 
 	super.evaluar_y_ejecutar_ataque()
 
-	# Lanzamos la animación solo una vez por cada ciclo de ataque
-	if not puede_atacar and not _ataque_animado_en_recarga and is_instance_valid(objetivo):
-		_ataque_animado_en_recarga = true
-		animar_ataque_impactante(objetivo.global_position)
-
 
 func animar_ataque_impactante(target_pos: Vector2) -> void:
-	var cuerpo = $CuerpoInterior as Polygon2D
-	var nucleo = $NucleoToxico as Polygon2D
+	# Flash de color en todo el cuerpo del enemigo
+	var color_original = modulate
+	modulate = Color(3.0, 0.5, 0.5, 1.0) # Flash rojo brillante tóxico
 
-	if cuerpo == null:
-		return
-
-	# Matar cualquier tween anterior que esté en medio para evitar superposiciones
-	if _tween_ataque and _tween_ataque.is_valid() and _tween_ataque.is_running():
-		_tween_ataque.kill()
-
-	_animando_ataque = true
-
-	var tween = create_tween().set_parallel(false)
-	_tween_ataque = tween
-
-	# Dirección hacia el objetivo para el impulso
+	# Sacudida/Impulso visual directo
 	var dir = (target_pos - global_position).normalized()
-	var offset_impulso = dir * 8.0 # Ligero desplazamiento hacia adelante
+	position += dir * 8.0 # Impulso inmediato hacia la víctima
 
-	# 1. Carga Casi Instantánea (30ms - Micro-compresión)
-	tween.tween_property(cuerpo, "scale", Vector2(1.15, 0.85), 0.03)\
-		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-
-	# 2. Embate Explosivo + Snag (50ms - Estiramiento hacia el golpe)
-	tween.chain().tween_property(cuerpo, "scale", Vector2(0.7, 1.3), 0.05)\
-		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
-	tween.parallel().tween_property(cuerpo, "position", offset_impulso, 0.05)
-
-	# Flash blanco sutil en el núcleo si existe
-	if nucleo != null:
-		tween.parallel().tween_property(nucleo, "modulate", Color(2.5, 2.5, 2.5, 1.0), 0.02)
-		tween.chain().tween_property(nucleo, "modulate", Color.WHITE, 0.04)
-
-	# 3. Recuperación Elástica Instantánea (100ms - Rebote fluido a 1.0)
-	tween.chain().tween_property(cuerpo, "scale", Vector2(1.0, 1.0), 0.1)\
-		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	tween.parallel().tween_property(cuerpo, "position", Vector2.ZERO, 0.1)
-
-	tween.finished.connect(func():
-		_animando_ataque = false
+	# Timer temporal para restaurar el estado en 0.1 segundos
+	get_tree().create_timer(0.08).timeout.connect(func():
+		modulate = color_original
+		position -= dir * 8.0
 	)
 
 
