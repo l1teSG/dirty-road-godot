@@ -3,7 +3,7 @@ extends enemigoNuevo
 
 ## ------------------------------------------------------------
 ## Enemigo Tanque "Marea Negra"
-## Avanza lentamente hacia el Árbol, lo ataca en rango y es
+## Avan za lentamente hacia el Árbol, lo ataca en rango y es
 ## resistente al empuje.
 ## ------------------------------------------------------------
 
