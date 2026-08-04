@@ -99,30 +99,28 @@ func _spawnear_siguiente_enemigo() -> void:
 		spawn_timer.stop()
 		return
 
-	# Elegir escena y punto de spawn aleatorio
 	var escena: PackedScene = enemigos_disponibles.pick_random()
 	var punto: Node2D = puntos_spawn.pick_random()
 
-	var enemigo: Node2D = escena.instantiate() as Node2D
-	if enemigo == null:
-		# La escena no es un Node2D, ignorar
+	if escena == null or punto == null:
 		return
 
-	# Posicionar en el punto de spawn
+	var enemigo: Node2D = escena.instantiate() as Node2D
+	if enemigo == null:
+		return
+
+	# Posicionar en las coordenadas globales del Marker2D
 	enemigo.global_position = punto.global_position
 
-	# Aplicar escalado de vida según la oleada
+	# Escalado de vida opcional
 	var factor_dificultad: float = 1.0 + ((oleada_actual - 1) * escalado_vida_por_oleada)
-	if "life" in enemigo:
-		var vida_actual = enemigo.get("life")
-		if vida_actual != null:
-			enemigo.set("life", vida_actual * factor_dificultad)
+	if "life" in enemigo and enemigo.get("life") != null:
+		enemigo.set("life", enemigo.get("life") * factor_dificultad)
 
-	# Conectar señal tree_exited para saber cuándo muere
 	enemigo.tree_exited.connect(_on_enemigo_derrotado)
 
-	# Agregar el enemigo a la escena principal (asumimos que WaveManager está en el árbol)
-	get_parent().add_child(enemigo)
+	# Añadir explícitamente a la escena del nivel actual
+	get_tree().current_scene.add_child(enemigo)
 
 	enemigos_vivos += 1
 	enemigos_por_spawnear -= 1
