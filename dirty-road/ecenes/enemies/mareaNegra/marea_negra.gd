@@ -31,19 +31,20 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	# Ejecuta comportamiento base (animación, selección de objetivo, evaluación de ataque)
+	super(delta)
+
 	# Buscar al jugador (grupo "player" o "jugador")
 	var player: Node2D = get_tree().get_first_node_in_group("player")
 	if player == null:
 		player = get_tree().get_first_node_in_group("jugador")
 
-	# Si el jugador está en el rango de ataque cuerpo a cuerpo, forzarlo como objetivo
-	# y detener el avance (el ataque lo manejará super(delta) mediante evaluar_y_ejecutar_ataque())
+	# Si el jugador está en el rango de ataque cuerpo a cuerpo, forzarlo como objetivo,
+	# detener el avance, y forzar ataque inmediato
 	if is_instance_valid(player) and global_position.distance_to(player.global_position) <= distancia_ataque:
 		objetivo = player
 		velocity = vector_knockback
-
-	# Ejecuta comportamiento base (animación, selección de objetivo, evaluación de ataque)
-	super(delta)
+		evaluar_y_ejecutar_ataque()
 
 	# Lógica de desplazamiento físico hacia el objetivo
 	if is_instance_valid(objetivo):
