@@ -98,7 +98,7 @@ func _spawnear_siguiente_enemigo() -> void:
 			enemigo.set("life", vida_actual * factor_dificultad)
 
 	# Conectar señal tree_exited para saber cuándo muere
-	enemigo.tree_exited.connect(_on_enemigo_derrotado.bind(enemigo))
+	enemigo.tree_exited.connect(_on_enemigo_derrotado)
 
 	# Agregar el enemigo a la escena principal (asumimos que WaveManager está en el árbol)
 	get_parent().add_child(enemigo)
@@ -110,11 +110,7 @@ func _spawnear_siguiente_enemigo() -> void:
 		spawn_timer.stop()
 
 
-func _on_enemigo_derrotado(enemigo: Node2D) -> void:
-	# Desconectar la señal para evitar fugas
-	if enemigo.tree_exited.is_connected(_on_enemigo_derrotado):
-		enemigo.tree_exited.disconnect(_on_enemigo_derrotado)
-
+func _on_enemigo_derrotado() -> void:
 	enemigos_vivos -= 1
 	if enemigos_vivos < 0:
 		enemigos_vivos = 0
