@@ -1,131 +1,23 @@
-class_name NubeGas
-extends enemigoNuevo
-
-## ------------------------------------------------------------
-## Enemigo a Rango "Nube de Gas"
-## Dispara proyectiles desde lejos y huye cuando el jugador
-## se acerca demasiado.
-## ------------------------------------------------------------
-
-# Variables exportables (ajustables en Inspector)
-@export var velocidad_movimiento: float = 85.0
-@export var rango_disparo: float = 450.0
-@export var rango_huida: float = 140.0
-@export var escena_proyectil: PackedScene = preload("res://ecenes/enemies/nubeGas/bullet/bulletGas.tscn")
-
-# Referencias a nodos visuales (asignar en la escena)
-@onready var cuerpo_ext: Polygon2D = $CuerpoExterior
-@onready var luz: PointLight2D = $PointLight2D
-
-# Estado interno (cooldown de recarga gestionado en evaluar_y_ejecutar_ataque)
-
-func _ready() -> void:
-	# Registrar en el grupo de enemigos
-	add_to_group("enemi")
-
-	# Ajustar perfil de Nube de Gas sobreescribiendo parámetros heredados
-	life = 60
-	danio_ataque = 12
-	tiempo_recarga = 1.8
-	distancia_ataque = 450.0          # Coincide con rango de disparo
-	distancia_urgencia_arbol = 400.0
-	distancia_max_aggro = 500.0
-	tiempo_aggro = 3.0
-
-
-func _physics_process(delta: float) -> void:
-	# Ejecuta comportamiento base (animación, selección de objetivo, etc.)
-	super(delta)
-
-	# Buscar al jugador para controlar huida
-	var player: Node2D = get_tree().get_first_node_in_group("player")
-	if player == null:
-		player = get_tree().get_first_node_in_group("jugador")
-
-	var player_valid: bool = is_instance_valid(player)
-
-	# Control de huida (kiting)
-	if player_valid and global_position.distance_to(player.global_position) <= rango_huida:
-		var dir_opuesta: Vector2 = (global_position - player.global_position).normalized()
-		velocity = dir_opuesta * velocidad_movimiento
-	elif is_instance_valid(objetivo):
-		var dist_objetivo: float = global_position.distance_to(objetivo.global_position)
-		if dist_objetivo > rango_disparo:
-			# Avanzar hacia el objetivo
-			var direccion: Vector2 = (objetivo.global_position - global_position).normalized()
-			velocity = direccion * velocidad_movimiento
-		else:
-			# Dentro del rango de disparo, detenerse
-			velocity = Vector2.ZERO
-	else:
-		# Sin objetivo válido
-		velocity = Vector2.ZERO
-
-	move_and_slide()
-
-
-func seleccionar_objetivo() -> void:
-	# Buscar jugador
-	var player: Node2D = get_tree().get_first_node_in_group("player")
-	if player == null:
-		player = get_tree().get_first_node_in_group("jugador")
-
-	if is_instance_valid(player):
-		var dist: float = global_position.distance_to(player.global_position)
-		# Si el jugador está en rango de huida, priorizarlo para alejarse
-		if dist <= rango_huida:
-			objetivo = player
-			return
-
-		# Si está en modo aggro, también priorizar al jugador
-		if en_aggro:
-			objetivo = player
-			return
-
-	# Si no hay jugador prioritario, usar la lógica de la clase padre (Árbol)
-	super()
-
-
 func evaluar_y_ejecutar_ataque() -> void:
 	if not puede_atacar or not is_instance_valid(objetivo):
 		return
 	if global_position.distance_to(objetivo.global_position) > rango_disparo:
 		return
 
-	# 1. Instanciar proyectil
 	var bullet = escena_proyectil.instantiate()
 	var dir_disparo: Vector2 = (objetivo.global_position - global_position).normalized()
 
-	# 2. Asignar dirección y posición ANTES de agregar al árbol
+	# 1. Agregar a la escena primero
+	get_tree().current_scene.add_child(bullet)
+
+	# 2. Asignar posición global e inyectar dirección después de estar en el árbol
+	bullet.global_position = global_position + (dir_disparo * 45.0)
+	
 	if bullet.has_method("set_direction"):
 		bullet.set_direction(dir_disparo)
-	bullet.global_position = global_position + (dir_disparo * 40.0)
-
-	# 3. Agregar al árbol
-	get_tree().current_scene.add_child(bullet)
 
 	_animar_retroceso()
 
-	# 4. Cooldown de recarga
 	puede_atacar = false
 	await get_tree().create_timer(tiempo_recarga).timeout
 	puede_atacar = true
-
-
-func _animar_retroceso() -> void:
-	# Pequeña animación visual de retroceso al disparar
-	if not is_instance_valid(cuerpo_ext):
-		return
-
-	var tween: Tween = create_tween()
-	tween.set_parallel(true)
-
-	# Comprimir escala brevemente
-	tween.tween_property(cuerpo_ext, "scale", Vector2(0.85, 0.85), 0.05)
-	if is_instance_valid(luz):
-		tween.tween_property(luz, "energy", 2.5, 0.05)
-
-	# Recuperar escala normal
-	tween.tween_property(cuerpo_ext, "scale", Vector2.ONE, 0.1).set_delay(0.05)
-	if is_instance_valid(luz):
-		tween.tween_property(luz, "energy", 1.0, 0.1).set_delay(0.05)
