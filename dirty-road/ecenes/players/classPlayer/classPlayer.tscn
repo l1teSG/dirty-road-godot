@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://b74nv28ce3acw"]
 
-[ext_resource type="Script" uid="uid://squsqr4aing1" path="res://ecenes/players/classPlayer/class_player.gd" id="1_fmujy"]
+[ext_resource type="Script" path="res://ecenes/players/classPlayer/class_player.gd" id="1_fmujy"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xqmf3"]
 size = Vector2(5, 5)

@@ -17,7 +17,11 @@ func _on_button_button_down() -> void:
 
 
 func _on_nueva_partida_button_down() -> void:
-	# Nueva Partida: Deslizamiento suave hacia la derecha con desvanecimiento (1.0 segundo)
+	# 1. Despausar el juego
+	get_tree().paused = false
+	# 2. Resetear SaveManager (memoria + disco)
+	SaveManager.nueva_partida()
+	# (Opcional) Deslizamiento suave hacia la derecha con desvanecimiento (1.0 segundo)
 	var tween = create_tween().set_parallel(true)
 	tween.set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_OUT)
 	
@@ -26,7 +30,8 @@ func _on_nueva_partida_button_down() -> void:
 	
 	await tween.finished
 	
-	get_tree().change_scene_to_file('res://demo/level 1/niviel1.tscn')
+	# 3. Recargar la escena actual de forma limpia
+	get_tree().reload_current_scene()
 
 
 func _on_salir_button_down() -> void:
