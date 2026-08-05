@@ -215,12 +215,6 @@ var survival_facts: Array = [
 # Keyed by a stable "enemy_id" string (sin guiones bajos, en minúsculas —
 # ver WaveManager._obtener_enemy_id()). "default" es el respaldo seguro
 # para cualquier enemy_id no catalogado todavía.
-#
-# "nubegas" y "mareanegra" se mantienen como alias temporales (asignados en
-# _ready()) apuntando a "humo" y "petroleo" respectivamente, por si las
-# escenas de estos enemigos (nube_gas.tscn / marea_negra.tscn) todavía no
-# han sido renombradas. Una vez que esas escenas se llamen humo.tscn /
-# petroleo.tscn, estos alias dejarán de ser necesarios y podrán eliminarse.
 var enemy_info: Dictionary = {
 	"microplastico": {
 		"name": "Micro-Plástico",
@@ -268,10 +262,6 @@ var _survival_timer: Timer
 
 func _ready() -> void:
 	randomize()
-
-	# Alias temporales de compatibilidad (ver comentario sobre enemy_info).
-	enemy_info["nubegas"] = enemy_info["humo"]
-	enemy_info["mareanegra"] = enemy_info["petroleo"]
 
 	var popup_script = load("res://scripts/education/EducationPopup.gd")
 	_popup = popup_script.new()
