@@ -8,7 +8,7 @@ signal descanso_iniciado(tiempo_total: float)
 signal enemigos_restantes_actualizado(cantidad: int)
 
 @export_category("Configuración")
-@export var enemigos_disponibles: Array[PackedScene] = []
+@export var enemigos_disponibles: Array[EnemigoOleadaConfig] = []
 @export var puntos_spawn: Array[Node2D] = []
 
 @export_category("Parámetros de Dificultad")
@@ -29,6 +29,9 @@ var spawn_timer: Timer
 var rest_timer: Timer
 var ui_timer: Timer
 var duracion_timer: Timer
+
+# Conteo de enemigos vivos por tipo (clave: resource_path de la escena)
+var _enemigos_vivos_por_tipo: Dictionary = {}
 
 
 func _ready() -> void:
@@ -99,13 +102,36 @@ func _spawnear_siguiente_enemigo() -> void:
 		spawn_timer.stop()
 		return
 
-	var escena: PackedScene = enemigos_disponibles.pick_random()
-	var punto: Node2D = puntos_spawn.pick_random()
+	# Filtrar configuraciones válidas para la oleada actual
+	var configs_validas: Array[EnemigoOleadaConfig] = []
+	for config in enemigos_disponibles:
+		if config == null or config.escena == null:
+			continue
+		if config.oleada_minima > oleada_actual:
+			continue
+		if config.oleada_maxima > 0 and config.oleada_maxima < oleada_actual:
+			continue
+		# Comprobar límite de simultáneos
+		var clave: String = config.escena.resource_path
+		var vivos_actuales: int = _enemigos_vivos_por_tipo.get(clave, 0)
+		if config.max_simultaneos > 0 and vivos_actuales >= config.max_simultaneos:
+			continue
+		configs_validas.append(config)
 
-	if escena == null or punto == null or not punto.is_inside_tree():
+	if configs_validas.is_empty():
+		# No hay enemigos válidos en este tick, reintentar en el siguiente
 		return
 
-	var enemigo: Node2D = escena.instantiate() as Node2D
+	# Selección ponderada por peso
+	var config_elegida: EnemigoOleadaConfig = _seleccionar_ponderado(configs_validas)
+	if config_elegida == null:
+		return
+
+	var punto: Node2D = puntos_spawn.pick_random()
+	if punto == null or not punto.is_inside_tree():
+		return
+
+	var enemigo: Node2D = config_elegida.escena.instantiate() as Node2D
 	if enemigo == null:
 		return
 
@@ -117,7 +143,11 @@ func _spawnear_siguiente_enemigo() -> void:
 	if "life" in enemigo and enemigo.get("life") != null:
 		enemigo.set("life", enemigo.get("life") * factor_dificultad)
 
-	enemigo.tree_exited.connect(_on_enemigo_derrotado)
+	# Registrar el tipo antes de añadir al árbol
+	var clave_escena: String = config_elegida.escena.resource_path
+	_enemigos_vivos_por_tipo[clave_escena] = _enemigos_vivos_por_tipo.get(clave_escena, 0) + 1
+
+	enemigo.tree_exited.connect(_on_enemigo_derrotado.bind(clave_escena))
 
 	# Añadir explícitamente a la escena del nivel actual
 	get_tree().current_scene.add_child(enemigo)
@@ -131,10 +161,36 @@ func _spawnear_siguiente_enemigo() -> void:
 		spawn_timer.stop()
 
 
-func _on_enemigo_derrotado() -> void:
+func _seleccionar_ponderado(configs: Array[EnemigoOleadaConfig]) -> EnemigoOleadaConfig:
+	var peso_total: float = 0.0
+	for config in configs:
+		peso_total += max(config.peso, 0.0)
+
+	if peso_total <= 0.0:
+		# Si todos los pesos son 0, elegir uniformemente
+		return configs[randi() % configs.size()]
+
+	var valor: float = randf() * peso_total
+	var acumulado: float = 0.0
+	for config in configs:
+		acumulado += max(config.peso, 0.0)
+		if valor <= acumulado:
+			return config
+
+	# Fallback (no debería ocurrir)
+	return configs[configs.size() - 1]
+
+
+func _on_enemigo_derrotado(clave_escena: String) -> void:
 	enemigos_vivos -= 1
 	if enemigos_vivos < 0:
 		enemigos_vivos = 0
+
+	# Decrementar el contador del tipo correspondiente
+	if _enemigos_vivos_por_tipo.has(clave_escena):
+		_enemigos_vivos_por_tipo[clave_escena] -= 1
+		if _enemigos_vivos_por_tipo[clave_escena] <= 0:
+			_enemigos_vivos_por_tipo.erase(clave_escena)
 
 	# Si el WaveManager ya no está en el SceneTree (ej. cambio de escena), abortar
 	if not is_inside_tree():
