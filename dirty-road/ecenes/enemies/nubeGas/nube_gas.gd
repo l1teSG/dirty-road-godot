@@ -41,19 +41,7 @@ func _ready() -> void:
 	distancia_max_aggro = rango_ataque + 100.0
 	tiempo_aggro = 3.0
 
-# ─── Funciones de búsqueda ──────────────────────────────
-
-func buscar_arbol() -> Node2D:
-	var arbol: Node2D = get_tree().get_first_node_in_group("arbol")
-	if arbol == null:
-		arbol = get_tree().get_first_node_in_group("tree")
-	return arbol
-
-func buscar_jugador() -> Node2D:
-	var player: Node2D = get_tree().get_first_node_in_group("jugador")
-	if player == null:
-		player = get_tree().get_first_node_in_group("player")
-	return player
+# ─── Actualización de objetivos ─────────────────────────
 
 func actualizar_objetivos() -> void:
 	target_tree = buscar_arbol()
@@ -130,16 +118,12 @@ func disparar() -> void:
 # ─── Física ──────────────────────────────────────────────
 
 func _physics_process(delta: float) -> void:
-	# Ejecuta comportamiento base (animación, selección de objetivo, etc.)
 	super(delta)
 
-	# Llamar a la lógica modular de movimiento
+	seleccionar_objetivo()
 	mover()
-
-	# Llamar a disparar si estamos en condiciones
 	disparar()
 
-	# Aplicar movimiento
 	move_and_slide()
 
 # ─── Selección de objetivo mejorada ─────────────────────

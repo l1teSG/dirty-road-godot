@@ -38,27 +38,27 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	# Ejecuta comportamiento base (animación, selección de objetivo, evaluación de ataque)
 	super(delta)
 
-	# Lógica de desplazamiento físico hacia el objetivo
+	seleccionar_objetivo()
+	evaluar_y_ejecutar_ataque()
+	mover(delta)
+	move_and_slide()
+
+
+func mover(delta: float) -> void:
 	if is_instance_valid(objetivo):
 		var dist: float = global_position.distance_to(objetivo.global_position)
 		if dist > distancia_ataque:
 			var direccion: Vector2 = (objetivo.global_position - global_position).normalized()
 			velocity = (direccion * velocidad_movimiento) + vector_knockback
 		else:
-			# Dentro del rango de ataque -> detiene el avance
 			velocity = vector_knockback
 	else:
-		# Sin objetivo válido, detener movimiento
 		velocity = vector_knockback
 
 	# Amortiguar el knockback progresivamente
 	vector_knockback = vector_knockback.move_toward(Vector2.ZERO, fuerza_friccion_knockback * delta)
-
-	# Aplicar movimiento en el motor de físicas 2D
-	move_and_slide()
 
 
 func seleccionar_objetivo() -> void:

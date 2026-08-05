@@ -18,6 +18,9 @@ var puede_atacar: bool = true
 var en_aggro: bool = false
 var objetivo: Node2D = null
 
+func _physics_process(delta: float) -> void:
+	animar_cuerpo_enemigo(delta)
+
 
 func animar_cuerpo_enemigo(delta: float) -> void:
 	var cuerpo_int = $CuerpoInterior as Polygon2D
@@ -34,12 +37,6 @@ func animar_cuerpo_enemigo(delta: float) -> void:
 
 	if nucleo != null:
 		nucleo.rotation += delta * 2.0
-
-
-func _physics_process(delta: float) -> void:
-	animar_cuerpo_enemigo(delta)
-	seleccionar_objetivo()
-	evaluar_y_ejecutar_ataque()
 
 
 func take_hit(damage: int = 10) -> void:
@@ -66,10 +63,40 @@ func recibir_danio(cantidad: int, atacante: Node2D = null) -> void:
 				label.global_position,
 				label.get_node("/root").find_child("ui", true, false)
 			)
-		self.queue_free()
+		queue_free()
 
 
-# ── Búsqueda dinámica de objetivos (híbrida) ────────────
+# ── Utilidades comunes ─────────────────────────────────
+
+func buscar_jugador() -> Node2D:
+	var player: Node2D = get_tree().get_first_node_in_group("jugador")
+	if player == null:
+		player = get_tree().get_first_node_in_group("player")
+	return player
+
+
+func buscar_arbol() -> Node2D:
+	var arbol: Node2D = get_tree().get_first_node_in_group("arbol")
+	if arbol == null:
+		arbol = get_tree().get_first_node_in_group("tree")
+	return arbol
+
+
+func _arbol_valido(arbol_node: Node2D) -> bool:
+	if not is_instance_valid(arbol_node):
+		return false
+	if arbol_node.has_method("is_dead"):
+		return not arbol_node.is_dead()
+	var vida_actual = arbol_node.get("vida_actual")
+	if vida_actual != null:
+		return vida_actual > 0
+	var vida_nodo = arbol_node.get("life")
+	if vida_nodo != null:
+		return vida_nodo > 0
+	return true
+
+
+# ── Selección de objetivo por defecto (opcional para subclases) ──
 
 func seleccionar_objetivo() -> void:
 	var jugador: Node2D = null
@@ -121,7 +148,7 @@ func seleccionar_objetivo() -> void:
 	objetivo = closest
 
 
-# ── Método principal de ataque ────────────────────────
+# ── Ataque cuerpo a cuerpo (opcional para subclases) ──
 
 func evaluar_y_ejecutar_ataque() -> void:
 	if not is_instance_valid(objetivo):
