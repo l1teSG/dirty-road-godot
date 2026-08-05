@@ -142,12 +142,6 @@ func _crear_particulas_regeneracion() -> void:
 	material.scale_max = 0.6
 	material.color = Color(0.2, 1.0, 0.3, 0.8)
 
-	# Curva de alpha para que desaparezcan gradualmente
-	var alpha_curve := Gradient.new()
-	alpha_curve.add_point(0.0, 1.0)
-	alpha_curve.add_point(1.0, 0.0)
-	material.alpha_curve = alpha_curve
-
 	# Caja de emisión pequeña centrada en el origen
 	material.emission_shape = ParticleProcessMaterial.EMISSION_SHAPE_BOX
 	material.emission_box_extents = Vector3(4.0, 4.0, 0.0)
@@ -173,7 +167,7 @@ func _physics_process(delta: float) -> void:
 	if _muerto:
 		# Si el jugador muere, detener el efecto visual de regeneración
 		if _regeneracion_visual_activa:
-			_detener_efecto_regeneracion_visual()
+			_detener_efecto_regeneracion()
 			_regeneracion_visual_activa = false
 		return
 
@@ -190,7 +184,7 @@ func _physics_process(delta: float) -> void:
 		_actualizar_barra_vida()
 
 	# Actualizar efecto visual
-	_actualizar_efecto_regeneracion_visual()
+	_actualizar_efecto_regeneracion(delta)
 
 
 # ── Movimiento (con aceleración/fricción y dash) ──────
@@ -586,7 +580,7 @@ func desactivar_disparo() -> void:
 
 # ── Efecto visual de regeneración ──────────────────────
 
-func _actualizar_efecto_regeneracion_visual() -> void:
+func _actualizar_efecto_regeneracion(_delta: float) -> void:
 	# Determina si el jugador debería estar regenerando visualmente
 	var regenerando: bool = regeneracion_activa and tiempo_sin_recibir_danio >= retraso_regeneracion and life < vida_maxima
 
@@ -595,15 +589,15 @@ func _actualizar_efecto_regeneracion_visual() -> void:
 
 	if regenerando:
 		# Inicio efecto regeneración
-		_iniciar_efecto_regeneracion_visual()
+		_iniciar_efecto_regeneracion()
 	else:
 		# Fin efecto regeneración
-		_detener_efecto_regeneracion_visual()
+		_detener_efecto_regeneracion()
 
 	_regeneracion_visual_activa = regenerando
 
 
-func _iniciar_efecto_regeneracion_visual() -> void:
+func _iniciar_efecto_regeneracion() -> void:
 	# Inicio efecto regeneración: barra de vida, partículas y luces
 
 	# --- Barra de vida: pulso de escala y cambio de color ---
@@ -628,27 +622,39 @@ func _iniciar_efecto_regeneracion_visual() -> void:
 	if _particulas_regeneracion != null:
 		_particulas_regeneracion.emitting = true
 
-	# --- Luces : cambiar suavemente a verde y aumentar energía ---
+	# --- Luces : pulso suave de energía y color ---
+	# Luz base
 	if luz_base != null:
 		if _tween_luz_base_regeneracion != null and _tween_luz_base_regeneracion.is_valid():
 			_tween_luz_base_regeneracion.kill()
-		_tween_luz_base_regeneracion = create_tween()
-		_tween_luz_base_regeneracion.tween_property(luz_base, "color", Color(0.2, 1.0, 0.3, 1.0), 0.5)\
-			.set_ease(Tween.EASE_IN_OUT)
-		_tween_luz_base_regeneracion.parallel().tween_property(luz_base, "energy", _luz_base_original_energy * 1.4, 0.5)\
-			.set_ease(Tween.EASE_IN_OUT)
+		_tween_luz_base_regeneracion = create_tween().set_loops()
+		# Subir energía y virar a verde
+		_tween_luz_base_regeneracion.tween_property(luz_base, "energy", _luz_base_original_energy * 1.6, 0.5)\
+			.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
+		_tween_luz_base_regeneracion.parallel().tween_property(luz_base, "color", Color(0.2, 1.0, 0.3, 1.0), 0.5)\
+			.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
+		# Bajar energía y volver a color original
+		_tween_luz_base_regeneracion.tween_property(luz_base, "energy", _luz_base_original_energy, 0.5)\
+			.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
+		_tween_luz_base_regeneracion.parallel().tween_property(luz_base, "color", _luz_base_original_color, 0.5)\
+			.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
 
+	# Luz punta
 	if luz_punta != null:
 		if _tween_luz_punta_regeneracion != null and _tween_luz_punta_regeneracion.is_valid():
 			_tween_luz_punta_regeneracion.kill()
-		_tween_luz_punta_regeneracion = create_tween()
-		_tween_luz_punta_regeneracion.tween_property(luz_punta, "color", Color(0.2, 1.0, 0.3, 1.0), 0.5)\
-			.set_ease(Tween.EASE_IN_OUT)
-		_tween_luz_punta_regeneracion.parallel().tween_property(luz_punta, "energy", _luz_punta_original_energy * 1.4, 0.5)\
-			.set_ease(Tween.EASE_IN_OUT)
+		_tween_luz_punta_regeneracion = create_tween().set_loops()
+		_tween_luz_punta_regeneracion.tween_property(luz_punta, "energy", _luz_punta_original_energy * 1.6, 0.5)\
+			.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
+		_tween_luz_punta_regeneracion.parallel().tween_property(luz_punta, "color", Color(0.2, 1.0, 0.3, 1.0), 0.5)\
+			.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
+		_tween_luz_punta_regeneracion.tween_property(luz_punta, "energy", _luz_punta_original_energy, 0.5)\
+			.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
+		_tween_luz_punta_regeneracion.parallel().tween_property(luz_punta, "color", _luz_punta_original_color, 0.5)\
+			.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
 
 
-func _detener_efecto_regeneracion_visual() -> void:
+func _detener_efecto_regeneracion() -> void:
 	# Fin efecto regeneración: restaurar todo a su estado original
 
 	# --- Barra de vida: restaurar escala y color ---
