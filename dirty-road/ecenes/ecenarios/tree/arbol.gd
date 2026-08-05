@@ -14,6 +14,18 @@ var esta_destruido: bool = false
 
 var tiempo_sin_recibir_danio: float = 0.0
 
+# ── Efecto visual regeneración ────────────────────────
+var _regeneracion_visual_activa: bool = false
+var _tween_barra_regeneracion: Tween = null
+var _tween_barra_color_regeneracion: Tween = null
+var _tween_luz_regeneracion: Tween = null
+var _particulas_regeneracion: GPUParticles2D = null
+
+var _barra_modulate_original: Color
+var _luz_original_color: Color
+var _luz_original_energy: float
+
+
 # -------------------------------------------------------------------
 # FUNCIÓN VISUAL: LATIDO Y CHISPEO DE LUZ MÍSTICA DEL ÁRBOL
 # -------------------------------------------------------------------
@@ -40,9 +52,14 @@ func animar_luz_mistica(delta: float) -> void:
 	var color_verde := Color("#00FF88")
 	var color_cian := Color("#00F0FF")
 	luz.color = color_verde.lerp(color_cian, factor_color)
-	
+
+
 func _process(delta: float) -> void:
 	if esta_destruido:
+		# Si el árbol está destruido, detener el efecto visual de regeneración
+		if _regeneracion_visual_activa:
+			_detener_efecto_regeneracion_visual()
+			_regeneracion_visual_activa = false
 		return
 	animar_luz_mistica(delta)
 
@@ -51,6 +68,10 @@ func _process(delta: float) -> void:
 		vida_actual = result.life
 		tiempo_sin_recibir_danio = result.time_since_damage
 		actualizar_barra_vida()
+
+	# Actualizar efecto visual
+	_actualizar_efecto_regeneracion_visual()
+
 
 func recibir_danio(cantidad: int) -> void:
 	vida_actual = max(0.0, vida_actual - cantidad)
@@ -61,11 +82,13 @@ func recibir_danio(cantidad: int) -> void:
 	if vida_actual <= 0:
 		destruir_arbol()
 
+
 func actualizar_barra_vida() -> void:
 	var barra = $BarraVida as ProgressBar
 	if barra != null:
 		barra.max_value = vida_maxima
 		barra.value = vida_actual
+
 
 # Efecto de destello rojo en la luz al recibir un golpe
 func reaccionar_visualmente_al_danio() -> void:
@@ -103,6 +126,7 @@ func reaccionar_visualmente_al_danio() -> void:
 	tween.tween_property(luz, "color", color_original, 0.25).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BACK)
 	tween.tween_property(luz, "energy", energia_original, 0.25).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BACK)
 	tween.tween_property(luz, "texture_scale", escala_original, 0.25).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BACK)
+
 
 func destruir_arbol() -> void:
 	esta_destruido = true
@@ -176,6 +200,140 @@ func destruir_arbol() -> void:
 	# Cambiar a la escena de muerte
 	get_tree().change_scene_to_file("res://ui/dead/dead.tscn")
 	
+
 func _ready() -> void:
 	vida_actual = float(vida_maxima)
 	actualizar_barra_vida()
+
+	# Guardar valores originales para el efecto visual de regeneración
+	var barra = $BarraVida as ProgressBar
+	if barra != null:
+		_barra_modulate_original = barra.modulate
+
+	var luz = $LuzArbol as PointLight2D
+	if luz != null:
+		_luz_original_color = luz.color
+		_luz_original_energy = luz.energy
+
+	_crear_particulas_regeneracion()
+
+
+func _crear_particulas_regeneracion() -> void:
+	# Crea un GPUParticles2D para las partículas verdes de regeneración
+	var particle := GPUParticles2D.new()
+	particle.name = "ParticulasRegeneracion"
+	particle.amount = 10
+	particle.lifetime = 1.0
+	particle.one_shot = false
+	particle.emitting = false
+	particle.local_coords = true
+
+	var material := ParticleProcessMaterial.new()
+	material.direction = Vector3(0, -1, 0)
+	material.gravity = Vector3(0, 0, 0)
+	material.initial_velocity_min = 15.0
+	material.initial_velocity_max = 30.0
+	material.lifetime_randomness = 0.2
+	material.scale_min = 0.3
+	material.scale_max = 0.6
+	material.color = Color(0.2, 1.0, 0.3, 0.8)
+
+	# Curva de alpha para que desaparezcan gradualmente
+	var alpha_curve := Gradient.new()
+	alpha_curve.add_point(0.0, 1.0)
+	alpha_curve.add_point(1.0, 0.0)
+	material.alpha_curve = alpha_curve
+
+	# Caja de emisión pequeña centrada en el origen
+	material.emission_shape = ParticleProcessMaterial.EMISSION_SHAPE_BOX
+	material.emission_box_extents = Vector3(4.0, 4.0, 0.0)
+
+	particle.process_material = material
+	add_child(particle)
+	_particulas_regeneracion = particle
+
+
+# ── Efecto visual de regeneración ──────────────────────
+
+func _actualizar_efecto_regeneracion_visual() -> void:
+	# Determina si el árbol debería estar regenerando visualmente
+	var regenerando: bool = regeneracion_activa and tiempo_sin_recibir_danio >= retraso_regeneracion and vida_actual < vida_maxima
+
+	if regenerando == _regeneracion_visual_activa:
+		return  # No hay cambio de estado
+
+	if regenerando:
+		# Inicio efecto regeneración
+		_iniciar_efecto_regeneracion_visual()
+	else:
+		# Fin efecto regeneración
+		_detener_efecto_regeneracion_visual()
+
+	_regeneracion_visual_activa = regenerando
+
+
+func _iniciar_efecto_regeneracion_visual() -> void:
+	# Inicio efecto regeneración: barra de vida, partículas y luz
+
+	var barra = $BarraVida as ProgressBar
+
+	# --- Barra de vida: pulso de escala y cambio de color ---
+	if barra != null:
+		# Pulso de escala (loop infinito)
+		if _tween_barra_regeneracion != null and _tween_barra_regeneracion.is_valid():
+			_tween_barra_regeneracion.kill()
+		_tween_barra_regeneracion = create_tween().set_loops()
+		_tween_barra_regeneracion.tween_property(barra, "scale", Vector2(1.08, 1.08), 0.6)\
+			.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
+		_tween_barra_regeneracion.tween_property(barra, "scale", Vector2(1.0, 1.0), 0.6)\
+			.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
+
+		# Transición de color a verde brillante (una sola vez)
+		if _tween_barra_color_regeneracion != null and _tween_barra_color_regeneracion.is_valid():
+			_tween_barra_color_regeneracion.kill()
+		_tween_barra_color_regeneracion = create_tween()
+		_tween_barra_color_regeneracion.tween_property(barra, "modulate", Color(0.2, 1.0, 0.3, 1.0), 0.3)\
+			.set_ease(Tween.EASE_IN_OUT)
+
+	# --- Partículas de regeneración ---
+	if _particulas_regeneracion != null:
+		_particulas_regeneracion.emitting = true
+
+	# --- Luz : cambiar suavemente a verde y aumentar energía ---
+	var luz = $LuzArbol as PointLight2D
+	if luz != null:
+		if _tween_luz_regeneracion != null and _tween_luz_regeneracion.is_valid():
+			_tween_luz_regeneracion.kill()
+		_tween_luz_regeneracion = create_tween()
+		_tween_luz_regeneracion.tween_property(luz, "color", Color(0.2, 1.0, 0.3, 1.0), 0.5)\
+			.set_ease(Tween.EASE_IN_OUT)
+		_tween_luz_regeneracion.parallel().tween_property(luz, "energy", _luz_original_energy * 1.4, 0.5)\
+			.set_ease(Tween.EASE_IN_OUT)
+
+
+func _detener_efecto_regeneracion_visual() -> void:
+	# Fin efecto regeneración: restaurar todo a su estado original
+
+	var barra = $BarraVida as ProgressBar
+
+	# --- Barra de vida: restaurar escala y color ---
+	if _tween_barra_regeneracion != null and _tween_barra_regeneracion.is_valid():
+		_tween_barra_regeneracion.kill()
+	if _tween_barra_color_regeneracion != null and _tween_barra_color_regeneracion.is_valid():
+		_tween_barra_color_regeneracion.kill()
+
+	if barra != null:
+		barra.scale = Vector2.ONE
+		barra.modulate = _barra_modulate_original
+
+	# --- Partículas: detener emisión ---
+	if _particulas_regeneracion != null:
+		_particulas_regeneracion.emitting = false
+
+	# --- Luz: restaurar color y energía originales ---
+	var luz = $LuzArbol as PointLight2D
+	if luz != null:
+		if _tween_luz_regeneracion != null and _tween_luz_regeneracion.is_valid():
+			_tween_luz_regeneracion.kill()
+		luz.color = _luz_original_color
+		luz.energy = _luz_original_energy

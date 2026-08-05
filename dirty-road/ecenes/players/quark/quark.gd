@@ -82,6 +82,20 @@ var _flash_tween: Tween = null
 
 var tiempo_sin_recibir_danio: float = 0.0
 
+# ── Efecto visual regeneración ────────────────────────
+var _regeneracion_visual_activa: bool = false
+var _tween_barra_regeneracion: Tween = null
+var _tween_barra_color_regeneracion: Tween = null
+var _tween_luz_base_regeneracion: Tween = null
+var _tween_luz_punta_regeneracion: Tween = null
+var _particulas_regeneracion: GPUParticles2D = null
+
+var _barra_modulate_original: Color
+var _luz_base_original_color: Color
+var _luz_base_original_energy: float
+var _luz_punta_original_color: Color
+var _luz_punta_original_energy: float
+
 
 func _ready() -> void:
 	_actualizar_barra_vida()
@@ -94,6 +108,53 @@ func _ready() -> void:
 		_color_original_cuerpo = cuerpo.modulate
 	if nucleo != null:
 		_color_original_nucleo = nucleo.modulate
+
+	# Guardar valores originales para el efecto visual de regeneración
+	if barra_vida != null:
+		_barra_modulate_original = barra_vida.modulate
+	if luz_base != null:
+		_luz_base_original_color = luz_base.color
+		_luz_base_original_energy = luz_base.energy
+	if luz_punta != null:
+		_luz_punta_original_color = luz_punta.color
+		_luz_punta_original_energy = luz_punta.energy
+
+	_crear_particulas_regeneracion()
+
+
+func _crear_particulas_regeneracion() -> void:
+	# Crea un GPUParticles2D para las partículas verdes de regeneración
+	var particle := GPUParticles2D.new()
+	particle.name = "ParticulasRegeneracion"
+	particle.amount = 10
+	particle.lifetime = 1.0
+	particle.one_shot = false
+	particle.emitting = false
+	particle.local_coords = true
+
+	var material := ParticleProcessMaterial.new()
+	material.direction = Vector3(0, -1, 0)
+	material.gravity = Vector3(0, 0, 0)
+	material.initial_velocity_min = 15.0
+	material.initial_velocity_max = 30.0
+	material.lifetime_randomness = 0.2
+	material.scale_min = 0.3
+	material.scale_max = 0.6
+	material.color = Color(0.2, 1.0, 0.3, 0.8)
+
+	# Curva de alpha para que desaparezcan gradualmente
+	var alpha_curve := Gradient.new()
+	alpha_curve.add_point(0.0, 1.0)
+	alpha_curve.add_point(1.0, 0.0)
+	material.alpha_curve = alpha_curve
+
+	# Caja de emisión pequeña centrada en el origen
+	material.emission_shape = ParticleProcessMaterial.EMISSION_SHAPE_BOX
+	material.emission_box_extents = Vector3(4.0, 4.0, 0.0)
+
+	particle.process_material = material
+	add_child(particle)
+	_particulas_regeneracion = particle
 
 
 func _conectar_respawn_manager() -> void:
@@ -110,6 +171,10 @@ func _conectar_respawn_manager() -> void:
 
 func _physics_process(delta: float) -> void:
 	if _muerto:
+		# Si el jugador muere, detener el efecto visual de regeneración
+		if _regeneracion_visual_activa:
+			_detener_efecto_regeneracion_visual()
+			_regeneracion_visual_activa = false
 		return
 
 	aplicar_pulso_energia(delta)
@@ -123,6 +188,9 @@ func _physics_process(delta: float) -> void:
 		life = result.life
 		tiempo_sin_recibir_danio = result.time_since_damage
 		_actualizar_barra_vida()
+
+	# Actualizar efecto visual
+	_actualizar_efecto_regeneracion_visual()
 
 
 # ── Movimiento (con aceleración/fricción y dash) ──────
@@ -514,3 +582,98 @@ func activar_disparo() -> void:
 
 func desactivar_disparo() -> void:
 	disparoON = false
+
+
+# ── Efecto visual de regeneración ──────────────────────
+
+func _actualizar_efecto_regeneracion_visual() -> void:
+	# Determina si el jugador debería estar regenerando visualmente
+	var regenerando: bool = regeneracion_activa and tiempo_sin_recibir_danio >= retraso_regeneracion and life < vida_maxima
+
+	if regenerando == _regeneracion_visual_activa:
+		return  # No hay cambio de estado
+
+	if regenerando:
+		# Inicio efecto regeneración
+		_iniciar_efecto_regeneracion_visual()
+	else:
+		# Fin efecto regeneración
+		_detener_efecto_regeneracion_visual()
+
+	_regeneracion_visual_activa = regenerando
+
+
+func _iniciar_efecto_regeneracion_visual() -> void:
+	# Inicio efecto regeneración: barra de vida, partículas y luces
+
+	# --- Barra de vida: pulso de escala y cambio de color ---
+	if barra_vida != null:
+		# Pulso de escala (loop infinito)
+		if _tween_barra_regeneracion != null and _tween_barra_regeneracion.is_valid():
+			_tween_barra_regeneracion.kill()
+		_tween_barra_regeneracion = create_tween().set_loops()
+		_tween_barra_regeneracion.tween_property(barra_vida, "scale", Vector2(1.08, 1.08), 0.6)\
+			.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
+		_tween_barra_regeneracion.tween_property(barra_vida, "scale", Vector2(1.0, 1.0), 0.6)\
+			.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
+
+		# Transición de color a verde brillante (una sola vez)
+		if _tween_barra_color_regeneracion != null and _tween_barra_color_regeneracion.is_valid():
+			_tween_barra_color_regeneracion.kill()
+		_tween_barra_color_regeneracion = create_tween()
+		_tween_barra_color_regeneracion.tween_property(barra_vida, "modulate", Color(0.2, 1.0, 0.3, 1.0), 0.3)\
+			.set_ease(Tween.EASE_IN_OUT)
+
+	# --- Partículas de regeneración ---
+	if _particulas_regeneracion != null:
+		_particulas_regeneracion.emitting = true
+
+	# --- Luces : cambiar suavemente a verde y aumentar energía ---
+	if luz_base != null:
+		if _tween_luz_base_regeneracion != null and _tween_luz_base_regeneracion.is_valid():
+			_tween_luz_base_regeneracion.kill()
+		_tween_luz_base_regeneracion = create_tween()
+		_tween_luz_base_regeneracion.tween_property(luz_base, "color", Color(0.2, 1.0, 0.3, 1.0), 0.5)\
+			.set_ease(Tween.EASE_IN_OUT)
+		_tween_luz_base_regeneracion.parallel().tween_property(luz_base, "energy", _luz_base_original_energy * 1.4, 0.5)\
+			.set_ease(Tween.EASE_IN_OUT)
+
+	if luz_punta != null:
+		if _tween_luz_punta_regeneracion != null and _tween_luz_punta_regeneracion.is_valid():
+			_tween_luz_punta_regeneracion.kill()
+		_tween_luz_punta_regeneracion = create_tween()
+		_tween_luz_punta_regeneracion.tween_property(luz_punta, "color", Color(0.2, 1.0, 0.3, 1.0), 0.5)\
+			.set_ease(Tween.EASE_IN_OUT)
+		_tween_luz_punta_regeneracion.parallel().tween_property(luz_punta, "energy", _luz_punta_original_energy * 1.4, 0.5)\
+			.set_ease(Tween.EASE_IN_OUT)
+
+
+func _detener_efecto_regeneracion_visual() -> void:
+	# Fin efecto regeneración: restaurar todo a su estado original
+
+	# --- Barra de vida: restaurar escala y color ---
+	if _tween_barra_regeneracion != null and _tween_barra_regeneracion.is_valid():
+		_tween_barra_regeneracion.kill()
+	if _tween_barra_color_regeneracion != null and _tween_barra_color_regeneracion.is_valid():
+		_tween_barra_color_regeneracion.kill()
+
+	if barra_vida != null:
+		barra_vida.scale = Vector2.ONE
+		barra_vida.modulate = _barra_modulate_original
+
+	# --- Partículas: detener emisión ---
+	if _particulas_regeneracion != null:
+		_particulas_regeneracion.emitting = false
+
+	# --- Luces: restaurar color y energía originales ---
+	if luz_base != null:
+		if _tween_luz_base_regeneracion != null and _tween_luz_base_regeneracion.is_valid():
+			_tween_luz_base_regeneracion.kill()
+		luz_base.color = _luz_base_original_color
+		luz_base.energy = _luz_base_original_energy
+
+	if luz_punta != null:
+		if _tween_luz_punta_regeneracion != null and _tween_luz_punta_regeneracion.is_valid():
+			_tween_luz_punta_regeneracion.kill()
+		luz_punta.color = _luz_punta_original_color
+		luz_punta.energy = _luz_punta_original_energy
