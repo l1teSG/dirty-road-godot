@@ -74,6 +74,14 @@ var _color_original_cuerpo: Color = Color.WHITE
 var _color_original_nucleo: Color = Color.WHITE
 var _flash_tween: Tween = null
 
+# ── Regeneración ───────────────────────────────────────
+@export_category("Regeneración")
+@export var regeneracion_por_segundo: float = 2.0
+@export var tiempo_sin_recibir_danio: float = 5.0
+@export var permitir_regeneracion: bool = true
+
+var _tiempo_ultimo_danio: float = 0.0
+
 
 func _ready() -> void:
 	_actualizar_barra_vida()
@@ -109,6 +117,12 @@ func _physics_process(delta: float) -> void:
 	actualizar_dash(delta)
 	move()
 	actualizar_aim()
+
+	if permitir_regeneracion:
+		var result = RegenerationHelper.update_regeneration(delta, life, vida_maxima, regeneracion_por_segundo, _tiempo_ultimo_danio, tiempo_sin_recibir_danio, permitir_regeneracion)
+		life = result.life
+		_tiempo_ultimo_danio = result.time_since_damage
+		_actualizar_barra_vida()
 
 
 # ── Movimiento (con aceleración/fricción y dash) ──────
@@ -337,6 +351,7 @@ func take_damage(damage: int) -> void:
 	_mostrar_flash_golpe()
 
 	life -= damage
+	_tiempo_ultimo_danio = 0.0
 	_actualizar_barra_vida()
 
 	if life <= 0:
