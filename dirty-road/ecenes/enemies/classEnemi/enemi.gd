@@ -23,6 +23,15 @@ var objetivo: Node2D = null
 @export var offset_etiqueta_nombre: Vector2 = Vector2(0, -60)
 var _etiqueta_nombre: Label = null
 
+# ── Feedback visual de daño ──────────────────────────
+@export_category("Feedback Visual de Daño")
+@export var flash_color: Color = Color.WHITE
+@export var flash_duration: float = 0.15
+@export var damage_number_offset: Vector2 = Vector2(0, -80)
+@export var damage_number_color: Color = Color.WHITE
+
+var _flash_tween: Tween = null
+
 func _physics_process(delta: float) -> void:
 	animar_cuerpo_enemigo(delta)
 
@@ -51,6 +60,10 @@ func take_hit(damage: int = 10) -> void:
 # ── Recepción de daño (con aggro) ────────────────────────
 
 func recibir_danio(cantidad: int, atacante: Node2D = null) -> void:
+	# ── Feedback visual inmediato ──
+	_mostrar_flash_danio()
+	_mostrar_numero_danio(cantidad)
+
 	# Aggro: si el atacante es el jugador o un proyectil, entra en modo aggro
 	if atacante != null and (atacante.is_in_group("player") or atacante.is_in_group("bullet")):
 		en_aggro = true
@@ -200,3 +213,49 @@ func configurar_etiqueta_nombre(nombre: String = "") -> void:
 
 	# Posicionar la etiqueta relativa al nodo (se actualiza cada frame)
 	_etiqueta_nombre.position = offset_etiqueta_nombre
+
+
+# ── Feedback visual de daño ──────────────────────────
+
+func _mostrar_flash_danio() -> void:
+	# Cancelar cualquier flash anterior en curso
+	if _flash_tween != null and _flash_tween.is_valid():
+		_flash_tween.kill()
+
+	var color_original: Color = modulate
+	modulate = flash_color
+
+	_flash_tween = create_tween()
+	_flash_tween.tween_property(self, "modulate", color_original, flash_duration)
+
+
+func _mostrar_numero_danio(cantidad: int) -> void:
+	var label: Label = Label.new()
+	label.text = str(cantidad)
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", 18)
+	label.add_theme_color_override("font_color", damage_number_color)
+	label.add_theme_color_override("font_outline_color", Color.BLACK)
+	label.add_theme_constant_override("outline_size", 2)
+	label.z_index = 200
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+	# Posición inicial: sobre la cabeza del enemigo con un pequeño desplazamiento horizontal aleatorio
+	var offset_x: float = randf_range(-15.0, 15.0)
+	var pos_inicial: Vector2 = global_position + damage_number_offset + Vector2(offset_x, 0.0)
+	label.global_position = pos_inicial
+
+	# Añadir a la escena actual para que no desaparezca si el enemigo muere
+	get_tree().current_scene.add_child(label)
+
+	# Animación: subir y desvanecer
+	var tween: Tween = create_tween()
+	tween.set_parallel(true)
+	tween.tween_property(label, "global_position", pos_inicial + Vector2(0.0, -30.0), 0.6)
+	tween.tween_property(label, "modulate:a", 0.0, 0.6)
+
+	tween.finished.connect(func():
+		if is_instance_valid(label):
+			label.queue_free()
+	)
