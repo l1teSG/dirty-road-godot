@@ -5,6 +5,7 @@ extends Player
 @onready var aim: Node2D = $aim
 @onready var nucleo: Polygon2D = $Nucleo
 @onready var cuerpo: Polygon2D = $body
+@onready var body_interior: Polygon2D = $body/bodyInterior
 @onready var luz_base: PointLight2D = $LuzBase
 @onready var luz_punta: PointLight2D = $LuzPunta
 @onready var sombra: Polygon2D = $sombra
@@ -96,6 +97,14 @@ var _luz_base_original_energy: float
 var _luz_punta_original_color: Color
 var _luz_punta_original_energy: float
 
+# ── Variables para animación de movimiento ─────────────
+var _movement_vertical_offset: float = 0.0
+var _movement_nucleo_rotation: float = 0.0
+
+var _body_original_scale: Vector2
+var _body_interior_original_scale: Vector2
+var _nucleo_original_scale: Vector2
+
 
 func _ready() -> void:
 	_actualizar_barra_vida()
@@ -118,6 +127,14 @@ func _ready() -> void:
 	if luz_punta != null:
 		_luz_punta_original_color = luz_punta.color
 		_luz_punta_original_energy = luz_punta.energy
+
+	# Guardar escalas originales para animación de movimiento
+	if cuerpo != null:
+		_body_original_scale = cuerpo.scale
+	if body_interior != null:
+		_body_interior_original_scale = body_interior.scale
+	if nucleo != null:
+		_nucleo_original_scale = nucleo.scale
 
 	_crear_particulas_regeneracion()
 
@@ -172,6 +189,7 @@ func _physics_process(delta: float) -> void:
 		return
 
 	aplicar_pulso_energia(delta)
+	animar_movimiento(delta)          # <-- nueva llamada
 	animar_sombra(delta)
 	actualizar_dash(delta)
 	move()
@@ -683,3 +701,67 @@ func _detener_efecto_regeneracion() -> void:
 			_tween_luz_punta_regeneracion.kill()
 		luz_punta.color = _luz_punta_original_color
 		luz_punta.energy = _luz_punta_original_energy
+
+
+# ── Nueva función: animar_movimiento ──────────────────
+
+func animar_movimiento(delta: float) -> void:
+	# Detecta si el jugador se está moviendo (velocidad significativa)
+	var moving: bool = velocity.length() > 10.0
+
+	if moving:
+		# Incrementa el tiempo de caminata
+		tiempo_caminata += delta * 14.0
+
+		# Dirección normalizada del movimiento
+		var dir: Vector2 = velocity.normalized()
+
+		# Squash & Stretch: estirar en la dirección del movimiento
+		# Escala objetivo: se estira horizontalmente según |dir.x| y comprime verticalmente
+		var target_scale: Vector2 = Vector2(
+			_body_original_scale.x + abs(dir.x) * 0.15,
+			_body_original_scale.y - abs(dir.x) * 0.08
+		)
+
+		# Rebote vertical usando seno
+		var vertical_bob: float = sin(tiempo_caminata * 6.0) * 2.0
+
+		# Aplicar lerp a la escala del cuerpo exterior
+		if cuerpo != null:
+			cuerpo.scale = cuerpo.scale.lerp(target_scale, delta * 12.0)
+
+		# Misma escala para el interior
+		if body_interior != null:
+			var target_interior: Vector2 = _body_interior_original_scale * (target_scale / _body_original_scale)
+			body_interior.scale = body_interior.scale.lerp(target_interior, delta * 12.0)
+
+		# Desplazamiento vertical del cuerpo (solo visual, se mueve con position)
+		_movement_vertical_offset = _movement_vertical_offset + (vertical_bob - _movement_vertical_offset) * delta * 10.0
+		if cuerpo != null:
+			cuerpo.position.y = _movement_vertical_offset
+
+		# Núcleo: pulso más rápido y rotación suave
+		_nucleo_original_scale = nucleo.scale if nucleo != null else Vector2.ONE
+		var nucleo_target_scale: float = _nucleo_original_scale.x + 0.1 + sin(tiempo_caminata * 8.0) * 0.08
+		if nucleo != null:
+			nucleo.scale = nucleo.scale.lerp(Vector2(nucleo_target_scale, nucleo_target_scale), delta * 10.0)
+			# Rotación ligera
+			_movement_nucleo_rotation = sin(tiempo_caminata * 4.0) * 0.1
+			nucleo.rotation = nucleo.rotation + (_movement_nucleo_rotation - nucleo.rotation) * delta * 6.0
+
+	else:
+		# Quieto: volver suavemente a escala original y eliminar desplazamiento vertical
+		if cuerpo != null:
+			cuerpo.scale = cuerpo.scale.lerp(_body_original_scale, delta * 10.0)
+		if body_interior != null:
+			body_interior.scale = body_interior.scale.lerp(_body_interior_original_scale, delta * 10.0)
+
+		# Desplazamiento vertical a cero
+		_movement_vertical_offset = _movement_vertical_offset * (1.0 - delta * 8.0)
+		if cuerpo != null:
+			cuerpo.position.y = _movement_vertical_offset
+
+		# Núcleo: volver a escala original y rotación cero
+		if nucleo != null:
+			nucleo.scale = nucleo.scale.lerp(_nucleo_original_scale, delta * 10.0)
+			nucleo.rotation = nucleo.rotation * (1.0 - delta * 6.0)
