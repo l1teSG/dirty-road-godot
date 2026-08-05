@@ -1,0 +1,1 @@
+enum Variant { WAVE_BREAK, DEATH, ENEMY_CARD, SURVIVAL }

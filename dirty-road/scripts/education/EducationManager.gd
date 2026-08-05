@@ -13,7 +13,7 @@ extends Node
 # architecture without changing the public API used by the rest of the game.
 # ---------------------------------------------------------------------------
 
-enum Variant { WAVE_BREAK, DEATH, ENEMY_CARD, SURVIVAL }
+enum PopupVariant { WAVE_BREAK, DEATH, ENEMY_CARD, SURVIVAL }
 
 @export var survival_interval: float = 120.0
 
@@ -292,7 +292,7 @@ func stop_run() -> void:
 
 func on_wave_ended() -> void:
 	var msg: String = _draw(_wave_queue, wave_break_messages, "_last_wave_message")
-	_popup.enqueue(msg, Variant.WAVE_BREAK, 3.5)
+	_popup.enqueue(msg, PopupVariant.WAVE_BREAK, 3.5)
 
 
 func on_enemy_encountered(enemy_id: String) -> void:
@@ -302,13 +302,13 @@ func on_enemy_encountered(enemy_id: String) -> void:
 
 	var info: Dictionary = enemy_info.get(enemy_id, enemy_info["default"])
 	var text: String = "%s\n%s\n%s" % [info["name"], info["represents"], info["fact"]]
-	_popup.enqueue(text, Variant.ENEMY_CARD, 4.0)
+	_popup.enqueue(text, PopupVariant.ENEMY_CARD, 4.0)
 
 
 func on_player_died() -> void:
 	stop_run()
 	var msg: String = _draw(_death_queue, death_messages, "_last_death_message")
-	_popup.enqueue(msg, Variant.DEATH, 3.5)
+	_popup.enqueue(msg, PopupVariant.DEATH, 3.5)
 	await _popup.popup_finished
 
 
@@ -318,7 +318,7 @@ func on_player_died() -> void:
 
 func _on_survival_timeout() -> void:
 	var fact: String = _draw(_survival_queue, survival_facts, "_last_survival_fact")
-	_popup.enqueue(fact, Variant.SURVIVAL, 3.5)
+	_popup.enqueue(fact, PopupVariant.SURVIVAL, 3.5)
 
 
 func _draw(queue: Array, source: Array, last_property_name: String) -> String:
