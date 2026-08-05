@@ -23,6 +23,7 @@ var vector_knockback: Vector2 = Vector2.ZERO
 var esta_animando_ataque: bool = false
 
 func _ready() -> void:
+	configurar_etiqueta_nombre("Marea Negra")
 
 	# Registrar en el grupo de enemigos (usa "enemi" como el resto del proyecto)
 	add_to_group("enemi")

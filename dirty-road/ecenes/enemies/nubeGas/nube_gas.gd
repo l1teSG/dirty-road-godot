@@ -37,6 +37,8 @@ var strafe_dir: float = 1.0          # 1 = un lado, -1 = el otro
 var strafe_timer: float = 0.0
 
 func _ready() -> void:
+	configurar_etiqueta_nombre("Nube de Gas")
+
 	add_to_group("enemi")
 
 	life = 60

@@ -6,6 +6,8 @@ var en_combate: bool = false
 
 
 func _ready() -> void:
+	configurar_etiqueta_nombre("Rastreador")
+
 	tiempo_recarga = 0.6
 	distancia_ataque = 45.0
 	distancia_max_aggro = 300.0

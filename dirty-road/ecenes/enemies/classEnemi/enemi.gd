@@ -18,6 +18,11 @@ var puede_atacar: bool = true
 var en_aggro: bool = false
 var objetivo: Node2D = null
 
+# ── Etiqueta de nombre ────────────────────────────────
+@export var nombre_enemigo: String = ""
+@export var offset_etiqueta_nombre: Vector2 = Vector2(0, -60)
+var _etiqueta_nombre: Label = null
+
 func _physics_process(delta: float) -> void:
 	animar_cuerpo_enemigo(delta)
 
@@ -171,3 +176,27 @@ func evaluar_y_ejecutar_ataque() -> void:
 	puede_atacar = false
 	await get_tree().create_timer(tiempo_recarga).timeout
 	puede_atacar = true
+
+
+# ── Etiqueta de nombre ────────────────────────────────
+
+func configurar_etiqueta_nombre(nombre: String = "") -> void:
+	if _etiqueta_nombre == null:
+		_etiqueta_nombre = Label.new()
+		_etiqueta_nombre.name = "EtiquetaNombre"
+		_etiqueta_nombre.z_index = 100
+		_etiqueta_nombre.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		_etiqueta_nombre.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		_etiqueta_nombre.add_theme_font_size_override("font_size", 14)
+		_etiqueta_nombre.add_theme_color_override("font_color", Color.WHITE)
+		_etiqueta_nombre.add_theme_color_override("font_outline_color", Color.BLACK)
+		_etiqueta_nombre.add_theme_constant_override("outline_size", 2)
+		_etiqueta_nombre.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		add_child(_etiqueta_nombre)
+
+	if nombre != "":
+		_etiqueta_nombre.text = nombre
+		nombre_enemigo = nombre
+
+	# Posicionar la etiqueta relativa al nodo (se actualiza cada frame)
+	_etiqueta_nombre.position = offset_etiqueta_nombre
