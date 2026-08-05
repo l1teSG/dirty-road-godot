@@ -42,6 +42,8 @@ position = Vector2(0, -2)
 
 [node name="ClassPlayer" parent="." unique_id=508460008 node_paths=PackedStringArray("respawn_manager") groups=["player"] instance=ExtResource("3_k6hvo")]
 position = Vector2(373, -69)
+cadencia_basic = 0.3
+cooldown_dash = 0.5
 respawn_manager = NodePath("../RespawnManager")
 
 [node name="Arbol" parent="." unique_id=157670480 groups=["arbol"] instance=ExtResource("5_q0v6s")]
@@ -103,6 +105,9 @@ position = Vector2(0, 63)
 script = ExtResource("8_bfnr7")
 enemigos_disponibles = Array[ExtResource("9_cc5k1")]([ExtResource("10_w7ccy"), ExtResource("11_vgl3r"), ExtResource("12_4a5wu")])
 puntos_spawn = [NodePath("1"), NodePath("2"), NodePath("3"), NodePath("4"), NodePath("5"), NodePath("6"), NodePath("7"), NodePath("8")]
+enemigos_base_por_oleada = 5
+tiempo_maximo_oleada = 60.0
+escalado_vida_por_oleada = 0.08
 
 [node name="1" type="Marker2D" parent="WaveManager" unique_id=2027456952]
 position = Vector2(0, 1200)

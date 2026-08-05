@@ -1,6 +1,5 @@
 extends Node
 
-
 signal biomasa_incrementada
 
 const MAX_BIOMASA := 10
@@ -13,7 +12,7 @@ func emitir_biomasa(desde_global: Vector2, destino_screen_pos: Vector2, canvas_l
 	var pos_pantalla = viewport.get_canvas_transform() * desde_global
 	orbe.position = pos_pantalla
 	canvas_layer.add_child(orbe)
-
+	
 	var tween = create_tween()
 	tween.set_ease(Tween.EASE_IN)
 	tween.set_trans(Tween.TRANS_QUAD)
@@ -38,12 +37,23 @@ func _crear_orbe() -> Node2D:
 
 
 func _incrementar() -> void:
-	contador += 1
-	if contador >= MAX_BIOMASA:
-		contador = 0
-	biomasa_incrementada.emit()
+	# Solo suma biomasa si no ha llegado al máximo (10)
+	if contador < MAX_BIOMASA:
+		contador += 1
+		biomasa_incrementada.emit()
 
 
 func reiniciar_biomasa() -> void:
 	contador = 0
 	biomasa_incrementada.emit()
+
+
+## Consume toda la biomasa acumulada SOLO si está al máximo.
+## Devuelve true si se consumió (y por lo tanto se puede activar el "super"),
+## false si no había suficiente biomasa todavía.
+func consumir_biomasa() -> bool:
+	if contador < MAX_BIOMASA:
+		return false
+	contador = 0
+	biomasa_incrementada.emit()
+	return true
