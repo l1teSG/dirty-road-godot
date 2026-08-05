@@ -9,10 +9,10 @@ var esta_destruido: bool = false
 # ── Regeneración ───────────────────────────────────────
 @export_category("Regeneración")
 @export var regeneracion_por_segundo: float = 1.0
-@export var tiempo_sin_recibir_danio: float = 10.0
-@export var permitir_regeneracion: bool = true
+@export var retraso_regeneracion: float = 10.0
+@export var regeneracion_activa: bool = true
 
-var _tiempo_ultimo_danio: float = 0.0
+var tiempo_sin_recibir_danio: float = 0.0
 
 # -------------------------------------------------------------------
 # FUNCIÓN VISUAL: LATIDO Y CHISPEO DE LUZ MÍSTICA DEL ÁRBOL
@@ -46,15 +46,15 @@ func _process(delta: float) -> void:
 		return
 	animar_luz_mistica(delta)
 
-	if permitir_regeneracion:
-		var result = RegenerationHelper.update_regeneration(delta, vida_actual, float(vida_maxima), regeneracion_por_segundo, _tiempo_ultimo_danio, tiempo_sin_recibir_danio, permitir_regeneracion)
+	if regeneracion_activa:
+		var result = RegenerationHelper.update_regeneration(delta, vida_actual, float(vida_maxima), regeneracion_por_segundo, tiempo_sin_recibir_danio, retraso_regeneracion, regeneracion_activa)
 		vida_actual = result.life
-		_tiempo_ultimo_danio = result.time_since_damage
+		tiempo_sin_recibir_danio = result.time_since_damage
 		actualizar_barra_vida()
 
 func recibir_danio(cantidad: int) -> void:
 	vida_actual = max(0.0, vida_actual - cantidad)
-	_tiempo_ultimo_danio = 0.0
+	tiempo_sin_recibir_danio = 0.0
 	actualizar_barra_vida()
 	reaccionar_visualmente_al_danio()
 
