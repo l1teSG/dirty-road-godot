@@ -8,7 +8,10 @@
 [ext_resource type="PackedScene" uid="uid://p208rapbv3d0" path="res://ecenes/enemies/microplastico/microPlastico.tscn" id="6_bfnr7"]
 [ext_resource type="Script" uid="uid://wubm8w5adwq2" path="res://ecenes/respawn/respawn_manager.gd" id="7_rspwn1"]
 [ext_resource type="Script" uid="uid://036a6w37ercn" path="res://scripts/wave_manager.gd" id="8_bfnr7"]
-[ext_resource type="PackedScene" uid="uid://c4msn7to5j3in" path="res://ecenes/enemies/nubeGas/nubeGas.tscn" id="9_trm6e"]
+[ext_resource type="Script" uid="uid://vyt7ho0roxls" path="res://scripts/enemigo_oleada_config.gd" id="9_cc5k1"]
+[ext_resource type="Resource" uid="uid://c7i5gecmsrwdi" path="res://ecenes/enemies/resources/enemis/nube_gas.tres" id="10_w7ccy"]
+[ext_resource type="Resource" uid="uid://dyd2ery6he44o" path="res://ecenes/enemies/resources/enemis/marea_negra.tres" id="11_vgl3r"]
+[ext_resource type="Resource" uid="uid://d253u0sxbtypv" path="res://ecenes/enemies/resources/enemis/microplastico.tres" id="12_4a5wu"]
 
 [sub_resource type="Environment" id="Environment_ckgak"]
 background_mode = 3
@@ -96,35 +99,31 @@ tiempo_respawn = 3.0
 [node name="PuntoRespawn" type="Marker2D" parent="RespawnManager" unique_id=1900412234]
 position = Vector2(0, 63)
 
-[node name="WaveManager" type="Node2D" parent="." unique_id=218025439 node_paths=PackedStringArray("puntos_spawn")]
+[node name="WaveManager" type="Node2D" parent="." unique_id=196695999 node_paths=PackedStringArray("puntos_spawn")]
 script = ExtResource("8_bfnr7")
-enemigos_disponibles = Array[PackedScene]([ExtResource("9_trm6e")])
-puntos_spawn = [NodePath("1"), NodePath("2"), NodePath("3"), NodePath("4"), NodePath("5"), NodePath("6")]
-enemigos_base_por_oleada = 5
-tiempo_entre_spawns = 1.5
-tiempo_maximo_oleada = 60.0
-escalado_vida_por_oleada = 0.059
+enemigos_disponibles = Array[ExtResource("9_cc5k1")]([ExtResource("10_w7ccy"), ExtResource("11_vgl3r"), ExtResource("12_4a5wu")])
+puntos_spawn = [NodePath("1"), NodePath("2"), NodePath("3"), NodePath("4"), NodePath("5"), NodePath("6"), NodePath("7"), NodePath("8")]
 
-[node name="1" type="Marker2D" parent="WaveManager" unique_id=1147606742]
+[node name="1" type="Marker2D" parent="WaveManager" unique_id=2027456952]
+position = Vector2(0, 1200)
+
+[node name="2" type="Marker2D" parent="WaveManager" unique_id=1180032042]
+position = Vector2(0, -1300)
+
+[node name="3" type="Marker2D" parent="WaveManager" unique_id=1598148073]
 position = Vector2(1200, 0)
 
-[node name="2" type="Marker2D" parent="WaveManager" unique_id=51600969]
+[node name="4" type="Marker2D" parent="WaveManager" unique_id=608716125]
 position = Vector2(-1300, 0)
 
-[node name="3" type="Marker2D" parent="WaveManager" unique_id=269814143]
-position = Vector2(0, 1286)
+[node name="5" type="Marker2D" parent="WaveManager" unique_id=1680291380]
+position = Vector2(1132, 1199)
 
-[node name="4" type="Marker2D" parent="WaveManager" unique_id=939465093]
-position = Vector2(0, -1301)
+[node name="6" type="Marker2D" parent="WaveManager" unique_id=1143169971]
+position = Vector2(-1273, -1273)
 
-[node name="5" type="Marker2D" parent="WaveManager" unique_id=864870252]
-position = Vector2(1211, -1277)
+[node name="7" type="Marker2D" parent="WaveManager" unique_id=11557122]
+position = Vector2(1258, -1310)
 
-[node name="6" type="Marker2D" parent="WaveManager" unique_id=1936858586]
-position = Vector2(1227, 1226)
-
-[node name="7" type="Marker2D" parent="WaveManager" unique_id=1878534211]
-position = Vector2(-1292, -1330)
-
-[node name="8" type="Marker2D" parent="WaveManager" unique_id=1299852262]
-position = Vector2(-1200, 1100)
+[node name="8" type="Marker2D" parent="WaveManager" unique_id=89181954]
+position = Vector2(-1236, 1169)

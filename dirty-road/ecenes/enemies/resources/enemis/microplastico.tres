@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="EnemigoOleadaConfig" format=3 uid="uid://d253u0sxbtypv"]
+
+[ext_resource type="Script" uid="uid://vyt7ho0roxls" path="res://scripts/enemigo_oleada_config.gd" id="1_66tq0"]
+[ext_resource type="PackedScene" uid="uid://p208rapbv3d0" path="res://ecenes/enemies/microplastico/microPlastico.tscn" id="1_sop5c"]
+
+[resource]
+script = ExtResource("1_66tq0")
+escena = ExtResource("1_sop5c")
+peso = 4.0

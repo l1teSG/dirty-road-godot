@@ -250,7 +250,9 @@ func _mostrar_numero_danio(cantidad: int) -> void:
 	get_tree().current_scene.add_child(label)
 
 	# Animación: subir y desvanecer
-	var tween: Tween = create_tween()
+	# IMPORTANTE: el tween se crea sobre "label", no sobre "self" (el enemigo),
+	# así su ciclo de vida no depende de que el enemigo siga vivo.
+	var tween: Tween = label.create_tween()
 	tween.set_parallel(true)
 	tween.tween_property(label, "global_position", pos_inicial + Vector2(0.0, -30.0), 0.6)
 	tween.tween_property(label, "modulate:a", 0.0, 0.6)
