@@ -42,12 +42,21 @@ position = Vector2(0, -2)
 
 [node name="ClassPlayer" parent="." unique_id=508460008 node_paths=PackedStringArray("respawn_manager") groups=["player"] instance=ExtResource("3_k6hvo")]
 position = Vector2(373, -69)
-cadencia_basic = 0.3
-cooldown_dash = 0.5
+cadencia_basic = 0.2
+aceleracion = 1800.0
+friccion = 2200.0
+velocidad_dash = 700.0
+duracion_dash = 0.14
+cooldown_dash = 0.8
+tiempo_advertencia_meteorito = 0.6
+retraso_entre_meteoritos = 0.08
 respawn_manager = NodePath("../RespawnManager")
+duracion_flash_golpe = 0.1
+regeneracion_por_segundo = 2.0
 
 [node name="Arbol" parent="." unique_id=157670480 groups=["arbol"] instance=ExtResource("5_q0v6s")]
 vida_maxima = 1000
+regeneracion_por_segundo = 1.0
 
 [node name="MicroPlastico" parent="." unique_id=888619048 instance=ExtResource("6_bfnr7")]
 position = Vector2(119, 846)
