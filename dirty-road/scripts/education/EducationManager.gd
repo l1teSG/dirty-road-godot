@@ -212,8 +212,9 @@ var survival_facts: Array = [
 	"El futuro del planeta depende de decisiones tomadas hoy."
 ]
 
-# Keyed by a stable "enemy_id" string. "default" is used as a safe fallback
-# for any enemy_id not explicitly cataloged yet.
+# Keyed by a stable "enemy_id" string (sin guiones bajos, en minúsculas —
+# ver WaveManager._obtener_enemy_id()). "default" es el respaldo seguro
+# para cualquier enemy_id no catalogado todavía.
 var enemy_info: Dictionary = {
 	"microplastico": {
 		"name": "Micro-Plástico",
@@ -224,6 +225,16 @@ var enemy_info: Dictionary = {
 		"name": "Ignis",
 		"represents": "Riesgo de incendios forestales.",
 		"fact": "La sequía y la deforestación aumentan el riesgo de incendios."
+	},
+	"nubegas": {
+		"name": "Nube de Gas",
+		"represents": "Contaminación del aire.",
+		"fact": "El aire contaminado puede afectar la salud humana y los ecosistemas."
+	},
+	"mareanegra": {
+		"name": "Marea Negra",
+		"represents": "Contaminación por derrames de petróleo.",
+		"fact": "Un derrame de petróleo puede tardar años en limpiarse por completo."
 	},
 	"default": {
 		"name": "Contaminación",

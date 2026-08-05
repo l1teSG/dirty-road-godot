@@ -30,6 +30,13 @@ func _ready() -> void:
 	# ── 0. Ocultar / opacar todo al inicio ─────────────────────────
 	_estado_inicial_oculto()
 
+	# Sistema educativo: mostrar una frase reflexiva aleatoria ANTES de
+	# revelar la pantalla de Game Over. No pausa el juego; simplemente
+	# esperamos a que el popup termine su propia animación antes de
+	# continuar con la secuencia normal de esta pantalla.
+	if EducationManager != null:
+		await EducationManager.on_player_died()
+
 	# Pequeño retraso en frames para garantizar que los nodos están listos
 	await get_tree().process_frame
 

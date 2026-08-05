@@ -76,6 +76,11 @@ func _ready() -> void:
 	# Iniciar la primera oleada
 	iniciar_oleada()
 
+	# Sistema educativo: iniciar seguimiento de la partida (timer de
+	# supervivencia + reseteo de enemigos vistos). No afecta el gameplay.
+	if EducationManager != null:
+		EducationManager.start_run()
+
 
 func iniciar_oleada() -> void:
 	en_descanso = false
@@ -157,8 +162,24 @@ func _spawnear_siguiente_enemigo() -> void:
 
 	_notificar_enemigos_restantes()
 
+	# Sistema educativo: notificar posible primer encuentro con este tipo
+	# de enemigo. EducationManager ignora la llamada si ya fue visto antes
+	# durante esta partida. No afecta el spawn ni el comportamiento del enemigo.
+	if EducationManager != null:
+		EducationManager.on_enemy_encountered(_obtener_enemy_id(clave_escena))
+
 	if enemigos_por_spawnear <= 0:
 		spawn_timer.stop()
+
+
+func _obtener_enemy_id(ruta_escena: String) -> String:
+	# Deriva un identificador estable a partir del nombre de archivo de la
+	# escena (ej: "res://enemies/micro_plastico.tscn" -> "microplastico").
+	# Se eliminan los guiones bajos para que coincida con las claves usadas
+	# en EducationManager.enemy_info independientemente de la convención de
+	# nombres usada en los archivos de escena.
+	var nombre_archivo: String = ruta_escena.get_file().get_basename()
+	return nombre_archivo.to_lower().replace("_", "")
 
 
 func _seleccionar_ponderado(configs: Array[EnemigoOleadaConfig]) -> EnemigoOleadaConfig:
@@ -230,6 +251,11 @@ func iniciar_fase_descanso() -> void:
 	descanso_iniciado.emit(tiempo_descanso)
 	tiempo_actualizado.emit(tiempo_restante, true)  # Emitir inmediatamente
 	_notificar_enemigos_restantes()
+
+	# Sistema educativo: mostrar un mensaje educativo aleatorio durante el
+	# descanso entre oleadas. No detiene ni pausa el juego.
+	if EducationManager != null:
+		EducationManager.on_wave_ended()
 
 	# Guardado automático mediante Autoload SaveManager
 	if SaveManager != null:
