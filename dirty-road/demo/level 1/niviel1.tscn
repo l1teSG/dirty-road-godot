@@ -113,7 +113,7 @@ position = Vector2(0, 63)
 [node name="WaveManager" type="Node2D" parent="." unique_id=196695999 node_paths=PackedStringArray("puntos_spawn")]
 script = ExtResource("8_bfnr7")
 enemigos_disponibles = Array[ExtResource("9_cc5k1")]([ExtResource("10_w7ccy"), ExtResource("11_vgl3r"), ExtResource("12_4a5wu")])
-puntos_spawn = [NodePath("1"), NodePath("2"), NodePath("3"), NodePath("4"), NodePath("5"), NodePath("6"), NodePath("7"), NodePath("8")]
+puntos_spawn = [NodePath("1"), NodePath("2"), NodePath("3"), NodePath("4"), NodePath("5"), null, null, null]
 enemigos_base_por_oleada = 5
 tiempo_maximo_oleada = 60.0
 escalado_vida_por_oleada = 0.08

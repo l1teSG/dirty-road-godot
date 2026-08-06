@@ -10,14 +10,14 @@ extends CanvasLayer
 #
 # Public API (unchanged):
 #   enqueue(text: String, variant: int, duration: float = 3.0) -> void
-#   signal popup_finished
+#   signal popup_finished 
 # ---------------------------------------------------------------------------
 
 signal popup_finished
 
-const BOTTOM_MARGIN: float = 30.0
-const WIDTH_RATIO: float = 0.38   # ~35-40% of screen width
-const TOAST_HEIGHT: float = 90.0
+const BOTTOM_MARGIN: float = 70.0
+const WIDTH_RATIO: float = 0.50   # ~35-40% of screen width
+const TOAST_HEIGHT: float = 200
 const SLIDE_DURATION_IN: float = 0.35
 const SLIDE_DURATION_OUT: float = 0.35
 const DEFAULT_VISIBLE_DURATION: float = 3.5
@@ -39,12 +39,14 @@ var _default_titles: Dictionary = {
 
 
 func _ready() -> void:
-	layer = 100
+	layer = 1000
 	process_mode = Node.PROCESS_MODE_ALWAYS
 
 	_panel = Panel.new()
 	_panel.visible = false
 	_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_panel.z_as_relative = true
+	_panel.z_index = 1000
 	_panel.size = Vector2(_toast_width(), TOAST_HEIGHT)
 	add_child(_panel)
 
@@ -68,7 +70,7 @@ func _ready() -> void:
 	_title_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	_title_label.autowrap_mode = TextServer.AUTOWRAP_WORD
 	_title_label.add_theme_color_override("font_color", Color(0.6, 1.0, 0.55))
-	_title_label.add_theme_font_size_override("font_size", 16)
+	_title_label.add_theme_font_size_override("font_size", 30)
 	vbox.add_child(_title_label)
 
 	_body_label = Label.new()
@@ -78,7 +80,7 @@ func _ready() -> void:
 	_body_label.autowrap_mode = TextServer.AUTOWRAP_WORD
 	_body_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_body_label.add_theme_color_override("font_color", Color(1, 1, 1))
-	_body_label.add_theme_font_size_override("font_size", 14)
+	_body_label.add_theme_font_size_override("font_size", 30)
 	vbox.add_child(_body_label)
 
 	_apply_style()
