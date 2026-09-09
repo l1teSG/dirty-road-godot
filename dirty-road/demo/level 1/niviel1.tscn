@@ -32,7 +32,7 @@ fill_to = Vector2(0.5, 0)
 script = ExtResource("1_bfnr7")
 
 [node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=457741389]
-color = Color(0.37859777, 0.4628796, 0.56501806, 1)
+color = Color(0.7236867, 0.78271127, 0.85070884, 1)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1336534250]
 environment = SubResource("Environment_ckgak")
@@ -48,11 +48,16 @@ friccion = 2200.0
 velocidad_dash = 700.0
 duracion_dash = 0.14
 cooldown_dash = 0.8
+danio_meteorito = 50000
 tiempo_advertencia_meteorito = 0.6
 retraso_entre_meteoritos = 0.08
 respawn_manager = NodePath("../RespawnManager")
 duracion_flash_golpe = 0.1
-regeneracion_por_segundo = 2.0
+regeneracion_por_segundo = 4.0
+retraso_regeneracion = 0.3
+distancia_flecha_arbol = 45.0
+distancia_minima_mostrar = 80.0
+margen_camara = 20.0
 
 [node name="Arbol" parent="." unique_id=157670480 groups=["arbol"] instance=ExtResource("5_q0v6s")]
 vida_maxima = 1000
@@ -113,8 +118,8 @@ position = Vector2(0, 63)
 [node name="WaveManager" type="Node2D" parent="." unique_id=196695999 node_paths=PackedStringArray("puntos_spawn")]
 script = ExtResource("8_bfnr7")
 enemigos_disponibles = Array[ExtResource("9_cc5k1")]([ExtResource("10_w7ccy"), ExtResource("11_vgl3r"), ExtResource("12_4a5wu")])
-puntos_spawn = [NodePath("1"), NodePath("2"), NodePath("3"), NodePath("4"), NodePath("5"), null, null, null]
-enemigos_base_por_oleada = 5
+puntos_spawn = [NodePath("1"), NodePath("2"), NodePath("3"), NodePath("4"), NodePath("5"), NodePath("6"), NodePath("7"), NodePath("8")]
+enemigos_base_por_oleada = 6
 tiempo_maximo_oleada = 60.0
 escalado_vida_por_oleada = 0.08
 
