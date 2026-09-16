@@ -1,1 +1,78 @@
+ 
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+ 
+@theme {
+  /* --- Paleta base (extraída de los frames del gameplay) --- */
+  --color-bg: #070c07;
+  --color-bg-alt: #0c140d;
+  --color-green: #35a848;
+  --color-green-bright: #4fd160;
+  --color-teal: #24b279;
+  --color-magenta: #811d4e;
+  --color-magenta-bright: #a8296a;
+  --color-muted: #3f6c60;
+  --color-text-primary: #d9f2dc;
+  --color-text-secondary: #8fae95;
+ 
+  /* --- Tipografía --- */
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+ 
+  /* --- Sombras / glow, usables como shadow-glow-green, etc. --- */
+  --shadow-glow-green: 0 0 40px rgba(53, 168, 72, 0.45);
+  --shadow-glow-teal: 0 0 40px rgba(36, 178, 121, 0.4);
+  --shadow-glow-magenta: 0 0 30px rgba(168, 41, 106, 0.5);
+}
+ 
+@layer base {
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text-primary);
+    font-family: var(--font-display);
+  }
+}
+ 
+@layer utilities {
+  /* Fondo con viñeta radial + anillos, el look del fondo de gameplay.
+     Uso: <section class="radial-vignette"> */
+  .radial-vignette {
+    position: relative;
+    background:
+      radial-gradient(circle at 50% 40%, rgba(53, 168, 72, 0.14) 0%, transparent 55%),
+      radial-gradient(ellipse at center, #142418 0%, var(--color-bg) 70%);
+    overflow: hidden;
+  }
+ 
+  .radial-vignette::before {
+    content: '';
+    position: absolute;
+    inset: -20%;
+    background: repeating-radial-gradient(
+      circle at 50% 45%,
+      transparent 0,
+      transparent 60px,
+      rgba(53, 168, 72, 0.035) 61px,
+      transparent 62px
+    );
+    pointer-events: none;
+  }
+ 
+  /* Glow pulsante, ej. para un logo o esfera decorativa.
+     Uso: <div class="glow-pulse"> */
+  .glow-pulse {
+    animation: pulse-glow 3s ease-in-out infinite;
+  }
+ 
+  @media (prefers-reduced-motion: reduce) {
+    .glow-pulse {
+      animation: none;
+    }
+  }
+}
+ 
+@keyframes pulse-glow {
+  0%, 100% { filter: drop-shadow(0 0 20px rgba(53, 168, 72, 0.35)); }
+  50%      { filter: drop-shadow(0 0 48px rgba(53, 168, 72, 0.6)); }
+}
+ 
