@@ -1,0 +1,32 @@
+---
+/**
+ * Layout base para todas las páginas de Dirty Road.
+ * Importa los estilos globales, define la estructura HTML principal
+ * y aplica el fondo oscuro característico del juego.
+ */
+import '../styles/global.css';
+
+export interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'Dirty Road',
+  description = 'Shooter de supervivencia minimalista con temática ecológica. Sobrevive a enemigos geométricos que representan la contaminación.',
+} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+  </head>
+  <body class="min-h-screen bg-bg text-text-primary font-display antialiased">
+    <slot />
+  </body>
+</html>
