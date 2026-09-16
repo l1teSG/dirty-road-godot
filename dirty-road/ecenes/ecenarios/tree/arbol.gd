@@ -205,6 +205,10 @@ func _ready() -> void:
 	vida_actual = float(vida_maxima)
 	actualizar_barra_vida()
 
+	# Añadir al grupo "arbol" para que otros nodos (ej. la flecha del
+	# jugador que indica hacia dónde ir) puedan encontrarlo fácilmente.
+	add_to_group("arbol")
+
 	# Guardar valores originales para el efecto visual de regeneración
 	var barra = $BarraVida as ProgressBar
 	if barra != null:

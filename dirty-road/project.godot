@@ -22,6 +22,7 @@ config/icon="uid://dqcco4yhy6ldm"
 
 BiomasaManager="*uid://b2o0ouq0f4sdb"
 SaveManager="*uid://cvmav7awamy4b"
+EducationManager="*uid://7rfhdfi1gfn3"
 
 [display]
 

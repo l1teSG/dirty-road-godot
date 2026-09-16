@@ -105,6 +105,32 @@ var _body_original_scale: Vector2
 var _body_interior_original_scale: Vector2
 var _nucleo_original_scale: Vector2
 
+# ── Flecha indicadora del árbol ────────────────────────
+@export_category("Flecha indicadora del árbol")
+## Radio de órbita: distancia desde el origen del jugador a la que orbita la flecha.
+@export var distancia_flecha_arbol: float = 45.0
+## Desplazamiento vertical (altura) del centro del personaje desde donde orbita la flecha.
+## Usar valores negativos para subirla (ej. -15.0).
+@export var offset_altura_flecha: float = -15.0
+## Distancia MÍNIMA en px entre el jugador y el árbol para que aparezca la flecha.
+## (Poner en 0.0 si solo quieres que dependa de la cámara).
+@export var distancia_minima_mostrar: float = 80.0
+## Margen adicional de la pantalla en px para evitar apariciones en el mismo borde.
+@export var margen_camara: float = 20.0
+## Color de la flecha.
+@export var color_flecha_arbol: Color = Color(1.0, 0.85, 0.2, 0.95)
+## Tamaño (ancho x alto) del triángulo de la flecha.
+@export var tamano_flecha_arbol: Vector2 = Vector2(18.0, 14.0)
+## Tiempo en segundos que tarda la animación de aparición y desaparición.
+@export var duracion_animacion_flecha: float = 0.25
+
+var nodo_arbol: Node2D = null
+var flecha_arbol: Polygon2D = null
+
+# Control de animación de la flecha
+var _flecha_visible_objetivo: bool = false
+var _tween_flecha: Tween = null
+
 
 func _ready() -> void:
 	_actualizar_barra_vida()
@@ -138,9 +164,11 @@ func _ready() -> void:
 
 	_crear_particulas_regeneracion()
 
+	_crear_flecha_arbol()
+	_buscar_arbol()
+
 
 func _crear_particulas_regeneracion() -> void:
-	# Crea un GPUParticles2D para las partículas verdes de regeneración
 	var particle := GPUParticles2D.new()
 	particle.name = "ParticulasRegeneracion"
 	particle.amount = 10
@@ -159,7 +187,6 @@ func _crear_particulas_regeneracion() -> void:
 	material.scale_max = 0.6
 	material.color = Color(0.2, 1.0, 0.3, 0.8)
 
-	# Caja de emisión pequeña centrada en el origen
 	material.emission_shape = ParticleProcessMaterial.EMISSION_SHAPE_BOX
 	material.emission_box_extents = Vector3(4.0, 4.0, 0.0)
 
@@ -182,18 +209,19 @@ func _conectar_respawn_manager() -> void:
 
 func _physics_process(delta: float) -> void:
 	if _muerto:
-		# Si el jugador muere, detener el efecto visual de regeneración
 		if _regeneracion_visual_activa:
 			_detener_efecto_regeneracion()
 			_regeneracion_visual_activa = false
+		_set_flecha_visible(false)
 		return
 
 	aplicar_pulso_energia(delta)
-	animar_movimiento(delta)          # <-- nueva llamada
+	animar_movimiento(delta)
 	animar_sombra(delta)
 	actualizar_dash(delta)
 	move()
 	actualizar_aim()
+	_actualizar_flecha_arbol(delta)
 
 	if regeneracion_activa:
 		var result = RegenerationHelper.update_regeneration(delta, life, vida_maxima, regeneracion_por_segundo, tiempo_sin_recibir_danio, retraso_regeneracion, regeneracion_activa)
@@ -201,12 +229,10 @@ func _physics_process(delta: float) -> void:
 		tiempo_sin_recibir_danio = result.time_since_damage
 		_actualizar_barra_vida()
 
-	# Actualizar efecto visual
 	_actualizar_efecto_regeneracion(delta)
 
 
-# ── Movimiento (con aceleración/fricción y dash) ──────
-# Mantiene la misma firma que el padre (Player.move(), sin parámetros).
+# ── Movimiento ─────────────────────────────────────────
 
 func move() -> void:
 	var delta: float = get_physics_process_delta_time()
@@ -227,7 +253,6 @@ func move() -> void:
 	move_and_slide()
 
 
-## Intenta iniciar un dash. Llamado desde el botón en pantalla "mega".
 func _intentar_dash_desde_boton() -> void:
 	if _muerto or _en_dash or _dash_cooldown_timer > 0.0:
 		return
@@ -285,8 +310,6 @@ func _on_timer_timeout() -> void:
 		_actualizar_objetivo()
 
 
-## Rota el nodo "aim" hacia el enemigo objetivo actual (si existe), o hacia
-## la dirección de movimiento cuando no hay ningún enemigo en rango.
 func actualizar_aim() -> void:
 	if not is_instance_valid(aim):
 		return
@@ -332,29 +355,24 @@ func _actualizar_objetivo() -> void:
 	onFire = true
 
 
-# ── Botones de poder (UI en pantalla) ──────────────────
+# ── Botones de poder (UI) ──────────────────────────────
 
-## Botón "super": activa la lluvia de meteoritos SOLO si la biomasa
-## está al máximo. La consume por completo al activarse.
 func _on_super_pressed() -> void:
 	if _muerto:
 		return
 
 	if not BiomasaManager.consumir_biomasa():
-		# No hay suficiente biomasa todavía; no se activa el super.
 		return
 
 	_lanzar_lluvia_meteoritos()
 
 
-## Botón "mega": ahora activa el dash directamente (ya no cambia "power").
 func _on_mega_pressed() -> void:
 	_intentar_dash_desde_boton()
 
 
 # ── Super: Lluvia de Meteoritos ────────────────────────
 
-## Lanza un meteorito sobre cada enemigo vivo actualmente en el mapa.
 func _lanzar_lluvia_meteoritos() -> void:
 	var enemigos: Array = get_tree().get_nodes_in_group("enemi")
 
@@ -367,15 +385,12 @@ func _lanzar_lluvia_meteoritos() -> void:
 			randf_range(-25.0, 25.0), randf_range(-25.0, 25.0)
 		)
 
-		# Pequeño retraso escalonado para que no caigan todos en el mismo frame
 		get_tree().create_timer(retraso_entre_meteoritos * indice).timeout.connect(
 			func(): _spawn_meteorito(pos_impacto)
 		)
 		indice += 1
 
 
-## Crea el círculo de advertencia en el punto de impacto, que se contrae
-## durante "tiempo_advertencia_meteorito" y luego detona.
 func _spawn_meteorito(pos_impacto: Vector2) -> void:
 	var advertencia := Node2D.new()
 	advertencia.global_position = pos_impacto
@@ -396,8 +411,6 @@ func _spawn_meteorito(pos_impacto: Vector2) -> void:
 	)
 
 
-## Ejecuta la explosión visual y aplica daño en área a todos los enemigos
-## dentro del radio de impacto.
 func _impacto_meteorito(pos_impacto: Vector2, radio: float) -> void:
 	var explosion := Node2D.new()
 	explosion.global_position = pos_impacto
@@ -466,6 +479,7 @@ func _ocultar_al_morir() -> void:
 		ui_contenedor.visible = false
 	if contendor_controles != null:
 		contendor_controles.visible = false
+	_set_flecha_visible(false)
 
 
 func _restaurar_al_reaparecer() -> void:
@@ -494,7 +508,7 @@ func _actualizar_barra_vida() -> void:
 	barra_vida.value = clamp(life, 0, vida_maxima)
 
 
-# ── Feedback visual de golpe recibido ─────────────────
+# ── Feedback visual de golpe ───────────────────────────
 
 func _mostrar_flash_golpe() -> void:
 	if _flash_tween != null and _flash_tween.is_valid():
@@ -596,31 +610,151 @@ func desactivar_disparo() -> void:
 	disparoON = false
 
 
+# ── Flecha indicadora del árbol ────────────────────────
+
+## Crea el Polygon2D triangular que sirve de flecha.
+func _crear_flecha_arbol() -> void:
+	var flecha := Polygon2D.new()
+	flecha.name = "FlechaArbol"
+	flecha.z_index = 100
+	flecha.top_level = true
+	
+	flecha.visible = false
+	flecha.scale = Vector2.ZERO
+	flecha.modulate.a = 0.0
+
+	add_child(flecha)
+	flecha_arbol = flecha
+	_actualizar_geometria_flecha()
+
+
+## Reconstruye el polígono de la flecha con el tamaño y color configurados.
+func _actualizar_geometria_flecha() -> void:
+	if flecha_arbol == null:
+		return
+
+	var mitad_ancho: float = tamano_flecha_arbol.x / 2.0
+	var mitad_alto: float = tamano_flecha_arbol.y / 2.0
+
+	flecha_arbol.polygon = PackedVector2Array([
+		Vector2(mitad_ancho, 0.0),
+		Vector2(-mitad_ancho, -mitad_alto),
+		Vector2(-mitad_ancho, mitad_alto)
+	])
+	flecha_arbol.color = color_flecha_arbol
+
+
+## Busca el árbol en la escena por su grupo "arbol".
+func _buscar_arbol() -> void:
+	await get_tree().process_frame
+	nodo_arbol = get_tree().get_first_node_in_group("arbol")
+	if nodo_arbol == null:
+		push_warning("Quark: no se encontró ningún nodo en el grupo 'arbol'")
+
+
+## Actualiza cada frame la posición, rotación y animación de la flecha.
+func _actualizar_flecha_arbol(_delta: float) -> void:
+	if flecha_arbol == null:
+		return
+
+	if _muerto:
+		_set_flecha_visible(false)
+		return
+
+	if not is_instance_valid(nodo_arbol):
+		_set_flecha_visible(false)
+		_buscar_arbol()
+		return
+
+	# Punto de origen considerando el offset vertical
+	var centro_origen: Vector2 = global_position + Vector2(0.0, offset_altura_flecha)
+	var vector_hacia_arbol: Vector2 = (nodo_arbol.global_position - centro_origen)
+	var distancia_al_arbol: float = vector_hacia_arbol.length()
+
+	# 1. Comprobar si supera la distancia mínima de activación
+	if distancia_al_arbol < distancia_minima_mostrar:
+		_set_flecha_visible(false)
+		return
+
+	# 2. Comprobar si el árbol está fuera del campo de visión de la cámara
+	var esta_fuera_camara: bool = not _arbol_esta_en_camara()
+
+	if esta_fuera_camara:
+		_set_flecha_visible(true)
+		flecha_arbol.rotation = vector_hacia_arbol.angle()
+		# Posición orbital exacta
+		flecha_arbol.global_position = centro_origen + vector_hacia_arbol.normalized() * distancia_flecha_arbol
+	else:
+		_set_flecha_visible(false)
+
+
+## Maneja las transiciones con Tween de aparición y desaparición.
+func _set_flecha_visible(debe_mostrar: bool) -> void:
+	if _flecha_visible_objetivo == debe_mostrar:
+		return
+
+	_flecha_visible_objetivo = debe_mostrar
+
+	if _tween_flecha != null and _tween_flecha.is_valid():
+		_tween_flecha.kill()
+
+	_tween_flecha = create_tween().set_parallel(true)
+
+	if debe_mostrar:
+		flecha_arbol.visible = true
+		_tween_flecha.tween_property(flecha_arbol, "scale", Vector2.ONE, duracion_animacion_flecha)\
+			.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		_tween_flecha.tween_property(flecha_arbol, "modulate:a", 1.0, duracion_animacion_flecha)\
+			.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	else:
+		_tween_flecha.tween_property(flecha_arbol, "scale", Vector2.ZERO, duracion_animacion_flecha)\
+			.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+		_tween_flecha.tween_property(flecha_arbol, "modulate:a", 0.0, duracion_animacion_flecha)\
+			.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+		
+		_tween_flecha.chain().tween_callback(func(): 
+			if not _flecha_visible_objetivo and flecha_arbol != null:
+				flecha_arbol.visible = false
+		)
+
+
+## Comprueba si la posición global del árbol cae dentro del rectángulo del viewport (con margen).
+func _arbol_esta_en_camara() -> bool:
+	var viewport := get_viewport()
+	if viewport == null or nodo_arbol == null:
+		return true
+
+	var transform_canvas: Transform2D = viewport.get_canvas_transform()
+	var pos_en_pantalla: Vector2 = transform_canvas * nodo_arbol.global_position
+	var tamano_pantalla: Vector2 = viewport.get_visible_rect().size
+
+	# Rectángulo ampliado según el margen
+	var rect_pantalla := Rect2(
+		Vector2(-margen_camara, -margen_camara),
+		tamano_pantalla + Vector2(margen_camara * 2.0, margen_camara * 2.0)
+	)
+
+	return rect_pantalla.has_point(pos_en_pantalla)
+
+
 # ── Efecto visual de regeneración ──────────────────────
 
 func _actualizar_efecto_regeneracion(_delta: float) -> void:
-	# Determina si el jugador debería estar regenerando visualmente
 	var regenerando: bool = regeneracion_activa and tiempo_sin_recibir_danio >= retraso_regeneracion and life < vida_maxima
 
 	if regenerando == _regeneracion_visual_activa:
-		return  # No hay cambio de estado
+		return
 
 	if regenerando:
-		# Inicio efecto regeneración
 		_iniciar_efecto_regeneracion()
 	else:
-		# Fin efecto regeneración
 		_detener_efecto_regeneracion()
 
 	_regeneracion_visual_activa = regenerando
 
 
 func _iniciar_efecto_regeneracion() -> void:
-	# Inicio efecto regeneración: barra de vida, partículas y luces
-
-	# --- Barra de vida: pulso de escala y cambio de color ---
 	if barra_vida != null:
-		# Pulso de escala (loop infinito)
 		if _tween_barra_regeneracion != null and _tween_barra_regeneracion.is_valid():
 			_tween_barra_regeneracion.kill()
 		_tween_barra_regeneracion = create_tween().set_loops()
@@ -629,35 +763,28 @@ func _iniciar_efecto_regeneracion() -> void:
 		_tween_barra_regeneracion.tween_property(barra_vida, "scale", Vector2(1.0, 1.0), 0.6)\
 			.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
 
-		# Transición de color a verde brillante (una sola vez)
 		if _tween_barra_color_regeneracion != null and _tween_barra_color_regeneracion.is_valid():
 			_tween_barra_color_regeneracion.kill()
 		_tween_barra_color_regeneracion = create_tween()
 		_tween_barra_color_regeneracion.tween_property(barra_vida, "modulate", Color(0.2, 1.0, 0.3, 1.0), 0.3)\
 			.set_ease(Tween.EASE_IN_OUT)
 
-	# --- Partículas de regeneración ---
 	if _particulas_regeneracion != null:
 		_particulas_regeneracion.emitting = true
 
-	# --- Luces : pulso suave de energía y color ---
-	# Luz base
 	if luz_base != null:
 		if _tween_luz_base_regeneracion != null and _tween_luz_base_regeneracion.is_valid():
 			_tween_luz_base_regeneracion.kill()
 		_tween_luz_base_regeneracion = create_tween().set_loops()
-		# Subir energía y virar a verde
 		_tween_luz_base_regeneracion.tween_property(luz_base, "energy", _luz_base_original_energy * 1.6, 0.5)\
 			.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
 		_tween_luz_base_regeneracion.parallel().tween_property(luz_base, "color", Color(0.2, 1.0, 0.3, 1.0), 0.5)\
 			.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
-		# Bajar energía y volver a color original
 		_tween_luz_base_regeneracion.tween_property(luz_base, "energy", _luz_base_original_energy, 0.5)\
 			.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
 		_tween_luz_base_regeneracion.parallel().tween_property(luz_base, "color", _luz_base_original_color, 0.5)\
 			.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
 
-	# Luz punta
 	if luz_punta != null:
 		if _tween_luz_punta_regeneracion != null and _tween_luz_punta_regeneracion.is_valid():
 			_tween_luz_punta_regeneracion.kill()
@@ -673,9 +800,6 @@ func _iniciar_efecto_regeneracion() -> void:
 
 
 func _detener_efecto_regeneracion() -> void:
-	# Fin efecto regeneración: restaurar todo a su estado original
-
-	# --- Barra de vida: restaurar escala y color ---
 	if _tween_barra_regeneracion != null and _tween_barra_regeneracion.is_valid():
 		_tween_barra_regeneracion.kill()
 	if _tween_barra_color_regeneracion != null and _tween_barra_color_regeneracion.is_valid():
@@ -685,11 +809,9 @@ func _detener_efecto_regeneracion() -> void:
 		barra_vida.scale = Vector2.ONE
 		barra_vida.modulate = _barra_modulate_original
 
-	# --- Partículas: detener emisión ---
 	if _particulas_regeneracion != null:
 		_particulas_regeneracion.emitting = false
 
-	# --- Luces: restaurar color y energía originales ---
 	if luz_base != null:
 		if _tween_luz_base_regeneracion != null and _tween_luz_base_regeneracion.is_valid():
 			_tween_luz_base_regeneracion.kill()
@@ -703,65 +825,50 @@ func _detener_efecto_regeneracion() -> void:
 		luz_punta.energy = _luz_punta_original_energy
 
 
-# ── Nueva función: animar_movimiento ──────────────────
+# ── Animación de movimiento ───────────────────────────
 
 func animar_movimiento(delta: float) -> void:
-	# Detecta si el jugador se está moviendo (velocidad significativa)
 	var moving: bool = velocity.length() > 10.0
 
 	if moving:
-		# Incrementa el tiempo de caminata
 		tiempo_caminata += delta * 14.0
-
-		# Dirección normalizada del movimiento
 		var dir: Vector2 = velocity.normalized()
 
-		# Squash & Stretch: estirar en la dirección del movimiento
-		# Escala objetivo: se estira horizontalmente según |dir.x| y comprime verticalmente
 		var target_scale: Vector2 = Vector2(
 			_body_original_scale.x + abs(dir.x) * 0.15,
 			_body_original_scale.y - abs(dir.x) * 0.08
 		)
 
-		# Rebote vertical usando seno
 		var vertical_bob: float = sin(tiempo_caminata * 6.0) * 2.0
 
-		# Aplicar lerp a la escala del cuerpo exterior
 		if cuerpo != null:
 			cuerpo.scale = cuerpo.scale.lerp(target_scale, delta * 12.0)
 
-		# Misma escala para el interior
 		if body_interior != null:
 			var target_interior: Vector2 = _body_interior_original_scale * (target_scale / _body_original_scale)
 			body_interior.scale = body_interior.scale.lerp(target_interior, delta * 12.0)
 
-		# Desplazamiento vertical del cuerpo (solo visual, se mueve con position)
 		_movement_vertical_offset = _movement_vertical_offset + (vertical_bob - _movement_vertical_offset) * delta * 10.0
 		if cuerpo != null:
 			cuerpo.position.y = _movement_vertical_offset
 
-		# Núcleo: pulso más rápido y rotación suave
 		_nucleo_original_scale = nucleo.scale if nucleo != null else Vector2.ONE
 		var nucleo_target_scale: float = _nucleo_original_scale.x + 0.1 + sin(tiempo_caminata * 8.0) * 0.08
 		if nucleo != null:
 			nucleo.scale = nucleo.scale.lerp(Vector2(nucleo_target_scale, nucleo_target_scale), delta * 10.0)
-			# Rotación ligera
 			_movement_nucleo_rotation = sin(tiempo_caminata * 4.0) * 0.1
 			nucleo.rotation = nucleo.rotation + (_movement_nucleo_rotation - nucleo.rotation) * delta * 6.0
 
 	else:
-		# Quieto: volver suavemente a escala original y eliminar desplazamiento vertical
 		if cuerpo != null:
 			cuerpo.scale = cuerpo.scale.lerp(_body_original_scale, delta * 10.0)
 		if body_interior != null:
 			body_interior.scale = body_interior.scale.lerp(_body_interior_original_scale, delta * 10.0)
 
-		# Desplazamiento vertical a cero
 		_movement_vertical_offset = _movement_vertical_offset * (1.0 - delta * 8.0)
 		if cuerpo != null:
 			cuerpo.position.y = _movement_vertical_offset
 
-		# Núcleo: volver a escala original y rotación cero
 		if nucleo != null:
 			nucleo.scale = nucleo.scale.lerp(_nucleo_original_scale, delta * 10.0)
 			nucleo.rotation = nucleo.rotation * (1.0 - delta * 6.0)

@@ -102,6 +102,13 @@ duracion_flash_golpe = 0.3
 regeneracion_por_segundo = 5.0
 retraso_regeneracion = 0.4
 regeneracion_activa = true
+distancia_flecha_arbol = 35.0
+offset_altura_flecha = -12.0
+distancia_minima_mostrar = 80.0
+margen_camara = 20.0
+color_flecha_arbol = Color(1, 0.85, 0.2, 0.95)
+tamano_flecha_arbol = Vector2(18, 14)
+duracion_animacion_flecha = 0.25
 ID = "quark"
 life = 200
 speed = 500.0
@@ -275,6 +282,7 @@ visible = false
 [node name="controls" type="CanvasLayer" parent="." index="12" unique_id=30969760]
 
 [node name="Joystick" type="VirtualJoystick" parent="controls" index="0" unique_id=309025352]
+z_index = -1
 offset_left = 289.0
 offset_top = 634.0
 offset_right = 546.0
