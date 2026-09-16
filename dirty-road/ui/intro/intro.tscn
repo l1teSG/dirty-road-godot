@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://ddhuvi04qd00b"]
 
 [ext_resource type="Theme" uid="uid://hau5fs7dt6rv" path="res://themes/mainTheme.tres" id="1_c5cpu"]
-[ext_resource type="Script" uid="uid://dhdwdj1udupi4" path="res://ui/intro/intro.gd" id="1_qxmol"]
+[ext_resource type="Script" uid="uid://dhg2koy3qgcnp" path="res://ui/intro/intro.gd" id="1_qxmol"]
 
 [sub_resource type="Curve" id="Curve_qxmol"]
 _data = [Vector2(0.546875, 0.42696637), 0.0, 0.0, 0, 0]

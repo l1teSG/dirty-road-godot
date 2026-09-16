@@ -6,23 +6,11 @@ var en_combate: bool = false
 
 
 func _ready() -> void:
+	configurar_etiqueta_nombre("Micro Plástico")
+
 	tiempo_recarga = 0.6
 	distancia_ataque = 45.0
 	distancia_max_aggro = 300.0
-
-
-func _arbol_valido(arbol_node: Node2D) -> bool:
-	if not is_instance_valid(arbol_node):
-		return false
-	if arbol_node.has_method("is_dead"):
-		return not arbol_node.is_dead()
-	var vida_actual = arbol_node.get("vida_actual")
-	if vida_actual != null:
-		return vida_actual > 0
-	var vida_nodo = arbol_node.get("life")
-	if vida_nodo != null:
-		return vida_nodo > 0
-	return true
 
 
 func seleccionar_objetivo() -> void:
@@ -167,7 +155,9 @@ func animar_ataque_impactante(target_pos: Vector2) -> void:
 
 
 func _physics_process(delta: float) -> void:
-	super._physics_process(delta)
+	super(delta)
+	seleccionar_objetivo()
+	evaluar_y_ejecutar_ataque()
 
 	# Si el objetivo actual es el Árbol y ya no es válido / está sin vida,
 	# lo descartamos inmediatamente.

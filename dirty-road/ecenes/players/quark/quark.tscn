@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://b74nv28ce3acw" path="res://ecenes/players/classPlayer/classPlayer.tscn" id="1_hr2c7"]
 [ext_resource type="Script" uid="uid://bsg7cxgg4axoa" path="res://ecenes/players/quark/quark.gd" id="2_lx2x3"]
-[ext_resource type="Script" uid="uid://b3thssvd7q4kf" path="res://scripts/wave_ui.gd" id="3_fm6mt"]
+[ext_resource type="Script" uid="uid://dwfyiqcgxcthk" path="res://scripts/wave_ui.gd" id="3_fm6mt"]
 [ext_resource type="FontFile" uid="uid://344dhrkbi7ri" path="res://themes/Chakra_Petch/ChakraPetch-Bold.ttf" id="3_lx2x3"]
 [ext_resource type="Texture2D" uid="uid://cfdda0xumpkii" path="res://assets/mobile-controls-1/boton2.tres" id="3_qh7t8"]
 [ext_resource type="Texture2D" uid="uid://f8dmk5pcnvgc" path="res://assets/mobile-controls-1/Vector/Icons/icon_pause.svg" id="4_j4fag"]
@@ -11,7 +11,7 @@
 [ext_resource type="FontFile" uid="uid://c57tlce3ingir" path="res://themes/Chakra_Petch/ChakraPetch-BoldItalic.ttf" id="7_ehraa"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_xqmf3"]
-radius = 266.75082
+radius = 463.13
 
 [sub_resource type="Gradient" id="Gradient_lx2x3"]
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
@@ -32,7 +32,7 @@ fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.5, 0)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_7cwo5"]
-radius = 20.22375
+radius = 7.81025
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mvreb"]
 bg_color = Color(0, 0, 0, 0.60784316)

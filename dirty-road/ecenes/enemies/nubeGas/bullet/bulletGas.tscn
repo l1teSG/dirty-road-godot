@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://cb27e727vlose"]
 
+[ext_resource type="Script" uid="uid://ctiiwy8k8nbfr" path="res://ecenes/enemies/nubeGas/bullet/bulletGas.gd" id="1_ketni"]
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_uv853"]
 radius = 5.0990195
 
@@ -13,6 +15,7 @@ fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.5, 0)
 
 [node name="BulletGas" type="Area2D" unique_id=1983240263]
+script = ExtResource("1_ketni")
 
 [node name="CuerpoExterior" type="Polygon2D" parent="." unique_id=954931773]
 color = Color(0.36078432, 0.5411765, 0.1254902, 0.8)

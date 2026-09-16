@@ -18,6 +18,23 @@ var puede_atacar: bool = true
 var en_aggro: bool = false
 var objetivo: Node2D = null
 
+# ── Etiqueta de nombre ────────────────────────────────
+@export var nombre_enemigo: String = ""
+@export var offset_etiqueta_nombre: Vector2 = Vector2(0, -60)
+var _etiqueta_nombre: Label = null
+
+# ── Feedback visual de daño ──────────────────────────
+@export_category("Feedback Visual de Daño")
+@export var flash_color: Color = Color.WHITE
+@export var flash_duration: float = 0.15
+@export var damage_number_offset: Vector2 = Vector2(0, -80)
+@export var damage_number_color: Color = Color.WHITE
+
+var _flash_tween: Tween = null
+
+func _physics_process(delta: float) -> void:
+	animar_cuerpo_enemigo(delta)
+
 
 func animar_cuerpo_enemigo(delta: float) -> void:
 	var cuerpo_int = $CuerpoInterior as Polygon2D
@@ -36,12 +53,6 @@ func animar_cuerpo_enemigo(delta: float) -> void:
 		nucleo.rotation += delta * 2.0
 
 
-func _physics_process(delta: float) -> void:
-	animar_cuerpo_enemigo(delta)
-	seleccionar_objetivo()
-	evaluar_y_ejecutar_ataque()
-
-
 func take_hit(damage: int = 10) -> void:
 	recibir_danio(damage)
 
@@ -49,6 +60,10 @@ func take_hit(damage: int = 10) -> void:
 # ── Recepción de daño (con aggro) ────────────────────────
 
 func recibir_danio(cantidad: int, atacante: Node2D = null) -> void:
+	# ── Feedback visual inmediato ──
+	_mostrar_flash_danio()
+	_mostrar_numero_danio(cantidad)
+
 	# Aggro: si el atacante es el jugador o un proyectil, entra en modo aggro
 	if atacante != null and (atacante.is_in_group("player") or atacante.is_in_group("bullet")):
 		en_aggro = true
@@ -66,10 +81,40 @@ func recibir_danio(cantidad: int, atacante: Node2D = null) -> void:
 				label.global_position,
 				label.get_node("/root").find_child("ui", true, false)
 			)
-		self.queue_free()
+		queue_free()
 
 
-# ── Búsqueda dinámica de objetivos (híbrida) ────────────
+# ── Utilidades comunes ─────────────────────────────────
+
+func buscar_jugador() -> Node2D:
+	var player: Node2D = get_tree().get_first_node_in_group("jugador")
+	if player == null:
+		player = get_tree().get_first_node_in_group("player")
+	return player
+
+
+func buscar_arbol() -> Node2D:
+	var arbol: Node2D = get_tree().get_first_node_in_group("arbol")
+	if arbol == null:
+		arbol = get_tree().get_first_node_in_group("tree")
+	return arbol
+
+
+func _arbol_valido(arbol_node: Node2D) -> bool:
+	if not is_instance_valid(arbol_node):
+		return false
+	if arbol_node.has_method("is_dead"):
+		return not arbol_node.is_dead()
+	var vida_actual = arbol_node.get("vida_actual")
+	if vida_actual != null:
+		return vida_actual > 0
+	var vida_nodo = arbol_node.get("life")
+	if vida_nodo != null:
+		return vida_nodo > 0
+	return true
+
+
+# ── Selección de objetivo por defecto (opcional para subclases) ──
 
 func seleccionar_objetivo() -> void:
 	var jugador: Node2D = null
@@ -121,7 +166,7 @@ func seleccionar_objetivo() -> void:
 	objetivo = closest
 
 
-# ── Método principal de ataque ────────────────────────
+# ── Ataque cuerpo a cuerpo (opcional para subclases) ──
 
 func evaluar_y_ejecutar_ataque() -> void:
 	if not is_instance_valid(objetivo):
@@ -144,3 +189,75 @@ func evaluar_y_ejecutar_ataque() -> void:
 	puede_atacar = false
 	await get_tree().create_timer(tiempo_recarga).timeout
 	puede_atacar = true
+
+
+# ── Etiqueta de nombre ────────────────────────────────
+
+func configurar_etiqueta_nombre(nombre: String = "") -> void:
+	if _etiqueta_nombre == null:
+		_etiqueta_nombre = Label.new()
+		_etiqueta_nombre.name = "EtiquetaNombre"
+		_etiqueta_nombre.z_index = 100
+		_etiqueta_nombre.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		_etiqueta_nombre.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		_etiqueta_nombre.add_theme_font_size_override("font_size", 14)
+		_etiqueta_nombre.add_theme_color_override("font_color", Color.WHITE)
+		_etiqueta_nombre.add_theme_color_override("font_outline_color", Color.BLACK)
+		_etiqueta_nombre.add_theme_constant_override("outline_size", 2)
+		_etiqueta_nombre.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		add_child(_etiqueta_nombre)
+
+	if nombre != "":
+		_etiqueta_nombre.text = nombre
+		nombre_enemigo = nombre
+
+	# Posicionar la etiqueta relativa al nodo (se actualiza cada frame)
+	_etiqueta_nombre.position = offset_etiqueta_nombre
+
+
+# ── Feedback visual de daño ──────────────────────────
+
+func _mostrar_flash_danio() -> void:
+	# Cancelar cualquier flash anterior en curso
+	if _flash_tween != null and _flash_tween.is_valid():
+		_flash_tween.kill()
+
+	var color_original: Color = modulate
+	modulate = flash_color
+
+	_flash_tween = create_tween()
+	_flash_tween.tween_property(self, "modulate", color_original, flash_duration)
+
+
+func _mostrar_numero_danio(cantidad: int) -> void:
+	var label: Label = Label.new()
+	label.text = str(cantidad)
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", 18)
+	label.add_theme_color_override("font_color", damage_number_color)
+	label.add_theme_color_override("font_outline_color", Color.BLACK)
+	label.add_theme_constant_override("outline_size", 2)
+	label.z_index = 200
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+	# Posición inicial: sobre la cabeza del enemigo con un pequeño desplazamiento horizontal aleatorio
+	var offset_x: float = randf_range(-15.0, 15.0)
+	var pos_inicial: Vector2 = global_position + damage_number_offset + Vector2(offset_x, 0.0)
+	label.global_position = pos_inicial
+
+	# Añadir a la escena actual para que no desaparezca si el enemigo muere
+	get_tree().current_scene.add_child(label)
+
+	# Animación: subir y desvanecer
+	# IMPORTANTE: el tween se crea sobre "label", no sobre "self" (el enemigo),
+	# así su ciclo de vida no depende de que el enemigo siga vivo.
+	var tween: Tween = label.create_tween()
+	tween.set_parallel(true)
+	tween.tween_property(label, "global_position", pos_inicial + Vector2(0.0, -30.0), 0.6)
+	tween.tween_property(label, "modulate:a", 0.0, 0.6)
+
+	tween.finished.connect(func():
+		if is_instance_valid(label):
+			label.queue_free()
+	)

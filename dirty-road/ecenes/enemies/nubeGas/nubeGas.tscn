@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://c4msn7to5j3in"]
 
-[ext_resource type="Script" uid="uid://bnd6p45ulna1e" path="res://ecenes/enemies/nubeGas/nube_gas.gd" id="1_intna"]
+[ext_resource type="Script" uid="uid://dcgwq0n5a1cca" path="res://ecenes/enemies/nubeGas/nube_gas.gd" id="1_intna"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_7smct"]
 radius = 20.024984
@@ -16,6 +16,10 @@ fill_to = Vector2(0.5, 0)
 
 [node name="NubeGas" type="CharacterBody2D" unique_id=1201918821]
 script = ExtResource("1_intna")
+velocidad_movimiento = 100.0
+rango_ataque = 450.0
+velocidad_retroceso = 110.0
+intervalo_disparo = 2.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1164621574]
 shape = SubResource("CircleShape2D_7smct")
