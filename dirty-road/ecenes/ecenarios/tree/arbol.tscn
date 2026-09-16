@@ -32,6 +32,8 @@ corner_radius_bottom_left = 2
 
 [node name="Arbol" type="Area2D" unique_id=157670480]
 script = ExtResource("1_v8n67")
+vida_maxima = 5000
+regeneracion_por_segundo = 20.0
 
 [node name="sombra" type="Polygon2D" parent="." unique_id=532215091]
 z_index = -1

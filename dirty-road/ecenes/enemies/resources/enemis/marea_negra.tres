@@ -1,8 +1,10 @@
 [gd_resource type="Resource" script_class="EnemigoOleadaConfig" format=3 uid="uid://dyd2ery6he44o"]
 
 [ext_resource type="Script" uid="uid://vyt7ho0roxls" path="res://scripts/enemigo_oleada_config.gd" id="1_6vnf2"]
+[ext_resource type="PackedScene" uid="uid://cae2il55vhlpd" path="res://ecenes/enemies/mareaNegra/mareaNegra.tscn" id="1_7qhng"]
 
 [resource]
 script = ExtResource("1_6vnf2")
+escena = ExtResource("1_7qhng")
 oleada_minima = 3
 max_simultaneos = 10
