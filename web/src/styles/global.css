@@ -1,6 +1,6 @@
  
+
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
  
 @theme {
   /* --- Paleta base (extraída de los frames del gameplay) --- */
@@ -75,4 +75,3 @@
   0%, 100% { filter: drop-shadow(0 0 20px rgba(53, 168, 72, 0.35)); }
   50%      { filter: drop-shadow(0 0 48px rgba(53, 168, 72, 0.6)); }
 }
- 
