@@ -1,15 +1,23 @@
 /**
- * Lógica centralizada para interactuar con la API de GitHub.
+ * Lógica centralizada para consumir la API pública de GitHub.
  *
- * Estrategia de fetching:
- * - Las funciones getLatestRelease y getRepoStats se ejecutan en el cliente
- *   (React) para obtener datos frescos en cada visita.
- * - Si se desea mejorar el rendimiento y reducir llamadas a la API, se puede
- *   mover la obtención de datos al frontmatter de Astro (build-time) usando
- *   fetch estático. Esto cachearía los datos en el HTML generado y evitaría
- *   rate limits en el cliente. La decisión de mantenerlo client-side es para
- *   mostrar siempre la información más reciente sin necesidad de rebuild.
+ * ¿Qué se podría mover a build‑time (Astro frontmatter) y qué mantener client‑side?
+ * ---------------------------------------------------------------------------------
+ * - Las llamadas a getLatestRelease() y getRepoStats() se ejecutan en el cliente
+ *   porque la página es estática (output: 'static') y queremos que los datos
+ *   reflejen el estado más reciente del repositorio sin necesidad de re‑build.
+ *   Si en el futuro se desea una carga instantánea sin peticiones en runtime,
+ *   se podría mover la lógica a un endpoint de Astro (SSR) o a un paso de
+ *   pre‑renderizado que inyecte los datos en el HTML.
+ * - Las funciones puras (detectOS, getAssetForOS, formatBytes, formatDate) no
+ *   dependen de la red y pueden usarse tanto en cliente como en build‑time.
+ * - El manejo de rate‑limit y errores de red es inherentemente client‑side; en
+ *   build‑time se manejaría con reintentos y caché en el servidor de build.
  */
+
+// ---------------------------------------------------------------------------
+// Tipos
+// ---------------------------------------------------------------------------
 
 export interface GitHubAsset {
   name: string;
@@ -33,18 +41,17 @@ export interface GitHubRepoStats {
   pushed_at: string;
 }
 
-const GITHUB_API_BASE = 'https://api.github.com';
+// ---------------------------------------------------------------------------
+// Helpers de autenticación (opcional, para evitar rate‑limit en desarrollo)
+// ---------------------------------------------------------------------------
 
-/**
- * Construye los headers para las peticiones a la API de GitHub.
- * Si se define GITHUB_TOKEN en el entorno, se usa para autenticación,
- * lo que aumenta el rate limit de 60 a 5000 peticiones/hora.
- */
 function getHeaders(): Record<string, string> {
   const headers: Record<string, string> = {
     Accept: 'application/vnd.github.v3+json',
   };
 
+  // Si se define GITHUB_TOKEN en el entorno (Astro lo expone como import.meta.env)
+  // se añade para aumentar el límite de peticiones.
   if (import.meta.env.GITHUB_TOKEN) {
     headers['Authorization'] = `token ${import.meta.env.GITHUB_TOKEN}`;
   }
@@ -52,78 +59,135 @@ function getHeaders(): Record<string, string> {
   return headers;
 }
 
+// ---------------------------------------------------------------------------
+// Errores tipados
+// ---------------------------------------------------------------------------
+
+export class GitHubError extends Error {
+  constructor(
+    message: string,
+    public readonly status?: number,
+    public readonly rateLimitRemaining?: number,
+  ) {
+    super(message);
+    this.name = 'GitHubError';
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Funciones de fetch
+// ---------------------------------------------------------------------------
+
 /**
- * Obtiene el último release del repositorio.
- * @throws Error con mensaje descriptivo según el tipo de error.
+ * Obtiene la release más reciente del repositorio.
+ * Lanza GitHubError con mensajes descriptivos según el tipo de fallo.
  */
 export async function getLatestRelease(
   owner: string,
-  repo: string
+  repo: string,
 ): Promise<GitHubRelease> {
-  const url = `${GITHUB_API_BASE}/repos/${owner}/${repo}/releases/latest`;
-  const response = await fetch(url, { headers: getHeaders() });
+  const url = `https://api.github.com/repos/${owner}/${repo}/releases/latest`;
+  let response: Response;
 
-  if (!response.ok) {
-    if (response.status === 403) {
-      const remaining = response.headers.get('X-RateLimit-Remaining');
-      if (remaining === '0') {
-        throw new Error(
-          'Límite de peticiones a GitHub excedido. Intenta de nuevo más tarde o configura GITHUB_TOKEN.'
-        );
-      }
-      throw new Error('Acceso denegado a la API de GitHub (403).');
-    }
-    if (response.status === 404) {
-      throw new Error(
-        'No se encontró el release más reciente. ¿El repositorio tiene releases publicados?'
-      );
-    }
-    throw new Error(
-      `Error al obtener el release: ${response.status} ${response.statusText}`
+  try {
+    response = await fetch(url, { headers: getHeaders() });
+  } catch {
+    throw new GitHubError(
+      'No se pudo conectar con GitHub. Verifica tu conexión a internet.',
     );
   }
 
-  return response.json();
+  // Rate limit
+  if (response.status === 403) {
+    const remaining = response.headers.get('X-RateLimit-Remaining');
+    if (remaining === '0') {
+      throw new GitHubError(
+        'Límite de peticiones a GitHub alcanzado. Intenta de nuevo en unos minutos.',
+        403,
+        0,
+      );
+    }
+  }
+
+  // Repositorio o release no encontrados
+  if (response.status === 404) {
+    throw new GitHubError(
+      'No se encontró el repositorio o no tiene releases publicadas.',
+      404,
+    );
+  }
+
+  if (!response.ok) {
+    throw new GitHubError(
+      `Error inesperado de GitHub (${response.status}).`,
+      response.status,
+    );
+  }
+
+  const data: GitHubRelease = await response.json();
+
+  // Caso defensivo: la API devolvió 200 pero el array de assets está vacío
+  // (puede ocurrir si se borraron los binarios de una release).
+  if (!data.assets || data.assets.length === 0) {
+    throw new GitHubError(
+      'La release más reciente no contiene archivos descargables. Disponible pronto.',
+    );
+  }
+
+  return data;
 }
 
 /**
- * Obtiene estadísticas del repositorio (estrellas, forks, último push).
- * @throws Error con mensaje descriptivo según el tipo de error.
+ * Obtiene estadísticas básicas del repositorio (estrellas, forks, último push).
  */
 export async function getRepoStats(
   owner: string,
-  repo: string
+  repo: string,
 ): Promise<GitHubRepoStats> {
-  const url = `${GITHUB_API_BASE}/repos/${owner}/${repo}`;
-  const response = await fetch(url, { headers: getHeaders() });
+  const url = `https://api.github.com/repos/${owner}/${repo}`;
+  let response: Response;
 
-  if (!response.ok) {
-    if (response.status === 403) {
-      const remaining = response.headers.get('X-RateLimit-Remaining');
-      if (remaining === '0') {
-        throw new Error(
-          'Límite de peticiones a GitHub excedido. Intenta de nuevo más tarde o configura GITHUB_TOKEN.'
-        );
-      }
-      throw new Error('Acceso denegado a la API de GitHub (403).');
-    }
-    if (response.status === 404) {
-      throw new Error(
-        'No se encontró el repositorio. Verifica que el nombre sea correcto.'
-      );
-    }
-    throw new Error(
-      `Error al obtener estadísticas: ${response.status} ${response.statusText}`
+  try {
+    response = await fetch(url, { headers: getHeaders() });
+  } catch {
+    throw new GitHubError(
+      'No se pudo conectar con GitHub. Verifica tu conexión a internet.',
     );
   }
 
-  return response.json();
+  if (response.status === 403) {
+    const remaining = response.headers.get('X-RateLimit-Remaining');
+    if (remaining === '0') {
+      throw new GitHubError(
+        'Límite de peticiones a GitHub alcanzado. Intenta de nuevo en unos minutos.',
+        403,
+        0,
+      );
+    }
+  }
+
+  if (response.status === 404) {
+    throw new GitHubError('Repositorio no encontrado.', 404);
+  }
+
+  if (!response.ok) {
+    throw new GitHubError(
+      `Error inesperado de GitHub (${response.status}).`,
+      response.status,
+    );
+  }
+
+  const data: GitHubRepoStats = await response.json();
+  return data;
 }
 
+// ---------------------------------------------------------------------------
+// Detección de SO (cliente)
+// ---------------------------------------------------------------------------
+
 /**
- * Detecta el sistema operativo del usuario basado en navigator.userAgent.
- * Retorna 'windows', 'mac', 'linux' o 'unknown'.
- * Esta función es pura y testeable por separado.
+ * Detecta el sistema operativo a partir del userAgent.
+ * Retorna 'unknown' si no se puede determinar (p. ej. en SSR).
  */
 export function detectOS(): 'windows' | 'mac' | 'linux' | 'unknown' {
   if (typeof navigator === 'undefined') return 'unknown';
@@ -134,28 +198,53 @@ export function detectOS(): 'windows' | 'mac' | 'linux' | 'unknown' {
   return 'unknown';
 }
 
+// ---------------------------------------------------------------------------
+// Selección de asset por SO (función pura)
+// ---------------------------------------------------------------------------
+
 /**
- * Filtra los assets del release según el sistema operativo.
- * Función pura y testeable por separado.
+ * Dado un array de assets y un SO, devuelve el asset que corresponda.
+ * La lógica de matching es pura y no depende del DOM, por lo que es
+ * fácilmente testeable.
  */
 export function getAssetForOS(
   assets: GitHubAsset[],
-  os: 'windows' | 'mac' | 'linux' | 'unknown'
-): GitHubAsset | undefined {
-  const patterns: Record<string, RegExp> = {
-    windows: /\.exe$/i,
-    mac: /\.dmg$/i,
-    linux: /\.AppImage$/i,
+  os: 'windows' | 'mac' | 'linux' | 'unknown',
+): GitHubAsset | null {
+  if (!assets || assets.length === 0) return null;
+
+  const lowerAssets = assets.map((a) => ({
+    ...a,
+    nameLower: a.name.toLowerCase(),
+  }));
+
+  const matchers: Record<string, (name: string) => boolean> = {
+    windows: (n) => n.includes('win') || n.endsWith('.exe') || n.endsWith('.msi'),
+    mac: (n) => n.includes('mac') || n.includes('darwin') || n.endsWith('.dmg'),
+    linux: (n) =>
+      n.includes('linux') ||
+      n.endsWith('.appimage') ||
+      n.endsWith('.deb') ||
+      n.endsWith('.rpm') ||
+      n.endsWith('.tar.gz') ||
+      n.endsWith('.tar.xz'),
   };
 
-  const pattern = patterns[os];
-  if (!pattern) return undefined;
+  if (os !== 'unknown' && matchers[os]) {
+    const match = lowerAssets.find((a) => matchers[os](a.nameLower));
+    if (match) return match;
+  }
 
-  return assets.find((asset) => pattern.test(asset.name));
+  // Fallback: devolver el primer asset (si existe)
+  return lowerAssets[0] ?? null;
 }
 
+// ---------------------------------------------------------------------------
+// Utilidades de formato
+// ---------------------------------------------------------------------------
+
 /**
- * Formatea bytes a una representación legible.
+ * Convierte bytes a una cadena legible (ej. "12.3 MB").
  */
 export function formatBytes(bytes: number): string {
   if (bytes === 0) return '0 B';
@@ -166,7 +255,7 @@ export function formatBytes(bytes: number): string {
 }
 
 /**
- * Formatea una fecha ISO a formato legible en español.
+ * Formatea una fecha ISO a un formato legible en español.
  */
 export function formatDate(isoDate: string): string {
   const date = new Date(isoDate);
