@@ -1,138 +1,124 @@
 /**
- * Botón de descarga principal.
- * Detecta el SO del usuario, obtiene el último release de GitHub
- * y muestra el asset correspondiente con versión, fecha y tamaño.
- * Maneja estados de carga, error y rate limiting.
+ * Componente cliente para el botón de descarga principal.
+ * Obtiene la última release de GitHub, detecta el SO del usuario
+ * y muestra el asset correspondiente con información adicional.
+ *
+ * Estados:
+ * - loading: skeleton
+ * - error: fallback con enlace a la página de releases
+ * - sin releases: mensaje "Disponible pronto"
+ * - éxito: botón de descarga con versión, fecha y tamaño
  */
-import { useState, useEffect } from 'react';
+
+import { useEffect, useState } from 'react';
 import {
   getLatestRelease,
   detectOS,
   getAssetForOS,
   formatBytes,
   formatDate,
-  type GitHubRelease,
-  type GitHubAsset,
+  GitHubRelease,
+  GitHubAsset,
 } from '../lib/github';
 
 interface Props {
-  owner?: string;
-  repo?: string;
+  owner: string;
+  repo: string;
 }
 
-export default function DownloadButton({
-  owner = 'usuario',
-  repo = 'repo',
-}: Props) {
+export default function DownloadButton({ owner, repo }: Props) {
   const [release, setRelease] = useState<GitHubRelease | null>(null);
+  const [asset, setAsset] = useState<GitHubAsset | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedOS, setSelectedOS] = useState<'windows' | 'mac' | 'linux' | 'unknown'>('unknown');
-  const [selectedAsset, setSelectedAsset] = useState<GitHubAsset | null>(null);
 
-  // Detectar SO al montar
-  useEffect(() => {
-    setSelectedOS(detectOS());
-  }, []);
-
-  // Obtener release de GitHub
   useEffect(() => {
     let cancelled = false;
+
     async function load() {
       try {
         setLoading(true);
         setError(null);
+
         const data = await getLatestRelease(owner, repo);
-        if (!cancelled) {
-          setRelease(data);
-        }
+        if (cancelled) return;
+
+        setRelease(data);
+
+        const os = detectOS();
+        const matched = getAssetForOS(data.assets, os);
+        setAsset(matched);
       } catch (err: any) {
-        if (!cancelled) {
-          setError(err.message || 'Error desconocido');
-        }
+        if (cancelled) return;
+        setError(err.message ?? 'Error desconocido');
       } finally {
         if (!cancelled) {
           setLoading(false);
         }
       }
     }
+
     load();
+
     return () => {
       cancelled = true;
     };
   }, [owner, repo]);
 
-  // Actualizar asset cuando cambia el SO o el release
-  useEffect(() => {
-    if (!release) {
-      setSelectedAsset(null);
-      return;
-    }
-    const asset = getAssetForOS(release.assets, selectedOS);
-    setSelectedAsset(asset || null);
-  }, [release, selectedOS]);
-
-  // Fallback: link a la página de releases
-  const fallbackUrl = `https://github.com/${owner}/${repo}/releases`;
-
-  // Estado de carga: skeleton
+  // --- Estado: loading (skeleton) ---
   if (loading) {
     return (
-      <div className="text-center py-8 space-y-4">
-        <div className="inline-block w-48 h-14 bg-muted/20 rounded-xl animate-pulse" />
-        <div className="space-y-2">
-          <div className="inline-block w-32 h-4 bg-muted/20 rounded animate-pulse" />
-          <div className="inline-block w-40 h-4 bg-muted/20 rounded animate-pulse" />
-        </div>
+      <div className="flex flex-col items-center gap-4">
+        <div className="h-14 w-64 animate-pulse rounded-lg bg-bg-alt" />
+        <div className="h-4 w-48 animate-pulse rounded bg-bg-alt" />
       </div>
     );
   }
 
-  // Estado de error
+  // --- Estado: error (fallback a releases) ---
   if (error) {
     return (
-      <div className="text-center py-8 space-y-4">
-        <p className="text-magenta-bright font-mono text-sm">⚠ {error}</p>
+      <div className="flex flex-col items-center gap-3">
+        <p className="text-sm text-text-secondary">{error}</p>
         <a
-          href={fallbackUrl}
+          href={`https://github.com/${owner}/${repo}/releases`}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-block px-6 py-3 bg-magenta text-white font-bold rounded-lg hover:bg-magenta-bright transition-colors focus:outline-none focus:ring-2 focus:ring-magenta-bright focus:ring-offset-2 focus:ring-offset-bg"
+          className="inline-flex items-center gap-2 rounded-lg bg-magenta px-6 py-3 text-sm font-semibold text-white shadow-glow-magenta transition hover:bg-magenta-bright focus:outline-none focus-visible:ring-2 focus-visible:ring-magenta-bright focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
         >
-          Ir a releases en GitHub
+          Ver releases en GitHub
         </a>
       </div>
     );
   }
 
-  if (!release) return null;
+  // --- Estado: sin releases (defensivo) ---
+  if (!release || !asset) {
+    return (
+      <p className="text-sm text-text-secondary">
+        Disponible pronto
+      </p>
+    );
+  }
 
-  const downloadUrl = selectedAsset?.browser_download_url || fallbackUrl;
-  const version = release.tag_name;
-  const date = formatDate(release.published_at);
-  const size = selectedAsset ? formatBytes(selectedAsset.size) : null;
-
-  const osLabel =
-    selectedOS === 'mac'
-      ? 'macOS'
-      : selectedOS === 'unknown'
-        ? ''
-        : selectedOS.charAt(0).toUpperCase() + selectedOS.slice(1);
-
+  // --- Estado: éxito ---
   return (
-    <div className="text-center space-y-4">
+    <div className="flex flex-col items-center gap-3">
       <a
-        href={downloadUrl}
+        href={asset.browser_download_url}
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-block px-8 py-4 bg-magenta text-white font-bold text-lg rounded-xl shadow-glow-magenta hover:bg-magenta-bright transition-all focus:outline-none focus:ring-2 focus:ring-magenta-bright focus:ring-offset-2 focus:ring-offset-bg"
+        className="inline-flex items-center gap-2 rounded-lg bg-magenta px-6 py-3 text-sm font-semibold text-white shadow-glow-magenta transition hover:bg-magenta-bright focus:outline-none focus-visible:ring-2 focus-visible:ring-magenta-bright focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
       >
-        Descargar {osLabel ? `para ${osLabel}` : 'ahora'}
+        Descargar {asset.name}
       </a>
-      <div className="text-text-secondary font-mono text-sm space-y-1">
-        <p>Versión {version}</p>
-        <p>{date}</p>
-        {size && <p>{size}</p>}
+
+      <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-text-secondary">
+        <span>v{release.tag_name}</span>
+        <span aria-hidden="true">·</span>
+        <span>{formatDate(release.published_at)}</span>
+        <span aria-hidden="true">·</span>
+        <span>{formatBytes(asset.size)}</span>
       </div>
     </div>
   );

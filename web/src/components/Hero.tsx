@@ -1,44 +1,30 @@
 /**
- * Componente Hero: título principal, subtítulo y elemento decorativo con glow.
- * Usa el fondo radial-vignette y un pulso sutil en el elemento central.
- * Incluye el botón de descarga dentro del layout.
+ * Componente Hero para la página de descarga de Dirty Road.
+ * Muestra el título, subtítulo y el botón de descarga principal.
+ * No contiene lógica de fetch propia; solo estructura y estilos.
  */
-import { useEffect, useState } from 'react';
+
 import DownloadButton from './DownloadButton';
 
 export default function Hero() {
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
-
-  useEffect(() => {
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setPrefersReducedMotion(mq.matches);
-    const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
-    mq.addEventListener('change', handler);
-    return () => mq.removeEventListener('change', handler);
-  }, []);
-
   return (
-    <section className="radial-vignette min-h-[80vh] flex flex-col items-center justify-center text-center px-4 relative">
-      {/* Elemento decorativo con glow aludiendo a la torreta del juego */}
+    <section className="radial-vignette relative flex min-h-[80vh] flex-col items-center justify-center px-4 py-20 text-center">
+      {/* Elemento decorativo que alude a la torreta del juego */}
       <div
-        className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 rounded-full bg-teal/10 blur-3xl ${
-          prefersReducedMotion ? '' : 'glow-pulse'
-        }`}
+        className="glow-pulse absolute top-10 right-10 h-24 w-24 rounded-full bg-green/20 blur-2xl"
         aria-hidden="true"
       />
 
-      <div className="relative z-10 space-y-8 max-w-3xl mx-auto">
-        <div className="space-y-4">
-          <h1 className="text-5xl md:text-7xl font-bold tracking-tight">
-            <span className="text-green-bright">Dirty</span>{' '}
-            <span className="text-teal">Road</span>
-          </h1>
-          <p className="text-xl md:text-2xl text-text-secondary max-w-2xl mx-auto font-mono">
-            Sobrevive a la contaminación. Un shooter minimalista con conciencia ecológica.
-          </p>
-        </div>
+      <h1 className="text-5xl font-bold tracking-tight text-text-primary sm:text-6xl lg:text-7xl">
+        Dirty Road
+      </h1>
+      <p className="mt-6 max-w-2xl text-lg text-text-secondary sm:text-xl">
+        Videojuego educativo 2D que fomenta la conciencia ambiental.
+        Recolecta, recicla y reforesta con Renata.
+      </p>
 
-        <DownloadButton />
+      <div className="mt-10">
+        <DownloadButton owner="l1teSG" repo="dirty-road-godot" />
       </div>
     </section>
   );
