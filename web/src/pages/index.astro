@@ -1,11 +1,32 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+// Página principal de descarga de Dirty Road.
+// Ensambla todos los componentes: Hero, GitHubStats, Changelog,
+// ScreenshotGallery y Footer dentro del BaseLayout.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero';
+import GitHubStats from '../components/GitHubStats';
+import Changelog from '../components/Changelog';
+import ScreenshotGallery from '../components/ScreenshotGallery';
+import Footer from '../components/Footer.astro';
 ---
-
-<Layout>
-	<Welcome />
-</Layout>
+<BaseLayout
+  title="Dirty Road - Videojuego educativo ambiental"
+  description="Videojuego educativo 2D que fomenta la conciencia ambiental. Recolecta, recicla y reforesta con Renata."
+>
+  <main>
+    <Hero client:load />
+    <section class="px-4 py-12">
+      <GitHubStats client:load owner="l1teSG" repo="dirty-road-godot" />
+    </section>
+    <section class="px-4 py-12">
+      <div class="mx-auto max-w-3xl">
+        <h2 class="mb-6 text-2xl font-semibold text-text-primary sm:text-3xl">
+          Novedades
+        </h2>
+        <Changelog client:load owner="l1teSG" repo="dirty-road-godot" />
+      </div>
+    </section>
+    <ScreenshotGallery client:load />
+    <Footer />
+  </main>
+</BaseLayout>

@@ -1,0 +1,39 @@
+---
+// Layout base para la página de descarga de Dirty Road.
+// Proporciona la estructura HTML común, meta tags, fuentes y estilos globales.
+export interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'Dirty Road',
+  description = 'Videojuego educativo 2D que fomenta la conciencia ambiental. Recolecta, recicla y reforesta con Renata.',
+} = Astro.props;
+---
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    <!-- Favicon placeholder (reemplazar con el icono real del juego) -->
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- Fuentes y estilos globales -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/src/styles/global.css" />
+  </head>
+  <body class="bg-bg text-text-primary font-display antialiased">
+    <slot />
+  </body>
+</html>
