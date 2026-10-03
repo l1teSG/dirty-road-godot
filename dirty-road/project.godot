@@ -20,9 +20,9 @@ config/icon="uid://dqcco4yhy6ldm"
 
 [autoload]
 
-BiomasaManager="*uid://b2o0ouq0f4sdb"
-SaveManager="*uid://cvmav7awamy4b"
 EducationManager="*uid://7rfhdfi1gfn3"
+SaveManager="*uid://cmkryrq7ecb2c"
+BiomasaManager="*uid://dghni3v7to2ax"
 
 [display]
 
