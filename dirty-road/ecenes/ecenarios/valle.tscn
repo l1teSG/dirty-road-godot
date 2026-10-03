@@ -440,3 +440,35 @@ light_enabled = false
 light_radius = 0.2
 halo_enabled = false
 halo_opacity = 0.9
+
+[node name="tocon13" parent="tocones" unique_id=67780098 instance=ExtResource("1_bmrih")]
+position = Vector2(-1386, 508)
+size_factor = 0.6000000000000001
+light_enabled = false
+light_radius = 0.2
+halo_enabled = false
+halo_opacity = 0.9
+
+[node name="tocon14" parent="tocones" unique_id=1546768092 instance=ExtResource("1_bmrih")]
+position = Vector2(-800, -554)
+size_factor = 0.6000000000000001
+light_enabled = false
+light_radius = 0.2
+halo_enabled = false
+halo_opacity = 0.9
+
+[node name="tocon15" parent="tocones" unique_id=1856954826 instance=ExtResource("1_bmrih")]
+position = Vector2(212, -994)
+size_factor = 0.6000000000000001
+light_enabled = false
+light_radius = 0.2
+halo_enabled = false
+halo_opacity = 0.9
+
+[node name="tocon16" parent="tocones" unique_id=961672343 instance=ExtResource("1_bmrih")]
+position = Vector2(290, 40)
+size_factor = 0.6000000000000001
+light_enabled = false
+light_radius = 0.2
+halo_enabled = false
+halo_opacity = 0.9

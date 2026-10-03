@@ -117,8 +117,10 @@ position = Vector2(0, 63)
 
 [node name="WaveManager" type="Node2D" parent="." unique_id=196695999 node_paths=PackedStringArray("puntos_spawn")]
 script = ExtResource("8_bfnr7")
-puntos_spawn = [NodePath("1"), NodePath("2")]
+puntos_spawn = [NodePath("1"), NodePath("2"), NodePath("3"), NodePath("4"), NodePath("5"), NodePath("6"), NodePath("7"), NodePath("8")]
 etapas = Array[ExtResource("8_trm6e")]([SubResource("Resource_trm6e")])
+tiempo_entre_spawns = 1.0
+tiempo_maximo_oleada = 60.0
 debug_spawnear_enemigos = false
 debug_imprimir_info = false
 
