@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://c5182832ylop2"]
 
+[ext_resource type="PackedScene" uid="uid://c3si17hcw3kmn" path="res://assets/envioromental/tocones.tscn" id="1_bmrih"]
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7cwo5"]
 size = Vector2(1474, 4827)
 
@@ -339,3 +341,23 @@ debug_color = Color(0.5594262, 0.55309296, 0.26348746, 0.41960785)
 position = Vector2(28, -1204)
 shape = SubResource("RectangleShape2D_818wt")
 debug_color = Color(0.56078434, 0.5529412, 0.2627451, 0.41960785)
+
+[node name="tocones" type="Node2D" parent="." unique_id=2128310393]
+
+[node name="tocon" parent="tocones" unique_id=728919273 instance=ExtResource("1_bmrih")]
+position = Vector2(426, 632)
+
+[node name="tocon2" parent="tocones" unique_id=2098023830 instance=ExtResource("1_bmrih")]
+position = Vector2(998, 140)
+
+[node name="tocon3" parent="tocones" unique_id=888814779 instance=ExtResource("1_bmrih")]
+position = Vector2(-422, -272)
+
+[node name="tocon4" parent="tocones" unique_id=1975722777 instance=ExtResource("1_bmrih")]
+position = Vector2(274, -806)
+
+[node name="tocon5" parent="tocones" unique_id=967316074 instance=ExtResource("1_bmrih")]
+position = Vector2(-718, -944)
+
+[node name="tocon6" parent="tocones" unique_id=1002493083 instance=ExtResource("1_bmrih")]
+position = Vector2(-900, 656)
