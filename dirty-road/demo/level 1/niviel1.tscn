@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://dx5ahbv0nxyet" path="res://ecenes/ecenarios/tree/arbol.tscn" id="5_q0v6s"]
 [ext_resource type="Script" uid="uid://wubm8w5adwq2" path="res://ecenes/respawn/respawn_manager.gd" id="7_rspwn1"]
 [ext_resource type="Script" uid="uid://036a6w37ercn" path="res://scripts/wave_manager.gd" id="8_bfnr7"]
-[ext_resource type="Script" uid="uid://b07d7n2c62y1x" path="res://etapa_config.gd" id="8_trm6e"]
+[ext_resource type="Script" uid="uid://b07d7n2c62y1x" path="res://scripts/etapa_config.gd" id="8_trm6e"]
 [ext_resource type="Script" uid="uid://vyt7ho0roxls" path="res://scripts/enemigo_oleada_config.gd" id="9_cc5k1"]
 [ext_resource type="Resource" uid="uid://c7i5gecmsrwdi" path="res://ecenes/enemies/resources/enemis/nube_gas.tres" id="10_w7ccy"]
 [ext_resource type="Resource" uid="uid://dyd2ery6he44o" path="res://ecenes/enemies/resources/enemis/marea_negra.tres" id="11_vgl3r"]
