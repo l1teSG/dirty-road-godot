@@ -19,6 +19,12 @@ var tween_actual: Tween
 
 
 func _ready() -> void:
+	EducationManager.set_data({
+		"general": EducationDataGeneral.get_data(),
+		"stages": EducationDataStages.get_data()
+	})
+	EducationManager.start_run()
+	EducationManager.on_stage_started(0)
 	horda_actual = SaveManager.get_horda() if SaveManager else 1
 	_iniciar_transicion_entrada()
 

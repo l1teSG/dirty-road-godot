@@ -185,13 +185,14 @@ func on_stage_started(stage_index: int) -> void:
 
 func on_wave_ended() -> void:
 	_wave_counter += 1
-	var msg: String = _mix(_wave_queue, _wave_break_messages, "_last_wave_message", "wave", "facts")
-	if msg != "":
-		_popup.enqueue(msg, PopupVariant.WAVE_BREAK, 3.5)
+	var msg: Dictionary = _mix(_wave_queue, _wave_break_messages, "_last_wave_message", "wave", "facts")
+	if msg["text"] != "":
+		_popup.enqueue(msg["text"], PopupVariant.WAVE_BREAK, 3.5, msg["subtitle"])
 
 
 func on_enemy_encountered(enemy_id: String) -> void:
 	var info: Dictionary = get_enemy_data(enemy_id)
+	var sub: String = _stage_subtitle(get_enemy_stage(enemy_id))
 
 	if not _seen_enemies.has(enemy_id):
 		_seen_enemies[enemy_id] = true
@@ -199,7 +200,7 @@ func on_enemy_encountered(enemy_id: String) -> void:
 		_enemy_last_shown[enemy_id] = _wave_counter
 		var text: String = "%s\n%s\n%s" % [
 			info.get("name", "?"), info.get("represents", ""), _next_enemy_fact(enemy_id, info)]
-		_popup.enqueue(text, PopupVariant.ENEMY_CARD, 4.0)
+		_popup.enqueue(text, PopupVariant.ENEMY_CARD, 5.0, sub)
 		return
 
 	var ultimo: int = _enemy_last_shown.get(enemy_id, 0)
@@ -209,10 +210,11 @@ func on_enemy_encountered(enemy_id: String) -> void:
 		return
 	_enemy_last_shown[enemy_id] = _wave_counter
 	var text2: String = "%s\n%s" % [info.get("name", "?"), _next_enemy_fact(enemy_id, info)]
-	_popup.enqueue(text2, PopupVariant.ENEMY_CARD, 4.0)
+	_popup.enqueue(text2, PopupVariant.ENEMY_CARD, 4.0, sub)
 
 
 func on_boss_defeated(stage_index: int = -1) -> void:
+	var idx: int = current_stage if stage_index < 0 else stage_index
 	var info: Dictionary = _stage_data(stage_index)
 	if info.is_empty():
 		return
@@ -220,23 +222,23 @@ func on_boss_defeated(stage_index: int = -1) -> void:
 	if info.has("action"):
 		text += "\nTú puedes: " + info["action"]
 	if text != "":
-		_popup.enqueue(text, PopupVariant.WAVE_BREAK, 5.0)
+		_popup.enqueue(text, PopupVariant.WAVE_BREAK, 5.0, _stage_subtitle(idx))
 
 
 func on_player_died() -> void:
 	stop_run()
-	var msg: String = _mix(_death_queue, _death_messages, "_last_death_message", "death", "death")
-	if msg != "":
-		_popup.enqueue(msg, PopupVariant.DEATH, 3.5)
+	var msg: Dictionary = _mix(_death_queue, _death_messages, "_last_death_message", "death", "death")
+	if msg["text"] != "":
+		_popup.enqueue(msg["text"], PopupVariant.DEATH, 3.5, msg["subtitle"])
 		await _popup.popup_finished
 
 
 # ───────────── INTERNO ─────────────
 
 func _on_survival_timeout() -> void:
-	var fact: String = _mix(_survival_queue, _survival_facts, "_last_survival_fact", "survival", "facts")
-	if fact != "":
-		_popup.enqueue(fact, PopupVariant.SURVIVAL, 3.5)
+	var msg: Dictionary = _mix(_survival_queue, _survival_facts, "_last_survival_fact", "survival", "facts")
+	if msg["text"] != "":
+		_popup.enqueue(msg["text"], PopupVariant.SURVIVAL, 3.5, msg["subtitle"])
 
 
 func _stage_data(idx: int = -1) -> Dictionary:
@@ -247,22 +249,32 @@ func _stage_data(idx: int = -1) -> Dictionary:
 	return _stages[clampi(idx, 0, _stages.size() - 1)]
 
 
-func _mix(queue: Array, source: Array, last_prop: String, kind: String, key: String) -> String:
-	if randf() < stage_mix_ratio:
-		var s: String = _draw_stage(kind, key)
-		if s != "":
-			return s
-	return _draw(queue, source, last_prop)
-
-
-func _draw_stage(kind: String, key: String) -> String:
-	if _stages.is_empty():
+## "Etapa 3 · Océanos y plástico" ("" si la etapa no existe)
+func _stage_subtitle(idx: int) -> String:
+	if idx < 0 or idx >= _stages.size():
 		return ""
+	return "Etapa %d · %s" % [idx + 1, _stages[idx].get("theme", "")]
+
+
+## Devuelve {"text": String, "subtitle": String}.
+## Con probabilidad stage_mix_ratio usa contenido de la etapa actual (con subtítulo);
+## si no, usa la lista general (sin subtítulo).
+func _mix(queue: Array, source: Array, last_prop: String, kind: String, key: String) -> Dictionary:
+	if randf() < stage_mix_ratio:
+		var s: Dictionary = _draw_stage(kind, key)
+		if not s.is_empty():
+			return s
+	return {"text": _draw(queue, source, last_prop), "subtitle": ""}
+
+
+func _draw_stage(kind: String, key: String) -> Dictionary:
+	if _stages.is_empty():
+		return {}
 	var idx: int = clampi(current_stage, 0, _stages.size() - 1)
 	var info: Dictionary = _stages[idx]
 	var pool: Array = info.get(key, [])
 	if pool.is_empty():
-		return ""
+		return {}
 
 	var qk: String = "%s_%d" % [kind, idx]
 	var queue: Array = _stage_queues.get(qk, [])
@@ -271,7 +283,7 @@ func _draw_stage(kind: String, key: String) -> String:
 		queue.shuffle()
 	var picked: String = queue.pop_front()
 	_stage_queues[qk] = queue
-	return "ETAPA %d · %s\n%s" % [idx + 1, info.get("theme", ""), picked]
+	return {"text": picked, "subtitle": _stage_subtitle(idx)}
 
 
 func _enemy_facts(info: Dictionary) -> Array:
