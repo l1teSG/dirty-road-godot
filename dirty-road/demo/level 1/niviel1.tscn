@@ -12,6 +12,7 @@
 [ext_resource type="Resource" uid="uid://c7i5gecmsrwdi" path="res://ecenes/enemies/resources/enemis/nube_gas.tres" id="10_w7ccy"]
 [ext_resource type="Resource" uid="uid://dyd2ery6he44o" path="res://ecenes/enemies/resources/enemis/marea_negra.tres" id="11_vgl3r"]
 [ext_resource type="Resource" uid="uid://d253u0sxbtypv" path="res://ecenes/enemies/resources/enemis/microplastico.tres" id="12_4a5wu"]
+[ext_resource type="Script" uid="uid://diass0dgy7sxa" path="res://scripts/education/EducationPopup.gd" id="13_w7ccy"]
 
 [sub_resource type="Environment" id="Environment_ckgak"]
 background_mode = 3
@@ -118,6 +119,10 @@ position = Vector2(0, 63)
 script = ExtResource("8_bfnr7")
 puntos_spawn = [NodePath("1"), NodePath("2")]
 etapas = Array[ExtResource("8_trm6e")]([SubResource("Resource_trm6e")])
+debug_activo = true
+debug_spawnear_enemigos = false
+debug_sin_limite_tiempo = true
+debug_imprimir_info = false
 
 [node name="1" type="Marker2D" parent="WaveManager" unique_id=2027456952]
 position = Vector2(0, 631)
@@ -142,3 +147,11 @@ position = Vector2(647, -664)
 
 [node name="8" type="Marker2D" parent="WaveManager" unique_id=89181954]
 position = Vector2(-643, 619)
+
+[node name="popupManager" type="Node" parent="." unique_id=1615927040]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="popupManager" unique_id=1680075402]
+script = ExtResource("13_w7ccy")
+display_style = 1
+subtitle_style_variants = Array[int]([3, 1, 2])
+toast_position = 1
