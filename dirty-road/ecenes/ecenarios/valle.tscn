@@ -343,21 +343,60 @@ shape = SubResource("RectangleShape2D_818wt")
 debug_color = Color(0.56078434, 0.5529412, 0.2627451, 0.41960785)
 
 [node name="tocones" type="Node2D" parent="." unique_id=2128310393]
+position = Vector2(502, 318)
 
 [node name="tocon" parent="tocones" unique_id=728919273 instance=ExtResource("1_bmrih")]
-position = Vector2(426, 632)
+position = Vector2(-1568, 152)
+size_factor = 0.6000000000000001
+light_enabled = false
+light_radius = 0.2
+halo_enabled = false
+halo_opacity = 0.9
 
-[node name="tocon2" parent="tocones" unique_id=2098023830 instance=ExtResource("1_bmrih")]
-position = Vector2(998, 140)
+[node name="tocon2" parent="tocones" unique_id=1640197170 instance=ExtResource("1_bmrih")]
+position = Vector2(696, 272)
+size_factor = 0.6000000000000001
+light_enabled = false
+light_radius = 0.2
+halo_enabled = false
+halo_opacity = 0.9
 
-[node name="tocon3" parent="tocones" unique_id=888814779 instance=ExtResource("1_bmrih")]
-position = Vector2(-422, -272)
+[node name="tocon3" parent="tocones" unique_id=1880860334 instance=ExtResource("1_bmrih")]
+position = Vector2(-1066, -1044)
+size_factor = 0.6000000000000001
+light_enabled = false
+light_radius = 0.2
+halo_enabled = false
+halo_opacity = 0.9
 
-[node name="tocon4" parent="tocones" unique_id=1975722777 instance=ExtResource("1_bmrih")]
-position = Vector2(274, -806)
+[node name="tocon4" parent="tocones" unique_id=1441254802 instance=ExtResource("1_bmrih")]
+position = Vector2(470, -602)
+size_factor = 0.6000000000000001
+light_enabled = false
+light_radius = 0.2
+halo_enabled = false
+halo_opacity = 0.9
 
-[node name="tocon5" parent="tocones" unique_id=967316074 instance=ExtResource("1_bmrih")]
-position = Vector2(-718, -944)
+[node name="tocon5" parent="tocones" unique_id=344825110 instance=ExtResource("1_bmrih")]
+position = Vector2(-714, 718)
+size_factor = 0.6000000000000001
+light_enabled = false
+light_radius = 0.2
+halo_enabled = false
+halo_opacity = 0.9
 
-[node name="tocon6" parent="tocones" unique_id=1002493083 instance=ExtResource("1_bmrih")]
-position = Vector2(-900, 656)
+[node name="tocon6" parent="tocones" unique_id=2127735 instance=ExtResource("1_bmrih")]
+position = Vector2(-46, 388)
+size_factor = 0.6000000000000001
+light_enabled = false
+light_radius = 0.2
+halo_enabled = false
+halo_opacity = 0.9
+
+[node name="tocon7" parent="tocones" unique_id=1308306782 instance=ExtResource("1_bmrih")]
+position = Vector2(-62, -1404)
+size_factor = 0.6000000000000001
+light_enabled = false
+light_radius = 0.2
+halo_enabled = false
+halo_opacity = 0.9
