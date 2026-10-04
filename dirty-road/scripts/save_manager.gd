@@ -12,6 +12,14 @@ const DATOS_DEFECTO := {
 var datos: Dictionary = DATOS_DEFECTO.duplicate()
 
 
+func _ready() -> void:
+	# Los autoloads persisten entre escenas: la partida se carga UNA vez
+	# por arranque del juego, aquí. NO llames cargar_partida() desde una
+	# escena: una recarga volvería a leer el archivo y podría revivir
+	# datos de una partida que nueva_partida() acaba de borrar.
+	cargar_partida()
+
+
 func hay_partida_guardada() -> bool:
 	return FileAccess.file_exists(RUTA_GUARDADO)
 
@@ -53,6 +61,7 @@ func cargar_partida() -> bool:
 
 
 func nueva_partida() -> void:
+	# Resetea memoria Y disco. A partir de esta llamada get_horda() == 1.
 	datos = DATOS_DEFECTO.duplicate()
 	if hay_partida_guardada():
 		DirAccess.remove_absolute(RUTA_GUARDADO)
@@ -66,18 +75,22 @@ func borrar_partida() -> void:
 # ── Helpers para leer/escribir campos individuales sin tocar todo el dict ──
 
 func set_horda(numero: int) -> void:
-	datos["horda_actual"] = numero
+	datos["horda_actual"] = maxi(numero, 1)
+
 
 func get_horda() -> int:
-	return datos.get("horda_actual", 1)
+	return maxi(int(datos.get("horda_actual", 1)), 1)
+
 
 func set_vida(actual: int, maxima: int = -1) -> void:
 	datos["vida_jugador"] = actual
 	if maxima > 0:
 		datos["vida_maxima"] = maxima
 
+
 func get_vida() -> int:
 	return datos.get("vida_jugador", 100)
+
 
 func get_vida_maxima() -> int:
 	return datos.get("vida_maxima", 100)

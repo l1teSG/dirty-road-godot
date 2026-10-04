@@ -121,8 +121,8 @@ puntos_spawn = [NodePath("1"), NodePath("2"), NodePath("3"), NodePath("4"), Node
 etapas = Array[ExtResource("8_trm6e")]([SubResource("Resource_trm6e")])
 tiempo_entre_spawns = 1.0
 tiempo_maximo_oleada = 60.0
-debug_spawnear_enemigos = false
-debug_imprimir_info = false
+debug_activo = true
+debug_no_guardar = false
 
 [node name="1" type="Marker2D" parent="WaveManager" unique_id=2027456952]
 position = Vector2(0, 631)
