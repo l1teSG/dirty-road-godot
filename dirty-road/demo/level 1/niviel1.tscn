@@ -153,7 +153,5 @@ position = Vector2(-643, 619)
 [node name="CanvasLayer" type="CanvasLayer" parent="popopManger" unique_id=110149047]
 script = ExtResource("13_w7ccy")
 debug_log = false
-style_death = 1
-style_enemy_card = 1
 badge_enabled = false
 usar_temas_por_tipo = false
