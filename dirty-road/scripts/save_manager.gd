@@ -11,6 +11,12 @@ const DATOS_DEFECTO := {
 
 var datos: Dictionary = DATOS_DEFECTO.duplicate()
 
+## Se activa al llamar nueva_partida() desde un menú. El WaveManager la
+## consulta al arrancar para IGNORAR los overrides de debug en esa partida
+## (oleada inicial / enemigos fijos), así "Nueva partida" siempre empieza
+## en la horda 1 con el pool correcto de la etapa.
+var evitar_debug_esta_partida := false
+
 
 func _ready() -> void:
 	# Los autoloads persisten entre escenas: la partida se carga UNA vez
@@ -61,8 +67,11 @@ func cargar_partida() -> bool:
 
 
 func nueva_partida() -> void:
-	# Resetea memoria Y disco. A partir de esta llamada get_horda() == 1.
+	# Resetea memoria Y disco. A partir de esta llamada get_horda() == 1
+	# y la bandera evitar_debug_esta_partida queda activa para el
+	# WaveManager de la escena que se cargue a continuación.
 	datos = DATOS_DEFECTO.duplicate()
+	evitar_debug_esta_partida = true
 	if hay_partida_guardada():
 		DirAccess.remove_absolute(RUTA_GUARDADO)
 
