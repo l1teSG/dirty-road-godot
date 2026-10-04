@@ -2,19 +2,14 @@ class_name EducationPopup
 extends CanvasLayer
 
 # ---------------------------------------------------------------------------
-# EducationPopup v6 - Temas por tipo de mensaje
+# EducationPopup v6.1 - Temas por tipo de mensaje + fix de desbordamiento
 # Lo crea EducationManager (Autoload): EducationPopup.new().
 # Toda la configuración se lee del nodo EducationSettings (manager.settings).
 #
-# Novedad v6:
-#  - El título se dibuja como un CHIP: etiqueta con fondo de color y
-#    contorno (ej. "Nueva Amenaza" con fondo rojizo en las cartas de enemigo).
-#  - Cada tipo de mensaje tiene su propio tema: fondo del chip, texto del
-#    chip, contorno del chip, fondo de la tarjeta, borde de la tarjeta y
-#    color del texto. Todo editable desde el Inspector (EducationSettings).
-#  - "Etapa 1 · ..." se alinea a la derecha de la fila del chip si cabe;
-#    si no, baja a su propia línea.
-#  - La insignia circular (v5) se mantiene y toma el color del tema.
+# Fix v6.1 (texto fuera de la tarjeta / del chip):
+#  - Título y etapa sin autowrap (se miden como UNA línea).
+#  - Altura del chip con font.get_height() (ascendente + descendente).
+#  - Anchos con ceilf() + holgura para evitar wraps por redondeo.
 #
 # API:
 #   enqueue(text, variant, duration = 3.5, subtitle = "", icon = "")
@@ -103,6 +98,12 @@ func _build_ui() -> void:
 	_sub_label = _make_label()
 	_title_label = _make_label()
 	_body_label = _make_label()
+
+	# FIX: título y etapa se miden como UNA sola línea. Con autowrap activo
+	# y un ancho exacto al texto, Godot bajaba la última palabra a una 2ª
+	# línea y el texto se salía del chip / de la tarjeta.
+	_sub_label.autowrap_mode = TextServer.AUTOWRAP_OFF
+	_title_label.autowrap_mode = TextServer.AUTOWRAP_OFF
 
 	_panel.add_child(_sub_label)
 	_panel.add_child(_title_label)
@@ -450,8 +451,12 @@ func _display(item: Dictionary) -> void:
 			var px: float = float(_opt("chip_pad_x", 10.0))
 			var py: float = float(_opt("chip_pad_y", 4.0))
 
-			chip_w = title_w + px * 2.0
-			chip_h = tfs + py * 2.0
+			# FIX: altura REAL de la línea (get_height incluye ascendente
+			# y descendente); antes se usaba solo el tamaño de fuente y el
+			# glifo sobresalía del chip. ceilf() + 2 px de holgura evita
+			# wraps por redondeo.
+			chip_w = ceilf(title_w) + px * 2.0 + 2.0
+			chip_h = tfont.get_height(tfs) + py * 2.0
 
 			_title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 			_title_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -459,7 +464,7 @@ func _display(item: Dictionary) -> void:
 			_chip_panel.size = Vector2(chip_w, chip_h)
 			_chip_panel.visible = true
 			_title_label.position = Vector2(text_x + px, y)
-			_title_label.size = Vector2(title_w, chip_h)
+			_title_label.size = Vector2(ceilf(title_w) + 2.0, chip_h)
 		else:
 			_chip_panel.visible = false
 
@@ -475,10 +480,10 @@ func _display(item: Dictionary) -> void:
 				cap_en_fila = true
 				_sub_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 				_sub_label.position = Vector2(
-					text_x + text_width - cap_w,
+					text_x + text_width - ceilf(cap_w) - 4.0,
 					y + (chip_h - cap_h) * 0.5
 				)
-				_sub_label.size = Vector2(cap_w + 2.0, cap_h)
+				_sub_label.size = Vector2(ceilf(cap_w) + 4.0, cap_h)
 				y += maxf(chip_h, cap_h)
 			else:
 				if _title_label.visible:

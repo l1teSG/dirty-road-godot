@@ -440,3 +440,99 @@ light_enabled = false
 light_radius = 0.2
 halo_enabled = false
 halo_opacity = 0.9
+
+[node name="tocon13" parent="tocones" unique_id=67780098 instance=ExtResource("1_bmrih")]
+position = Vector2(-1386, 508)
+size_factor = 0.6000000000000001
+light_enabled = false
+light_radius = 0.2
+halo_enabled = false
+halo_opacity = 0.9
+
+[node name="tocon14" parent="tocones" unique_id=1546768092 instance=ExtResource("1_bmrih")]
+position = Vector2(-800, -554)
+size_factor = 0.6000000000000001
+light_enabled = false
+light_radius = 0.2
+halo_enabled = false
+halo_opacity = 0.9
+
+[node name="tocon15" parent="tocones" unique_id=1856954826 instance=ExtResource("1_bmrih")]
+position = Vector2(212, -994)
+size_factor = 0.6000000000000001
+light_enabled = false
+light_radius = 0.2
+halo_enabled = false
+halo_opacity = 0.9
+
+[node name="tocon16" parent="tocones" unique_id=961672343 instance=ExtResource("1_bmrih")]
+position = Vector2(290, 40)
+size_factor = 0.6000000000000001
+light_enabled = false
+light_radius = 0.2
+halo_enabled = false
+halo_opacity = 0.9
+
+[node name="tocon17" parent="tocones" unique_id=1053766492 instance=ExtResource("1_bmrih")]
+position = Vector2(-344, 74)
+size_factor = 0.6000000000000001
+light_enabled = false
+light_radius = 0.2
+halo_enabled = false
+halo_opacity = 0.9
+
+[node name="tocon18" parent="tocones" unique_id=1283054447 instance=ExtResource("1_bmrih")]
+position = Vector2(-310, -816)
+size_factor = 0.6000000000000001
+light_enabled = false
+light_radius = 0.2
+halo_enabled = false
+halo_opacity = 0.9
+
+[node name="tocon19" parent="tocones" unique_id=476954933 instance=ExtResource("1_bmrih")]
+position = Vector2(-722, -1150)
+size_factor = 0.6000000000000001
+light_enabled = false
+light_radius = 0.2
+halo_enabled = false
+halo_opacity = 0.9
+
+[node name="tocon20" parent="tocones" unique_id=777751970 instance=ExtResource("1_bmrih")]
+position = Vector2(-1034, -48)
+size_factor = 0.6000000000000001
+light_enabled = false
+light_radius = 0.2
+halo_enabled = false
+halo_opacity = 0.9
+
+[node name="tocon21" parent="tocones" unique_id=1308699 instance=ExtResource("1_bmrih")]
+position = Vector2(112, -150)
+size_factor = 0.6000000000000001
+light_enabled = false
+light_radius = 0.2
+halo_enabled = false
+halo_opacity = 0.9
+
+[node name="tocon22" parent="tocones" unique_id=95253219 instance=ExtResource("1_bmrih")]
+position = Vector2(480, -1262)
+size_factor = 0.6000000000000001
+light_enabled = false
+light_radius = 0.2
+halo_enabled = false
+halo_opacity = 0.9
+
+[node name="tocon23" parent="tocones" unique_id=761784613 instance=ExtResource("1_bmrih")]
+position = Vector2(-866, -1562)
+size_factor = 0.6000000000000001
+light_enabled = false
+light_radius = 0.2
+halo_enabled = false
+halo_opacity = 0.9
+
+[node name="tocon24" parent="tocones" unique_id=1381798177 instance=ExtResource("1_bmrih")]
+position = Vector2(-1034, 540)
+size_factor = 0.6000000000000001
+light_enabled = false
+light_radius = 0.2
+halo_enabled = false
+halo_opacity = 0.9

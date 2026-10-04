@@ -17,7 +17,7 @@ func _ready() -> void:
 		push_error("MenuPrincipal: falta algún nodo, revisa las rutas @onready")
 		return
 
-	# oculta TODO de inmdiato, antes de cualquiera otra cosa
+	# oculta TODO de inmediato, antes de cualquier otra cosa
 	_ocultar_para_entrada()
 
 	btn_continuar.pressed.connect(_on_continuar_pressed)
@@ -26,8 +26,13 @@ func _ready() -> void:
 
 	btn_continuar.disabled = not SaveManager.hay_partida_guardada()
 
-	# evita que el primer botón reciba foco autmático y muestra su
-	# estillo de "focus" brillant al iniciar
+	# (Opcional) Muestra en el botón hasta qué oleada llegaste.
+	# Útil para verificar que el guardado de hordas funciona; borra si no.
+	if not btn_continuar.disabled:
+		btn_continuar.text = "Continuar (Oleada %d)" % SaveManager.get_horda()
+
+	# evita que el primer botón reciba foco automático y muestre su
+	# estilo de "focus" brillante al iniciar
 	btn_continuar.focus_mode = Control.FOCUS_NONE
 	btn_salir.focus_mode = Control.FOCUS_NONE
 	btn_nueva_partida.focus_mode = Control.FOCUS_NONE
@@ -71,13 +76,18 @@ func _animar_entrada() -> void:
 # ── Botones ────────────────────────────────────────────────────────
 
 func _on_continuar_pressed() -> void:
-	if not SaveManager.cargar_partida():
-		push_warning("No se pudo cargar la partida guardada")
+	# La partida YA está cargada en memoria: SaveManager la lee UNA sola vez
+	# en su _ready() al arrancar el juego. NO volver a llamar cargar_partida()
+	# aquí evita revivir datos viejos sobre un reset recién hecho.
+	if not SaveManager.hay_partida_guardada():
+		push_warning("MenuPrincipal: no hay partida guardada para continuar")
 		return
 	_transicion_y_cambiar_escena(RUTA_NIVEL)
 
 
 func _on_nueva_partida_pressed() -> void:
+	# Resetea memoria + disco; el WaveManager de la escena nueva arrancará
+	# en la horda 1 con el pool de enemigos de esa oleada.
 	SaveManager.nueva_partida()
 	_transicion_y_cambiar_escena(RUTA_NIVEL)
 

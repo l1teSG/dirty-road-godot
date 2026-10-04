@@ -30,7 +30,7 @@ func _ready() -> void:
 
 	# Conectar señales con WaveManager
 	await get_tree().process_frame
-	var wave_manager = get_tree().get_first_node_in_group("wave_manager") as WaveManager
+	var wave_manager = get_tree().get_first_node_in_group("wave_Manager") as WaveManager
 	if wave_manager != null:
 		wave_manager.oleada_iniciada.connect(_on_oleada_iniciada)
 		wave_manager.descanso_iniciado.connect(_on_descanso_iniciado)

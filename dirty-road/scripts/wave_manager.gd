@@ -55,6 +55,11 @@ var _generacion: int = 0
 var _descanso_jefe_actual: float = 0.0
 var _enemigos_vivos_por_tipo: Dictionary = {}
 
+## true cuando esta partida empezó con "Nueva partida" desde un menú:
+## anula los overrides de ARRANQUE del debug (oleada inicial / enemigos
+## fijos) para que la partida siempre arranque limpia en la horda 1.
+var _ignorar_debug := false
+
 
 func _ready() -> void:
 	add_to_group("wave_manager")
@@ -71,10 +76,18 @@ func _ready() -> void:
 	duracion_timer = _crear_timer(true, tiempo_maximo_oleada)
 	duracion_timer.timeout.connect(_on_tiempo_oleada_agotado)
 
-	if debug_activo:
+	# "Nueva partida" desde un menú ignora los overrides de debug:
+	# arranca en la horda guardada (1 tras el reset), con el pool real.
+	_ignorar_debug = SaveManager != null and SaveManager.evitar_debug_esta_partida
+
+	if debug_activo and not _ignorar_debug:
 		oleada_actual = maxi(debug_oleada_inicial, 1)
 	elif SaveManager != null:
 		oleada_actual = SaveManager.get_horda()
+
+	if debug_imprimir_info:
+		var origen := "debug_oleada_inicial" if (debug_activo and not _ignorar_debug) else "SaveManager"
+		print("[WaveManager] arranque en horda %d (origen: %s)" % [oleada_actual, origen])
 
 	iniciar_oleada()
 
@@ -111,7 +124,7 @@ func _etapa(oleada: int) -> EtapaConfig:
 func _enemigos_de_etapa(oleada: int) -> Array[EnemigoOleadaConfig]:
 	var lista: Array[EnemigoOleadaConfig] = []
 
-	if debug_activo and not debug_enemigos_fijos.is_empty():
+	if debug_activo and not _ignorar_debug and not debug_enemigos_fijos.is_empty():
 		lista.append_array(debug_enemigos_fijos)
 		return lista
 
@@ -120,12 +133,54 @@ func _enemigos_de_etapa(oleada: int) -> Array[EnemigoOleadaConfig]:
 	if etapa == null:
 		return lista
 
+	# Posición de la oleada DENTRO de la etapa (1..oleadas_por_etapa).
+	var pos_en_etapa: int = ((oleada - 1) % oleadas_por_etapa) + 1
+
+	# Heredados: ahora TAMBIÉN respetan su oleada_minima / oleada_maxima.
 	if etapa.heredar_enemigos_anteriores:
 		for i in range(idx):
-			if etapas[i] != null:
-				lista.append_array(etapas[i].enemigos)
-	lista.append_array(etapa.enemigos)
+			if etapas[i] == null:
+				continue
+			for config in etapas[i].enemigos:
+				if _enemigo_disponible(config, pos_en_etapa):
+					lista.append(config)
+
+	# Enemigos propios de la etapa.
+	for config in etapa.enemigos:
+		if _enemigo_disponible(config, pos_en_etapa):
+			lista.append(config)
+
+	# Red de seguridad: si ningún enemigo desbloqueó todavía, debuta
+	# el de oleada_minima más baja para que la oleada no quede vacía.
+	if lista.is_empty():
+		var mejor: EnemigoOleadaConfig = null
+		var mejor_min: int = 999999
+
+		for config in etapa.enemigos:
+			if config == null or config.escena == null:
+				continue
+			var minimo: int = maxi(config.oleada_minima, 1)
+			if minimo < mejor_min:
+				mejor_min = minimo
+				mejor = config
+
+		if mejor != null:
+			lista.append(mejor)
+
 	return lista
+
+
+## ¿Puede este enemigo aparecer en esta posición de oleada (dentro de la
+## etapa)? oleada_minima = oleada de debut, oleada_maxima = última oleada
+## donde sale (0 = sin límite).
+func _enemigo_disponible(config: EnemigoOleadaConfig, pos_en_etapa: int) -> bool:
+	if config == null or config.escena == null:
+		return false
+	if pos_en_etapa < maxi(config.oleada_minima, 1):
+		return false
+	if config.oleada_maxima > 0 and pos_en_etapa > config.oleada_maxima:
+		return false
+	return true
 
 
 ## El jefe sale en la última oleada de cada etapa realmente definida
@@ -173,8 +228,9 @@ func iniciar_oleada() -> void:
 	tiempo_restante = int(tiempo_maximo_oleada)
 
 	if debug_activo and debug_imprimir_info:
-		print("[WaveManager] Oleada %d | Etapa %d | Jefe: %s | Enemigos: %d | Pool: %d" % [
-			oleada_actual, etapa_actual_idx + 1, str(oleada_de_jefe),
+		print("[WaveManager] Oleada %d (pos %d/%d en etapa) | Etapa %d | Jefe: %s | Enemigos: %d | Pool: %d" % [
+			oleada_actual, ((oleada_actual - 1) % oleadas_por_etapa) + 1,
+			oleadas_por_etapa, etapa_actual_idx + 1, str(oleada_de_jefe),
 			enemigos_por_spawnear, _enemigos_de_etapa(oleada_actual).size()])
 
 	oleada_iniciada.emit(oleada_actual)
