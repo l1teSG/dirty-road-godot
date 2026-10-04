@@ -166,11 +166,12 @@ shape = SubResource("CircleShape2D_7cwo5")
 [node name="aim" type="Marker2D" parent="." index="9" unique_id=182942934]
 position = Vector2(20, 0)
 
-[node name="ui" type="CanvasLayer" parent="." index="10" unique_id=1985090240 node_paths=PackedStringArray("label_enemigo", "label_tiempo")]
+[node name="ui" type="CanvasLayer" parent="." index="10" unique_id=1985090240 node_paths=PackedStringArray("label_enemigo", "label_tiempo", "label_oleada")]
 layer = 0
 script = ExtResource("3_fm6mt")
 label_enemigo = NodePath("margenUi/ContenedorVertical/enemigos")
 label_tiempo = NodePath("MarginContainer/contador")
+label_oleada = NodePath("margenUi/ContenedorVertical/oleadas")
 
 [node name="margenUi" type="MarginContainer" parent="ui" index="0" unique_id=957307684]
 offset_right = 40.0
@@ -218,6 +219,9 @@ theme_override_font_sizes/font_size = 40
 
 [node name="oleadas" type="Label" parent="ui/margenUi/ContenedorVertical" index="3" unique_id=1247948870]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.61960787, 0.83137256, 0.2509804, 1)
+theme_override_fonts/font = ExtResource("7_ehraa")
+theme_override_font_sizes/font_size = 40
 
 [node name="ajuste" type="MarginContainer" parent="ui" index="1" unique_id=1341644146]
 anchors_preset = 1
