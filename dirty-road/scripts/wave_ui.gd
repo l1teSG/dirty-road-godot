@@ -1,7 +1,7 @@
 class_name WaveUI
 extends CanvasLayer
 
-@export var label_oleada: Label
+@export var label_enemigo: Label
 @export var label_tiempo: Label
 
 
@@ -15,8 +15,8 @@ func _ready() -> void:
 
 
 func _on_enemigos_restantes_actualizado(cantidad: int) -> void:
-	if label_oleada != null:
-		label_oleada.text = "Enemigos: %d" % max(0, cantidad)
+	if label_enemigo!= null:
+		label_enemigo.text = "Enemigos: %d" % max(0, cantidad)
 
 
 func _on_tiempo_actualizado(segundos_restantes: int, _es_descanso: bool) -> void:
