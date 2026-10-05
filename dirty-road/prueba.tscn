@@ -1,14 +1,84 @@
 [gd_scene format=3 uid="uid://bvbiytnpyaqkb"]
 
-[node name="Control" type="Control" unique_id=1326634264]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+[ext_resource type="PackedScene" uid="uid://dogn08xliy6gi" path="res://ecenes/players/quark/quark.tscn" id="1_2pljw"]
+[ext_resource type="PackedScene" uid="uid://c5182832ylop2" path="res://ecenes/ecenarios/valle.tscn" id="2_i7ldd"]
+[ext_resource type="PackedScene" uid="uid://skbsnp6j3pk" path="res://assets/stage/enemis/stage11-20/bolsaPlastica.tscn" id="3_gkbsn"]
+[ext_resource type="PackedScene" uid="uid://crhsqfaqp2x1w" path="res://assets/stage/enemis/stage11-20/lataOxidada.tscn" id="4_ih1lc"]
+[ext_resource type="PackedScene" uid="uid://diysg7vec3g7r" path="res://assets/stage/enemis/stage11-20/neumaticoQuemado.tscn" id="5_o67f3"]
+[ext_resource type="PackedScene" uid="uid://bnj636384hsgy" path="res://assets/stage/enemis/stage21-30/botellaLanzadora.tscn" id="6_36xdq"]
+[ext_resource type="PackedScene" uid="uid://bogj1adfvgpkq" path="res://assets/stage/enemis/stage21-30/botellaPlastico.tscn" id="7_04saj"]
+[ext_resource type="PackedScene" uid="uid://fg7nqn6jx2u" path="res://assets/stage/enemis/stage21-30/redFantasma.tscn" id="8_nhlc6"]
+[ext_resource type="PackedScene" uid="uid://ceakpy4yyfy4w" path="res://assets/stage/enemis/stage31-40/chimenea.tscn" id="9_n7351"]
+[ext_resource type="PackedScene" uid="uid://ch4gllxhacgm5" path="res://assets/stage/enemis/stage31-40/humoFabrica.tscn" id="10_pmwq3"]
+[ext_resource type="PackedScene" uid="uid://c7qt2x4pi4w41" path="res://assets/stage/enemis/stage31-40/ollin.tscn" id="11_ptikf"]
+[ext_resource type="PackedScene" uid="uid://bl7r4rc5ed2qu" path="res://assets/stage/enemis/stage41-50/charco_acido.tscn" id="12_xru3o"]
+[ext_resource type="PackedScene" uid="uid://cgp8rytnxnhpu" path="res://assets/stage/enemis/stage41-50/gota_acida.tscn" id="13_4c11n"]
+[ext_resource type="PackedScene" uid="uid://cv405fq8d5ek2" path="res://assets/stage/enemis/stage41-50/nube_acida.tscn" id="14_3tmio"]
+[ext_resource type="PackedScene" uid="uid://c3qvke6ije2a" path="res://assets/stage/enemis/stage51-60/basura_electronica.tscn" id="15_caauc"]
+[ext_resource type="PackedScene" uid="uid://wnulbp1j0xcg" path="res://assets/stage/enemis/stage51-60/bateria_toxica.tscn" id="16_2xgey"]
+[ext_resource type="PackedScene" uid="uid://onpsapbp7w2r" path="res://assets/stage/enemis/stage51-60/cable_electrico.tscn" id="17_a0yig"]
 
-[node name="VirtualJoystick" type="VirtualJoystick" parent="." unique_id=1177875311]
-layout_mode = 0
-offset_left = 249.0
-offset_top = 757.0
-offset_right = 289.0
-offset_bottom = 883.0
+[sub_resource type="Environment" id="Environment_2pljw"]
+background_mode = 3
+glow_enabled = true
+glow_intensity = 1.2
+glow_bloom = 0.25
+
+[node name="Node2D" type="Node2D" unique_id=1977152363]
+
+[node name="ClassPlayer" parent="." unique_id=508460008 instance=ExtResource("1_2pljw")]
+
+[node name="valle" parent="." unique_id=1723520595 instance=ExtResource("2_i7ldd")]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1432083377]
+environment = SubResource("Environment_2pljw")
+
+[node name="Node" type="Node" parent="." unique_id=835315883]
+
+[node name="bolsaPlastica" parent="Node" unique_id=1911154884 instance=ExtResource("3_gkbsn")]
+position = Vector2(77, 311)
+
+[node name="neumaticoQuemado" parent="Node" unique_id=1133705256 instance=ExtResource("5_o67f3")]
+position = Vector2(72, 452)
+
+[node name="nubeAcida" parent="Node" unique_id=995931539 instance=ExtResource("14_3tmio")]
+position = Vector2(-298, 472)
+
+[node name="cableElectrico" parent="Node" unique_id=1323443974 instance=ExtResource("17_a0yig")]
+position = Vector2(-499, 492)
+
+[node name="bateriaToxica" parent="Node" unique_id=1133312911 instance=ExtResource("16_2xgey")]
+position = Vector2(-486, 379)
+
+[node name="basuraElectronica" parent="Node" unique_id=373696521 instance=ExtResource("15_caauc")]
+position = Vector2(-451, 304)
+
+[node name="gotaAcida" parent="Node" unique_id=1324056268 instance=ExtResource("13_4c11n")]
+position = Vector2(-292, 390)
+
+[node name="charcoAcido" parent="Node" unique_id=249345338 instance=ExtResource("12_xru3o")]
+position = Vector2(-285, 291)
+
+[node name="ollin" parent="Node" unique_id=1581676109 instance=ExtResource("11_ptikf")]
+position = Vector2(-128, 438)
+
+[node name="humoFabrica" parent="Node" unique_id=1709647790 instance=ExtResource("10_pmwq3")]
+position = Vector2(-123, 351)
+
+[node name="chimenea" parent="Node" unique_id=1015707264 instance=ExtResource("9_n7351")]
+position = Vector2(-128, 219)
+
+[node name="redFantasma" parent="Node" unique_id=1986586057 instance=ExtResource("8_nhlc6")]
+position = Vector2(287, 430)
+
+[node name="botellaPlastico" parent="Node" unique_id=770697124 instance=ExtResource("7_04saj")]
+position = Vector2(282, 319)
+
+[node name="botellaLanzadora" parent="Node" unique_id=1641695009 instance=ExtResource("6_36xdq")]
+position = Vector2(274, 194)
+
+[node name="lataOxidada" parent="Node" unique_id=1564930846 instance=ExtResource("4_ih1lc")]
+position = Vector2(73, 391)
+
+[node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=1844047986]
+color = Color(0.7236867, 0.78271127, 0.85070884, 1)
