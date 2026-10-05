@@ -149,5 +149,12 @@ position = Vector2(-643, 619)
 [node name="CanvasLayer" type="CanvasLayer" parent="popopManger" unique_id=110149047]
 script = ExtResource("13_w7ccy")
 debug_log = false
+card_max_width = 939.0
+card_max_height_ratio = 0.53
+card_title_font_size = 30
+card_body_font_size = 25
+card_stage_font_size = 20
+subtitles_font_size = 35
+subtitles_width_ratio = 0.9199999999999999
 badge_enabled = false
 usar_temas_por_tipo = false

@@ -402,7 +402,7 @@ halo_enabled = false
 halo_opacity = 0.9
 
 [node name="tocon8" parent="tocones" unique_id=342469647 instance=ExtResource("1_bmrih")]
-position = Vector2(-1610, -1240)
+position = Vector2(-1548, -1378)
 size_factor = 0.6000000000000001
 light_enabled = false
 light_radius = 0.2
@@ -530,9 +530,27 @@ halo_enabled = false
 halo_opacity = 0.9
 
 [node name="tocon24" parent="tocones" unique_id=1381798177 instance=ExtResource("1_bmrih")]
-position = Vector2(-1034, 540)
+position = Vector2(-1170, 684)
 size_factor = 0.6000000000000001
 light_enabled = false
 light_radius = 0.2
 halo_enabled = false
 halo_opacity = 0.9
+
+[node name="particles" type="CanvasLayer" parent="." unique_id=35092086]
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="particles" unique_id=1604972759]
+amount = 25
+lifetime = 3.0
+emission_shape = 3
+emission_rect_extents = Vector2(695, 702)
+direction = Vector2(0, -1)
+spread = 180.0
+gravity = Vector2(0, -10)
+initial_velocity_min = 25.0
+initial_velocity_max = 25.0
+angular_velocity_min = 501.57
+angular_velocity_max = 501.57
+scale_amount_min = 0.0
+scale_amount_max = 3.0
+color = Color(0.3706983, 0.57580733, 0.61699605, 1)
