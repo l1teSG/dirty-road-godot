@@ -21,7 +21,7 @@ static func get_data() -> Array:
 			"action": "Compostar tus residuos orgánicos devuelve nutrientes al suelo.",
 			"enemies": {
 				"microplastico": {
-					"name": "Microplástico",
+					"name": "Microplastico",
 					"represents": "Fragmentos diminutos de plástico en suelo y agua.",
 					"facts": [
 						"Los microplásticos miden menos de 5 mm y se han hallado en casi todos los ambientes.",

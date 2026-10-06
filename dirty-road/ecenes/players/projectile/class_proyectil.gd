@@ -1,9 +1,15 @@
 class_name ClassProyectil
 extends Area2D
 
+## Grupos que cuentan como enemigo: 'enemigos' (clase Enemigo
+## nueva) y 'enemi' (enemigos viejos, mientras sigan existiendo).
+const GRUPOS_ENEMIGO: Array[String] = ["enemigos", "enemi"]
+
+const DANO: float = 10.0
+
 @export var sped: float = 400.0
 @export var vida_util: float = 2.0
-@onready var visual: Node2D = $hoja  
+@onready var visual: Node2D = $hoja
 
 var positionEnemi: Vector2 = Vector2.ZERO
 var _destruyendo: bool = false
@@ -23,11 +29,37 @@ func shoot(dir: Vector2, delta: float) -> void:
 	global_position += delta * sped * dir
 
 func _on_body_entered(body: Node2D) -> void:
-	
-	if body.is_in_group('enemi') and not _destruyendo:
-		if body.has_method('take_hit'):
-			body.take_hit(10)
+	if _es_enemigo(body) and not _destruyendo:
+		_dañar_enemigo(body)
 		_destruir()
+
+func _es_enemigo(nodo: Node2D) -> bool:
+	for grupo in GRUPOS_ENEMIGO:
+		if nodo.is_in_group(grupo):
+			return true
+	return false
+
+## Respeta el contrato de cada enemigo:
+## • Nuevo (Enemigo.gd): recibir_danio(cantidad) — 1 argumento.
+## • Viejo: recibir_danio(cantidad, fuente) — 2 argumentos.
+## • Viejo: take_hit(int) / take_damage(int).
+func _dañar_enemigo(enemigo: Node2D) -> void:
+	if enemigo.has_method("recibir_danio"):
+		if _metodo_tiene_n_args(enemigo, "recibir_danio", 2):
+			enemigo.call("recibir_danio", DANO, self)
+		else:
+			enemigo.call("recibir_danio", DANO)
+	elif enemigo.has_method("take_hit"):
+		enemigo.call("take_hit", DANO)
+	elif enemigo.has_method("take_damage"):
+		enemigo.call("take_damage", roundi(DANO))
+
+## Cuenta los argumentos de un método (para no romper firmas viejas).
+func _metodo_tiene_n_args(nodo: Node, metodo: String, n: int) -> bool:
+	for m in nodo.get_method_list():
+		if m.get("name", "") == metodo:
+			return (m.get("args", []) as Array).size() == n
+	return false
 
 func _destruir() -> void:
 	if _destruyendo:

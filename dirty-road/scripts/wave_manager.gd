@@ -91,10 +91,12 @@ func _ready() -> void:
 		var origen := "debug_oleada_inicial" if (debug_activo and not _ignorar_debug) else "SaveManager"
 		print("[WaveManager] arranque en horda %d (origen: %s)" % [oleada_actual, origen])
 
-	iniciar_oleada()
-
+	# La corrida educativa se arma ANTES de la primera oleada para que
+	# la intro de etapa/oleada 1 no se pierda.
 	if EducationManager != null:
 		EducationManager.start_run()
+
+	iniciar_oleada()
 
 
 func _crear_timer(one_shot: bool, tiempo: float) -> Timer:
@@ -238,6 +240,9 @@ func iniciar_oleada() -> void:
 	en_descanso = false
 	jefe_actual = null
 
+	if EducationManager != null:
+		EducationManager.on_wave_started()
+
 	var idx := _indice_etapa(oleada_actual)
 	if idx != etapa_actual_idx:
 		etapa_actual_idx = idx
@@ -245,6 +250,10 @@ func iniciar_oleada() -> void:
 		if idx >= 0 and etapas[idx] != null:
 			nombre_etapa = etapas[idx].nombre
 		etapa_iniciada.emit(idx, nombre_etapa)
+
+		# Intro de etapa (el manager tiene dedupe interno con _announced_stage).
+		if EducationManager != null:
+			EducationManager.on_stage_started(idx)
 
 	var etapa := _etapa(oleada_actual)
 	var etapa_jefe := _jefe_de_oleada(oleada_actual)
@@ -349,6 +358,9 @@ func _on_jefe_muerto(nombre: String, generacion: int) -> void:
 		return
 	jefe_actual = null
 	jefe_derrotado.emit(nombre)
+
+	if EducationManager != null:
+		EducationManager.on_boss_defeated(etapa_actual_idx)
 
 
 func _spawnear_siguiente_enemigo() -> void:
