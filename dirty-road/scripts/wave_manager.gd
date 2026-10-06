@@ -54,6 +54,8 @@ var oleada_de_jefe: bool = false
 var _generacion: int = 0
 var _descanso_jefe_actual: float = 0.0
 var _enemigos_vivos_por_tipo: Dictionary = {}
+var _aviso_sin_jugador: bool = false
+var _aviso_sin_arbol: bool = false
 
 ## true cuando esta partida empezó con "Nueva partida" desde un menú:
 ## anula los overrides de ARRANQUE del debug (oleada inicial / enemigos
@@ -102,6 +104,40 @@ func _crear_timer(one_shot: bool, tiempo: float) -> Timer:
 	t.autostart = false
 	add_child(t)
 	return t
+
+
+# ───────────── IDENTIFICACIÓN: JUGADOR Y ÁRBOL (SOLO GRUPOS) ─────────────
+## Responsabilidad única de este script: encontrar al jugador y al árbol
+## por sus grupos y pasárselos a cada enemigo que spawnea. No existen
+## referencias manuales: el que está en el grupo, es el objetivo.
+
+func _obtener_jugador() -> Node2D:
+	var j := get_tree().get_first_node_in_group("jugador") as Node2D
+	if j == null and not _aviso_sin_jugador:
+		_aviso_sin_jugador = true
+		push_warning("[WaveManager] Jugador no encontrado (grupo 'jugador'). Los enemigos se quedan quietos.")
+	return j
+
+
+func _obtener_arbol() -> Node2D:
+	var a := get_tree().get_first_node_in_group("arbol") as Node2D
+	if a == null and not _aviso_sin_arbol:
+		_aviso_sin_arbol = true
+		push_warning("[WaveManager] Árbol no encontrado (grupo 'arbol'). Los anti-estructura no tendrán objetivo.")
+	return a
+
+
+## Inyecta las referencias en un enemigo recién instanciado, ANTES de
+## add_child para que su _ready ya las tenga.
+func _pasar_referencias(enemigo: Node2D) -> void:
+	if enemigo == null:
+		return
+	var j := _obtener_jugador()
+	if j != null and "jugador" in enemigo:
+		enemigo.set("jugador", j)
+	var a := _obtener_arbol()
+	if a != null and "arbol" in enemigo:
+		enemigo.set("arbol", a)
 
 
 # ───────────── ETAPAS ─────────────
@@ -266,7 +302,7 @@ func _aplicar_stats(enemigo: Node2D, etapa: EtapaConfig, extra_vida: float = 1.0
 	var mult_dano: float = etapa.multiplicador_dano if etapa != null else 1.0
 
 	var factor_vida: float = (1.0 + (oleada_actual - 1) * escalado) * mult_vida * extra_vida
-	# Cambia estos nombres si tus enemigos usan otras variables
+	# Nombres del contrato con la clase Enemigo: life / speed / damage.
 	if "life" in enemigo and enemigo.get("life") != null:
 		enemigo.set("life", enemigo.get("life") * factor_vida)
 	if mult_vel != 1.0 and "speed" in enemigo and enemigo.get("speed") != null:
@@ -288,6 +324,7 @@ func _spawnear_jefe(etapa: EtapaConfig) -> void:
 
 	jefe.global_position = punto.global_position
 	_aplicar_stats(jefe, etapa, etapa.jefe_multiplicador_vida)
+	_pasar_referencias(jefe)   # los jefes estáticos (torretas) también apuntan
 
 	var clave: String = etapa.jefe_escena.resource_path
 	_enemigos_vivos_por_tipo[clave] = _enemigos_vivos_por_tipo.get(clave, 0) + 1
@@ -347,6 +384,7 @@ func _spawnear_siguiente_enemigo() -> void:
 
 	enemigo.global_position = punto.global_position
 	_aplicar_stats(enemigo, _etapa(oleada_actual))
+	_pasar_referencias(enemigo)
 
 	var clave_escena: String = config_elegida.escena.resource_path
 	_enemigos_vivos_por_tipo[clave_escena] = _enemigos_vivos_por_tipo.get(clave_escena, 0) + 1

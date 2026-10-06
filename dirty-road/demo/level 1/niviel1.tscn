@@ -9,9 +9,7 @@
 [ext_resource type="Script" uid="uid://036a6w37ercn" path="res://scripts/wave_manager.gd" id="8_bfnr7"]
 [ext_resource type="Script" uid="uid://b07d7n2c62y1x" path="res://scripts/etapa_config.gd" id="8_trm6e"]
 [ext_resource type="Script" uid="uid://vyt7ho0roxls" path="res://scripts/enemigo_oleada_config.gd" id="9_cc5k1"]
-[ext_resource type="Resource" uid="uid://c7i5gecmsrwdi" path="res://ecenes/enemies/resources/enemis/nube_gas.tres" id="10_w7ccy"]
-[ext_resource type="Resource" uid="uid://dyd2ery6he44o" path="res://ecenes/enemies/resources/enemis/marea_negra.tres" id="11_vgl3r"]
-[ext_resource type="Resource" uid="uid://d253u0sxbtypv" path="res://ecenes/enemies/resources/enemis/microplastico.tres" id="12_4a5wu"]
+[ext_resource type="Resource" uid="uid://gbevvyqlsqel" path="res://ecenes/enemies/main/1-10/microPlastico/microPlastico.tres" id="10_1o1kr"]
 [ext_resource type="Script" uid="uid://8lgx20mmi322" path="res://scripts/education/EducationSettings.gd" id="13_w7ccy"]
 
 [sub_resource type="Environment" id="Environment_ckgak"]
@@ -29,10 +27,10 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.5, 0)
 
-[sub_resource type="Resource" id="Resource_bfnr7"]
+[sub_resource type="Resource" id="Resource_2fick"]
 script = ExtResource("8_trm6e")
-nombre = "Etapa prueba"
-enemigos = Array[ExtResource("9_cc5k1")]([ExtResource("12_4a5wu"), ExtResource("10_w7ccy"), ExtResource("11_vgl3r")])
+nombre = "pruebas"
+enemigos = Array[ExtResource("9_cc5k1")]([ExtResource("10_1o1kr")])
 metadata/_custom_type_script = "uid://b07d7n2c62y1x"
 
 [node name="Niviel1" type="Node2D" unique_id=1415381483]
@@ -47,7 +45,7 @@ environment = SubResource("Environment_ckgak")
 [node name="valle" parent="." unique_id=1723520595 instance=ExtResource("2_ckgak")]
 position = Vector2(0, -2)
 
-[node name="ClassPlayer" parent="." unique_id=508460008 node_paths=PackedStringArray("respawn_manager") groups=["player"] instance=ExtResource("3_k6hvo")]
+[node name="ClassPlayer" parent="." unique_id=508460008 node_paths=PackedStringArray("respawn_manager") groups=["jugador", "player"] instance=ExtResource("3_k6hvo")]
 position = Vector2(373, -69)
 cadencia_basic = 0.2
 aceleracion = 1800.0
@@ -117,8 +115,8 @@ position = Vector2(0, 63)
 
 [node name="WaveManager" type="Node2D" parent="." unique_id=196695999 node_paths=PackedStringArray("puntos_spawn")]
 script = ExtResource("8_bfnr7")
-puntos_spawn = [NodePath("1")]
-etapas = Array[ExtResource("8_trm6e")]([SubResource("Resource_bfnr7")])
+puntos_spawn = [NodePath("1"), NodePath("2")]
+etapas = Array[ExtResource("8_trm6e")]([SubResource("Resource_2fick")])
 
 [node name="1" type="Marker2D" parent="WaveManager" unique_id=2027456952]
 position = Vector2(0, 631)
@@ -155,6 +153,6 @@ card_title_font_size = 30
 card_body_font_size = 25
 card_stage_font_size = 20
 subtitles_font_size = 35
-subtitles_width_ratio = 0.9199999999999999
+subtitles_width_ratio = 0.92
 badge_enabled = false
 usar_temas_por_tipo = false

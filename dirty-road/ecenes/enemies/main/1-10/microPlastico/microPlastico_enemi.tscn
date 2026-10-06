@@ -1,0 +1,44 @@
+[gd_scene format=3 uid="uid://bj5yt0utv833l"]
+
+[ext_resource type="PackedScene" uid="uid://cgh5ie63rhuf4" path="res://ecenes/enemies/class/clase_enemigo.tscn" id="1_5bwjt"]
+[ext_resource type="Script" uid="uid://3d2r2juma3g4" path="res://ecenes/enemies/class/comportamientos/com_enjambre.gd" id="2_61hl6"]
+[ext_resource type="PackedScene" uid="uid://ch6axxkgnpeg3" path="res://assets/stage/enemis/stages/stage1-10/microPlastico.tscn" id="3_b8lch"]
+[ext_resource type="Script" uid="uid://dtju1od6upjok" path="res://assets/stage/enemis/classShape/figura_capa.gd" id="4_ovq23"]
+
+[sub_resource type="Resource" id="Resource_oox02"]
+resource_local_to_scene = true
+script = ExtResource("4_ovq23")
+nombre = "Cuerpo"
+puntos = PackedVector2Array(9, -3, 11, 3, 6, 9, -2, 10, -8, 6, -10, -2, -5, -8, 3, -9)
+color = Color(0.8117647, 0.9019608, 0.91764706, 1)
+animacion = 5
+anim_velocidad = 1.6
+anim_amplitud = 1.2
+
+[sub_resource type="Resource" id="Resource_1478i"]
+resource_local_to_scene = true
+script = ExtResource("4_ovq23")
+nombre = "Destello"
+puntos = PackedVector2Array(-3, -4, 2, -5, 3, 0, -2, 2)
+color = Color(1, 1, 1, 0.7529412)
+
+[sub_resource type="Resource" id="Resource_x71uq"]
+resource_local_to_scene = true
+script = ExtResource("4_ovq23")
+nombre = "Ojo"
+puntos = PackedVector2Array(3, -2, 6, -1, 5, 2, 2, 1)
+color = Color(0, 1, 0.49803922, 1)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_7cwo5"]
+radius = 7.0
+
+[node name="enemigo" unique_id=2006919752 node_paths=PackedStringArray("figura") instance=ExtResource("1_5bwjt")]
+comportamiento_tipo = "enjambre"
+comportamiento_personalizado = ExtResource("2_61hl6")
+figura = NodePath("FiguraConstructor")
+
+[node name="FiguraConstructor" parent="." index="0" unique_id=66989019 instance=ExtResource("3_b8lch")]
+capas = Array[ExtResource("4_ovq23")]([SubResource("Resource_oox02"), SubResource("Resource_1478i"), SubResource("Resource_x71uq")])
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." index="1" unique_id=1310004655]
+shape = SubResource("CircleShape2D_7cwo5")

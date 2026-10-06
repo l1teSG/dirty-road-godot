@@ -1,5 +1,17 @@
 extends Player
 
+# ══════════════════════════════════════════════════════════
+#  JUGADOR (Quark) — compatible con enemigos viejos y nuevos.
+#  CONTRATO CON EL SISTEMA NUEVO:
+#  • Este nodo entra al grupo 'jugador': el WaveManager lo
+#    identifica por grupo y se lo pasa a cada enemigo.
+#  • Los enemigos nuevos (Enemigo.gd) dañan llamando
+#    recibir_danio(cantidad) → implementado aquí.
+#  • Detecta enemigos por los grupos 'enemigos' (nuevos) y
+#    'enemi' (viejos), y les pega por recibir_danio o
+#    take_damage según lo que cada uno exponga.
+# ══════════════════════════════════════════════════════════
+
 # ── Referencias a nodos ──────────────────────────────
 @onready var rangeArea = $Area2D/range
 @onready var aim: Node2D = $aim
@@ -24,6 +36,10 @@ var power: String = 'basic'
 var onFire: bool = false
 var enemi: Node2D = null
 var enemigos_en_rango: Array[Node2D] = []
+
+## Grupos que cuentan como enemigo: 'enemigos' (clase Enemigo
+## nueva) y 'enemi' (enemigos viejos, mientras sigan existiendo).
+const GRUPOS_ENEMIGO: Array[String] = ["enemigos", "enemi"]
 
 @export_category("Cadencia de Disparo")
 @export var cadencia_basic: float = 0.6
@@ -133,6 +149,11 @@ var _tween_flecha: Tween = null
 
 
 func _ready() -> void:
+	# Contrato del sistema nuevo: WaveManager y enemigos identifican
+	# al jugador por el grupo 'jugador'. add_to_group es idempotente:
+	# si ya lo pusiste en el editor, no pasa nada.
+	add_to_group("jugador")
+
 	_actualizar_barra_vida()
 	_conectar_respawn_manager()
 
@@ -324,13 +345,13 @@ func actualizar_aim() -> void:
 # ── Detección de enemigos en rango ────────────────────
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
-	if body.is_in_group('enemi') and not enemigos_en_rango.has(body):
+	if _es_enemigo(body) and not enemigos_en_rango.has(body):
 		enemigos_en_rango.append(body)
 		_actualizar_objetivo()
 
 
 func _on_area_2d_body_exited(body: Node2D) -> void:
-	if body.is_in_group('enemi'):
+	if _es_enemigo(body):
 		enemigos_en_rango.erase(body)
 		_actualizar_objetivo()
 
@@ -355,6 +376,47 @@ func _actualizar_objetivo() -> void:
 	onFire = true
 
 
+# ── Compatibilidad: enemigos viejos ('enemi') y nuevos ('enemigos') ──
+
+func _es_enemigo(nodo: Node2D) -> bool:
+	for grupo in GRUPOS_ENEMIGO:
+		if nodo.is_in_group(grupo):
+			return true
+	return false
+
+
+## Todos los enemigos válidos en pantalla, sin duplicados.
+func _enemigos_vivos() -> Array[Node2D]:
+	var lista: Array[Node2D] = []
+	for grupo in GRUPOS_ENEMIGO:
+		for nodo in get_tree().get_nodes_in_group(grupo):
+			if nodo is Node2D and is_instance_valid(nodo) and not lista.has(nodo as Node2D):
+				lista.append(nodo as Node2D)
+	return lista
+
+
+## Daña a cualquier enemigo respetando su contrato:
+## • Nuevo (Enemigo.gd): recibir_danio(cantidad) — 1 argumento.
+## • Viejo: recibir_danio(cantidad, fuente) — 2 argumentos.
+## • Fallback: take_damage(int).
+func _dañar_enemigo(enemigo: Node2D, cantidad: float) -> void:
+	if enemigo.has_method("recibir_danio"):
+		if _metodo_tiene_n_args(enemigo, "recibir_danio", 2):
+			enemigo.call("recibir_danio", cantidad, self)
+		else:
+			enemigo.call("recibir_danio", cantidad)
+	elif enemigo.has_method("take_damage"):
+		enemigo.call("take_damage", roundi(cantidad))
+
+
+## Cuenta los argumentos de un método (para no romper firmas viejas).
+func _metodo_tiene_n_args(nodo: Node, metodo: String, n: int) -> bool:
+	for m in nodo.get_method_list():
+		if m.get("name", "") == metodo:
+			return (m.get("args", []) as Array).size() == n
+	return false
+
+
 # ── Botones de poder (UI) ──────────────────────────────
 
 func _on_super_pressed() -> void:
@@ -374,13 +436,10 @@ func _on_mega_pressed() -> void:
 # ── Super: Lluvia de Meteoritos ────────────────────────
 
 func _lanzar_lluvia_meteoritos() -> void:
-	var enemigos: Array = get_tree().get_nodes_in_group("enemi")
+	var enemigos := _enemigos_vivos()
 
 	var indice: int = 0
 	for enemigo in enemigos:
-		if not is_instance_valid(enemigo):
-			continue
-
 		var pos_impacto: Vector2 = enemigo.global_position + Vector2(
 			randf_range(-25.0, 25.0), randf_range(-25.0, 25.0)
 		)
@@ -425,17 +484,18 @@ func _impacto_meteorito(pos_impacto: Vector2, radio: float) -> void:
 	tween.tween_property(explosion, "modulate:a", 0.0, 0.3)
 	tween.tween_callback(explosion.queue_free)
 
-	for enemigo in get_tree().get_nodes_in_group("enemi"):
-		if not is_instance_valid(enemigo):
-			continue
+	for enemigo in _enemigos_vivos():
 		if enemigo.global_position.distance_to(pos_impacto) <= radio:
-			if enemigo.has_method("recibir_danio"):
-				enemigo.recibir_danio(danio_meteorito, self)
-			elif enemigo.has_method("take_damage"):
-				enemigo.take_damage(danio_meteorito)
+			_dañar_enemigo(enemigo, danio_meteorito)
 
 
 # ── Vida / daño ────────────────────────────────────────
+
+## Contrato NUEVO: los enemigos (Enemigo.gd) y sus proyectiles
+## llaman recibir_danio(cantidad). Se apoya en take_damage.
+func recibir_danio(cantidad: float) -> void:
+	take_damage(roundi(cantidad))
+
 
 func take_damage(damage: int) -> void:
 	if _muerto:

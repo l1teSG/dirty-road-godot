@@ -2,21 +2,30 @@
 
 [ext_resource type="PackedScene" uid="uid://dogn08xliy6gi" path="res://ecenes/players/quark/quark.tscn" id="1_2pljw"]
 [ext_resource type="PackedScene" uid="uid://c5182832ylop2" path="res://ecenes/ecenarios/valle.tscn" id="2_i7ldd"]
-[ext_resource type="PackedScene" uid="uid://skbsnp6j3pk" path="res://assets/stage/enemis/stage11-20/bolsaPlastica.tscn" id="3_gkbsn"]
-[ext_resource type="PackedScene" uid="uid://crhsqfaqp2x1w" path="res://assets/stage/enemis/stage11-20/lataOxidada.tscn" id="4_ih1lc"]
-[ext_resource type="PackedScene" uid="uid://diysg7vec3g7r" path="res://assets/stage/enemis/stage11-20/neumaticoQuemado.tscn" id="5_o67f3"]
-[ext_resource type="PackedScene" uid="uid://bnj636384hsgy" path="res://assets/stage/enemis/stage21-30/botellaLanzadora.tscn" id="6_36xdq"]
-[ext_resource type="PackedScene" uid="uid://bogj1adfvgpkq" path="res://assets/stage/enemis/stage21-30/botellaPlastico.tscn" id="7_04saj"]
-[ext_resource type="PackedScene" uid="uid://fg7nqn6jx2u" path="res://assets/stage/enemis/stage21-30/redFantasma.tscn" id="8_nhlc6"]
-[ext_resource type="PackedScene" uid="uid://ceakpy4yyfy4w" path="res://assets/stage/enemis/stage31-40/chimenea.tscn" id="9_n7351"]
-[ext_resource type="PackedScene" uid="uid://ch4gllxhacgm5" path="res://assets/stage/enemis/stage31-40/humoFabrica.tscn" id="10_pmwq3"]
-[ext_resource type="PackedScene" uid="uid://c7qt2x4pi4w41" path="res://assets/stage/enemis/stage31-40/ollin.tscn" id="11_ptikf"]
-[ext_resource type="PackedScene" uid="uid://bl7r4rc5ed2qu" path="res://assets/stage/enemis/stage41-50/charco_acido.tscn" id="12_xru3o"]
-[ext_resource type="PackedScene" uid="uid://cgp8rytnxnhpu" path="res://assets/stage/enemis/stage41-50/gota_acida.tscn" id="13_4c11n"]
-[ext_resource type="PackedScene" uid="uid://cv405fq8d5ek2" path="res://assets/stage/enemis/stage41-50/nube_acida.tscn" id="14_3tmio"]
-[ext_resource type="PackedScene" uid="uid://c3qvke6ije2a" path="res://assets/stage/enemis/stage51-60/basura_electronica.tscn" id="15_caauc"]
-[ext_resource type="PackedScene" uid="uid://wnulbp1j0xcg" path="res://assets/stage/enemis/stage51-60/bateria_toxica.tscn" id="16_2xgey"]
-[ext_resource type="PackedScene" uid="uid://onpsapbp7w2r" path="res://assets/stage/enemis/stage51-60/cable_electrico.tscn" id="17_a0yig"]
+[ext_resource type="PackedScene" uid="uid://skbsnp6j3pk" path="res://assets/stage/enemis/stages/stage11-20/bolsaPlastica.tscn" id="3_gkbsn"]
+[ext_resource type="PackedScene" uid="uid://crhsqfaqp2x1w" path="res://assets/stage/enemis/stages/stage11-20/lataOxidada.tscn" id="4_ih1lc"]
+[ext_resource type="PackedScene" uid="uid://diysg7vec3g7r" path="res://assets/stage/enemis/stages/stage11-20/neumaticoQuemado.tscn" id="5_o67f3"]
+[ext_resource type="PackedScene" uid="uid://bnj636384hsgy" path="res://assets/stage/enemis/stages/stage21-30/botellaLanzadora.tscn" id="6_36xdq"]
+[ext_resource type="PackedScene" uid="uid://bogj1adfvgpkq" path="res://assets/stage/enemis/stages/stage21-30/botellaPlastico.tscn" id="7_04saj"]
+[ext_resource type="PackedScene" uid="uid://fg7nqn6jx2u" path="res://assets/stage/enemis/stages/stage21-30/redFantasma.tscn" id="8_nhlc6"]
+[ext_resource type="PackedScene" uid="uid://ceakpy4yyfy4w" path="res://assets/stage/enemis/stages/stage31-40/chimenea.tscn" id="9_n7351"]
+[ext_resource type="PackedScene" uid="uid://ch4gllxhacgm5" path="res://assets/stage/enemis/stages/stage31-40/humoFabrica.tscn" id="10_pmwq3"]
+[ext_resource type="PackedScene" path="res://assets/stage/enemis/stage31-40/ollin.tscn" id="11_ptikf"]
+[ext_resource type="PackedScene" path="res://assets/stage/enemis/stage41-50/charco_acido.tscn" id="12_xru3o"]
+[ext_resource type="PackedScene" path="res://assets/stage/enemis/stage41-50/gota_acida.tscn" id="13_4c11n"]
+[ext_resource type="PackedScene" path="res://assets/stage/enemis/stage41-50/nube_acida.tscn" id="14_3tmio"]
+[ext_resource type="PackedScene" path="res://assets/stage/enemis/stage51-60/basura_electronica.tscn" id="15_caauc"]
+[ext_resource type="PackedScene" path="res://assets/stage/enemis/stage51-60/bateria_toxica.tscn" id="16_2xgey"]
+[ext_resource type="PackedScene" path="res://assets/stage/enemis/stage51-60/cable_electrico.tscn" id="17_a0yig"]
+[ext_resource type="PackedScene" path="res://assets/stage/enemis/stage71-80/dron_pesticida.tscn" id="18_pmwq3"]
+[ext_resource type="PackedScene" path="res://assets/stage/enemis/stage71-80/nube_fumigacion.tscn" id="19_ptikf"]
+[ext_resource type="PackedScene" uid="uid://bhifvi1sqxwk4" path="res://assets/stage/enemis/stages/stage71-80/plaga.tscn" id="20_xru3o"]
+[ext_resource type="PackedScene" uid="uid://cfvluwmve4on4" path="res://assets/stage/enemis/stages/stage81-90/incendio.tscn" id="21_4c11n"]
+[ext_resource type="PackedScene" uid="uid://dgnuptl0ysdx" path="res://assets/stage/enemis/stages/stage81-90/motosierra.tscn" id="22_3tmio"]
+[ext_resource type="PackedScene" uid="uid://c5h6v3xe43s34" path="res://assets/stage/enemis/stages/stage81-90/talador.tscn" id="23_caauc"]
+[ext_resource type="PackedScene" uid="uid://x5kgm7c8knp8" path="res://assets/stage/enemis/stages/stage91-100/deshielo.tscn" id="24_2xgey"]
+[ext_resource type="PackedScene" path="res://assets/stage/enemis/stage91-100/ola_calor.tscn" id="25_a0yig"]
+[ext_resource type="PackedScene" uid="uid://dev8r56n1c60g" path="res://assets/stage/enemis/stages/stage91-100/tormenta.tscn" id="26_kbpp8"]
 
 [sub_resource type="Environment" id="Environment_2pljw"]
 background_mode = 3
@@ -82,3 +91,30 @@ position = Vector2(73, 391)
 
 [node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=1844047986]
 color = Color(0.7236867, 0.78271127, 0.85070884, 1)
+
+[node name="dronPesticida" parent="." unique_id=1832783183 instance=ExtResource("18_pmwq3")]
+position = Vector2(-214, 22)
+
+[node name="nubeFumigacion" parent="." unique_id=793900315 instance=ExtResource("19_ptikf")]
+position = Vector2(-127, 109)
+
+[node name="plaga" parent="." unique_id=1835394817 instance=ExtResource("20_xru3o")]
+position = Vector2(-42, 112)
+
+[node name="incendio" parent="." unique_id=1976759639 instance=ExtResource("21_4c11n")]
+position = Vector2(-67, -90)
+
+[node name="motosierra" parent="." unique_id=1324395202 instance=ExtResource("22_3tmio")]
+position = Vector2(122, -94)
+
+[node name="talador" parent="." unique_id=762742299 instance=ExtResource("23_caauc")]
+position = Vector2(185, 2)
+
+[node name="deshielo" parent="." unique_id=1493503412 instance=ExtResource("24_2xgey")]
+position = Vector2(-262, -54)
+
+[node name="olaCalor" parent="." unique_id=907926931 instance=ExtResource("25_a0yig")]
+position = Vector2(11, 152)
+
+[node name="tormenta" parent="." unique_id=1942586200 instance=ExtResource("26_kbpp8")]
+position = Vector2(65, 68)
