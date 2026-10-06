@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="EnemigoOleadaConfig" format=3 uid="uid://ca3fyboai1h7f"]
+
+[ext_resource type="PackedScene" uid="uid://csk8lc57rlfwy" path="res://ecenes/enemies/main/1-10/nubeGas/nubeGas_enemi.tscn" id="1_4uora"]
+[ext_resource type="Script" uid="uid://vyt7ho0roxls" path="res://scripts/enemigo_oleada_config.gd" id="1_fl1gc"]
+
+[resource]
+script = ExtResource("1_fl1gc")
+escena = ExtResource("1_4uora")
+peso = 1.5
+oleada_minima = 4
+metadata/_custom_type_script = "uid://vyt7ho0roxls"

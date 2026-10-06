@@ -2,10 +2,11 @@
 
 [ext_resource type="PackedScene" uid="uid://cgh5ie63rhuf4" path="res://ecenes/enemies/class/clase_enemigo.tscn" id="1_5bwjt"]
 [ext_resource type="Script" uid="uid://3d2r2juma3g4" path="res://ecenes/enemies/class/comportamientos/com_enjambre.gd" id="2_61hl6"]
+[ext_resource type="FontFile" uid="uid://vnsqj7q05uej" path="res://themes/Chakra_Petch/ChakraPetch-BoldItalic.ttf" id="3_61hl6"]
 [ext_resource type="PackedScene" uid="uid://ch6axxkgnpeg3" path="res://assets/stage/enemis/stages/stage1-10/microPlastico.tscn" id="3_b8lch"]
 [ext_resource type="Script" uid="uid://dtju1od6upjok" path="res://assets/stage/enemis/classShape/figura_capa.gd" id="4_ovq23"]
 
-[sub_resource type="Resource" id="Resource_oox02"]
+[sub_resource type="Resource" id="Resource_5bwjt"]
 resource_local_to_scene = true
 script = ExtResource("4_ovq23")
 nombre = "Cuerpo"
@@ -15,14 +16,14 @@ animacion = 5
 anim_velocidad = 1.6
 anim_amplitud = 1.2
 
-[sub_resource type="Resource" id="Resource_1478i"]
+[sub_resource type="Resource" id="Resource_61hl6"]
 resource_local_to_scene = true
 script = ExtResource("4_ovq23")
 nombre = "Destello"
 puntos = PackedVector2Array(-3, -4, 2, -5, 3, 0, -2, 2)
 color = Color(1, 1, 1, 0.7529412)
 
-[sub_resource type="Resource" id="Resource_x71uq"]
+[sub_resource type="Resource" id="Resource_b8lch"]
 resource_local_to_scene = true
 script = ExtResource("4_ovq23")
 nombre = "Ojo"
@@ -33,12 +34,23 @@ color = Color(0, 1, 0.49803922, 1)
 radius = 7.0
 
 [node name="enemigo" unique_id=2006919752 node_paths=PackedStringArray("figura") instance=ExtResource("1_5bwjt")]
+life = 8.0
+speed = 120.0
+damage = 2.0
+radio_contacto = 12.0
+figura = NodePath("FiguraConstructor")
 comportamiento_tipo = "enjambre"
 comportamiento_personalizado = ExtResource("2_61hl6")
-figura = NodePath("FiguraConstructor")
+enjambre_vel_extra = 1.4
+enjambre_radio_rodeo = 45.0
+enjambre_reeleccion = 0.9
+enjambre_tambalear = 8.0
+nombre_mostrado = "micro plastico"
+fuente_nombre = ExtResource("3_61hl6")
+fuente_danio = ExtResource("3_61hl6")
 
 [node name="FiguraConstructor" parent="." index="0" unique_id=66989019 instance=ExtResource("3_b8lch")]
-capas = Array[ExtResource("4_ovq23")]([SubResource("Resource_oox02"), SubResource("Resource_1478i"), SubResource("Resource_x71uq")])
+capas = Array[ExtResource("4_ovq23")]([SubResource("Resource_5bwjt"), SubResource("Resource_61hl6"), SubResource("Resource_b8lch")])
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." index="1" unique_id=1310004655]
 shape = SubResource("CircleShape2D_7cwo5")

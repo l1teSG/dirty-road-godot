@@ -6,60 +6,74 @@ extends CharacterBody2D
 ##
 ##  CONTRATO:
 ##  • Jugador y Árbol los identifica el WAVE MANAGER (por grupos) y
-##    los inyecta aquí antes de add_child. Esta clase NO busca nada:
-##    solo los recibe y expone objetivo().
-##  • El WaveManager escala life / speed / damage ANTES de add_child;
-##    en _ready la vida actual arranca como life (ya escalada).
-##  • Esta clase entra al grupo 'enemigos' (debug y sistemas).
-##  • Los comportamientos son SOLO .gd (lógica); sus parámetros se
-##    configuran en el Inspector y se inyectan al iniciar.
+##    los inyecta antes de add_child(). Este script NO los exporta.
+##    CINTURÓN DE SEGURIDAD: si algo llega nulo (orden de _ready,
+##    prueba suelta, jefe por otra vía), se auto-repara por grupos
+##    cada frame mientras falte algo — nunca queda sin objetivo.
+##  • life / speed / damage llegan YA escalados por oleada/etapa.
+##  • El ciclo por frame: reset de órdenes → _mecanica() (del extend)
+##    → _comp.pensar() (comportamiento) → move_and_slide() → contacto.
+##  • Los comportamientos (comp_*.gd) SOLO dictan órdenes con la API:
+##    objetivo(), distancia_a(), dir_a(), mover_hacia(), mover_en(),
+##    detener(), atacar_objetivo(), disparar_desde().
+##    NUNCA lean e.jugador directo: usen e.objetivo() (así el jefe
+##    embiste al árbol y la nube asedia el árbol de lejos).
+##  • CONTACTO: si el tronco bloquea el camino, el enemigo lo muerde
+##    (además de dañar al jugador por proximidad, si dano_al_tocar).
+##  • NOMBRE FLOTANTE: aparece al spawn con animación de entrada y
+##    se oculta con el primer golpe. DAÑO FLOTANTE: número con pop
+##    de entrada que luego sube y se desvanece. Centrado exacto a
+##    cualquier zoom: pivote en el centro LOCAL del Label (size*0.5)
+##    y position = centro_deseado - size*0.5. Blanco sin contorno.
 ## ══════════════════════════════════════════════════════════
 
-signal murio(enemigo: Enemigo)
 signal recibo_danio(cantidad: float)
+signal murio(enemigo: Enemigo)
 
-# Registro: tipo → .gd del comportamiento (solo lógica, sin escena).
-const COMPORTAMIENTOS: Dictionary = {
-	"melee": "res://ecenes/enemies/class/comportamientos/comp_melee.gd",
-	"enjambre": "res://ecenes/enemies/class/comportamientos/comp_enjambre.gd",
-	"rango": "res://ecenes/enemies/class/comportamientos/comp_rango.gd",
-	"torreta": "res://ecenes/enemies/class/comportamientos/comp_torreta.gd",
-	"embestida": "res://ecenes/enemies/class/comportamientos/comp_embestida.gd",
-}
+# ───────────── ESTADÍSTICAS ─────────────
 
-@export_group("Comportamiento")
-## Tipo de comportamiento básico. Sus parámetros se ajustan en
-## los grupos de abajo (Melee, Enjambre, Rango...).
-@export_enum("melee", "enjambre", "rango", "torreta", "embestida")
-var comportamiento_tipo: String = "melee"
-## Opcional: un .gd propio que extienda ComportamientoEnemigo.
-@export var comportamiento_personalizado: GDScript
-
-@export_group("Depuración")
-## Dibuja el radio del comportamiento activo sobre el enemigo.
-@export var debug_dibujar: bool = false
-
-@export_group("Estadísticas")
-## Vida MÁXIMA. El WaveManager la escala por oleada (`life`).
+## Vida base. El WaveManager la escala por oleada ANTES de add_child.
 @export var life: float = 20.0
-## Velocidad base. El WaveManager la escala por etapa (`speed`).
+## Velocidad base (px/s). El WaveManager la escala por etapa.
 @export var speed: float = 90.0
-## Daño de contacto/ataque. El WaveManager lo escala por etapa (`damage`).
+## Daño de contacto/ataque. El WaveManager lo escala por etapa.
 @export var damage: float = 5.0
 @export_range(0.0, 4.0) var velocidad_multiplicador: float = 1.0
-## Daño automático al tocar al objetivo (lo activa p. ej. el enjambre).
+## Daño automático al tocar al objetivo (lo activa p. ej. el Petróleo).
 @export var dano_al_tocar: bool = false
+## Radio de la hurtbox de contacto y alcance del golpe directo.
 @export var radio_contacto: float = 22.0
-@export_range(0.1, 3.0) var periodo_contacto: float = 0.8
+## Segundos entre daños por contacto.
+@export_range(0.1, 3.0) var periodo_contacto: float = 1.0
+## Recompensa al morir.
 @export var recompensa: int = 1
 
-@export_group("Objetivo (jugador / árbol)")
-## Si es true (Talador, Motosierra...), ignora al jugador y va
-## directo al árbol mientras exista.
+## Si es true (jefes anti-estructura), ignora al jugador y va directo
+## al árbol. El daño por contacto sigue funcionando.
 @export var anti_estructura: bool = false
-## Si el jugador queda a más de esta distancia, el enemigo vuelve al
+## Si el objetivo queda a más de esta distancia, el enemigo vuelve al
 ## árbol (0 = persigue al jugador a cualquier distancia).
 @export var rango_aggro: float = 0.0
+
+# ───────────── REFERENCIAS (OPCIONAL) ─────────────
+
+## Visual poligonal (FiguraConstructor). Vacío = se autodetecta como
+## hijo con ese nombre o script.
+@export var figura: Node2D
+## Marker2D de salida de proyectiles. Vacío = el centro del enemigo.
+@export var boca: Node2D
+## Escena de proyectil propia. Vacía = usa el proyectil interno.
+@export var proyectil: PackedScene
+
+# ───────────── COMPORTAMIENTO ─────────────
+
+@export_category("Comportamiento")
+## Lógica que dicta las órdenes cada frame (comp_*.gd).
+@export_enum("melee", "enjambre", "rango", "torreta", "embestida") var comportamiento_tipo: String = "melee"
+## Script personalizado (opcional). Si va vacío se usa el registro.
+@export var comportamiento_personalizado: GDScript
+## Dibuja los radios de contacto/persecución del enemigo.
+@export var debug_dibujar: bool = false
 
 @export_group("Melee")
 @export var melee_radio: float = 30.0
@@ -77,271 +91,264 @@ var comportamiento_tipo: String = "melee"
 @export var rango_margen: float = 40.0
 @export var rango_recarga: float = 1.6
 @export_range(0.0, 2.0) var rango_vel_strafe: float = 0.5
-@export_range(0.0, 45.0) var rango_dispersion: float = 0.0
+@export_range(0.0, 45.0) var rango_dispersion: float = 6.0
 
 @export_group("Torreta")
-@export var torreta_alcance: float = 600.0
-@export var torreta_recarga: float = 2.2
-@export var torreta_balas: int = 3
-@export var torreta_separacion: float = 0.12
-@export_range(0.0, 45.0) var torreta_dispersion: float = 6.0
+@export var torreta_cadencia: float = 1.6
+@export var torreta_alcance: float = 280.0
 
 @export_group("Embestida")
-@export var embestida_alcance: float = 340.0
-@export var embestida_tiempo_apuntado: float = 0.7
-@export_range(1.0, 6.0) var embestida_mult_carga: float = 3.2
-@export var embestida_tiempo_carga: float = 0.9
-@export var embestida_descanso: float = 1.1
-@export_range(1.0, 4.0) var embestida_mult_dano: float = 2.0
-@export_range(0.1, 2.0) var embestida_vel_patrulla: float = 0.6
-@export var embestida_telegrafiar: bool = true
+@export var embestida_alcance: float = 320.0
+@export var embestida_preparacion: float = 0.5
+@export_range(1.0, 6.0) var embestida_mult_velocidad: float = 3.0
+@export var embestida_danio_extra: float = 0.0
+@export var embestida_enfriamiento: float = 2.0
 
-@export_group("Ataque a distancia")
-## Escena de proyectil (puede faltar: se usa uno interno mientras tanto).
-@export var proyectil: PackedScene
-@export var velocidad_proyectil: float = 220.0
-## Multiplicador del daño de proyectil sobre `damage` (así el
-## escalado del WaveManager también afecta a los disparos).
-@export_range(0.1, 4.0) var mult_dano_proyectil: float = 1.0
+# ───────────── NOMBRE FLOTANTE ─────────────
 
-@export_group("Referencias internas")
-## Nodo visual (FiguraConstructor). Vacío = autodetección entre los hijos.
-@export var figura: Node2D
-## Punto de salida de proyectiles. Vacío = autodetección del hijo "Boca".
-@export var boca: Node2D
+@export_category("Nombre flotante")
+## Muestra el nombre sobre el enemigo al aparecer. Se oculta con el
+## primer golpe que recibe.
+@export var mostrar_nombre: bool = true
+## Texto a mostrar. Vacío = se deriva del nombre de la escena
+## (Excavadora_Toxica.tscn → "Excavadora Toxica").
+@export var nombre_mostrado: String = ""
+## Fuente personalizada (.ttf/.otf). Vacía = la fuente por defecto.
+@export var fuente_nombre: Font
+## Tamaño aproximado EN PÍXELES DE PANTALLA (con zoom compensado).
+@export var tamano_fuente_nombre: int = 13
+@export var color_nombre: Color = Color("ffffff")
+## Grosor del borde alrededor del nombre (0 = sin borde).
+@export_range(0, 12) var contorno_nombre: int = 0
+@export var sombra_nombre: bool = false
+@export var mayusculas_nombre: bool = false
+@export_enum("pop", "ninguna") var entrada_nombre: String = "pop"
+## Altura sobre el enemigo. Negativa = arriba. 0 = automática
+## según radio_contacto.
+@export var altura_nombre: float = 0.0
 
-# Referencias que SOLO inyecta el WaveManager (identifica por grupos).
-# No se buscan aquí: sin WaveManager, el enemigo se queda quieto.
+# ───────────── DAÑO FLOTANTE ─────────────
+
+@export_category("Daño flotante")
+## Número flotante con el daño recibido en cada golpe.
+@export var mostrar_danio: bool = true
+## Fuente personalizada (.ttf/.otf). Vacía = la fuente por defecto.
+@export var fuente_danio: Font
+## Tamaño aproximado EN PÍXELES DE PANTALLA (con zoom compensado).
+@export var tamano_fuente_danio: int = 15
+@export var color_danio: Color = Color("ffffff")
+## Grosor del borde alrededor de los números (0 = sin borde).
+@export_range(0, 12) var contorno_danio: int = 0
+@export var sombra_danio: bool = false
+@export_enum("pop", "ninguna") var entrada_danio: String = "pop"
+## Cuánto sube el número mientras se desvanece (px).
+@export var subida_danio: float = 14.0
+## Segundos que vive el número flotante.
+@export var duracion_numero: float = 0.7
+
+# ───────────── ESTADO INTERNO ─────────────
+
+const COMPORTAMIENTOS: Dictionary = {
+	"melee": "res://ecenes/enemies/class/comportamientos/comp_melee.gd",
+	"enjambre": "res://ecenes/enemies/class/comportamientos/comp_enjambre.gd",
+	"rango": "res://ecenes/enemies/class/comportamientos/comp_rango.gd",
+	"torreta": "res://ecenes/enemies/class/comportamientos/comp_torreta.gd",
+	"embestida": "res://ecenes/enemies/class/comportamientos/comp_embestida.gd",
+}
+
+var vida: float
 var jugador: Node2D = null
 var arbol: Node2D = null
-
-# ───────────── ESTADO ─────────────
-var vida: float                   # vida ACTUAL (life ya vino escalada)
-var _comp = null                  # comportamiento (duck typing)
+var _comp: Node = null
 var _t_contacto: float = 0.0
 var _muerto: bool = false
-var _avisos: Dictionary = {}      # clave -> true (avisar solo una vez)
+var _vel_deseada: Vector2 = Vector2.ZERO
+var _recarga_interna: float = 0.0
+var _aviso_comp: bool = false
+var _fallback_aviso: bool = false
 
-
-# ───────────── COMPATIBILIDAD DE NOMBRES ─────────────
-## Por si una escena vieja guardó overrides con los nombres antiguos.
-func _set(propiedad: StringName, valor: Variant) -> bool:
-	match propiedad:
-		"vida_max":
-			life = valor
-			return true
-		"velocidad":
-			speed = valor
-			return true
-		"dano_contacto":
-			damage = valor
-			return true
-	return false
-
-func _get(propiedad: StringName) -> Variant:
-	match propiedad:
-		"vida_max":
-			return life
-		"velocidad":
-			return speed
-		"dano_contacto":
-			return damage
-	return null
+var _etiqueta_nombre: Label = null
+var _tween_nombre: Tween = null
+var _tween_flash: Tween = null
+var _numeros: Array[Label] = []
 
 
 # ───────────── CICLO DE VIDA ─────────────
 
 func _ready() -> void:
-	add_to_group("enemigos")   # contrato WaveManager: debug y sistemas lo buscan aquí
-	vida = life                # el WaveManager ya escaló life ANTES de add_child
-	_resolver_referencias_internas()
+	add_to_group("enemigos")
+	if figura == null:
+		figura = get_node_or_null("FiguraConstructor")
+	vida = life  # life llegó YA escalada por el WaveManager
 	_cargar_comportamiento()
-	_listo()
+	_notificar_educacion()
+	queue_redraw()
 	_al_spawnear()
+	_mostrar_nombre()
 
 
 func _physics_process(delta: float) -> void:
 	if _muerto:
 		return
-	_mecanica(delta)              # 1) mecánica del enemigo concreto (extends)
-	if _comp != null:
-		_comp.pensar(self, delta) # 2) órdenes del comportamiento
-	move_and_slide()              # 3) ejecutar
-	_danio_por_contacto(delta)    # 4) contacto automático
+	_resolver_referencias_fallback()
+	_vel_deseada = Vector2.ZERO     # las órdenes se dictan CADA frame
+	_mecanica(delta)                # 1) mecánica del enemigo concreto (extends)
+	if _comp != null and is_instance_valid(_comp) and _comp.has_method("pensar"):
+		_comp.pensar(self, delta)   # 2) órdenes del comportamiento
+	else:
+		_melee_interna(delta)       # 2b) respaldo si no hay comp_*.gd
+	velocity = _vel_deseada
+	move_and_slide()
+	_contacto(delta)                # 3) contacto con jugador Y árbol
+	_actualizar_zoom_texto()
 
 
-func _process(_delta: float) -> void:
-	if debug_dibujar:
-		queue_redraw()
+# ───────────── API PARA COMPORTAMIENTOS (única permitida) ─────────────
 
-
-func _draw() -> void:
-	if debug_dibujar and _comp != null and _comp.has_method("debug_dibujar_en"):
-		_comp.debug_dibujar_en(self)
-
-
-# ───────────── REFERENCIAS INTERNAS (figura y boca) ─────────────
-
-func _resolver_referencias_internas() -> void:
-	# FIGURA
-	if figura != null and not is_instance_valid(figura):
-		figura = null
-	if figura == null:
-		var f := get_node_or_null("FiguraConstructor")
-		if f is FiguraConstructor:
-			figura = f
-	if figura == null:
-		for hijo in get_children():
-			if hijo is FiguraConstructor:
-				figura = hijo
-				break
-	if figura != null and not (figura is FiguraConstructor):
-		_avisar_una_vez("figura_tipo",
-			"[Enemigo] %s: la figura asignada no usa el script FiguraConstructor." % name)
-	# BOCA
-	if boca != null and not is_instance_valid(boca):
-		boca = null
-	if boca == null:
-		boca = get_node_or_null("Boca") as Node2D
-
-
-## Para mecánicas futuras (invocar, se divide): la criatura nueva
-## hereda las referencias inyectadas, sin buscar nada por su cuenta.
-func heredar_referencias_a(criatura: Node) -> void:
-	if criatura == null:
-		return
-	if "jugador" in criatura and jugador != null:
-		criatura.set("jugador", jugador)
-	if "arbol" in criatura and arbol != null:
-		criatura.set("arbol", arbol)
-
-
-# ───────────── GANCHOS PARA LAS MECÁNICAS (extends) ─────────────
-
-## Se llama una vez en _ready, antes de _al_spawnear.
-func _listo() -> void: pass
-## Se llama cada frame físico, antes del comportamiento.
-func _mecanica(_delta: float) -> void: pass
-## Se llama al aparecer en escena.
-func _al_spawnear() -> void: pass
-## Se llama tras recibir daño.
-func _al_recibir_danio(_cantidad: float) -> void: pass
-## Se llama cuando el contacto automático alcanza al objetivo.
-func _al_tocar_jugador() -> void: pass
-## Se llama justo antes de morir (dividirse, explotar, invocar...).
-func _al_morir() -> void: pass
-
-
-# ───────────── OBJETIVO: JUGADOR O ÁRBOL ─────────────
-
-## A quién perseguir: el jugador si existe y está dentro del aggro;
-## en caso contrario (o si es anti-estructura), el árbol.
+## A quién atacar:
+##  • anti_estructura → siempre el árbol (jefes).
+##  • jugador muerto/ausente → el árbol.
+##  • rango_aggro > 0 y el jugador quedó lejos → el árbol (nube de gas).
+##  • resto → el jugador.
 func objetivo() -> Node2D:
-	# Limpieza perezosa: si una referencia quedó liberada, se suelta.
-	if jugador != null and not is_instance_valid(jugador):
-		jugador = null
-	if arbol != null and not is_instance_valid(arbol):
-		arbol = null
 	if anti_estructura:
-		return arbol if arbol != null else jugador
-	if jugador != null and (rango_aggro <= 0.0 or distancia_a(jugador) <= rango_aggro):
+		return arbol if _valido(arbol) else null
+	if _valido(jugador):
+		if rango_aggro > 0.0 and _valido(arbol) and distancia_a(jugador) > rango_aggro:
+			return arbol
 		return jugador
-	return arbol
+	return arbol if _valido(arbol) else null
 
 
-func distancia_a(nodo: Node2D) -> float:
-	if nodo == null:
+func distancia_a(n: Node2D) -> float:
+	if not _valido(n):
 		return INF
-	return global_position.distance_to(nodo.global_position)
+	return global_position.distance_to(n.global_position)
 
 
-func dir_a(nodo: Node2D) -> Vector2:
-	if nodo == null:
+func dir_a(n: Node2D) -> Vector2:
+	if not _valido(n):
 		return Vector2.ZERO
-	return (nodo.global_position - global_position).normalized()
+	return global_position.direction_to(n.global_position)
 
-
-# ───────────── API PARA LOS COMPORTAMIENTOS ─────────────
 
 func velocidad_efectiva() -> float:
 	return speed * velocidad_multiplicador
 
 
+## Órden de movimiento: hacia un punto global.
 func mover_hacia(punto: Vector2, multiplicador: float = 1.0) -> void:
-	var dir := (punto - global_position).normalized()
-	velocity = dir * velocidad_efectiva() * multiplicador
+	_vel_deseada = global_position.direction_to(punto) * velocidad_efectiva() * multiplicador
 
 
-func mover_en(dir: Vector2, multiplicador: float = 1.0) -> void:
-	velocity = dir.normalized() * velocidad_efectiva() * multiplicador
+## Órden de movimiento: en una dirección (se normaliza sola).
+func mover_en(direccion: Vector2, multiplicador: float = 1.0) -> void:
+	if direccion.length_squared() < 0.0001:
+		_vel_deseada = Vector2.ZERO
+		return
+	_vel_deseada = direccion.normalized() * velocidad_efectiva() * multiplicador
 
 
-func detener(freno: float = 10.0) -> void:
-	velocity = velocity.move_toward(
-		Vector2.ZERO, velocidad_efectiva() * freno * get_physics_process_delta_time())
+func detener() -> void:
+	_vel_deseada = Vector2.ZERO
 
 
-## Golpe de contacto contra el objetivo actual (jugador O árbol).
-## Usa e.damage: ya viene escalado por el WaveManager.
-func atacar_objetivo() -> bool:
-	var obj := objetivo()
-	if obj == null or distancia_a(obj) > radio_contacto:
+## Daña a cualquier objetivo (jugador, árbol, otro enemigo) por la
+## vía que exponga: recibir_danio() o take_damage(). Devuelve true
+## si conectó.
+## Daña a cualquier objetivo (jugador, árbol, otro enemigo) por la
+## vía que exponga: recibir_danio() o take_damage(). Devuelve true
+## si conectó.
+## obj OPCIONAL: sin argumento ataca a objetivo() automáticamente
+## (compatible con los comp_*.gd que llaman e.atacar_objetivo()).
+func atacar_objetivo(obj: Node2D = null, cantidad: float = -1.0) -> bool:
+	if obj == null:
+		obj = objetivo()
+	if not _valido(obj):
 		return false
+	var d := damage if cantidad < 0.0 else cantidad
 	if obj.has_method("recibir_danio"):
-		obj.recibir_danio(damage)
+		obj.recibir_danio(d)
 		return true
-	if obj.has_method("recibir_dano"):
-		obj.recibir_dano(damage)
+	elif obj.has_method("take_damage"):
+		obj.take_damage(int(d))
 		return true
-	_avisar_una_vez("objetivo_metodo",
-		"[Enemigo] %s: el objetivo no tiene recibir_danio(). No recibe daño." % name)
 	return false
-
-
-## Origen de los proyectiles: el nodo Boca si existe, si no el centro.
-func punto_salida() -> Vector2:
-	if boca != null and is_instance_valid(boca):
-		return boca.global_position
-	return global_position
-
-
-## Destino de proyectiles/invocaciones: la escena actual (donde el
-## WaveManager agrega a los enemigos) o, si no hay, el padre.
-func _contenedor_salida() -> Node:
-	var cs := get_tree().current_scene
-	return cs if cs != null else get_parent()
-
-
-func disparar_hacia(punto: Vector2) -> void:
-	disparar_desde(punto_salida(), punto)
-
-
-## Dispara desde `punto` hacia `hacia`.
-func disparar_desde(punto: Vector2, hacia: Vector2) -> void:
-	var dano_final := damage * mult_dano_proyectil
-	# PROYECTIL REAL (si la escena ya existe).
+## Dispara desde un origen (usa 'boca' si existe). Con escena de
+## proyectil propia la instancia; sin ella usa el proyectil interno.
+func disparar_desde(origen: Node2D, direccion: Vector2, dano: float = -1.0, velocidad: float = 260.0) -> void:
+	var dir := direccion.normalized()
+	if dir == Vector2.ZERO:
+		return
+	var pos := (origen if _valido(origen) else self).global_position
+	if boca != null and _valido(boca):
+		pos = boca.global_position
+	var d := damage if dano < 0.0 else dano
 	if proyectil != null:
 		var p := proyectil.instantiate()
 		_contenedor_salida().add_child(p)
-		p.global_position = punto
-		var dir := (hacia - punto).normalized()
 		if p is Node2D:
-			p.rotation = dir.angle()
+			(p as Node2D).global_position = pos
+			(p as Node2D).rotation = dir.angle()
+		p.set("damage", d)
 		p.set("direccion", dir)
-		p.set("velocidad", velocidad_proyectil)
-		p.set("dano", dano_final)   # daño ya escalado por el WaveManager
+		p.set("velocidad", velocidad)
 		return
-	# PROYECTIL INTERNO (mientras la escena no exista): rombo neón por código.
-	_avisar_una_vez("proyectil",
-		"[Enemigo] %s: sin escena de proyectil. Usando proyectil interno." % name)
-	var pr := ProyectilDefecto.new()
-	pr.direccion = (hacia - punto).normalized()
-	pr.velocidad = velocidad_proyectil
-	pr.dano = dano_final
-	pr.color_proyectil = Color("00ff7f")
-	_contenedor_salida().add_child(pr)
-	pr.global_position = punto
-	pr.rotation = pr.direccion.angle()
+	_crear_proyectil_interno(pos, dir, d, velocidad)
+
+
+# ───────────── REFERENCIAS (resolución perezosa) ─────────────
+
+## El WaveManager inyecta antes de add_child(); esto SOLO repara si
+## algo llegó nulo. Costo cero cuando todo está bien.
+func _resolver_referencias_fallback() -> void:
+	if not _valido(jugador):
+		jugador = get_tree().get_first_node_in_group("jugador") as Node2D
+	if not _valido(arbol):
+		arbol = get_tree().get_first_node_in_group("arbol") as Node2D
+	if jugador == null and arbol == null and not _fallback_aviso:
+		_fallback_aviso = true
+		push_warning("[Enemigo] '%s': sin jugador ni árbol en los grupos 'jugador'/'arbol'. Revisa WaveManager._pasar_referencias()." % name)
+
+
+func _valido(n: Node) -> bool:
+	return n != null and is_instance_valid(n) and n.is_inside_tree()
+
+
+# ───────────── CONTACTO (jugador y ÁRBOL) ─────────────
+
+func _contacto(delta: float) -> void:
+	_t_contacto -= delta
+	if not dano_al_tocar or _t_contacto > 0.0:
+		return
+	if _golpear_por_contacto():
+		_t_contacto = periodo_contacto
+
+
+func _golpear_por_contacto() -> bool:
+	var pego := false
+	# 1) Jugador por proximidad.
+	if _valido(jugador) and distancia_a(jugador) <= radio_contacto:
+		if atacar_objetivo(jugador):
+			pego = true
+			_al_tocar_jugador()
+	# 2) Árbol: si el empuje nos dejó rozando el tronco, también lo
+	# muerde. Aunque "persiga al jugador", el bloqueo lo castiga.
+	for i in get_slide_collision_count():
+		var obj: Object = get_slide_collision(i).get_collider()
+		if obj is Node and obj != jugador and _es_arbol(obj as Node):
+			if atacar_objetivo(obj as Node2D):
+				pego = true
+				_al_tocar_arbol()
+			break
+	return pego
+
+
+func _es_arbol(n: Node) -> bool:
+	if n.is_in_group("arbol"):
+		return true
+	# El que bloquea puede ser un StaticBody2D hijo del árbol.
+	return n.get_parent() != null and n.get_parent().is_in_group("arbol")
 
 
 # ───────────── DAÑO Y MUERTE ─────────────
@@ -353,6 +360,8 @@ func recibir_danio(cantidad: float) -> void:
 	recibo_danio.emit(cantidad)
 	_al_recibir_danio(cantidad)
 	_flash_danio()
+	_ocultar_nombre()                # el nombre se quita al primer golpe
+	_mostrar_numero_danio(cantidad)  # número flotante con entrada animada
 	if vida <= 0.0:
 		morir()
 
@@ -366,187 +375,248 @@ func morir() -> void:
 	queue_free()   # el WaveManager contabiliza la baja con tree_exited
 
 
+func porcentaje_vida() -> float:
+	return clampf(vida / maxf(life, 0.01), 0.0, 1.0)
+
+
 func _flash_danio() -> void:
-	if figura == null or not is_instance_valid(figura):
+	var objetivo_flash: CanvasItem = figura if _valido(figura) else self
+	if _tween_flash != null and _tween_flash.is_valid():
+		_tween_flash.kill()
+	objetivo_flash.modulate = Color(3.0, 3.0, 3.0, 1.0)
+	_tween_flash = create_tween()
+	_tween_flash.tween_property(objetivo_flash, "modulate", Color.WHITE, 0.15)
+
+
+# ───────────── NOMBRE Y DAÑO FLOTANTE ─────────────
+
+func _texto_nombre() -> String:
+	if nombre_mostrado.strip_edges() != "":
+		return nombre_mostrado
+	if scene_file_path != "":
+		var t: String = scene_file_path.get_file().get_basename().replace("_", " ")
+		return t.to_upper() if mayusculas_nombre else t
+	return "Enemigo"
+
+
+func _altura_nombre() -> float:
+	return altura_nombre if altura_nombre != 0.0 else -(radio_contacto + 14.0)
+
+
+func _zoom_camara() -> float:
+	var cam := get_viewport().get_camera_2d()
+	if cam == null:
+		return 1.0
+	return maxf(cam.zoom.x, 0.01)
+
+
+func _zoom_inv() -> float:
+	return 1.0 / _zoom_camara()
+
+
+func _crear_label(texto: String, fuente: Font, tam: int, color: Color, contorno: int, sombra: bool) -> Label:
+	var lbl := Label.new()
+	lbl.text = texto
+	var cfg := LabelSettings.new()
+	if fuente != null:
+		cfg.font = fuente
+	cfg.font_size = tam
+	cfg.font_color = color
+	cfg.outline_size = contorno          # 0 = sin borde
+	cfg.outline_color = Color(0, 0, 0, 0.85)
+	cfg.shadow_color = Color(0, 0, 0, 0.6) if sombra else Color(0, 0, 0, 0)
+	cfg.shadow_offset = Vector2(1, 1)
+	lbl.label_settings = cfg
+	lbl.z_index = 20
+	add_child(lbl)
+	lbl.reset_size()
+	return lbl
+
+
+func _mostrar_nombre() -> void:
+	if not mostrar_nombre:
 		return
+	if _etiqueta_nombre == null or not is_instance_valid(_etiqueta_nombre):
+		_etiqueta_nombre = _crear_label(_texto_nombre(), fuente_nombre, tamano_fuente_nombre, color_nombre, contorno_nombre, sombra_nombre)
+		_etiqueta_nombre.position = Vector2(-_etiqueta_nombre.size.x * 0.5, _altura_nombre())
+		_etiqueta_nombre.pivot_offset = _etiqueta_nombre.size * 0.5
+	_etiqueta_nombre.visible = true
+	if _tween_nombre != null and _tween_nombre.is_valid():
+		_tween_nombre.kill()
+	_tween_nombre = create_tween()
+	if entrada_nombre == "pop":
+		_etiqueta_nombre.set_meta("anim", true)
+		_etiqueta_nombre.modulate.a = 0.0
+		_tween_nombre.set_parallel(true)
+		_tween_nombre.tween_property(_etiqueta_nombre, "modulate:a", 1.0, 0.3)
+		_tween_nombre.tween_property(_etiqueta_nombre, "scale", Vector2.ONE * _zoom_inv(), 0.25) \
+			.from(Vector2.ONE * (_zoom_inv() * 0.2)).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		_tween_nombre.chain().tween_callback(func() -> void: _etiqueta_nombre.set_meta("anim", false))
+	else:
+		_etiqueta_nombre.scale = Vector2.ONE * _zoom_inv()
+		_etiqueta_nombre.modulate.a = 0.0
+		_tween_nombre.tween_property(_etiqueta_nombre, "modulate:a", 1.0, 0.3)
+
+
+func _ocultar_nombre() -> void:
+	if _etiqueta_nombre == null or not _etiqueta_nombre.visible:
+		return
+	if _tween_nombre != null and _tween_nombre.is_valid():
+		_tween_nombre.kill()
+	_tween_nombre = create_tween()
+	_tween_nombre.tween_property(_etiqueta_nombre, "modulate:a", 0.0, 0.25)
+	_tween_nombre.tween_callback(func() -> void: _etiqueta_nombre.visible = false)
+
+
+func _mostrar_numero_danio(cantidad: float) -> void:
+	if not mostrar_danio:
+		return
+	var lbl := _crear_label(str(int(round(cantidad))), fuente_danio, tamano_fuente_danio, color_danio, contorno_danio, sombra_danio)
+	var centro := Vector2(0.0, _altura_nombre() + 8.0)
+	lbl.position = centro - lbl.size * 0.5   # centrado exacto
+	lbl.pivot_offset = lbl.size * 0.5        # pivote en centro LOCAL
+	var z_inv := _zoom_inv()
+	_numeros.append(lbl)
 	var tw := create_tween()
-	figura.modulate = Color(1.0, 0.35, 0.35)
-	tw.tween_property(figura, "modulate", Color.WHITE, 0.15)
+	if entrada_danio == "pop":
+		lbl.set_meta("anim", true)
+		lbl.scale = Vector2.ONE * (z_inv * 0.2)
+		lbl.modulate.a = 0.0
+		tw.set_parallel(true)
+		tw.tween_property(lbl, "scale", Vector2.ONE * z_inv, 0.18).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		tw.tween_property(lbl, "modulate:a", 1.0, 0.1)
+		tw.chain().tween_callback(func() -> void: lbl.set_meta("anim", false))
+	else:
+		lbl.scale = Vector2.ONE * z_inv
+	# Fase de vida: sube y se desvanece.
+	tw.set_parallel(true)
+	tw.tween_property(lbl, "position:y", lbl.position.y - subida_danio, duracion_numero) \
+		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tw.tween_property(lbl, "modulate:a", 0.0, duracion_numero).set_delay(duracion_numero * 0.4)
+	tw.chain().tween_callback(_limpiar_numero.bind(lbl))
 
 
-# ───────────── COMPORTAMIENTO: carga e inyección de parámetros ─────────────
+func _limpiar_numero(lbl: Label) -> void:
+	_numeros.erase(lbl)
+	if is_instance_valid(lbl):
+		lbl.queue_free()
 
-## Los parámetros del grupo del tipo elegido, listos para inyectar.
-func _datos_comportamiento() -> Dictionary:
-	match comportamiento_tipo:
-		"enjambre":
-			return {
-				"vel_extra": enjambre_vel_extra,
-				"radio_rodeo": enjambre_radio_rodeo,
-				"reeleccion": enjambre_reeleccion,
-				"tambalear": enjambre_tambalear,
-			}
-		"rango":
-			return {
-				"distancia_ideal": rango_distancia,
-				"margen": rango_margen,
-				"recarga": rango_recarga,
-				"vel_strafe": rango_vel_strafe,
-				"dispersion_grados": rango_dispersion,
-			}
-		"torreta":
-			return {
-				"alcance": torreta_alcance,
-				"recarga": torreta_recarga,
-				"balas_porrafaga": torreta_balas,
-				"separacion": torreta_separacion,
-				"dispersion_grados": torreta_dispersion,
-			}
-		"embestida":
-			return {
-				"alcance_deteccion": embestida_alcance,
-				"tiempo_apuntado": embestida_tiempo_apuntado,
-				"mult_carga": embestida_mult_carga,
-				"tiempo_carga": embestida_tiempo_carga,
-				"tiempo_descanso": embestida_descanso,
-				"mult_dano_carga": embestida_mult_dano,
-				"vel_patrulla": embestida_vel_patrulla,
-				"telegrafiar": embestida_telegrafiar,
-			}
-		_:  # melee
-			return {
-				"radio_ataque": melee_radio,
-				"recarga": melee_recarga,
-				"mult_persecucion": melee_mult_persecucion,
-			}
 
+## Compensa el zoom de la cámara cada frame (solo cuando la etiqueta
+## no está animando su entrada, para no pelear con el pop).
+func _actualizar_zoom_texto() -> void:
+	var z_inv := _zoom_inv()
+	var pendientes: Array = [_etiqueta_nombre]
+	pendientes.append_array(_numeros)
+	for n in pendientes:
+		if n is Label and is_instance_valid(n) and n.visible and not n.get_meta("anim", false):
+			(n as Label).scale = Vector2.ONE * z_inv
+
+
+# ───────────── COMPORTAMIENTO (carga y respaldo) ─────────────
 
 func _cargar_comportamiento() -> void:
-	# 1) Script personalizado del Inspector.
-	var script: GDScript = comportamiento_personalizado
-	# 2) Archivo del registro, SOLO si ya existe en disco.
-	if script == null:
-		var ruta: String = COMPORTAMIENTOS.get(comportamiento_tipo, "")
-		if ruta != "" and ResourceLoader.exists(ruta):
-			script = load(ruta)
-			if script == null or not script.can_instantiate():
-				_avisar_una_vez("comp_" + comportamiento_tipo,
-					"[Enemigo] %s: '%s' existe pero no se pudo instanciar." % [name, ruta])
-				script = null
-	# 3) Melee interno: nunca falla.
-	if script == null:
-		_avisar_una_vez("comp_fallback_" + comportamiento_tipo,
-			"[Enemigo] %s: comportamiento '%s' no disponible todavía. Usando melee interno."
-			% [name, comportamiento_tipo])
-		_comp = CompDefecto.new()
-	else:
-		_comp = script.new()
-	# Inyección de parámetros ANTES de iniciar(): así _listo() ve los valores finales.
-	if _comp != null and _comp.has_method("configurar"):
-		_comp.configurar(_datos_comportamiento())
-	if _comp != null and _comp.has_method("iniciar"):
-		_comp.iniciar(self)
+	_comp = null
+	var script_comp: GDScript = comportamiento_personalizado
+	if script_comp == null and COMPORTAMIENTOS.has(comportamiento_tipo):
+		var ruta: String = COMPORTAMIENTOS[comportamiento_tipo]
+		if ResourceLoader.exists(ruta):
+			script_comp = load(ruta) as GDScript
+	if script_comp != null:
+		var instancia: Node = script_comp.new()
+		if instancia is Node:
+			_comp = instancia
+			add_child(_comp)
+			if _comp.has_method("iniciar"):
+				_comp.iniciar(self)
+			return
+	if not _aviso_comp:
+		_aviso_comp = true
+		push_warning("[Enemigo] '%s': sin comp_%s.gd → uso el melee interno." % [name, comportamiento_tipo])
 
 
-# ───────────── INTERNOS ─────────────
-
-func _danio_por_contacto(delta: float) -> void:
-	if not dano_al_tocar:
-		return
+## Respaldo melee: persigue a objetivo() y golpea al llegar.
+## Los comp_*.gd lo reemplazan cuando existen.
+func _melee_interna(delta: float) -> void:
+	_recarga_interna -= delta
 	var obj := objetivo()
 	if obj == null:
+		detener()
 		return
-	_t_contacto -= delta
-	if _t_contacto > 0.0 or distancia_a(obj) > radio_contacto:
+	if distancia_a(obj) > melee_radio:
+		mover_hacia(obj.global_position, melee_mult_persecucion)
+	else:
+		detener()
+		if _recarga_interna <= 0.0:
+			if atacar_objetivo(obj):
+				if obj == jugador:
+					_al_tocar_jugador()
+				elif _es_arbol(obj):
+					_al_tocar_arbol()
+			_recarga_interna = melee_recarga
+
+
+# ───────────── PROYECTIL INTERNO (respaldo) ─────────────
+
+func _contenedor_salida() -> Node:
+	var escena := get_tree().current_scene
+	return escena if escena != null else get_parent()
+
+
+func _crear_proyectil_interno(pos: Vector2, dir: Vector2, dano: float, vel: float) -> void:
+	var area := Area2D.new()
+	var poly := Polygon2D.new()
+	poly.polygon = PackedVector2Array([Vector2(6, 0), Vector2(0, 4), Vector2(-6, 0), Vector2(0, -4)])
+	poly.color = Color("d81b60")
+	area.add_child(poly)
+	var col := CollisionShape2D.new()
+	var forma := CircleShape2D.new()
+	forma.radius = 5.0
+	col.shape = forma
+	area.add_child(col)
+	_contenedor_salida().add_child(area)
+	area.global_position = pos
+	area.rotation = dir.angle()
+	area.body_entered.connect(_proyectil_interno_toco.bind(dano))
+	area.area_entered.connect(_proyectil_interno_toco.bind(dano))
+	var tw := area.create_tween()
+	tw.tween_property(area, "global_position", pos + dir * 600.0, 600.0 / vel)
+	tw.tween_callback(area.queue_free)
+
+
+func _proyectil_interno_toco(n: Node, dano: float) -> void:
+	if n == null or n == self or n is Enemigo:
 		return
-	_t_contacto = periodo_contacto
-	if damage > 0.0:
-		if obj.has_method("recibir_danio"):
-			obj.recibir_danio(damage)
-		elif obj.has_method("recibir_dano"):
-			obj.recibir_dano(damage)
-	_al_tocar_jugador()
+	if n.has_method("recibir_danio"):
+		n.recibir_danio(dano)
+	elif n.has_method("take_damage"):
+		n.take_damage(int(dano))
 
 
-func _avisar_una_vez(clave: String, mensaje: String) -> void:
-	if _avisos.has(clave):
+# ───────────── EDUCACIÓN / ENCICLOPEDIA ─────────────
+
+func _notificar_educacion() -> void:
+	var edu := get_node_or_null("/root/EducationManager")
+	if edu != null and edu.has_method("on_enemy_encountered") and scene_file_path != "":
+		edu.on_enemy_encountered(scene_file_path.get_file().get_basename())
+
+
+# ───────────── GANCHOS PARA MECÁNICAS (extends Enemigo) ─────────────
+
+func _al_spawnear() -> void: pass
+func _mecanica(_delta: float) -> void: pass
+func _al_recibir_danio(_cantidad: float) -> void: pass
+func _al_tocar_jugador() -> void: pass
+func _al_tocar_arbol() -> void: pass
+func _al_morir() -> void: pass
+
+
+# ───────────── DEBUG ─────────────
+
+func _draw() -> void:
+	if not debug_dibujar:
 		return
-	_avisos[clave] = true
-	push_warning(mensaje)
-
-
-# ───────────── SUSTITUTOS INTERNOS (mientras no existan los recursos) ─────────────
-
-## Comportamiento melee interno: persigue y ataca por contacto.
-class CompDefecto:
-	extends RefCounted
-
-	var radio_ataque := 30.0
-	var recarga := 1.0
-	var _t := 0.0
-
-	func configurar(datos: Dictionary) -> void:
-		for clave in datos:
-			if clave in self:
-				set(clave, datos[clave])
-
-	func iniciar(_e: Enemigo) -> void: pass
-
-	func pensar(e: Enemigo, delta: float) -> void:
-		var obj := e.objetivo()
-		if obj == null:
-			e.detener(); return
-		_t -= delta
-		if e.distancia_a(obj) > radio_ataque:
-			e.mover_hacia(obj.global_position)
-		else:
-			e.detener()
-			if _t <= 0.0 and e.atacar_objetivo():
-				_t = recarga
-
-
-## Proyectil interno: rombo neón construido por código.
-## Golpea a lo primero que toque (jugador o árbol): es detección de
-## impacto, no identificación de objetivo.
-class ProyectilDefecto:
-	extends Node2D
-
-	var direccion := Vector2.RIGHT
-	var velocidad := 220.0
-	var dano := 4.0
-	var color_proyectil: Color = Color("00ff7f")
-	var vida_util := 3.0
-	var radio_golpe := 20.0
-	var _t := 0.0
-	var _golpeado := false
-
-	func _ready() -> void:
-		var vis := Polygon2D.new()
-		vis.polygon = PackedVector2Array([
-			Vector2(7, 0), Vector2(-4, 4), Vector2(-2, 0), Vector2(-4, -4)])
-		vis.color = color_proyectil
-		add_child(vis)
-		var cola := Polygon2D.new()
-		cola.polygon = PackedVector2Array([
-			Vector2(-2, 0), Vector2(-11, 2), Vector2(-8, 0), Vector2(-11, -2)])
-		cola.color = Color(color_proyectil.r, color_proyectil.g, color_proyectil.b, 0.4)
-		add_child(cola)
-
-	func _physics_process(delta: float) -> void:
-		if _golpeado:
-			return
-		_t += delta
-		if _t > vida_util:
-			queue_free()
-			return
-		position += direccion * velocidad * delta
-		for grupo in ["jugador", "arbol"]:
-			var j := get_tree().get_first_node_in_group(grupo)
-			if j is Node2D and global_position.distance_to(j.global_position) <= radio_golpe:
-				_golpeado = true
-				if j.has_method("recibir_danio"):
-					j.recibir_danio(dano)
-				elif j.has_method("recibir_dano"):
-					j.recibir_dano(dano)
-				queue_free()
-				return
+	draw_arc(Vector2.ZERO, radio_contacto, 0.0, TAU, 32, Color(1.0, 0.4, 0.7, 0.35), 1.0)
+	draw_arc(Vector2.ZERO, melee_radio, 0.0, TAU, 32, Color(0.0, 1.0, 0.5, 0.35), 1.0)
+	if rango_aggro > 0.0:
+		draw_arc(Vector2.ZERO, rango_aggro, 0.0, TAU, 48, Color(1.0, 0.9, 0.2, 0.3), 1.0)

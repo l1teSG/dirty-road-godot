@@ -1,0 +1,63 @@
+[gd_scene format=3 uid="uid://csk8lc57rlfwy"]
+
+[ext_resource type="PackedScene" uid="uid://cgh5ie63rhuf4" path="res://ecenes/enemies/class/clase_enemigo.tscn" id="1_2dhvw"]
+[ext_resource type="Script" uid="uid://7wwisup7lilo" path="res://ecenes/enemies/class/comportamientos/comp_rango.gd" id="2_nllrl"]
+[ext_resource type="FontFile" uid="uid://vnsqj7q05uej" path="res://themes/Chakra_Petch/ChakraPetch-BoldItalic.ttf" id="3_nllrl"]
+[ext_resource type="PackedScene" uid="uid://cjx0su50n0cgy" path="res://assets/stage/enemis/stages/stage1-10/nubeGas.tscn" id="3_tfaec"]
+[ext_resource type="Script" uid="uid://dtju1od6upjok" path="res://assets/stage/enemis/classShape/figura_capa.gd" id="4_76bpx"]
+
+[sub_resource type="Resource" id="Resource_2dhvw"]
+resource_local_to_scene = true
+script = ExtResource("4_76bpx")
+nombre = "Nube_exterior"
+puntos = PackedVector2Array(-8, -14, 8, -16, 20, -6, 22, 6, 12, 14, -10, 14, -20, 4, -18, -8)
+color = Color(0.6156863, 0.72156864, 0.24705882, 0.65882355)
+animacion = 1
+anim_velocidad = 0.5
+
+[sub_resource type="Resource" id="Resource_nllrl"]
+resource_local_to_scene = true
+script = ExtResource("4_76bpx")
+nombre = "Nube_interior"
+puntos = PackedVector2Array(-2, -8, 8, -8, 14, 0, 10, 8, -2, 10, -12, 4, -12, -2)
+color = Color(0.78431374, 0.84705883, 0.30980393, 0.5882353)
+animacion = 1
+anim_velocidad = 0.5
+anim_fase = 2.0
+
+[sub_resource type="Resource" id="Resource_tfaec"]
+resource_local_to_scene = true
+script = ExtResource("4_76bpx")
+nombre = "Nucleo"
+puntos = PackedVector2Array(-3, -2, 4, -3, 6, 3, 0, 7, -6, 3)
+color = Color(0.91764706, 1, 0.43529412, 1)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_7cwo5"]
+radius = 23.345236
+
+[node name="enemigo" unique_id=2006919752 node_paths=PackedStringArray("figura", "boca") instance=ExtResource("1_2dhvw")]
+life = 24.0
+speed = 55.0
+damage = 4.0
+velocidad_multiplicador = 1.4
+radio_contacto = 18.0
+recompensa = 2
+figura = NodePath("FiguraConstructor")
+boca = NodePath("Marker2D")
+comportamiento_tipo = "rango"
+comportamiento_personalizado = ExtResource("2_nllrl")
+rango_distancia = 200.0
+rango_margen = 50.0
+rango_recarga = 2.4
+rango_vel_strafe = 0.3
+rango_dispersion = 10.0
+nombre_mostrado = "nube gas"
+fuente_danio = ExtResource("3_nllrl")
+
+[node name="FiguraConstructor" parent="." index="0" unique_id=66989019 instance=ExtResource("3_tfaec")]
+capas = Array[ExtResource("4_76bpx")]([SubResource("Resource_2dhvw"), SubResource("Resource_nllrl"), SubResource("Resource_tfaec")])
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." index="1" unique_id=945368225]
+shape = SubResource("CircleShape2D_7cwo5")
+
+[node name="Marker2D" type="Marker2D" parent="." index="2" unique_id=1346893839]

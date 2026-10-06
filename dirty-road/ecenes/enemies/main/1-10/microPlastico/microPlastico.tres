@@ -6,4 +6,5 @@
 [resource]
 script = ExtResource("1_4jtoj")
 escena = ExtResource("1_71csx")
+peso = 3.0
 metadata/_custom_type_script = "uid://vyt7ho0roxls"

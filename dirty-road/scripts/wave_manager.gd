@@ -20,9 +20,28 @@ signal jefe_derrotado(nombre: String)
 @export var oleadas_por_etapa: int = 10
 
 @export_category("Tiempos")
+## Frecuencia de refuerzos: cada cuántos segundos entra un enemigo.
+## Es EL knob de presión ahora: a menor valor, más enemigos por oleada.
 @export var tiempo_entre_spawns: float = 1.2
+## Duración BASE de la oleada (luego la escalan los aumentos micro/macro).
 @export var tiempo_maximo_oleada: float = 40.0
 @export var tiempo_descanso: float = 5.0
+
+@export_category("Duración de oleadas")
+## Aumento MICRO: la oleada N de la etapa dura base × (1 + esto × (N−1)). 0 = fija.
+@export_range(0.0, 2.0) var aumento_duracion_por_oleada: float = 0.10
+## Aumento MACRO: + este % por cada etapa avanzada (etapa 1 = ×1.0).
+@export_range(0.0, 2.0) var aumento_duracion_por_etapa: float = 0.0
+## Tope de duración en segundos (0 = sin tope).
+@export var duracion_maxima_oleada: float = 0.0
+
+@export_category("Spawns")
+## Tope de enemigos vivos a la vez (0 = sin tope). Si se alcanza, el spawner
+## se salta la tanda y reintenta en el siguiente tick; el reloj NO se pausa.
+@export var max_enemigos_simultaneos: int = 0
+## Al acabar el tiempo: true elimina a los vivos; false los deja en pantalla
+## y se mezclan con la siguiente oleada (siguen atacando el árbol).
+@export var eliminar_sobrevivientes: bool = false
 
 @export_category("Debug")
 @export var debug_activo: bool = false
@@ -38,6 +57,8 @@ signal jefe_derrotado(nombre: String)
 
 var oleada_actual: int = 1
 var enemigos_vivos: int = 0
+## LEGADO: ya no hay cola fija de spawns; siempre 0. Se conserva porque
+## la UI y otros sistemas pueden sumarla al contador de restantes.
 var enemigos_por_spawnear: int = 0
 var en_descanso: bool = false
 var tiempo_restante: int = 0
@@ -53,6 +74,7 @@ var oleada_de_jefe: bool = false
 
 var _generacion: int = 0
 var _descanso_jefe_actual: float = 0.0
+var _duracion_oleada_actual: float = 0.0
 var _enemigos_vivos_por_tipo: Dictionary = {}
 var _aviso_sin_jugador: bool = false
 var _aviso_sin_arbol: bool = false
@@ -91,12 +113,13 @@ func _ready() -> void:
 		var origen := "debug_oleada_inicial" if (debug_activo and not _ignorar_debug) else "SaveManager"
 		print("[WaveManager] arranque en horda %d (origen: %s)" % [oleada_actual, origen])
 
-	# La corrida educativa se arma ANTES de la primera oleada para que
-	# la intro de etapa/oleada 1 no se pierda.
+	# La corrida educativa se arma ANTES de la primera oleada.
 	if EducationManager != null:
 		EducationManager.start_run()
 
-	iniciar_oleada()
+	# Diferido: evita el "Parent node is busy setting up children" cuando
+	# el jefe (o un enemigo) se spawnea durante el montaje de la escena.
+	iniciar_oleada.call_deferred()
 
 
 func _crear_timer(one_shot: bool, tiempo: float) -> Timer:
@@ -110,14 +133,13 @@ func _crear_timer(one_shot: bool, tiempo: float) -> Timer:
 
 # ───────────── IDENTIFICACIÓN: JUGADOR Y ÁRBOL (SOLO GRUPOS) ─────────────
 ## Responsabilidad única de este script: encontrar al jugador y al árbol
-## por sus grupos y pasárselos a cada enemigo que spawnea. No existen
-## referencias manuales: el que está en el grupo, es el objetivo.
+## por sus grupos y pasárselos a cada enemigo que spawnea.
 
 func _obtener_jugador() -> Node2D:
 	var j := get_tree().get_first_node_in_group("jugador") as Node2D
 	if j == null and not _aviso_sin_jugador:
 		_aviso_sin_jugador = true
-		push_warning("[WaveManager] Jugador no encontrado (grupo 'jugador'). Los enemigos se quedan quietos.")
+		push_warning("[WaveManager] Jugador no encontrado (grupo 'jugador').")
 	return j
 
 
@@ -125,119 +147,25 @@ func _obtener_arbol() -> Node2D:
 	var a := get_tree().get_first_node_in_group("arbol") as Node2D
 	if a == null and not _aviso_sin_arbol:
 		_aviso_sin_arbol = true
-		push_warning("[WaveManager] Árbol no encontrado (grupo 'arbol'). Los anti-estructura no tendrán objetivo.")
+		push_warning("[WaveManager] Árbol no encontrado (grupo 'arbol').")
 	return a
 
 
-## Inyecta las referencias en un enemigo recién instanciado, ANTES de
-## add_child para que su _ready ya las tenga.
-func _pasar_referencias(enemigo: Node2D) -> void:
-	if enemigo == null:
-		return
-	var j := _obtener_jugador()
-	if j != null and "jugador" in enemigo:
-		enemigo.set("jugador", j)
-	var a := _obtener_arbol()
-	if a != null and "arbol" in enemigo:
-		enemigo.set("arbol", a)
+func _pasar_referencias(nodo: Node2D) -> void:
+	# set() es un no-op seguro si la propiedad no existe: los enemigos
+	# nuevos la reciben; los legacy usan su _resolver_referencias_fallback().
+	nodo.set("jugador", _obtener_jugador())
+	nodo.set("arbol", _obtener_arbol())
 
 
-# ───────────── ETAPAS ─────────────
-
-func _indice_etapa(oleada: int) -> int:
-	if etapas.is_empty():
-		return -1
-	var idx: int = int(floor((oleada - 1) / float(oleadas_por_etapa)))
-	# Pasada la última etapa, se repite la última (modo infinito)
-	return mini(idx, etapas.size() - 1)
-
-
-func _etapa(oleada: int) -> EtapaConfig:
-	var idx := _indice_etapa(oleada)
-	if idx < 0:
-		return null
-	return etapas[idx]
-
-
-func _enemigos_de_etapa(oleada: int) -> Array[EnemigoOleadaConfig]:
-	var lista: Array[EnemigoOleadaConfig] = []
-
-	if debug_activo and not _ignorar_debug and not debug_enemigos_fijos.is_empty():
-		lista.append_array(debug_enemigos_fijos)
-		return lista
-
-	var idx := _indice_etapa(oleada)
-	var etapa := _etapa(oleada)
-	if etapa == null:
-		return lista
-
-	# Posición de la oleada DENTRO de la etapa (1..oleadas_por_etapa).
-	var pos_en_etapa: int = ((oleada - 1) % oleadas_por_etapa) + 1
-
-	# Heredados: ahora TAMBIÉN respetan su oleada_minima / oleada_maxima.
-	if etapa.heredar_enemigos_anteriores:
-		for i in range(idx):
-			if etapas[i] == null:
-				continue
-			for config in etapas[i].enemigos:
-				if _enemigo_disponible(config, pos_en_etapa):
-					lista.append(config)
-
-	# Enemigos propios de la etapa.
-	for config in etapa.enemigos:
-		if _enemigo_disponible(config, pos_en_etapa):
-			lista.append(config)
-
-	# Red de seguridad: si ningún enemigo desbloqueó todavía, debuta
-	# el de oleada_minima más baja para que la oleada no quede vacía.
-	if lista.is_empty():
-		var mejor: EnemigoOleadaConfig = null
-		var mejor_min: int = 999999
-
-		for config in etapa.enemigos:
-			if config == null or config.escena == null:
-				continue
-			var minimo: int = maxi(config.oleada_minima, 1)
-			if minimo < mejor_min:
-				mejor_min = minimo
-				mejor = config
-
-		if mejor != null:
-			lista.append(mejor)
-
-	return lista
-
-
-## ¿Puede este enemigo aparecer en esta posición de oleada (dentro de la
-## etapa)? oleada_minima = oleada de debut, oleada_maxima = última oleada
-## donde sale (0 = sin límite).
-func _enemigo_disponible(config: EnemigoOleadaConfig, pos_en_etapa: int) -> bool:
-	if config == null or config.escena == null:
-		return false
-	if pos_en_etapa < maxi(config.oleada_minima, 1):
-		return false
-	if config.oleada_maxima > 0 and pos_en_etapa > config.oleada_maxima:
-		return false
-	return true
-
-
-## El jefe sale en la última oleada de cada etapa realmente definida
-func _jefe_de_oleada(oleada: int) -> EtapaConfig:
-	if oleada % oleadas_por_etapa != 0:
-		return null
-	var idx: int = oleada / oleadas_por_etapa - 1
-	if idx < 0 or idx >= etapas.size():
-		return null
-	var etapa: EtapaConfig = etapas[idx]
-	if etapa == null or etapa.jefe_escena == null:
-		return null
-	return etapa
-
-
-# ───────────── OLEADAS ─────────────
+# ───────────── CICLO DE OLEADAS ─────────────
 
 func iniciar_oleada() -> void:
+	if not is_inside_tree():
+		return
+
 	en_descanso = false
+	_generacion += 1
 	jefe_actual = null
 
 	if EducationManager != null:
@@ -250,195 +178,248 @@ func iniciar_oleada() -> void:
 		if idx >= 0 and etapas[idx] != null:
 			nombre_etapa = etapas[idx].nombre
 		etapa_iniciada.emit(idx, nombre_etapa)
-
-		# Intro de etapa (el manager tiene dedupe interno con _announced_stage).
 		if EducationManager != null:
 			EducationManager.on_stage_started(idx)
 
-	var etapa := _etapa(oleada_actual)
-	var etapa_jefe := _jefe_de_oleada(oleada_actual)
-	oleada_de_jefe = etapa_jefe != null
+	oleada_de_jefe = _es_oleada_de_jefe()
 
-	var base: int = etapa.enemigos_base_por_oleada if etapa != null else 4
-	var incremento: int = etapa.incremento_enemigos_por_oleada if etapa != null else 3
+	# Duración escalada micro (por oleada) y macro (por etapa).
+	var oleada_en_etapa: int = (oleada_actual - 1) % maxi(oleadas_por_etapa, 1) + 1
+	_duracion_oleada_actual = _calcular_duracion(oleada_en_etapa)
+	tiempo_restante = int(_duracion_oleada_actual)
 
-	if oleada_de_jefe:
-		enemigos_por_spawnear = etapa_jefe.jefe_escoltas
-	else:
-		enemigos_por_spawnear = base + ((oleada_actual - 1) * incremento)
-		enemigos_por_spawnear = maxi(enemigos_por_spawnear, 1)
-		if debug_activo and not debug_spawnear_enemigos:
-			enemigos_por_spawnear = 0
+	# Descanso largo tras jefe, si el recurso lo define.
+	_descanso_jefe_actual = 0.0
+	var etapa_oleada: EtapaConfig = _etapa(oleada_actual)
+	if etapa_oleada != null:
+		var descanso_jefe: Variant = etapa_oleada.get("descanso_jefe")
+		if descanso_jefe != null:
+			_descanso_jefe_actual = float(descanso_jefe)
 
-	tiempo_restante = int(tiempo_maximo_oleada)
-
-	if debug_activo and debug_imprimir_info:
-		print("[WaveManager] Oleada %d (pos %d/%d en etapa) | Etapa %d | Jefe: %s | Enemigos: %d | Pool: %d" % [
-			oleada_actual, ((oleada_actual - 1) % oleadas_por_etapa) + 1,
-			oleadas_por_etapa, etapa_actual_idx + 1, str(oleada_de_jefe),
-			enemigos_por_spawnear, _enemigos_de_etapa(oleada_actual).size()])
-
-	oleada_iniciada.emit(oleada_actual)
-	tiempo_actualizado.emit(tiempo_restante, false)
+	enemigos_vivos = 0
+	enemigos_por_spawnear = 0
+	_enemigos_vivos_por_tipo.clear()
 
 	if oleada_de_jefe:
-		_spawnear_jefe(etapa_jefe)
+		_spawnear_jefe(etapa_oleada)
 
-	_notificar_enemigos_restantes()
-
-	# Oleada vacía: pasa directo al descanso
-	if enemigos_por_spawnear <= 0 and enemigos_vivos <= 0:
+	# Sin nada que spawnear (etapa sin enemigos o spawns de debug apagados):
+	# no se espera en vacío, se pasa directo al descanso.
+	if not oleada_de_jefe and _enemigos_de_etapa(oleada_actual).is_empty():
 		iniciar_fase_descanso()
 		return
 
-	if enemigos_por_spawnear > 0:
-		spawn_timer.start(tiempo_entre_spawns)
+	oleada_iniciada.emit(oleada_actual)
+	tiempo_actualizado.emit(tiempo_restante, false)
+	_notificar_enemigos_restantes()
 
-	if oleada_de_jefe:
-		# El jefe no tiene límite de tiempo
-		ui_timer.stop()
-		tiempo_actualizado.emit(0, false)
-	else:
-		if not (debug_activo and debug_sin_limite_tiempo):
-			duracion_timer.start(tiempo_maximo_oleada)
-		ui_timer.start(1.0)
+	# SPAWN CONTINUO: refuerzos durante TODA la oleada. Matar enemigos
+	# no corta ni adelanta nada: el único que manda es el reloj.
+	spawn_timer.start(tiempo_entre_spawns)
 
+	# En oleada de jefe no hay reloj: termina cuando muera él.
+	if not oleada_de_jefe and not (debug_activo and debug_sin_limite_tiempo):
+		duracion_timer.start(_duracion_oleada_actual)
 
-func _aplicar_stats(enemigo: Node2D, etapa: EtapaConfig, extra_vida: float = 1.0) -> void:
-	var escalado: float = etapa.escalado_vida_por_oleada if etapa != null else 0.15
-	var mult_vida: float = etapa.multiplicador_vida if etapa != null else 1.0
-	var mult_vel: float = etapa.multiplicador_velocidad if etapa != null else 1.0
-	var mult_dano: float = etapa.multiplicador_dano if etapa != null else 1.0
-
-	var factor_vida: float = (1.0 + (oleada_actual - 1) * escalado) * mult_vida * extra_vida
-	# Nombres del contrato con la clase Enemigo: life / speed / damage.
-	if "life" in enemigo and enemigo.get("life") != null:
-		enemigo.set("life", enemigo.get("life") * factor_vida)
-	if mult_vel != 1.0 and "speed" in enemigo and enemigo.get("speed") != null:
-		enemigo.set("speed", enemigo.get("speed") * mult_vel)
-	if mult_dano != 1.0 and "damage" in enemigo and enemigo.get("damage") != null:
-		enemigo.set("damage", enemigo.get("damage") * mult_dano)
+	ui_timer.start(1.0)
 
 
-func _spawnear_jefe(etapa: EtapaConfig) -> void:
-	var punto: Node2D = punto_spawn_jefe
-	if punto == null and not puntos_spawn.is_empty():
-		punto = puntos_spawn.pick_random()
-	if punto == null or not punto.is_inside_tree():
-		return
-
-	var jefe: Node2D = etapa.jefe_escena.instantiate() as Node2D
-	if jefe == null:
-		return
-
-	jefe.global_position = punto.global_position
-	_aplicar_stats(jefe, etapa, etapa.jefe_multiplicador_vida)
-	_pasar_referencias(jefe)   # los jefes estáticos (torretas) también apuntan
-
-	var clave: String = etapa.jefe_escena.resource_path
-	_enemigos_vivos_por_tipo[clave] = _enemigos_vivos_por_tipo.get(clave, 0) + 1
-
-	jefe.tree_exited.connect(_on_enemigo_derrotado.bind(clave, _generacion))
-	jefe.tree_exited.connect(_on_jefe_muerto.bind(etapa.jefe_nombre, _generacion))
-
-	get_tree().current_scene.add_child(jefe)
-
-	jefe_actual = jefe
-	_descanso_jefe_actual = etapa.jefe_tiempo_descanso
-	enemigos_vivos += 1
-
-	jefe_aparecido.emit(jefe, etapa.jefe_nombre)
-
-	if EducationManager != null:
-		EducationManager.on_enemy_encountered(_obtener_enemy_id(clave))
+func _calcular_duracion(oleada_en_etapa: int) -> float:
+	var duracion: float = tiempo_maximo_oleada
+	duracion *= 1.0 + aumento_duracion_por_oleada * float(oleada_en_etapa - 1)
+	if etapa_actual_idx > 0:
+		duracion *= 1.0 + aumento_duracion_por_etapa * float(etapa_actual_idx)
+	if duracion_maxima_oleada > 0.0:
+		duracion = minf(duracion, duracion_maxima_oleada)
+	return maxf(duracion, 1.0)
 
 
-func _on_jefe_muerto(nombre: String, generacion: int) -> void:
-	if generacion != _generacion or not is_inside_tree():
-		return
-	jefe_actual = null
-	jefe_derrotado.emit(nombre)
+func _indice_etapa(numero_oleada: int) -> int:
+	if etapas.is_empty():
+		return -1
+	var paso: int = maxi(oleadas_por_etapa, 1)
+	var idx: int = floori(float(numero_oleada - 1) / float(paso))
+	# Si se supera el contenido, se repite la última etapa (sin quedarse en null).
+	return clampi(idx, 0, etapas.size() - 1)
 
-	if EducationManager != null:
-		EducationManager.on_boss_defeated(etapa_actual_idx)
 
+func _etapa(numero_oleada: int) -> EtapaConfig:
+	if etapas.is_empty():
+		return null
+	var idx := _indice_etapa(numero_oleada)
+	if idx < 0:
+		return null
+	return etapas[idx]
+
+
+func _es_oleada_de_jefe() -> bool:
+	if etapas.is_empty() or etapa_actual_idx < 0:
+		return false
+	if oleada_actual % maxi(oleadas_por_etapa, 1) != 0:
+		return false
+	var etapa: EtapaConfig = etapas[etapa_actual_idx]
+	return etapa != null and etapa.jefe_escena != null
+
+
+# ───────────── SPAWNS ─────────────
 
 func _spawnear_siguiente_enemigo() -> void:
-	var pool := _enemigos_de_etapa(oleada_actual)
-	if pool.is_empty() or puntos_spawn.is_empty():
-		spawn_timer.stop()
+	if en_descanso or not is_inside_tree():
 		return
 
-	var configs_validas: Array[EnemigoOleadaConfig] = []
-	for config in pool:
-		if config == null or config.escena == null:
-			continue
-		var clave: String = config.escena.resource_path
-		var vivos_actuales: int = _enemigos_vivos_por_tipo.get(clave, 0)
-		if config.max_simultaneos > 0 and vivos_actuales >= config.max_simultaneos:
-			continue
-		configs_validas.append(config)
-
-	if configs_validas.is_empty():
+	# Tope opcional de simultáneos: se salta la tanda y reintenta luego.
+	if max_enemigos_simultaneos > 0 and enemigos_vivos >= max_enemigos_simultaneos:
 		return
 
-	var config_elegida: EnemigoOleadaConfig = _seleccionar_ponderado(configs_validas)
-	if config_elegida == null:
+	var pool: Array[EnemigoOleadaConfig] = _enemigos_de_etapa(oleada_actual)
+	if pool.is_empty():
 		return
 
-	var punto: Node2D = puntos_spawn.pick_random()
-	if punto == null or not punto.is_inside_tree():
+	var config: EnemigoOleadaConfig = pool.pick_random()
+	if config == null or config.escena == null:
 		return
 
-	var enemigo: Node2D = config_elegida.escena.instantiate() as Node2D
+	var enemigo := config.escena.instantiate() as Node2D
 	if enemigo == null:
 		return
 
-	enemigo.global_position = punto.global_position
-	_aplicar_stats(enemigo, _etapa(oleada_actual))
+	var punto: Node2D = _elegir_punto_spawn()
+	if punto != null:
+		enemigo.global_position = punto.global_position
+
+	_aplicar_stats(enemigo, _etapa(oleada_actual), 1.0, config)
+
+	var clave: String = config.escena.resource_path
+	_enemigos_vivos_por_tipo[clave] = int(_enemigos_vivos_por_tipo.get(clave, 0)) + 1
+	enemigo.tree_exited.connect(_on_enemigo_derrotado.bind(clave, _generacion))
+
 	_pasar_referencias(enemigo)
-
-	var clave_escena: String = config_elegida.escena.resource_path
-	_enemigos_vivos_por_tipo[clave_escena] = _enemigos_vivos_por_tipo.get(clave_escena, 0) + 1
-
-	enemigo.tree_exited.connect(_on_enemigo_derrotado.bind(clave_escena, _generacion))
-
 	get_tree().current_scene.add_child(enemigo)
 
 	enemigos_vivos += 1
-	enemigos_por_spawnear -= 1
-
 	_notificar_enemigos_restantes()
 
 	if EducationManager != null:
-		EducationManager.on_enemy_encountered(_obtener_enemy_id(clave_escena))
-
-	if enemigos_por_spawnear <= 0:
-		spawn_timer.stop()
+		EducationManager.on_enemy_encountered(_obtener_enemy_id(enemigo))
 
 
-func _obtener_enemy_id(ruta_escena: String) -> String:
-	var nombre_archivo: String = ruta_escena.get_file().get_basename()
-	return nombre_archivo.to_lower().replace("_", "")
+func _enemigos_de_etapa(numero_oleada: int) -> Array[EnemigoOleadaConfig]:
+	var pool: Array[EnemigoOleadaConfig] = []
+
+	if debug_activo:
+		if not debug_spawnear_enemigos:
+			return pool
+		if not debug_enemigos_fijos.is_empty():
+			pool.append_array(debug_enemigos_fijos)
+			return pool
+
+	var etapa: EtapaConfig = _etapa(numero_oleada)
+	if etapa == null:
+		return pool
+
+	for config in etapa.enemigos:
+		var entrada := config as EnemigoOleadaConfig
+		if entrada == null:
+			continue
+		if _disponible_en_oleada(entrada, numero_oleada):
+			pool.append(entrada)
+	return pool
 
 
-func _seleccionar_ponderado(configs: Array[EnemigoOleadaConfig]) -> EnemigoOleadaConfig:
-	var peso_total: float = 0.0
-	for config in configs:
-		peso_total += max(config.peso, 0.0)
+func _disponible_en_oleada(entrada: EnemigoOleadaConfig, numero_oleada: int) -> bool:
+	# Ventana de oleadas opcional del recurso: si los campos no existen,
+	# get() devuelve null y el enemigo está siempre disponible.
+	var desde: Variant = entrada.get("oleada_desde")
+	if desde != null and int(desde) > numero_oleada:
+		return false
+	var hasta: Variant = entrada.get("oleada_hasta")
+	if hasta != null and int(hasta) > 0 and int(hasta) < numero_oleada:
+		return false
+	return true
 
-	if peso_total <= 0.0:
-		return configs[randi() % configs.size()]
 
-	var valor: float = randf() * peso_total
-	var acumulado: float = 0.0
-	for config in configs:
-		acumulado += max(config.peso, 0.0)
-		if valor <= acumulado:
-			return config
+func _elegir_punto_spawn() -> Node2D:
+	if puntos_spawn.is_empty():
+		return self
+	var punto: Node2D = puntos_spawn.pick_random()
+	return punto
 
-	return configs[configs.size() - 1]
 
+func _spawnear_jefe(etapa: EtapaConfig) -> void:
+	if etapa == null or etapa.jefe_escena == null:
+		return
+
+	var jefe := etapa.jefe_escena.instantiate() as Node2D
+	if jefe == null:
+		return
+
+	var punto: Node2D = punto_spawn_jefe
+	if punto == null and not puntos_spawn.is_empty():
+		punto = puntos_spawn.pick_random()
+	if punto != null:
+		jefe.global_position = punto.global_position
+
+	_aplicar_stats(jefe, etapa, etapa.jefe_multiplicador_vida)
+
+	var clave: String = etapa.jefe_escena.resource_path
+	_enemigos_vivos_por_tipo[clave] = int(_enemigos_vivos_por_tipo.get(clave, 0)) + 1
+	jefe.tree_exited.connect(_on_enemigo_derrotado.bind(clave, _generacion))
+	jefe.tree_exited.connect(_on_jefe_muerto.bind(etapa.jefe_nombre, _generacion))
+
+	_pasar_referencias(jefe)
+	# Diferido: nunca add_child durante el montaje de la escena.
+	get_tree().current_scene.add_child.call_deferred(jefe)
+
+	jefe_actual = jefe
+	enemigos_vivos += 1
+	jefe_aparecido.emit(jefe, etapa.jefe_nombre)
+	_notificar_enemigos_restantes()
+
+	if EducationManager != null:
+		EducationManager.on_enemy_encountered(_obtener_enemy_id(jefe))
+
+
+func _aplicar_stats(nodo: Node2D, etapa: EtapaConfig, mult_extra: float = 1.0, config: EnemigoOleadaConfig = null) -> void:
+	var escala_vida: float = 1.0
+	var mult_dano: float = 1.0
+
+	if etapa != null:
+		escala_vida = 1.0 + etapa.escalado_vida_por_oleada * float(oleada_actual - 1)
+		mult_dano = etapa.multiplicador_dano
+
+	# Multiplicadores opcionales del recurso (si existen en EnemigoOleadaConfig).
+	if config != null:
+		var mult_vida: Variant = config.get("mult_vida")
+		if mult_vida != null:
+			escala_vida *= float(mult_vida)
+		var extra_vida: Variant = config.get("extra_vida")
+		if extra_vida != null:
+			escala_vida *= float(extra_vida)
+
+	escala_vida *= mult_extra
+
+	# La clase Enemigo expone life/speed/damage y el escalado va ANTES de
+	# add_child (su _ready inicializa vida = life ya escalada). Para nodos
+	# legacy sin esas propiedades, set() es un no-op seguro.
+	if "life" in nodo:
+		nodo.set("life", float(nodo.get("life")) * escala_vida)
+	if "damage" in nodo:
+		nodo.set("damage", float(nodo.get("damage")) * mult_dano)
+	if etapa != null and "speed" in nodo:
+		var mult_velocidad: Variant = etapa.get("multiplicador_velocidad")
+		if mult_velocidad != null:
+			nodo.set("speed", float(nodo.get("speed")) * float(mult_velocidad))
+
+
+func _obtener_enemy_id(nodo: Node2D) -> String:
+	var ruta: String = nodo.scene_file_path
+	var base: String = ruta.get_file().get_basename() if not ruta.is_empty() else String(nodo.name)
+	# EducationManager normaliza tildes/espacios por su lado; aquí solo
+	# minúsculas y sin separadores.
+	return base.to_lower().replace(" ", "").replace("_", "").replace("-", "")
+
+
+# ───────────── CIERRES DE OLEADA ─────────────
 
 func _on_enemigo_derrotado(clave_escena: String, generacion: int) -> void:
 	if generacion != _generacion:
@@ -456,18 +437,43 @@ func _on_enemigo_derrotado(clave_escena: String, generacion: int) -> void:
 
 	_notificar_enemigos_restantes()
 
-	if enemigos_vivos <= 0 and enemigos_por_spawnear <= 0:
-		duracion_timer.stop()
-		spawn_timer.stop()
-		ui_timer.stop()
-		iniciar_fase_descanso()
+	# SIN cierre por limpieza: matar al último enemigo NUNCA cierra la
+	# oleada ni detiene los spawns. El único cierre anticipado es la
+	# muerte del jefe (_on_jefe_muerto); el resto lo decide el reloj.
+
+
+func _on_jefe_muerto(nombre: String, generacion: int) -> void:
+	if generacion != _generacion or not is_inside_tree():
+		return
+	jefe_actual = null
+	jefe_derrotado.emit(nombre)
+
+	if EducationManager != null:
+		EducationManager.on_boss_defeated(etapa_actual_idx)
+
+	# La oleada del jefe no tiene reloj: termina al morir él.
+	if eliminar_sobrevivientes:
+		_limpiar_enemigos_vivos()
+
+	iniciar_fase_descanso()
 
 
 func _on_tiempo_oleada_agotado() -> void:
+	# En oleada de jefe no corre el reloj (el cierre lo hace _on_jefe_muerto).
 	if oleada_de_jefe:
 		return
+	_terminar_oleada_por_tiempo()
+
+
+func _terminar_oleada_por_tiempo() -> void:
 	spawn_timer.stop()
+	duracion_timer.stop()
 	ui_timer.stop()
+	enemigos_por_spawnear = 0
+
+	if eliminar_sobrevivientes:
+		_limpiar_enemigos_vivos()
+
 	iniciar_fase_descanso()
 
 
@@ -476,6 +482,10 @@ func iniciar_fase_descanso() -> void:
 		return
 
 	en_descanso = true
+
+	spawn_timer.stop()
+	duracion_timer.stop()
+	ui_timer.stop()
 
 	var duracion_descanso: float = tiempo_descanso
 	if oleada_de_jefe and _descanso_jefe_actual > 0.0:
@@ -498,6 +508,14 @@ func iniciar_fase_descanso() -> void:
 
 	rest_timer.start(duracion_descanso)
 	ui_timer.start(1.0)
+
+
+func _limpiar_enemigos_vivos() -> void:
+	# Limpieza real (no debug): cubre 'enemigos' y el legacy 'enemi'.
+	for nodo in get_tree().get_nodes_in_group("enemigos"):
+		nodo.queue_free()
+	for nodo in get_tree().get_nodes_in_group("enemi"):
+		nodo.queue_free()
 
 
 func _on_ui_tick() -> void:

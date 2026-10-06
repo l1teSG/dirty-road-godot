@@ -1,11 +1,15 @@
-## ENJAMBRE — rápido, rodea a su objetivo, tambalea y muerde.
-## Parámetros: vel_extra, radio_rodeo, reeleccion, tambalear.
+## ENJAMBRE — rápido: rodea a objetivo(), tambalea y muerde.
+## Parámetros (grupo "Enjambre"): enjambre_vel_extra,
+## enjambre_radio_rodeo, enjambre_reeleccion, enjambre_tambalear,
+## enjambre_margen_arbol (opcional).
 extends ComportamientoEnemigo
 
 var vel_extra: float = 1.35
 var radio_rodeo: float = 55.0
-var reeleccion: float = 1.2
+var reeleccion: float = 1.2   # también es la cadencia de mordisco
 var tambalear: float = 6.0
+## Alcance extra del mordisco contra el árbol.
+var margen_arbol: float = 10.0
 
 var _sentido: int = 1
 var _t_reeleccion: float = 0.0
@@ -13,18 +17,17 @@ var _fase: float = 0.0
 var _t: float = 0.0
 
 
-func configurar(datos: Dictionary) -> void:
-	vel_extra = datos.get("vel_extra", vel_extra)
-	radio_rodeo = datos.get("radio_rodeo", radio_rodeo)
-	reeleccion = datos.get("reeleccion", reeleccion)
-	tambalear = datos.get("tambalear", tambalear)
-
-
 func iniciar(enemigo: Enemigo) -> void:
 	e = enemigo
+	vel_extra = _f("enjambre_vel_extra", vel_extra)
+	radio_rodeo = _f("enjambre_radio_rodeo", radio_rodeo)
+	reeleccion = _f("enjambre_reeleccion", reeleccion)
+	tambalear = _f("enjambre_tambalear", tambalear)
+	margen_arbol = _f("enjambre_margen_arbol", margen_arbol)
 	_sentido = 1 if randf() < 0.5 else -1
 	_fase = randf() * TAU
-	_t_reeleccion = randf_range(reeleccion * 0.5, reeleccion)
+	_t = 0.0
+	_t_reeleccion = 0.0
 
 
 func pensar(enemigo: Enemigo, delta: float) -> void:
@@ -33,26 +36,29 @@ func pensar(enemigo: Enemigo, delta: float) -> void:
 	if obj == null:
 		e.detener()
 		return
-
-	_fase += delta * tambalear
 	_t -= delta
-
-	# Reelección: a veces invierte el sentido del rodeo.
 	_t_reeleccion -= delta
 	if _t_reeleccion <= 0.0:
 		_t_reeleccion = reeleccion
-		if randf() < 0.4:
+		if randf() < 0.5:
 			_sentido = -_sentido
-
-	# Dirección al objetivo + tangencial (rodear) + ondulación.
-	var dir: Vector2 = e.dir_a(obj)
-	var tangente: Vector2 = Vector2(-dir.y, dir.x) * float(_sentido)
-	var osc: float = sin(_fase) * 0.35
-	var rumbo: Vector2 = (dir + tangente * (0.85 + osc)).normalized()
-	# vel_extra es multiplicador de velocity: NO toca e.speed escalada.
-	e.mover_en(rumbo, vel_extra)
-
-	# Mordisco por contacto (daño = e.damage escalado).
-	if e.distancia_a(obj) <= e.radio_contacto + 6.0 and _t <= 0.0:
-		if e.atacar_objetivo():
-			_t = 0.6
+	_fase += delta * tambalear
+	var al_objetivo := e.dir_a(obj)
+	var dist := e.distancia_a(obj)
+	if dist > radio_rodeo * 1.3:
+		# Lejos: entra en línea recta, más rápido.
+		e.mover_hacia(obj.global_position, vel_extra)
+	elif dist < radio_rodeo * 0.6:
+		# Demasiado pegado: se despega rodeando.
+		e.mover_en((al_objetivo.orthogonal() * _sentido - al_objetivo).normalized(), vel_extra)
+	else:
+		# En el anillo: orbita con vaivén senoidal.
+		var tangente := al_objetivo.orthogonal() * _sentido
+		var vaiven := al_objetivo * sin(_fase) * 0.45
+		e.mover_en((tangente + vaiven).normalized(), vel_extra)
+	# Mordisco al rozar (contra el árbol muerde desde el margen).
+	var alcance_mordisco := e.radio_contacto + 6.0 \
+			+ (margen_arbol if _es_arbol(obj) else 0.0)
+	if dist <= alcance_mordisco and _t <= 0.0 and not e.dano_al_tocar:
+		if e.atacar_objetivo(obj):
+			_t = maxf(reeleccion, 0.6)

@@ -10,6 +10,16 @@ extends Player
 #  • Detecta enemigos por los grupos 'enemigos' (nuevos) y
 #    'enemi' (viejos), y les pega por recibir_danio o
 #    take_damage según lo que cada uno exponga.
+#  BALANCE (vs Etapa 1, valores de oleada 1 — el WaveManager
+#  escala a los enemigos por encima, al jugador NO):
+#  • DPS base ≈ 17 (danio_disparo 10 / cadencia 0.6 s), +5%
+#    esperado por críticos. Microplástico (8 HP) cae en 1 tiro.
+#  • Nube de gas (24 HP): 3 tiros. Petróleo (60 HP): 6 tiros.
+#  • Jefe de la ol. 10 (~846 HP): ~40-50 s de pelea contando
+#    los meteoritos de la super (40 c/u).
+#  • Daños recibidos de referencia: 2 (micro), 4 (nube),
+#    8 (petróleo), 12-19 (jefe) contra 100 HP + regeneración
+#    2 HP/s tras 5 s + i-frames durante el dash.
 # ══════════════════════════════════════════════════════════
 
 # ── Referencias a nodos ──────────────────────────────
@@ -42,7 +52,24 @@ var enemigos_en_rango: Array[Node2D] = []
 const GRUPOS_ENEMIGO: Array[String] = ["enemigos", "enemi"]
 
 @export_category("Cadencia de Disparo")
+## Segundos entre disparos. Con danio_disparo 10 → DPS ≈ 16.7.
 @export var cadencia_basic: float = 0.6
+
+# ── Estadísticas de combate ───────────────────────────
+@export_category("Estadísticas de Combate")
+## Daño de cada proyectil. Referencia Etapa 1: microplástico 8 HP
+## (1 tiro), nube de gas 24 (3 tiros), petróleo 60 (6 tiros).
+@export var danio_disparo: float = 10.0
+## Velocidad del proyectil (px/s). Se inyecta a la bala al disparar.
+@export var velocidad_proyectil: float = 400.0
+## Probabilidad de golpe crítico (0.05 = 5%).
+@export_range(0.0, 1.0) var prob_critico: float = 0.05
+## Multiplicador de daño del golpe crítico.
+@export_range(1.0, 5.0) var mult_critico: float = 2.0
+## Multiplicador del radio de detección (escala el Area2D entero).
+## 1.0 = el tamaño definido en la escena. Útil si el rango se queda
+## corto contra enemigos a distancia como la Nube de gas.
+@export_range(0.5, 3.0) var rango_deteccion: float = 1.0
 
 # ── Movimiento ─────────────────────────────────────────
 @export_category("Movimiento")
@@ -53,6 +80,9 @@ const GRUPOS_ENEMIGO: Array[String] = ["enemigos", "enemi"]
 @export var velocidad_dash: float = 600.0
 @export var duracion_dash: float = 0.15
 @export var cooldown_dash: float = 0.8
+## I-frames: durante el dash el jugador no recibe daño. Es la
+## herramienta principal contra el enjambre de microplásticos.
+@export var invulnerable_en_dash: bool = true
 
 var _en_dash: bool = false
 var _dash_timer: float = 0.0
@@ -61,6 +91,8 @@ var _dash_direccion: Vector2 = Vector2.RIGHT
 
 # ── Super: Lluvia de Meteoritos ────────────────────────
 @export_category("Super - Lluvia de Meteoritos")
+## 40 = un microplástico muere de un meteoro y el petróleo pierde
+## 2/3 de vida. Contra el jefe son ~200 de los ~846 HP.
 @export var danio_meteorito: int = 40
 @export var radio_impacto_meteorito: float = 90.0
 @export var tiempo_advertencia_meteorito: float = 0.6
@@ -93,6 +125,8 @@ var _flash_tween: Tween = null
 
 # ── Regeneración ───────────────────────────────────────
 @export_category("Regeneración")
+## 2 HP/s tras 5 s sin daño: recupera 10 HP por ciclo, justo para
+## compensar roces leves sin anular el daño del petróleo/jefe.
 @export var regeneracion_por_segundo: float = 2.0
 @export var retraso_regeneracion: float = 5.0
 @export var regeneracion_activa: bool = true
@@ -154,6 +188,7 @@ func _ready() -> void:
 	# si ya lo pusiste en el editor, no pasa nada.
 	add_to_group("jugador")
 
+	_aplicar_rango_deteccion()
 	_actualizar_barra_vida()
 	_conectar_respawn_manager()
 
@@ -187,6 +222,16 @@ func _ready() -> void:
 
 	_crear_flecha_arbol()
 	_buscar_arbol()
+
+
+## Aplica el multiplicador de rango escalando el Area2D de detección
+## (padre de 'range'). Uniforme, así no deforma las formas de colisión.
+func _aplicar_rango_deteccion() -> void:
+	if rango_deteccion == 1.0 or rangeArea == null:
+		return
+	var area := rangeArea.get_parent() as Area2D
+	if area != null:
+		area.scale = Vector2.ONE * rango_deteccion
 
 
 func _crear_particulas_regeneracion() -> void:
@@ -314,12 +359,24 @@ func shot(target: Node2D, _power_actual: String) -> void:
 
 	var direction = (target.global_position - aim.global_position).normalized()
 
+	# Daño del disparo con tirada de crítico (se decide al disparar).
+	var danio_final: float = danio_disparo
+	var critico: bool = randf() < prob_critico
+	if critico:
+		danio_final *= mult_critico
+
 	var bullet = proyectil.instantiate()
-	bullet.scale = Vector2(0.5, 0.5)
+	bullet.scale = Vector2(0.5, 0.5) * (1.3 if critico else 1.0)
+	if critico:
+		bullet.modulate = Color(1.0, 0.75, 0.35)  # los críticos van ámbar
 	bullet.rotation = direction.angle()
 	bullet.add_to_group('bullet')
 	bullet.global_position = aim.global_position
 	bullet.positionEnemi = direction
+	# Inyecta las stats del jugador en la bala (ignorado sin error
+	# si el proyectil no tiene alguna de estas propiedades).
+	bullet.set('dano', danio_final)
+	bullet.set('sped', velocidad_proyectil)
 
 	get_tree().current_scene.add_child(bullet)
 
@@ -499,6 +556,10 @@ func recibir_danio(cantidad: float) -> void:
 
 func take_damage(damage: int) -> void:
 	if _muerto:
+		return
+
+	# I-frames de dash: esquivar es la respuesta al enjambre.
+	if _en_dash and invulnerable_en_dash:
 		return
 
 	_mostrar_flash_golpe()
