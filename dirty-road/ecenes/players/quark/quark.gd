@@ -49,6 +49,10 @@ const DRON := preload("res://ecenes/players/quark/dron.gd")
 var _apuntado = null
 ## Dron compañero (carta "Dron Conservacionista").
 var _dron = null
+## Escala base del HUD definida en la escena (para no acumular el ajuste hud_escala).
+var _hud_base_listo: bool = false
+var _base_escala_botones: Vector2 = Vector2.ONE
+var _base_escala_joystick: Vector2 = Vector2.ONE
 
 # ── Disparo ───────────────────────────────────────────
 var proyectil: PackedScene = preload("res://ecenes/players/projectile/quark/playerProyectil.tscn")
@@ -345,6 +349,21 @@ func _icono_estrella() -> PackedVector2Array:
 		Vector2(0, 16), Vector2(-5, 5), Vector2(-16, 0), Vector2(-5, -5)])
 
 
+## Guarda la escala original de los controles definida en la escena.
+## Sin esto, `_aplicar_hud()` reemplazaría la escala 2.5 del `ContenedorBotones`
+## por `hud_escala` (1.0) y los botones táctiles quedarían al 40 % de su tamaño.
+func _capturar_escala_hud() -> void:
+	if _hud_base_listo or controles == null:
+		return
+	var cont := controles.get_node_or_null("ContenedorBotones")
+	if cont is Control:
+		_base_escala_botones = (cont as Control).scale
+	var joy := controles.get_node_or_null("Joystick")
+	if joy is Control:
+		_base_escala_joystick = (joy as Control).scale
+	_hud_base_listo = true
+
+
 ## Crea/elimina el joystick de apuntado y aplica escala/opacidad del HUD.
 func _configurar_hud() -> void:
 	if controles == null:
@@ -364,16 +383,19 @@ func _configurar_hud() -> void:
 func _aplicar_hud() -> void:
 	if SaveManager == null or controles == null:
 		return
+	_capturar_escala_hud()
 	var esc := float(SaveManager.get_ajuste("hud_escala", 1.0))
 	var op := float(SaveManager.get_ajuste("hud_opacidad", 1.0))
 	var cont := controles.get_node_or_null("ContenedorBotones")
-	if cont != null:
-		cont.scale = Vector2(esc, esc)
-		cont.modulate = Color(1, 1, 1, op)
+	if cont is Control:
+		(cont as Control).scale = _base_escala_botones * esc
+		(cont as Control).modulate = Color(1, 1, 1, op)
 	var joy := controles.get_node_or_null("Joystick")
-	if joy is Node2D:
-		(joy as Node2D).scale = Vector2(esc, esc)
-		(joy as Node2D).modulate = Color(1, 1, 1, op)
+	if joy is Control:
+		(joy as Control).scale = _base_escala_joystick * esc
+		(joy as Control).modulate = Color(1, 1, 1, op)
+	if _apuntado is Control:
+		(_apuntado as Control).modulate = Color(1, 1, 1, op)
 
 
 func shot(target: Node2D, _power_actual: String = "basic") -> void:
