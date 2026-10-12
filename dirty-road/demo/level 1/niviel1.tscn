@@ -46,9 +46,11 @@ script = ExtResource("8_trm6e")
 enemigos = Array[ExtResource("9_cc5k1")]([ExtResource("10_1o1kr"), ExtResource("11_cc5k1"), ExtResource("12_w7ccy")])
 heredar_enemigos_anteriores = false
 enemigos_base_por_oleada = 8
-incremento_enemigos_por_oleada = 3
-escalado_vida_por_oleada = 0.3
-escalado_danio_por_oleada = 0.09
+incremento_enemigos_por_oleada = 1
+tiempo_entre_spawns = 1.2
+max_enemigos_simultaneos = 12
+escalado_vida_por_oleada = 0.1
+escalado_danio_por_oleada = 0.04
 jefe_escena = ExtResource("13_vgl3r")
 metadata/_custom_type_script = "uid://b07d7n2c62y1x"
 
@@ -66,20 +68,14 @@ position = Vector2(0, -2)
 
 [node name="ClassPlayer" parent="." unique_id=508460008 node_paths=PackedStringArray("respawn_manager") groups=["jugador", "player"] instance=ExtResource("3_k6hvo")]
 position = Vector2(373, -69)
-cadencia_basic = 0.2
 aceleracion = 1800.0
 friccion = 2200.0
-velocidad_dash = 700.0
 duracion_dash = 0.14
-cooldown_dash = 0.8
-danio_meteorito = 50000
 tiempo_advertencia_meteorito = 0.6
 retraso_entre_meteoritos = 0.08
 respawn_manager = NodePath("../RespawnManager")
-life = 100
 
 [node name="Arbol" parent="." unique_id=157670480 groups=["arbol"] instance=ExtResource("5_q0v6s")]
-vida_maxima = 1000
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=671132988]
 

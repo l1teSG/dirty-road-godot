@@ -33,14 +33,17 @@ color = Color(0, 1, 0.49803922, 1)
 radius = 7.0
 
 [node name="enemigo" unique_id=2006919752 instance=ExtResource("1_5bwjt")]
-life = 24.0
-speed = 155.0
+life = 14.0
+speed = 120.0
 damage = 12.0
 dano_al_tocar = true
 danio_contacto = 12.0
 comportamiento_tipo = "enjambre"
 enjambre_recarga = 0.507
 enjambre_separacion = 10.0
+enjambre_vel_extra = 1.2
+mov_zigzag_grados = 6.0
+mov_separacion_fuerza = 0.5
 nombre_texto = "micro plastico"
 fuente_nombre = ExtResource("3_61hl6")
 fuente_danio = ExtResource("3_61hl6")

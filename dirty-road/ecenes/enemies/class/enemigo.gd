@@ -110,6 +110,8 @@ const COMPORTAMIENTOS: Dictionary = {
 @export_group("Enjambre")
 @export_range(0.1, 3.0) var enjambre_recarga: float = 0.8
 @export var enjambre_separacion: float = 26.0
+## Multiplicador de velocidad del enjambre al correr hacia su objetivo.
+@export_range(0.5, 2.0) var enjambre_vel_extra: float = 1.35
 
 @export_group("Rango")
 ## Distancia a la que se planta y dispara.
