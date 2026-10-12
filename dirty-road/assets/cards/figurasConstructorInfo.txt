@@ -635,3 +635,17 @@ capa Humo #a9a9a9: 8,-14 12,-20 6,-18
 capa BrilloTierra #8b4513: -13,13 -6,13 -6,-6 -10,0
 escala 1.1
 sombra 28 12 16 0.5
+---
+NOMBRE: Cadena de Semillas
+capa EslabonSup #ffd700: 0,-8 -6,-14 0,-20 6,-14
+capa EslabonSupLuz #fff8dc: 0,-8 -6,-14 -2,-14 0,-12
+capa EslabonMedio #ffa500: 0,4 -6,-2 0,-8 6,-2
+capa EslabonMedioLuz #fff8dc: 0,4 -6,-2 -2,-2 0,0
+capa EslabonInf #ffd700: 0,16 -6,10 0,4 6,10
+capa EslabonInfLuz #fff8dc: 0,16 -6,10 -2,10 0,12
+capa SemillaDer #8b4513: 6,-2 10,2 6,6 2,2
+capa Brote #32cd32: 0,-20 -4,-26 0,-23
+capa Hoja #adff2f: 0,-23 5,-27 3,-22
+capa BrilloCentro #ffffff: -1,-2 1,-2 1,0 -1,0
+escala 1.1
+sombra 16 6 18 0.4
