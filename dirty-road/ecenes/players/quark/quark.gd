@@ -373,6 +373,9 @@ func _configurar_hud() -> void:
 			_apuntado = JOYSTICK_APUNTADO.new()
 			_apuntado.name = "JoystickApuntado"
 			controles.add_child(_apuntado)
+			# Al fondo del CanvasLayer: los botones super/mega quedan por encima
+			# y siguen recibiendo el toque (el joystick cubre la mitad derecha).
+			controles.move_child(_apuntado, 0)
 	else:
 		if _apuntado != null and is_instance_valid(_apuntado):
 			_apuntado.queue_free()

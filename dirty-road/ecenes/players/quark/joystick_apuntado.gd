@@ -86,8 +86,9 @@ func _draw() -> void:
 	var base := _origen
 	var alfa := 1.0
 	if not activo:
-		# Base tenue fija abajo-derecha para que se vea que existe.
-		base = Vector2(size.x * 0.5, size.y - 200.0)
+		# Base tenue fija abajo-derecha para que se vea que existe (por encima
+		# de los botones super/mega para no confundirlos).
+		base = Vector2(size.x * 0.5, size.y - 440.0)
 		alfa = 0.4
 	draw_arc(base, radio, 0.0, TAU, 48, Color(c.r, c.g, c.b, 0.35 * alfa), 3.0)
 	draw_circle(base, radio, Color(c.r, c.g, c.b, 0.06 * alfa))
