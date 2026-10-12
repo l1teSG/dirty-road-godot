@@ -620,3 +620,18 @@ capa BordeOscuro #3e2723: -16,16 16,16 15,13 -15,13
 capa Hoja #32cd32: 0,12 -4,18 4,18
 escala 1.1
 sombra 30 12 16 0.4
+---
+NOMBRE: Compost Volcánico
+capa MonticuloFondo #3e2723: -18,15 18,15 8,0 0,-12 -8,0
+capa MonticuloFrente #4e342e: -13,13 13,13 0,-8
+capa FacetaIzq #5c4033: -18,15 0,15 0,-8 -8,0
+capa FacetaDer #271a17: 18,15 0,15 0,-8 8,0
+capa Lava1 #ff4500: -6,-2 -2,-2 -4,2
+capa Lava2 #ff8c00: 2,0 6,0 4,4
+capa Chispa1 #ffd700: -5,-12 -2,-16 1,-12
+capa Chispa2 #ff8c00: 6,-9 9,-13 11,-9
+capa HojaNueva #32cd32: 0,-12 -3,-18 2,-17
+capa Humo #a9a9a9: 8,-14 12,-20 6,-18
+capa BrilloTierra #8b4513: -13,13 -6,13 -6,-6 -10,0
+escala 1.1
+sombra 28 12 16 0.5
