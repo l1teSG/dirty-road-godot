@@ -764,3 +764,18 @@ capa Flotador2 #ff4500: 18,-14 12,-14 12,-10 18,-10
 capa Brillo #e0ffff: -13,15 -10,15 -10,-11 -13,-11
 escala 1.2
 sombra 32 12 20 0.4
+---
+NOMBRE: Fumigador Orgánico
+capa TanqueFondo #2e8b57: -10,16 10,16 10,-6 -10,-6
+capa TanqueFrente #3cb371: -7,14 7,14 7,-5 -7,-5
+capa Cuello #228b22: -5,-6 5,-6 3,-12 -3,-12
+capa Gatillo #ff4500: -12,-12 0,-12 0,-16 -12,-14
+capa Boquilla #a9a9a9: -16,-14 -12,-12 -12,-16 -16,-16
+capa Mango #4d4d4d: -10,-8 -14,-8 -14,4 -10,4
+capa NubeSpray1 #7fff00: -22,-12 -26,-18 -18,-16
+capa NubeSpray2 #7fff00: -28,-18 -32,-24 -24,-22
+capa GotaVeneno #00ff00: -20,-6 -18,-2 -16,-6
+capa Etiqueta #ffffff: -4,0 4,0 4,4 -4,4
+capa BrilloTanque #adff2f: -6,14 -6,-5 -4,-5 -4,14
+escala 1.1
+sombra 22 8 16 0.4
