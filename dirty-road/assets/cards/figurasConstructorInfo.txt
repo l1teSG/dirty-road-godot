@@ -779,3 +779,16 @@ capa Etiqueta #ffffff: -4,0 4,0 4,4 -4,4
 capa BrilloTanque #adff2f: -6,14 -6,-5 -4,-5 -4,14
 escala 1.1
 sombra 22 8 16 0.4
+---
+NOMBRE: Esporas Ardientes
+capa NubeFondo #8b0000: 0,8 -14,2 -10,-8 0,-12 10,-8 14,2
+capa NubeMedia #ff4500: 0,4 -9,0 -6,-5 0,-8 6,-5 9,0
+capa Espora1 #ffd700: -6,10 -4,14 -8,14
+capa Espora2 #ff8c00: 4,12 6,16 2,16
+capa Espora3 #ffff00: 0,14 -2,19 2,19
+capa BrilloFuego1 #ffa500: -12,0 -9,-4 -8,0
+capa BrilloFuego2 #ffa500: 10,0 9,-4 12,0
+capa Chispa1 #ffd700: -10,-10 -13,-14 -9,-12
+capa Chispa2 #ffff00: 8,-12 11,-16 12,-11
+escala 1.1
+sombra 22 8 16 0.3
