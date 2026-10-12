@@ -2,14 +2,14 @@
 import SectionHeading from '../ui/SectionHeading.astro';
 import Reveal from '../ui/Reveal.astro';
 
-// Marcadores de captura (sustituir por imágenes reales del juego).
+// Capturas reales del juego (generadas con tools/fotos_web.sh).
 const capturas = [
-  { t: 'El árbol central', c: '#141a10' },
-  { t: 'Oleadas de enemigos', c: '#161c12' },
-  { t: 'Jefe de etapa', c: '#1a1410' },
-  { t: 'Escenario ácido', c: '#171b10' },
-  { t: 'Mejoras entre oleadas', c: '#101a16' },
-  { t: 'Cambio climático', c: '#1a120c' },
+  { src: '/images/juego/etapas/etapa_01.png', t: 'El árbol central' },
+  { src: '/images/juego/etapas/etapa_03.png', t: 'Océanos y plástico' },
+  { src: '/images/juego/etapas/etapa_05.png', t: 'Lluvia ácida' },
+  { src: '/images/juego/etapas/etapa_09.png', t: 'Deforestación' },
+  { src: '/images/juego/etapas/etapa_10.png', t: 'Cambio climático' },
+  { src: '/images/juego/enemigos/boss_05_geiser.png', t: 'Jefe de etapa' },
 ];
 ---
 <section id="galeria" class="border-t border-line px-4 py-24 sm:py-28">
@@ -21,18 +21,31 @@ const capturas = [
         descripcion="Capturas del gameplay: combate, jefes y escenarios temáticos."
       />
     </Reveal>
+
+    <Reveal>
+      <video
+        class="mt-14 w-full rounded-[3px] border border-line"
+        src="/video/trailer.mp4"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata"
+        aria-label="Trailer de Dirty Road"
+      ></video>
+    </Reveal>
+
     <div class="mt-14 grid gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
       {capturas.map((cap) => (
         <Reveal>
           <figure>
-            <div
-              class="field-grid relative flex aspect-video items-center justify-center overflow-hidden rounded-[3px] border border-line"
-              style={`background:${cap.c}`}
-            >
-              <span class="rounded-[3px] border border-line-strong bg-bg/60 px-3 py-1 text-xs text-moss">
-                Captura pendiente
-              </span>
-            </div>
+            <img
+              src={cap.src}
+              alt={cap.t}
+              loading="lazy"
+              decoding="async"
+              class="aspect-video w-full rounded-[3px] border border-line object-cover"
+            />
             <figcaption class="mt-3 text-sm text-moss">{cap.t}</figcaption>
           </figure>
         </Reveal>
