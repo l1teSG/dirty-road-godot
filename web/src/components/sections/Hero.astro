@@ -2,7 +2,7 @@
 // Héroe: el único momento orquestado de la página. A la izquierda, el título
 // como etiqueta de espécimen. A la derecha, una "ventana cinematográfica":
 // el gameplay ocupa el panel y encima va un HUD (medidor de contaminación vivo
-// + totales), con el tronco como insignia en una esquina.
+// + totales).
 // Índice de contaminación inicial (el script lo anima con el scroll).
 const indice = 7;
 const total = 10;
@@ -74,22 +74,6 @@ const total = 10;
           aria-hidden="true"
         ></div>
 
-        <!-- Insignia del árbol: el tronco como medidor de vida -->
-        <div
-          class="absolute left-3 top-3 flex items-center gap-2 rounded-full border border-line bg-bg/55 px-3 py-1.5 backdrop-blur"
-        >
-          <svg viewBox="0 0 24 24" class="h-5 w-5 shrink-0" fill="none" aria-hidden="true">
-            <circle cx="12" cy="12" r="9.5" stroke="var(--color-leaf)" stroke-width="1.2" opacity="0.9" />
-            <circle cx="12" cy="12" r="6" stroke="var(--color-leaf)" stroke-width="1" opacity="0.5" />
-            <circle cx="12" cy="12" r="3.2" stroke="var(--color-rust)" stroke-width="2" opacity="0.9" />
-            <circle cx="12" cy="12" r="1" fill="var(--color-leaf)" />
-          </svg>
-          <span class="text-xs font-medium text-bone">Árbol central</span>
-          <span class="flex items-center gap-1 text-xs text-leaf">
-            <span class="h-1.5 w-1.5 rounded-full bg-leaf" aria-hidden="true"></span> VIVO
-          </span>
-        </div>
-
         <!-- HUD inferior: medidor vivo + totales -->
         <div class="absolute inset-x-0 bottom-0 p-3 sm:p-4">
           <div class="flex items-baseline justify-between text-xs">
@@ -120,11 +104,6 @@ const total = 10;
           </div>
         </div>
       </div>
-
-      <p class="mt-3 max-w-[52ch] text-xs leading-relaxed text-moss">
-        Los anillos del tronco cuentan su historia: el anillo óxido marca un año malo
-        (sequía, incendio). Es, a la vez, tu medidor de vida del ecosistema.
-      </p>
     </div>
   </div>
 </section>
