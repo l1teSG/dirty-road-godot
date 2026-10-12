@@ -15,7 +15,7 @@ efectos = {
 		["arbol.raices_empuje", "pct", 0.6],
 		["arbol.raices_pulso", "pct", -0.25],
 	],
-	"auradedepurificacion": [
+	"auradepurificacion": [
 		["arbol.aura_purificacion", "add", 0.15],
 		["arbol.aura_dano_toxico", "add", 5.0],
 	],

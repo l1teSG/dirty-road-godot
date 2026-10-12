@@ -31,7 +31,7 @@ const EFECTOS: Dictionary = {
 		["arbol.raices_pulso", "pct", -0.25],
 	],
 	# Aura de Purificación: más ralentización y daño a los tóxicos.
-	"auradedepurificacion": [
+	"auradepurificacion": [
 		["arbol.aura_purificacion", "add", 0.15],
 		["arbol.aura_dano_toxico", "add", 5.0],
 	],
