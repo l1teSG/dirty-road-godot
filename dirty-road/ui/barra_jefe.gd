@@ -21,6 +21,7 @@ extends CanvasLayer
 
 var _raiz: Control
 var _nombre: Label
+var _pct_label: Label
 var _contenedor: Control
 var _fondo: ColorRect
 var _sangrado: ColorRect
@@ -50,15 +51,7 @@ func _construir() -> void:
 	_raiz.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_raiz)
 
-	_nombre = Label.new()
-	_nombre.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_nombre.add_theme_font_override("font", EstiloUI.F_BOLD)
-	_nombre.add_theme_font_size_override("font_size", 34)
-	_nombre.add_theme_color_override("font_color", color_vida)
-	_nombre.add_theme_color_override("font_outline_color", Color(0, 0, 0, 0.7))
-	_nombre.add_theme_constant_override("outline_size", 7)
-	_raiz.add_child(_nombre)
-
+	# Barra (fondo, sangrado, relleno, marcos).
 	_contenedor = Control.new()
 	_contenedor.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_raiz.add_child(_contenedor)
@@ -79,6 +72,29 @@ func _construir() -> void:
 	_marcos.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_marcos.draw.connect(_dibujar_marcos)
 	_contenedor.add_child(_marcos)
+
+	# Nombre DENTRO de la barra: se añade DESPUÉS del contenedor para
+	# dibujarse encima del relleno.
+	_nombre = Label.new()
+	_nombre.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_nombre.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_nombre.add_theme_font_override("font", EstiloUI.F_BOLD)
+	_nombre.add_theme_font_size_override("font_size", 28)
+	_nombre.add_theme_color_override("font_color", color_vida)
+	_nombre.add_theme_color_override("font_outline_color", Color(0, 0, 0, 0.85))
+	_nombre.add_theme_constant_override("outline_size", 8)
+	_raiz.add_child(_nombre)
+
+	# Porcentaje a la derecha, también dentro de la barra.
+	_pct_label = Label.new()
+	_pct_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	_pct_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_pct_label.add_theme_font_override("font", EstiloUI.F_BOLD)
+	_pct_label.add_theme_font_size_override("font_size", 20)
+	_pct_label.add_theme_color_override("font_color", Color.WHITE)
+	_pct_label.add_theme_color_override("font_outline_color", Color(0, 0, 0, 0.85))
+	_pct_label.add_theme_constant_override("outline_size", 6)
+	_raiz.add_child(_pct_label)
 
 
 func _process(delta: float) -> void:
@@ -121,8 +137,6 @@ func _colocar() -> void:
 	var vp := get_viewport().get_visible_rect().size
 	var x := (vp.x - ancho) * 0.5
 	var y := margen_superior
-	_nombre.position = Vector2(0.0, y - 44.0)
-	_nombre.size = Vector2(vp.x, 40.0)
 	_contenedor.position = Vector2(x, y)
 	_contenedor.size = Vector2(ancho, alto)
 	_fondo.position = Vector2.ZERO
@@ -131,12 +145,18 @@ func _colocar() -> void:
 	_relleno.position = Vector2.ZERO
 	_marcos.position = Vector2.ZERO
 	_marcos.size = Vector2(ancho, alto)
+	# Nombre y % dentro de la barra.
+	_nombre.position = Vector2(x, y)
+	_nombre.size = Vector2(ancho, alto)
+	_pct_label.position = Vector2(x, y)
+	_pct_label.size = Vector2(ancho - 14.0, alto)
 
 
 func _aplicar() -> void:
 	var w := ancho
 	_relleno.size = Vector2(w * clampf(_pct, 0.0, 1.0), alto)
 	_sangrado.size = Vector2(w * clampf(maxf(_pct_sangrado, _pct), 0.0, 1.0), alto)
+	_pct_label.text = "%d%%" % roundi(clampf(_pct, 0.0, 1.0) * 100.0)
 
 	# Furia: por debajo del 40% se vuelve magenta y late.
 	if _pct <= 0.4:
@@ -151,9 +171,14 @@ func _aplicar() -> void:
 func _dibujar_marcos() -> void:
 	var w := ancho
 	var h := alto
+	# Glow exterior (varias capas translúcidas).
+	for i in range(3):
+		var e := 3.0 + float(i) * 3.0
+		_marcos.draw_rect(Rect2(Vector2(-e, -e), Vector2(w + e * 2.0, h + e * 2.0)),
+			Color(color_vida.r, color_vida.g, color_vida.b, 0.10 - float(i) * 0.03), false, 2.0)
 	_marcos.draw_rect(Rect2(Vector2(-2, -2), Vector2(w + 4, h + 4)), Color(0, 0, 0, 0.55), false, 2.0)
 	_marcos.draw_rect(Rect2(Vector2(-1, -1), Vector2(w + 2, h + 2)),
-		Color(color_vida.r, color_vida.g, color_vida.b, 0.55), false, 2.0)
+		Color(color_vida.r, color_vida.g, color_vida.b, 0.65), false, 2.0)
 	if segmentos > 1:
 		for i in range(1, segmentos):
 			var x := w * float(i) / float(segmentos)

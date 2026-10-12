@@ -6,8 +6,8 @@ extends CanvasLayer
 ##  • Lee el estado PÚBLICO del manager (oleada_actual,
 ##    enemigos_vivos, etapa_actual_idx, jefe_actual): no usa
 ##    getters, así que wave_manager.gd no necesita cambios.
-##  • La oleada de JEFE no tiene reloj: mientras el jefe viva,
-##    el label de tiempo muestra "—" en vez de una cuenta atrás.
+##  • La oleada de JEFE no tiene reloj: mientras el jefe viva, el label de
+##    tiempo se OCULTA (el nombre del jefe vive en la BarraJefe).
 ## ══════════════════════════════════════════════════════════
 
 @export_category("Referencias")
@@ -64,9 +64,8 @@ func _ready() -> void:
 	# recupera también ese estado.
 	if wave_manager.jefe_actual != null:
 		_jefe_en_pantalla = true
-		if label_jefe != null:
-			label_jefe.text = "¡JEFE!"
-			label_jefe.visible = true
+		if label_tiempo != null:
+			label_tiempo.visible = false
 
 
 # ── Handlers de señales ──────────────────────────────────────────────
@@ -93,26 +92,28 @@ func _on_etapa_iniciada(_indice: int, nombre: String) -> void:
 func _on_tiempo_actualizado(segundos_restantes: int, es_descanso: bool) -> void:
 	if label_tiempo == null:
 		return
+	if _jefe_en_pantalla:
+		# Oleada de jefe: se OCULTA el contador (sin guion).
+		label_tiempo.visible = false
+		return
+	label_tiempo.visible = true
 	if es_descanso:
 		label_tiempo.text = "Descanso: %d" % maxi(0, segundos_restantes)
-	elif _jefe_en_pantalla:
-		# Oleada de jefe: no hay reloj, no hay cuenta atrás que mostrar.
-		label_tiempo.text = "—"
 	else:
 		label_tiempo.text = "%02d" % maxi(0, segundos_restantes)
 
 
-func _on_jefe_aparecido(_jefe: Node2D, nombre: String) -> void:
+## El nombre del jefe ahora vive dentro de la BarraJefe: aquí no se usa.
+func _on_jefe_aparecido(_jefe: Node2D, _nombre: String) -> void:
 	_jefe_en_pantalla = true
-	if label_jefe != null:
-		label_jefe.text = "¡%s!" % nombre
-		label_jefe.visible = true
+	if label_tiempo != null:
+		label_tiempo.visible = false
 
 
 func _on_jefe_muerto(_nombre: String) -> void:
 	_jefe_en_pantalla = false
-	if label_jefe != null:
-		label_jefe.visible = false
+	if label_tiempo != null:
+		label_tiempo.visible = true
 
 
 # ── Helpers ──────────────────────────────────────────────────────────
