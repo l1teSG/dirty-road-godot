@@ -1,0 +1,91 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ecenes/enemies/class/enemigo.gd" id="1_xqrrj"]
+[ext_resource type="FontFile" path="res://themes/Chakra_Petch/ChakraPetch-BoldItalic.ttf" id="2_4jlv3"]
+[ext_resource type="PackedScene" path="res://assets/stage/enemis/stages/stage11-20/neumaticoQuemado.tscn" id="3_ptdf0"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_constructor.gd" id="4_l716s"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_capa.gd" id="5_e70w6"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/AnimacionEnemigo.gd" id="6_pvr1l"]
+
+[sub_resource type="Resource" id="Resource_p5u30"]
+resource_local_to_scene = true
+script = ExtResource("5_e70w6")
+nombre = "Goma"
+puntos = PackedVector2Array(22, 0, 15, 15, 0, 20, -15, 15, -22, 0, -15, -15, 0, -20, 15, -15)
+color = Color(0.10980392, 0.10980392, 0.10980392, 1)
+
+[sub_resource type="Resource" id="Resource_la03j"]
+resource_local_to_scene = true
+script = ExtResource("5_e70w6")
+nombre = "Hombro"
+puntos = PackedVector2Array(15, 0, 10, 10, 0, 13, -10, 10, -15, 0, -10, -10, 0, -13, 10, -10)
+color = Color(0.18039216, 0.16470589, 0.14901961, 1)
+
+[sub_resource type="Resource" id="Resource_3uo1b"]
+resource_local_to_scene = true
+script = ExtResource("5_e70w6")
+nombre = "Interior"
+puntos = PackedVector2Array(8, 0, 5, 6, 0, 8, -5, 6, -8, 0, -5, -6, 0, -8, 5, -6)
+color = Color(0.050980393, 0.050980393, 0.050980393, 1)
+
+[sub_resource type="Resource" id="Resource_q0dh7"]
+resource_local_to_scene = true
+script = ExtResource("5_e70w6")
+nombre = "Brasas"
+puntos = PackedVector2Array(9, 3, 4, 8, -3, 9, -8, 5, -10, 0, -5, 4, 2, 5, 7, 0)
+color = Color(0.5411765, 0.16862746, 0.05490196, 1)
+animacion = 6
+anim_velocidad = 1.5
+anim_amplitud = 0.5
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_naajp"]
+radius = 22.0
+
+[node name="enemigo" type="CharacterBody2D" unique_id=2006919752]
+script = ExtResource("1_xqrrj")
+life = 80.0
+speed = 75.0
+damage = 22.0
+mov_zigzag_grados = 10.0
+mov_orbita = 0.35
+mov_dash_mult = 1.6
+mov_dash_freq = 0.5
+dano_al_tocar = true
+danio_contacto = 22.0
+radio_contacto = 38.0
+comportamiento_tipo = "embestida"
+nombre_texto = "Neumático Quemado"
+fuente_nombre = ExtResource("2_4jlv3")
+fuente_danio = ExtResource("2_4jlv3")
+
+[node name="FiguraConstructor" type="Node2D" parent="." unique_id=66989019 instance=ExtResource("3_ptdf0")]
+script = ExtResource("4_l716s")
+capas = Array[ExtResource("5_e70w6")]([SubResource("Resource_p5u30"), SubResource("Resource_la03j"), SubResource("Resource_3uo1b"), SubResource("Resource_q0dh7")])
+sombra = true
+sombra_ancho = 38.0
+sombra_alto = 12.0
+sombra_desfase = 16.0
+sombra_opacidad = 0.32
+color_luz = Color(1, 0.33333334, 0.13333334, 1)
+posicion_luz = Vector2(0, 3)
+energia_luz = 0.7
+escala_luz = 0.55
+anim_luz = 2
+velocidad_luz = 0.8
+variacion_luz = 0.35
+texto_figura = "capa Goma 1c1c1c: 22,0 15,15 0,20 -15,15 -22,0 -15,-15 0,-20 15,-15  
+capa Hombro 2e2a26: 15,0 10,10 0,13 -10,10 -15,0 -10,-10 0,-13 10,-10  
+capa Interior 0d0d0d: 8,0 5,6 0,8 -5,6 -8,0 -5,-6 0,-8 5,-6  
+capa Brasas 8a2b0e: 9,3 4,8 -3,9 -8,5 -10,0 -5,4 2,5 7,0  
+sombra 38 12 16 0.32  
+luz ff5522 0,3 0.7 0.55  
+escala 1.0  
+anim Brasas parpadear 1.5 0.5  
+animluz trueno 0.8 0.35
+"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=834597786]
+shape = SubResource("CircleShape2D_naajp")
+
+[node name="Animacion" type="Node" parent="." unique_id=1495648938]
+script = ExtResource("6_pvr1l")

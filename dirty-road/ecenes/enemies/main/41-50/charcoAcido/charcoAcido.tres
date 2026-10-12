@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="EnemigoOleadaConfig" format=3 uid="uid://cdqyoqrvn86nk"]
+
+[ext_resource type="PackedScene" path="res://ecenes/enemies/main/41-50/charcoAcido/charcoAcido_enemi.tscn" id="1_a0u4r"]
+[ext_resource type="Script" uid="uid://vyt7ho0roxls" path="res://scripts/enemigo_oleada_config.gd" id="2_yy05k"]
+
+[resource]
+script = ExtResource("2_yy05k")
+escena = ExtResource("1_a0u4r")
+peso = 1.5
+oleada_minima = 4

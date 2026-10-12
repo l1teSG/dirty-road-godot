@@ -12,7 +12,8 @@
 
 import { useEffect, useState } from 'react';
 import { marked } from 'marked';
-import { getLatestRelease, GitHubRelease } from '../lib/github';
+import { getLatestRelease } from '../lib/github';
+import type { GitHubRelease } from '../lib/github';
 
 interface Props {
   owner: string;

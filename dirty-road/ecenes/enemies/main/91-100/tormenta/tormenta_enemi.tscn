@@ -1,0 +1,86 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ecenes/enemies/class/enemigo.gd" id="1_v0vns"]
+[ext_resource type="FontFile" path="res://themes/Chakra_Petch/ChakraPetch-BoldItalic.ttf" id="2_1k8xp"]
+[ext_resource type="PackedScene" path="res://assets/stage/enemis/stages/stage91-100/tormenta.tscn" id="3_iywml"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_constructor.gd" id="4_0rcwy"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_capa.gd" id="5_w8f3d"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/AnimacionEnemigo.gd" id="6_g8mwd"]
+
+[sub_resource type="Resource" id="Resource_7cyfp"]
+resource_local_to_scene = true
+script = ExtResource("5_w8f3d")
+nombre = "Nube"
+puntos = PackedVector2Array(-12, -16, 6, -20, 20, -12, 24, 0, 12, 6, -8, 6, -24, -2, -22, -10)
+color = Color(0.22745098, 0.27450982, 0.3137255, 1)
+animacion = 1
+anim_velocidad = 0.7
+anim_amplitud = 2.5
+
+[sub_resource type="Resource" id="Resource_swkrg"]
+resource_local_to_scene = true
+script = ExtResource("5_w8f3d")
+nombre = "Vientre"
+puntos = PackedVector2Array(-16, 4, 14, 4, 8, 12, -10, 12)
+color = Color(0.16470589, 0.20392157, 0.23529412, 1)
+
+[sub_resource type="Resource" id="Resource_dvnv3"]
+resource_local_to_scene = true
+script = ExtResource("5_w8f3d")
+nombre = "Rayo"
+puntos = PackedVector2Array(5, 6, 13, 6, 7, 15, 12, 15, 0, 32, 5, 19, -1, 19)
+color = Color(1, 0.9607843, 0.62352943, 1)
+animacion = 6
+anim_velocidad = 3.0
+anim_amplitud = 1.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_4sb63"]
+radius = 35.2
+
+[node name="enemigo" type="CharacterBody2D" unique_id=2006919752 node_paths=PackedStringArray("boca")]
+script = ExtResource("1_v0vns")
+life = 34.0
+speed = 95.0
+damage = 9.0
+mov_zigzag_grados = 6.0
+mov_orbita = 0.7
+radio_contacto = 51.2
+comportamiento_tipo = "rango"
+boca = NodePath("boca")
+nombre_texto = "Tormenta"
+fuente_nombre = ExtResource("2_1k8xp")
+fuente_danio = ExtResource("2_1k8xp")
+
+[node name="FiguraConstructor" type="Node2D" parent="." unique_id=66989019 instance=ExtResource("3_iywml")]
+script = ExtResource("4_0rcwy")
+capas = Array[ExtResource("5_w8f3d")]([SubResource("Resource_7cyfp"), SubResource("Resource_swkrg"), SubResource("Resource_dvnv3")])
+sombra = true
+sombra_ancho = 34.0
+sombra_alto = 10.0
+sombra_desfase = 22.0
+sombra_opacidad = 0.22
+color_luz = Color(0.8117647, 0.9098039, 1, 1)
+posicion_luz = Vector2(0, 10)
+energia_luz = 0.7
+escala_luz = 0.8
+anim_luz = 2
+velocidad_luz = 1.4
+variacion_luz = 0.55
+escala_global = 1.1
+texto_figura = "capa Nube 3a4650: -12,-16 6,-20 20,-12 24,0 12,6 -8,6 -24,-2 -22,-10
+capa Vientre 2a343c: -16,4 14,4 8,12 -10,12
+capa Rayo fff59f: 5,6 13,6 7,15 12,15 0,32 5,19 -1,19
+sombra 34 10 22 0.22
+luz cfe8ff 0,10 0.7 0.8
+escala 1.1
+anim Nube flotar 0.7 2.5
+anim Rayo parpadear 3.0 1.0
+animluz trueno 1.4 0.55"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=704784138]
+shape = SubResource("CircleShape2D_4sb63")
+
+[node name="boca" type="Marker2D" parent="." unique_id=533852936]
+
+[node name="Animacion" type="Node" parent="." unique_id=1862397054]
+script = ExtResource("6_g8mwd")

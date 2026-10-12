@@ -1,0 +1,21 @@
+---
+// Encabezado de sección: kicker + título + descripción opcional.
+interface Props {
+  kicker?: string;
+  titulo: string;
+  descripcion?: string;
+  centrado?: boolean;
+}
+const { kicker, titulo, descripcion, centrado = false } = Astro.props;
+---
+<div class={centrado ? 'mx-auto max-w-3xl text-center' : 'max-w-3xl'}>
+  {kicker && (
+    <p class="mb-2 font-mono text-xs uppercase tracking-[0.3em] text-green">
+      {kicker}
+    </p>
+  )}
+  <h2 class="text-3xl font-bold text-text-primary sm:text-4xl">{titulo}</h2>
+  {descripcion && (
+    <p class="mt-4 text-base leading-relaxed text-text-secondary">{descripcion}</p>
+  )}
+</div>

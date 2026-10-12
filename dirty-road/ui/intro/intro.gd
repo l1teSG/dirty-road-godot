@@ -1,62 +1,64 @@
 extends Control
 
-@onready var titulo = $Label
-@onready var esporas = $CPUParticles2D
+## Pantalla de inicio: título + subtítulo con esporas, y transición al menú.
+
+@onready var titulo: Label = $Centro/VBox/Titulo
+@onready var subtitulo: Label = $Centro/VBox/Subtitulo
+@onready var esporas: CPUParticles2D = $Esporas
+
 
 func _ready() -> void:
-	# Estado inicial: El título empieza invisible en su tamaño real
-	titulo.modulate.a = 0.0
-	titulo.scale = Vector2(1.0, 1.0)
-	self.modulate.a = 1.0
-	
-	# Configuramos para que las partículas nazcan exactamente a lo ancho y alto del Label
-	esporas.emission_shape = CPUParticles2D.EMISSION_SHAPE_RECTANGLE
-	esporas.emission_rect_extents = titulo.size / 2.0
-	esporas.global_position = titulo.global_position + (titulo.size / 2.0)
-	
-	ejecutar_intro()
+	EstiloUI.titulo(titulo, 180, EstiloUI.NEON)
 
-func ejecutar_intro() -> void:
-	var tween = create_tween()
-	
-	# --- FASE 1: LAS ESPORAS FLOTAN ALREDEDOR DEL TEXTO (1.5 segundos) ---
-	tween.tween_interval(1.5)
-	
-	# --- FASE 2: CONDENSACIÓN SOBRE LA PALABRA ---
-	tween.tween_callback(func() -> void:
-		esporas.speed_scale = 1.0
-		
-		var tween_creacion = create_tween()
-		tween_creacion.tween_property(titulo, "modulate:a", 1.0, 1.2).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
-	)
-	
-	# El título se mantiene formado y brillante en pantalla (1.5 segundos)
-	tween.tween_interval(1.5)
-	
-	# --- FASE 3: EL TÍTULO SE DESVANECE Y LAS ESPORAS SE DISIPAN ---
-	tween.tween_callback(func() -> void:
-		# Cortamos la emisión de nuevas partículas para que el remanente se disuelva con elegancia
-		esporas.emitting = false
-		
-		var tween_salida = create_tween().set_parallel(true)
-		tween_salida.tween_property(titulo, "modulate:a", 0.0, 0.8).set_ease(Tween.EASE_IN_OUT)
-		# Fundimos la opacidad general de las partículas para que se desvanezcan junto con el texto
-		tween_salida.tween_property(esporas, "modulate:a", 0.0, 0.8)
-	)
-	
-	# Breve pausa dramática (0.3 segundos)
-	tween.tween_interval(0.3)
-	
-	# --- FASE 4: TRANSICIÓN A NEGRO ---
-	tween.tween_callback(func() -> void:
-		var tween_transicion = create_tween()
-		tween_transicion.tween_property(self, "modulate:a", 0.0, 0.8)
-	)
-	
-	# Esperamos a que termine el fundido negro
-	tween.tween_interval(0.8)
-	
-	# --- FASE 5: CAMBIO DE ESCENA ---
-	tween.tween_callback(func() -> void:
-		get_tree().change_scene_to_file("res://ui/main/main.tscn")
-	)
+	# Estado inicial.
+	titulo.modulate.a = 0.0
+	titulo.scale = Vector2(0.86, 0.86)
+	subtitulo.modulate.a = 0.0
+	self.modulate.a = 1.0
+
+	_centrar_esporas.call_deferred()
+	_ejecutar_intro()
+
+
+func _centrar_esporas() -> void:
+	await get_tree().process_frame
+	if titulo == null:
+		return
+	titulo.pivot_offset = titulo.size * 0.5
+	esporas.emission_shape = CPUParticles2D.EMISSION_SHAPE_RECTANGLE
+	esporas.global_position = titulo.global_position + titulo.size * 0.5
+	esporas.emission_rect_extents = titulo.size * 0.5
+
+
+func _ejecutar_intro() -> void:
+	await get_tree().process_frame
+
+	# 1. Aparición del título (fade + escala con rebote).
+	titulo.pivot_offset = titulo.size * 0.5
+	var t1 := create_tween().set_parallel(true)
+	t1.tween_property(titulo, "modulate:a", 1.0, 0.9)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	t1.tween_property(titulo, "scale", Vector2.ONE, 1.1)\
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	await t1.finished
+
+	# 2. Subtítulo.
+	var t2 := create_tween()
+	t2.tween_property(subtitulo, "modulate:a", 1.0, 0.6).set_trans(Tween.TRANS_SINE)
+	await t2.finished
+
+	# 3. Mantener.
+	await get_tree().create_timer(1.6).timeout
+
+	# 4. Salida (título + subtítulo).
+	var t3 := create_tween().set_parallel(true)
+	t3.tween_property(titulo, "modulate:a", 0.0, 0.6)
+	t3.tween_property(subtitulo, "modulate:a", 0.0, 0.6)
+	esporas.emitting = false
+	await t3.finished
+
+	# 5. Fundido general y transición al menú.
+	var t4 := create_tween()
+	t4.tween_property(self, "modulate:a", 0.0, 0.5)
+	await t4.finished
+	get_tree().change_scene_to_file("res://ui/main/main.tscn")

@@ -1,0 +1,15 @@
+---
+// Envoltorio con animación de aparición al hacer scroll.
+interface Props {
+  class?: string;
+  delay?: number;
+}
+const { class: cls = '', delay = 0 } = Astro.props;
+---
+<div
+  data-reveal
+  class={`reveal ${cls}`}
+  style={delay ? `transition-delay:${delay}ms` : undefined}
+>
+  <slot />
+</div>

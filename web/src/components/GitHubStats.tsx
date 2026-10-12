@@ -6,7 +6,8 @@
 
 import { useEffect, useState } from 'react';
 import { Star, GitFork, Clock } from 'lucide-react';
-import { getRepoStats, formatDate, GitHubRepoStats } from '../lib/github';
+import { getRepoStats, formatDate } from '../lib/github';
+import type { GitHubRepoStats } from '../lib/github';
 
 interface Props {
   owner: string;

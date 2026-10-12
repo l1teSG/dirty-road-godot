@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="EnemigoOleadaConfig" format=3 uid="uid://b8qmcgj5ho5l6"]
+
+[ext_resource type="PackedScene" path="res://ecenes/enemies/main/71-80/nubeFumigacion/nubeFumigacion_enemi.tscn" id="1_lh5vr"]
+[ext_resource type="Script" uid="uid://vyt7ho0roxls" path="res://scripts/enemigo_oleada_config.gd" id="2_eug36"]
+
+[resource]
+script = ExtResource("2_eug36")
+escena = ExtResource("1_lh5vr")
+peso = 1.5
+oleada_minima = 4

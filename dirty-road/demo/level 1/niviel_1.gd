@@ -3,6 +3,11 @@ extends Node2D
 @onready var fondo_negro: ColorRect = $CanvasLayer/ColorRect
 @onready var texto_horda: Label = $CanvasLayer/TextoHorda
 
+var _vineta: TextureRect = null
+var _tween_vineta: Tween = null
+var _puerta: Puerta = null
+var _transicionando: bool = false
+
 var horda_actual: int = 1
 
 const DURACION_FADE_ENTRADA := 1.0
@@ -30,10 +35,93 @@ func _ready() -> void:
 
 	# Conectar señales con WaveManager
 	await get_tree().process_frame
-	var wave_manager = get_tree().get_first_node_in_group("wave_Manager") as WaveManager
+	var wave_manager = get_tree().get_first_node_in_group("wave_manager") as WaveManager
 	if wave_manager != null:
 		wave_manager.oleada_iniciada.connect(_on_oleada_iniciada)
 		wave_manager.descanso_iniciado.connect(_on_descanso_iniciado)
+		wave_manager.etapa_completada.connect(_on_etapa_completada)
+
+	# Derrota: si el árbol es destruido, Game Over.
+	var arbol := get_tree().get_first_node_in_group("arbol")
+	if arbol != null and arbol.has_signal("arbol_destruido"):
+		arbol.arbol_destruido.connect(_on_arbol_destruido)
+	# Viñeta roja cuando el árbol recibe un golpe.
+	_vineta = get_node_or_null("viñeta/TextureRect") as TextureRect
+	if arbol != null and arbol.has_signal("golpe_recibido") and _vineta != null:
+		arbol.golpe_recibido.connect(_on_golpe_arbol)
+
+
+func _on_golpe_arbol(cantidad: float) -> void:
+	if _vineta == null:
+		return
+	var fuerza := clampf(cantidad / 40.0, 0.2, 1.0)
+	if _tween_vineta != null and _tween_vineta.is_valid():
+		_tween_vineta.kill()
+	_vineta.modulate = Color(1.0, 0.35, 0.35, fuerza)
+	_tween_vineta = create_tween()
+	_tween_vineta.tween_property(_vineta, "modulate", Color.WHITE, 0.35)
+
+
+func _on_arbol_destruido() -> void:
+	await get_tree().create_timer(1.5).timeout
+	get_tree().change_scene_to_file("res://ui/dead/dead.tscn")
+
+
+# ── Puerta de etapa (transición al siguiente escenario) ──────────────
+
+func _on_etapa_completada(_indice: int) -> void:
+	_mostrar_puerta()
+
+
+func _mostrar_puerta() -> void:
+	if _puerta != null and is_instance_valid(_puerta):
+		_puerta.queue_free()
+	_puerta = Puerta.new()
+	_puerta.name = "Puerta"
+	add_child(_puerta)
+	_puerta.global_position = Vector2(560, 0)
+	var gestor := get_node_or_null("GestorEtapa")
+	if gestor != null:
+		var tema = gestor.get("_tema")
+		if tema != null:
+			_puerta.color = tema.get("banner_color")
+	_puerta.cruzada.connect(_on_puerta_cruzada)
+	_puerta.abrir()
+	mostrar_mensaje("ENTRA POR LA PUERTA")
+
+
+func _on_puerta_cruzada() -> void:
+	if _transicionando:
+		return
+	_transicionando = true
+	await _fade(1.0, 0.5)
+	# La base se muda: árbol al centro, jugador al lado opuesto de la puerta.
+	var arbol := get_tree().get_first_node_in_group("arbol")
+	if arbol != null and arbol.has_method("reubicar"):
+		arbol.call("reubicar", Vector2.ZERO)
+	var jug := get_tree().get_first_node_in_group("jugador")
+	if jug != null and jug is Node2D:
+		(jug as Node2D).global_position = Vector2(-560, 0)
+	if _puerta != null and is_instance_valid(_puerta):
+		_puerta.queue_free()
+		_puerta = null
+	# Reanuda: arranca la nueva etapa; el GestorEtapa regenera terreno+ambiente.
+	var wm := get_tree().get_first_node_in_group("wave_manager")
+	if wm != null and wm.has_method("continuar_tras_puerta"):
+		wm.call("continuar_tras_puerta")
+	await _fade(0.0, 0.6)
+	_transicionando = false
+
+
+func _fade(alpha: float, dur: float) -> void:
+	if fondo_negro == null:
+		return
+	fondo_negro.mouse_filter = Control.MOUSE_FILTER_STOP
+	var tw := create_tween()
+	tw.tween_property(fondo_negro, "color:a", alpha, dur)
+	await tw.finished
+	if alpha <= 0.01:
+		fondo_negro.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 
 # ── Transición de entrada al nivel (fade desde negro) ──────────────

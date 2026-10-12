@@ -1,0 +1,69 @@
+[gd_scene format=3 uid="uid://4swtich8dpqn"]
+
+[ext_resource type="PackedScene" uid="uid://cgh5ie63rhuf4" path="res://ecenes/enemies/class/clase_enemigo.tscn" id="1_fvyy4"]
+[ext_resource type="PackedScene" uid="uid://cr4en6vh2vdbm" path="res://assets/stage/enemis/stages/stage1-10/boss/excavadoraToxica.tscn" id="2_momxs"]
+[ext_resource type="Script" uid="uid://dtju1od6upjok" path="res://assets/stage/enemis/classShape/figura_capa.gd" id="3_kj70p"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/BossAttackComponent.gd" id="9_ataques"]
+
+[sub_resource type="Resource" id="Resource_fvyy4"]
+resource_local_to_scene = true
+script = ExtResource("3_kj70p")
+nombre = "Orugas"
+puntos = PackedVector2Array(24, -20, 30, -12, 30, 14, 24, 20, -24, 20, -30, 14, -30, -12, -24, -20)
+color = Color(0.078431375, 0.078431375, 0.078431375, 1)
+
+[sub_resource type="Resource" id="Resource_momxs"]
+resource_local_to_scene = true
+script = ExtResource("3_kj70p")
+nombre = "Cuerpo"
+puntos = PackedVector2Array(16, -14, 16, 8, 8, 12, -8, 12, -16, 8, -16, -14, -8, -18, 8, -18)
+color = Color(0.23529412, 0.23529412, 0.23529412, 1)
+
+[sub_resource type="Resource" id="Resource_kj70p"]
+resource_local_to_scene = true
+script = ExtResource("3_kj70p")
+nombre = "Cabina"
+puntos = PackedVector2Array(-12, -14, -2, -14, -2, -2, -12, -2)
+color = Color(0.84705883, 0.105882354, 0.3764706, 1)
+
+[sub_resource type="Resource" id="Resource_bq5cd"]
+resource_local_to_scene = true
+script = ExtResource("3_kj70p")
+nombre = "Brazo"
+puntos = PackedVector2Array(10, -8, 28, -20, 34, -14, 16, -2)
+color = Color(0.18039216, 0.16470589, 0.14901961, 1)
+
+[sub_resource type="Resource" id="Resource_kagq6"]
+resource_local_to_scene = true
+script = ExtResource("3_kj70p")
+nombre = "Cuchara"
+puntos = PackedVector2Array(26, -32, 42, -26, 38, -12, 24, -18)
+color = Color(0.5411765, 0.16862746, 0.05490196, 1)
+animacion = 4
+anim_amplitud = 5.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_7cwo5"]
+radius = 68.18358
+
+[node name="enemigo" unique_id=2006919752 node_paths=PackedStringArray("figura") instance=ExtResource("1_fvyy4")]
+life = 900.0
+speed = 60.0
+damage = 22.0
+radio_contacto = 36.0
+recompensa = 225
+anti_estructura = true
+figura = NodePath("FiguraConstructor")
+comportamiento_tipo = "embestida"
+
+[node name="FiguraConstructor" parent="." index="0" unique_id=66989019 instance=ExtResource("2_momxs")]
+capas = Array[ExtResource("3_kj70p")]([SubResource("Resource_fvyy4"), SubResource("Resource_momxs"), SubResource("Resource_kj70p"), SubResource("Resource_bq5cd"), SubResource("Resource_kagq6")])
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." index="1" unique_id=995971524]
+shape = SubResource("CircleShape2D_7cwo5")
+
+[node name="Ataques" type="Node2D" parent="." unique_id=999000111]
+script = ExtResource("9_ataques")
+onda = true
+meteoros = true
+met_cantidad = 6
+met_color = Color(0.6, 0.45, 0.25, 0.6)

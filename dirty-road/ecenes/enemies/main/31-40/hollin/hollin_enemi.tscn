@@ -1,0 +1,88 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ecenes/enemies/class/enemigo.gd" id="1_dwx7e"]
+[ext_resource type="FontFile" path="res://themes/Chakra_Petch/ChakraPetch-BoldItalic.ttf" id="2_070wn"]
+[ext_resource type="PackedScene" path="res://assets/stage/enemis/stages/stage31-40/hollin.tscn" id="3_v0paf"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_constructor.gd" id="4_42ymh"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_capa.gd" id="5_ita5x"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/MecanicasEnemigo.gd" id="6_rsdou"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/AnimacionEnemigo.gd" id="7_43gsm"]
+
+[sub_resource type="Resource" id="Resource_5m2ix"]
+resource_local_to_scene = true
+script = ExtResource("5_ita5x")
+nombre = "Masa"
+puntos = PackedVector2Array(10, -2, 12, 6, 4, 12, -6, 12, -12, 4, -10, -6, -2, -12, 6, -10)
+color = Color(0.13333334, 0.1254902, 0.11764706, 1)
+animacion = 2
+anim_velocidad = 1.2
+anim_amplitud = 5.0
+
+[sub_resource type="Resource" id="Resource_8k8i6"]
+resource_local_to_scene = true
+script = ExtResource("5_ita5x")
+nombre = "Brillo"
+puntos = PackedVector2Array(-4, -6, 2, -8, 4, -2, -2, 0)
+color = Color(0.24705882, 0.22745098, 0.21176471, 1)
+
+[sub_resource type="Resource" id="Resource_jpe7t"]
+resource_local_to_scene = true
+script = ExtResource("5_ita5x")
+nombre = "Brasa"
+puntos = PackedVector2Array(2, 4, 6, 6, 4, 10, 0, 8)
+color = Color(0.72156864, 0.3137255, 0.16470589, 1)
+animacion = 6
+anim_velocidad = 1.5
+anim_amplitud = 0.5
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1altj"]
+radius = 10.733127
+
+[node name="enemigo" type="CharacterBody2D" unique_id=2006919752]
+script = ExtResource("1_dwx7e")
+life = 45.0
+speed = 80.0
+damage = 18.0
+mov_zigzag_grados = 8.0
+mov_orbita = 0.55
+mov_dash_mult = 1.5
+mov_dash_freq = 0.7
+radio_contacto = 26.733126291998992
+melee_radio = 30.0
+melee_margen_arbol = 16.0
+categoria = "fuego"
+nombre_texto = "Hollín"
+fuente_nombre = ExtResource("2_070wn")
+fuente_danio = ExtResource("2_070wn")
+
+[node name="FiguraConstructor" type="Node2D" parent="." unique_id=66989019 instance=ExtResource("3_v0paf")]
+script = ExtResource("4_42ymh")
+capas = Array[ExtResource("5_ita5x")]([SubResource("Resource_5m2ix"), SubResource("Resource_8k8i6"), SubResource("Resource_jpe7t")])
+sombra = true
+sombra_ancho = 18.0
+sombra_alto = 7.0
+sombra_desfase = 11.0
+color_luz = Color(0.72156864, 0.3137255, 0.16470589, 1)
+escala_luz = 0.4
+anim_luz = 2
+variacion_luz = 0.4
+escala_global = 0.8
+texto_figura = "capa Masa 22201e: 10,-2 12,6 4,12 -6,12 -12,4 -10,-6 -2,-12 6,-10
+capa Brillo 3f3a36: -4,-6 2,-8 4,-2 -2,0
+capa Brasa b8502a: 2,4 6,6 4,10 0,8
+sombra 18 7 11 0.3
+luz b8502a 0,0 0.5 0.4
+escala 0.8
+anim Masa latir 1.2 5
+anim Brasa parpadear 1.5 0.5
+animluz trueno 1.0 0.4"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1184961387]
+shape = SubResource("CircleShape2D_1altj")
+
+[node name="Mecanicas" type="Node2D" parent="." unique_id=1016040045]
+script = ExtResource("6_rsdou")
+divide_al_morir = true
+
+[node name="Animacion" type="Node" parent="." unique_id=1703232367]
+script = ExtResource("7_43gsm")

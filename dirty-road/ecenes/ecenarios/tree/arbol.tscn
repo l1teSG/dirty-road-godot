@@ -1,9 +1,10 @@
 [gd_scene format=3 uid="uid://dx5ahbv0nxyet"]
 
-[ext_resource type="Script" uid="uid://qw3vwiq5js6j" path="res://ecenes/ecenarios/tree/arbol.gd" id="1_v8n67"]
+[ext_resource type="Script" uid="uid://d205i7r3a6mhq" path="res://ecenes/ecenarios/tree/arbol.gd" id="1_v8n67"]
+[ext_resource type="FontFile" uid="uid://vnsqj7q05uej" path="res://themes/Chakra_Petch/ChakraPetch-BoldItalic.ttf" id="2_ryl7s"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7cwo5"]
-size = Vector2(78, 47)
+size = Vector2(150, 180)
 
 [sub_resource type="Gradient" id="Gradient_rbule"]
 colors = PackedColorArray(1, 1, 1, 1, 0, 1, 0.53333336, 0.007843138)
@@ -24,16 +25,16 @@ size = Vector2(48, 67)
 bg_color = Color(0, 0, 0, 0.6627451)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ryl7s"]
-bg_color = Color(0, 1, 0.53333336, 1)
+bg_color = Color(0.97247595, 0, 0.1458782, 1)
 corner_radius_top_left = 2
 corner_radius_top_right = 2
 corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
 
-[node name="Arbol" type="Area2D" unique_id=157670480]
+[node name="Arbol" type="Area2D" unique_id=157670480 node_paths=PackedStringArray("shapes_danio")]
 script = ExtResource("1_v8n67")
-vida_maxima = 5000
-regeneracion_por_segundo = 20.0
+shapes_danio = [NodePath("CollisionShape2D"), NodePath("StaticBody2D/CollisionShape2D"), NodePath("StaticBody2D/CollisionShape2D2")]
+regeneracion_activa = false
 
 [node name="sombra" type="Polygon2D" parent="." unique_id=532215091]
 z_index = -1
@@ -56,7 +57,7 @@ color = Color(0, 1, 0.53333336, 1)
 polygon = PackedVector2Array(-10, -280, 50, -230, 90, -180, 45, -140, 0, -120, -45, -130, -100, -170, -60, -230)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1355414515]
-position = Vector2(0, -9.5)
+position = Vector2(0, -45)
 shape = SubResource("RectangleShape2D_7cwo5")
 
 [node name="LuzArbol" type="PointLight2D" parent="." unique_id=46945719]
@@ -93,10 +94,12 @@ scale_amount_max = 4.0
 color = Color(0.6666667, 1, 0, 1)
 
 [node name="BarraVida" type="ProgressBar" parent="." unique_id=1303220616]
-offset_left = -30.0
-offset_top = -46.0
-offset_right = 30.0
-offset_bottom = -38.0
+offset_left = -29.0
+offset_top = -45.0
+offset_right = 31.0
+offset_bottom = -35.0
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("2_ryl7s")
 theme_override_styles/background = SubResource("StyleBoxFlat_v8n67")
 theme_override_styles/fill = SubResource("StyleBoxFlat_ryl7s")
 value = 100.0

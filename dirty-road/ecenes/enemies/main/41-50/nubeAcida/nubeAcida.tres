@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="EnemigoOleadaConfig" format=3 uid="uid://b74yoftx6p0m"]
+
+[ext_resource type="PackedScene" path="res://ecenes/enemies/main/41-50/nubeAcida/nubeAcida_enemi.tscn" id="1_v7ccr"]
+[ext_resource type="Script" uid="uid://vyt7ho0roxls" path="res://scripts/enemigo_oleada_config.gd" id="2_qtlla"]
+
+[resource]
+script = ExtResource("2_qtlla")
+escena = ExtResource("1_v7ccr")
+oleada_minima = 7
+max_simultaneos = 3

@@ -1,6 +1,37 @@
  
 
 @import "tailwindcss";
+
+/* Tipografía del juego (Chakra Petch), copiada del proyecto Godot. */
+@font-face {
+  font-family: 'Chakra Petch';
+  src: url('/fonts/ChakraPetch-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Chakra Petch';
+  src: url('/fonts/ChakraPetch-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Chakra Petch';
+  src: url('/fonts/ChakraPetch-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Chakra Petch';
+  src: url('/fonts/ChakraPetch-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
  
 @theme {
   /* --- Paleta base (extraída de los frames del gameplay) --- */
@@ -16,8 +47,8 @@
   --color-text-secondary: #8fae95;
  
   /* --- Tipografía --- */
-  --font-display: 'Space Grotesk', system-ui, sans-serif;
-  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --font-display: 'Chakra Petch', system-ui, sans-serif;
+  --font-mono: 'Chakra Petch', ui-monospace, monospace;
  
   /* --- Sombras / glow, usables como shadow-glow-green, etc. --- */
   --shadow-glow-green: 0 0 40px rgba(53, 168, 72, 0.45);
@@ -74,4 +105,29 @@
 @keyframes pulse-glow {
   0%, 100% { filter: drop-shadow(0 0 20px rgba(53, 168, 72, 0.35)); }
   50%      { filter: drop-shadow(0 0 48px rgba(53, 168, 72, 0.6)); }
+}
+
+/* Scroll suave + espacio para la navbar fija en las anclas. */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 72px;
+}
+
+/* Animación de aparición al hacer scroll (Reveal). */
+.reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+  will-change: opacity, transform;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 }

@@ -1,0 +1,138 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ecenes/enemies/class/enemigo.gd" id="1_w7daw"]
+[ext_resource type="FontFile" path="res://themes/Chakra_Petch/ChakraPetch-BoldItalic.ttf" id="2_8r5ju"]
+[ext_resource type="PackedScene" path="res://assets/stage/enemis/stages/stage91-100/boss/calentamientoGlobal.tscn" id="3_ekb6s"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_constructor.gd" id="4_h6jht"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_capa.gd" id="5_ox8ch"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/MecanicasEnemigo.gd" id="6_2p73h"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/BossAttackComponent.gd" id="7_qtrhq"]
+[ext_resource type="PackedScene" path="res://ecenes/enemies/main/91-100/deshielo/deshielo_enemi.tscn" id="8_08yxi"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/AnimacionEnemigo.gd" id="9_lk5md"]
+
+[sub_resource type="Resource" id="Resource_10sm1"]
+resource_local_to_scene = true
+script = ExtResource("5_ox8ch")
+nombre = "Oceano"
+puntos = PackedVector2Array(60, 0, 42, 42, 0, 60, -42, 42, -60, 0, -42, -42, 0, -60, 42, -42)
+color = Color(0.15294118, 0.33333334, 0.41960785, 1)
+
+[sub_resource type="Resource" id="Resource_ms1sv"]
+resource_local_to_scene = true
+script = ExtResource("5_ox8ch")
+nombre = "Continentes"
+puntos = PackedVector2Array(10, -40, 34, -22, 20, -4, -4, -14, -18, -30)
+color = Color(0.5411765, 0.37254903, 0.18431373, 1)
+
+[sub_resource type="Resource" id="Resource_5ikv5"]
+resource_local_to_scene = true
+script = ExtResource("5_ox8ch")
+nombre = "Continentes_2"
+puntos = PackedVector2Array(-30, 10, -8, 16, -2, 36, -26, 40, -44, 24)
+color = Color(0.43529412, 0.2901961, 0.14901961, 1)
+
+[sub_resource type="Resource" id="Resource_tnqek"]
+resource_local_to_scene = true
+script = ExtResource("5_ox8ch")
+nombre = "Corona_fuego"
+puntos = PackedVector2Array(-14, -56, 2, -78, 16, -58, 30, -66, 24, -46, 8, -52, -6, -48)
+color = Color(1, 0.41568628, 0.16470589, 1)
+animacion = 2
+anim_velocidad = 1.2
+anim_amplitud = 6.0
+
+[sub_resource type="Resource" id="Resource_8tet3"]
+resource_local_to_scene = true
+script = ExtResource("5_ox8ch")
+nombre = "Grieta_magma"
+puntos = PackedVector2Array(-2, -24, 8, -6, 0, 10, 10, 26, 2, 28, -6, 10, 2, -8, -8, -20)
+color = Color(1, 0.5411765, 0.24705882, 1)
+animacion = 6
+anim_velocidad = 0.9
+anim_amplitud = 0.5
+
+[sub_resource type="Resource" id="Resource_4ybxd"]
+resource_local_to_scene = true
+script = ExtResource("5_ox8ch")
+nombre = "Nucleo_ardiente"
+puntos = PackedVector2Array(0, -6, 6, -2, 6, 6, 0, 10, -6, 6, -6, -2)
+color = Color(1, 0.84705883, 0.24705882, 1)
+animacion = 2
+anim_amplitud = 12.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_51uw1"]
+radius = 187.26154
+
+[node name="enemigo" type="CharacterBody2D" unique_id=2006919752]
+script = ExtResource("1_w7daw")
+life = 2000.0
+speed = 75.0
+damage = 22.0
+mov_zigzag_grados = 10.0
+mov_zigzag_freq = 2.0
+mov_orbita = 0.5
+mov_dash_mult = 1.6
+mov_dash_freq = 0.5
+mov_separacion_fuerza = 1.0
+dano_al_tocar = true
+danio_contacto = 22.0
+radio_contacto = 90.0
+comportamiento_tipo = "embestida"
+anti_estructura = true
+categoria = "elite"
+nombre_texto = "Calentamiento Global"
+fuente_nombre = ExtResource("2_8r5ju")
+fuente_danio = ExtResource("2_8r5ju")
+orbes_min = 8
+orbes_max = 14
+orbe_valor = 3.0
+
+[node name="FiguraConstructor" type="Node2D" parent="." unique_id=66989019 instance=ExtResource("3_ekb6s")]
+script = ExtResource("4_h6jht")
+capas = Array[ExtResource("5_ox8ch")]([SubResource("Resource_10sm1"), SubResource("Resource_ms1sv"), SubResource("Resource_5ikv5"), SubResource("Resource_tnqek"), SubResource("Resource_8tet3"), SubResource("Resource_4ybxd")])
+sombra = true
+sombra_ancho = 100.0
+sombra_alto = 26.0
+sombra_desfase = 48.0
+color_luz = Color(1, 0.41568628, 0.16470589, 1)
+energia_luz = 1.3
+escala_luz = 1.8
+anim_luz = 2
+variacion_luz = 0.35
+escala_global = 2.4
+animar_en_editor = true
+texto_figura = "capa Oceano 27556b: 60,0 42,42 0,60 -42,42 -60,0 -42,-42 0,-60 42,-42
+capa Continentes 8a5f2f: 10,-40 34,-22 20,-4 -4,-14 -18,-30
+capa Continentes_2 6f4a26: -30,10 -8,16 -2,36 -26,40 -44,24
+capa Corona_fuego ff6a2a: -14,-56 2,-78 16,-58 30,-66 24,-46 8,-52 -6,-48
+capa Grieta_magma ff8a3f: -2,-24 8,-6 0,10 10,26 2,28 -6,10 2,-8 -8,-20
+capa Nucleo_ardiente ffd83f: 0,-6 6,-2 6,6 0,10 -6,6 -6,-2
+sombra 100 26 48 0.3
+luz ff6a2a 0,0 1.3 1.8
+escala 2.4
+anim Corona_fuego latir 1.2 6
+anim Grieta_magma parpadear 0.9 0.5
+anim Nucleo_ardiente latir 1.0 12
+animluz trueno 1.0 0.35"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=106786688]
+shape = SubResource("CircleShape2D_51uw1")
+
+[node name="Mecanicas" type="Node2D" parent="." unique_id=2083429299]
+script = ExtResource("6_2p73h")
+aura_danio = true
+aura_radio = 130.0
+aura_dps = 12.0
+
+[node name="Ataques" type="Node2D" parent="." unique_id=31087437]
+script = ExtResource("7_qtrhq")
+meteoros = true
+rayo = true
+aura_pulso = true
+met_color = Color(1, 0.35, 0.1, 0.6)
+rayo_color = Color(1, 0.6, 0.2, 0.9)
+inv_escena = ExtResource("8_08yxi")
+pulso_color = Color(1, 0.4, 0.15, 0.5)
+
+[node name="Animacion" type="Node" parent="." unique_id=1626919338]
+script = ExtResource("9_lk5md")

@@ -1,0 +1,119 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ecenes/enemies/class/enemigo.gd" id="1_flvcn"]
+[ext_resource type="FontFile" path="res://themes/Chakra_Petch/ChakraPetch-BoldItalic.ttf" id="2_7e874"]
+[ext_resource type="PackedScene" path="res://assets/stage/enemis/stages/stage31-40/boss/chimeneaGigante.tscn" id="3_c81ru"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_constructor.gd" id="4_sv605"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_capa.gd" id="5_2qt0l"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/BossAttackComponent.gd" id="6_5cwk0"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/AnimacionEnemigo.gd" id="7_qlhwt"]
+
+[sub_resource type="Resource" id="Resource_1g4b2"]
+resource_local_to_scene = true
+script = ExtResource("5_2qt0l")
+nombre = "Torre"
+puntos = PackedVector2Array(24, 50, 24, -30, 16, -48, -16, -48, -24, -30, -24, 50)
+color = Color(0.30588236, 0.23921569, 0.19607843, 1)
+
+[sub_resource type="Resource" id="Resource_x3wuc"]
+resource_local_to_scene = true
+script = ExtResource("5_2qt0l")
+nombre = "Franja_alta"
+puntos = PackedVector2Array(24, -18, 24, -4, -24, -4, -24, -18)
+color = Color(0.23529412, 0.18039216, 0.14901961, 1)
+
+[sub_resource type="Resource" id="Resource_iso5y"]
+resource_local_to_scene = true
+script = ExtResource("5_2qt0l")
+nombre = "Boca"
+puntos = PackedVector2Array(16, -48, 16, -58, -16, -58, -16, -48)
+color = Color(0.14117648, 0.10980392, 0.09411765, 1)
+
+[sub_resource type="Resource" id="Resource_xe70d"]
+resource_local_to_scene = true
+script = ExtResource("5_2qt0l")
+nombre = "Columna_humo"
+puntos = PackedVector2Array(-24, -58, -8, -84, 10, -92, 22, -72, 8, -64)
+color = Color(0.36078432, 0.36078432, 0.36078432, 0.6901961)
+animacion = 1
+anim_velocidad = 0.6
+anim_amplitud = 5.0
+
+[sub_resource type="Resource" id="Resource_87lq3"]
+resource_local_to_scene = true
+script = ExtResource("5_2qt0l")
+nombre = "Horno"
+puntos = PackedVector2Array(-14, 34, 14, 34, 14, 48, -14, 48)
+color = Color(0.84705883, 0.32941177, 0.16470589, 1)
+animacion = 6
+anim_velocidad = 1.5
+anim_amplitud = 0.35
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_nwygi"]
+radius = 166.5754
+
+[node name="enemigo" type="CharacterBody2D" unique_id=2006919752 node_paths=PackedStringArray("boca")]
+script = ExtResource("1_flvcn")
+life = 1500.0
+speed = 60.0
+damage = 12.0
+mov_zigzag_grados = 10.0
+mov_zigzag_freq = 2.0
+mov_orbita = 0.5
+mov_dash_mult = 1.6
+mov_dash_freq = 0.5
+mov_separacion_fuerza = 1.0
+radio_contacto = 90.0
+comportamiento_tipo = "torreta"
+boca = NodePath("boca")
+anti_estructura = true
+categoria = "elite"
+nombre_texto = "Chimenea Gigante"
+fuente_nombre = ExtResource("2_7e874")
+fuente_danio = ExtResource("2_7e874")
+orbes_min = 8
+orbes_max = 14
+orbe_valor = 3.0
+
+[node name="FiguraConstructor" type="Node2D" parent="." unique_id=66989019 instance=ExtResource("3_c81ru")]
+script = ExtResource("4_sv605")
+capas = Array[ExtResource("5_2qt0l")]([SubResource("Resource_1g4b2"), SubResource("Resource_x3wuc"), SubResource("Resource_iso5y"), SubResource("Resource_xe70d"), SubResource("Resource_87lq3")])
+sombra = true
+sombra_ancho = 44.0
+sombra_alto = 13.0
+sombra_desfase = 48.0
+sombra_opacidad = 0.35
+color_luz = Color(0.84705883, 0.32941177, 0.16470589, 1)
+posicion_luz = Vector2(0, 40)
+energia_luz = 1.0
+escala_luz = 1.3
+anim_luz = 2
+velocidad_luz = 0.9
+variacion_luz = 0.4
+escala_global = 1.8
+texto_figura = "capa Torre 4e3d32: 24,50 24,-30 16,-48 -16,-48 -24,-30 -24,50
+capa Franja_alta 3c2e26: 24,-18 24,-4 -24,-4 -24,-18
+capa Boca 241c18: 16,-48 16,-58 -16,-58 -16,-48
+capa Columna_humo 5c5c5cb0: -24,-58 -8,-84 10,-92 22,-72 8,-64
+capa Horno d8542a: -14,34 14,34 14,48 -14,48
+sombra 44 13 48 0.35
+luz d8542a 0,40 1.0 1.3
+escala 1.8
+anim Columna_humo flotar 0.6 5
+anim Horno parpadear 1.5 0.35
+animluz trueno 0.9 0.4"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2133800768]
+shape = SubResource("CircleShape2D_nwygi")
+
+[node name="boca" type="Marker2D" parent="." unique_id=1974439319]
+
+[node name="Ataques" type="Node2D" parent="." unique_id=992194679]
+script = ExtResource("6_5cwk0")
+meteoros = true
+onda = true
+met_cantidad = 8
+met_color = Color(0.35, 0.35, 0.4, 0.6)
+
+[node name="Animacion" type="Node" parent="." unique_id=1285951665]
+script = ExtResource("7_qlhwt")

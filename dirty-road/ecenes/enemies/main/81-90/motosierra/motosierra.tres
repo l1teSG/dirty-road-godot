@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="EnemigoOleadaConfig" format=3 uid="uid://dxk4q3j5sfxyc"]
+
+[ext_resource type="PackedScene" path="res://ecenes/enemies/main/81-90/motosierra/motosierra_enemi.tscn" id="1_k6feg"]
+[ext_resource type="Script" uid="uid://vyt7ho0roxls" path="res://scripts/enemigo_oleada_config.gd" id="2_kginp"]
+
+[resource]
+script = ExtResource("2_kginp")
+escena = ExtResource("1_k6feg")
+peso = 1.5
+oleada_minima = 4

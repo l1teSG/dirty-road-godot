@@ -1,0 +1,104 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ecenes/enemies/class/enemigo.gd" id="1_k15b8"]
+[ext_resource type="FontFile" path="res://themes/Chakra_Petch/ChakraPetch-BoldItalic.ttf" id="2_se4oh"]
+[ext_resource type="PackedScene" path="res://assets/stage/enemis/stages/stage31-40/humoFabrica.tscn" id="3_c5uoi"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_constructor.gd" id="4_skxxt"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_capa.gd" id="5_xr8vq"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/AnimacionEnemigo.gd" id="6_eixan"]
+
+[sub_resource type="Resource" id="Resource_kbny4"]
+resource_local_to_scene = true
+script = ExtResource("5_xr8vq")
+nombre = "Nube_exterior"
+puntos = PackedVector2Array(-6, -14, 10, -12, 20, -2, 16, 10, 2, 14, -14, 12, -22, 0, -16, -10)
+color = Color(0.23529412, 0.23529412, 0.23529412, 1)
+animacion = 2
+anim_velocidad = 0.7
+
+[sub_resource type="Resource" id="Resource_etg18"]
+resource_local_to_scene = true
+script = ExtResource("5_xr8vq")
+nombre = "Nube_interior"
+puntos = PackedVector2Array(0, -8, 10, -4, 10, 6, 0, 10, -10, 6, -10, -4)
+color = Color(0.36078432, 0.36078432, 0.36078432, 1)
+animacion = 2
+anim_velocidad = 0.7
+anim_amplitud = 6.0
+anim_fase = 2.0
+
+[sub_resource type="Resource" id="Resource_6u6ue"]
+resource_local_to_scene = true
+script = ExtResource("5_xr8vq")
+nombre = "Ceniza"
+puntos = PackedVector2Array(14, -6, 18, -2, 14, 2, 10, -2)
+color = Color(0.14901961, 0.14901961, 0.14901961, 1)
+
+[sub_resource type="Resource" id="Resource_tcd5c"]
+resource_local_to_scene = true
+script = ExtResource("5_xr8vq")
+nombre = "Ojos"
+puntos = PackedVector2Array(-4, -2, 0, -2, 0, 2, -4, 2)
+color = Color(0, 1, 0.49803922, 1)
+animacion = 6
+anim_velocidad = 0.5
+anim_amplitud = 0.6
+
+[sub_resource type="Resource" id="Resource_gq4d1"]
+resource_local_to_scene = true
+script = ExtResource("5_xr8vq")
+nombre = "Ojos_2"
+puntos = PackedVector2Array(4, -2, 8, -2, 8, 2, 4, 2)
+color = Color(0, 1, 0.49803922, 1)
+animacion = 6
+anim_velocidad = 0.5
+anim_amplitud = 0.6
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_x1nde"]
+radius = 22.0
+
+[node name="enemigo" type="CharacterBody2D" unique_id=2006919752 node_paths=PackedStringArray("boca")]
+script = ExtResource("1_k15b8")
+life = 26.0
+speed = 95.0
+damage = 9.0
+mov_zigzag_grados = 6.0
+mov_orbita = 0.7
+radio_contacto = 38.0
+comportamiento_tipo = "rango"
+boca = NodePath("boca")
+categoria = "nube"
+nombre_texto = "Humo de Fábrica"
+fuente_nombre = ExtResource("2_se4oh")
+fuente_danio = ExtResource("2_se4oh")
+
+[node name="FiguraConstructor" type="Node2D" parent="." unique_id=66989019 instance=ExtResource("3_c5uoi")]
+script = ExtResource("4_skxxt")
+capas = Array[ExtResource("5_xr8vq")]([SubResource("Resource_kbny4"), SubResource("Resource_etg18"), SubResource("Resource_6u6ue"), SubResource("Resource_tcd5c"), SubResource("Resource_gq4d1")])
+sombra = true
+sombra_ancho = 22.0
+sombra_alto = 7.0
+sombra_desfase = 16.0
+sombra_opacidad = 0.2
+color_luz = Color(0.72156864, 0.78431374, 0.2509804, 1)
+energia_luz = 0.4
+texto_figura = "capa Nube_exterior 3c3c3c: -6,-14 10,-12 20,-2 16,10 2,14 -14,12 -22,0 -16,-10
+capa Nube_interior 5c5c5c: 0,-8 10,-4 10,6 0,10 -10,6 -10,-4
+capa Ceniza 262626: 14,-6 18,-2 14,2 10,-2
+capa Ojos 00ff7f: -4,-2 0,-2 0,2 -4,2
+capa Ojos_2 00ff7f: 4,-2 8,-2 8,2 4,2
+sombra 22 7 16 0.2
+luz b8c840 0,0 0.4 0.5
+escala 1.0
+anim Nube_exterior latir 0.7 4
+anim Nube_interior latir 0.7 6 2.0
+anim Ojos parpadear 0.5 0.6
+anim Ojos_2 parpadear 0.5 0.6"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=735348448]
+shape = SubResource("CircleShape2D_x1nde")
+
+[node name="boca" type="Marker2D" parent="." unique_id=720196606]
+
+[node name="Animacion" type="Node" parent="." unique_id=1809436936]
+script = ExtResource("6_eixan")

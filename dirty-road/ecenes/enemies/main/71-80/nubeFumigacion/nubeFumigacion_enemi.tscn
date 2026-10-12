@@ -1,0 +1,89 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ecenes/enemies/class/enemigo.gd" id="1_jkixw"]
+[ext_resource type="FontFile" path="res://themes/Chakra_Petch/ChakraPetch-BoldItalic.ttf" id="2_12uha"]
+[ext_resource type="PackedScene" path="res://assets/stage/enemis/stages/stage71-80/nubeFumigacion.tscn" id="3_nvy8x"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_constructor.gd" id="4_w6ib5"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_capa.gd" id="5_sqb61"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/MecanicasEnemigo.gd" id="6_qn3sv"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/AnimacionEnemigo.gd" id="7_6e0fe"]
+
+[sub_resource type="Resource" id="Resource_kin0f"]
+resource_local_to_scene = true
+script = ExtResource("5_sqb61")
+nombre = "Nube"
+puntos = PackedVector2Array(-8, -12, 8, -14, 18, -6, 20, 4, 8, 8, -10, 8, -20, 2, -18, -6)
+color = Color(0.6039216, 0.37254903, 0.65882355, 1)
+animacion = 1
+anim_velocidad = 0.5
+anim_amplitud = 2.0
+
+[sub_resource type="Resource" id="Resource_1uaqd"]
+resource_local_to_scene = true
+script = ExtResource("5_sqb61")
+nombre = "Nucleo"
+puntos = PackedVector2Array(-2, -6, 8, -4, 10, 4, 0, 6, -10, 2)
+color = Color(0.78431374, 0.56078434, 0.83137256, 1)
+
+[sub_resource type="Resource" id="Resource_7t4y1"]
+resource_local_to_scene = true
+script = ExtResource("5_sqb61")
+nombre = "Rociado"
+puntos = PackedVector2Array(-12, 10, 12, 10, 6, 18, -6, 18)
+color = Color(0.84705883, 0.105882354, 0.3764706, 0.6666667)
+animacion = 6
+anim_velocidad = 0.8
+anim_amplitud = 0.6
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_px8jc"]
+radius = 20.396078
+
+[node name="enemigo" type="CharacterBody2D" unique_id=2006919752 node_paths=PackedStringArray("boca")]
+script = ExtResource("1_jkixw")
+life = 26.0
+speed = 95.0
+damage = 9.0
+mov_zigzag_grados = 6.0
+mov_orbita = 0.7
+radio_contacto = 36.39607805437114
+comportamiento_tipo = "rango"
+boca = NodePath("boca")
+categoria = "nube"
+nombre_texto = "Nube de Fumigación"
+fuente_nombre = ExtResource("2_12uha")
+fuente_danio = ExtResource("2_12uha")
+
+[node name="FiguraConstructor" type="Node2D" parent="." unique_id=66989019 instance=ExtResource("3_nvy8x")]
+script = ExtResource("4_w6ib5")
+capas = Array[ExtResource("5_sqb61")]([SubResource("Resource_kin0f"), SubResource("Resource_1uaqd"), SubResource("Resource_7t4y1")])
+sombra = true
+sombra_ancho = 26.0
+sombra_desfase = 20.0
+sombra_opacidad = 0.18
+color_luz = Color(0.72156864, 0.37254903, 0.78431374, 1)
+escala_luz = 0.7
+anim_luz = 3
+velocidad_luz = 0.7
+texto_figura = "capa Nube 9a5fa8: -8,-12 8,-14 18,-6 20,4 8,8 -10,8 -20,2 -18,-6
+capa Nucleo c88fd4: -2,-6 8,-4 10,4 0,6 -10,2
+capa Rociado d81b60aa: -12,10 12,10 6,18 -6,18
+sombra 26 8 20 0.18
+luz b85fc8 0,0 0.5 0.7
+escala 1.0
+anim Rociado parpadear 0.8 0.6
+anim Nube flotar 0.5 2
+animluz respirar 0.7 0.3"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1562319065]
+shape = SubResource("CircleShape2D_px8jc")
+
+[node name="boca" type="Marker2D" parent="." unique_id=1220830543]
+
+[node name="Mecanicas" type="Node2D" parent="." unique_id=1228199518]
+script = ExtResource("6_qn3sv")
+aura_danio = true
+aura_radio = 90.0
+aura_dps = 7.0
+
+[node name="Animacion" type="Node" parent="." unique_id=1436305872]
+script = ExtResource("7_6e0fe")

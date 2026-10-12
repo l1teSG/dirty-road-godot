@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="EtapaConfig" format=3 uid="uid://cccb8x7ggxl1j"]
+
+[ext_resource type="Script" uid="uid://vyt7ho0roxls" path="res://scripts/enemigo_oleada_config.gd" id="1_cv74e"]
+[ext_resource type="Resource" uid="uid://bdi4ul77qc62a" path="res://ecenes/enemies/main/61-70/residuoRadiactivo/residuoRadiactivo.tres" id="2_px6dm"]
+[ext_resource type="Resource" uid="uid://d4kvqk6pfs7j6" path="res://ecenes/enemies/main/61-70/barrilExplosivo/barrilExplosivo.tres" id="3_6eul3"]
+[ext_resource type="Resource" uid="uid://cpg33qy1m45lc" path="res://ecenes/enemies/main/61-70/mutante/mutante.tres" id="4_p1nxu"]
+[ext_resource type="PackedScene" path="res://ecenes/enemies/main/61-70/boss/ReactorRoto_boss.tscn" id="5_0n1ur"]
+[ext_resource type="Script" uid="uid://b07d7n2c62y1x" path="res://scripts/etapa_config.gd" id="6_w5k68"]
+
+[resource]
+script = ExtResource("6_w5k68")
+nombre = "Etapa 7: Energía nuclear y radiación"
+enemigos = Array[ExtResource("1_cv74e")]([ExtResource("2_px6dm"), ExtResource("3_6eul3"), ExtResource("4_p1nxu")])
+enemigos_base_por_oleada = 15
+incremento_enemigos_por_oleada = 3
+escalado_vida_por_oleada = 0.3
+escalado_danio_por_oleada = 0.09
+mult_vida = 4.4
+mult_velocidad = 1.3
+mult_danio = 4.4
+jefe_escena = ExtResource("5_0n1ur")
+jefe_nombre = "Reactor Roto"
+jefe_escoltas = 6

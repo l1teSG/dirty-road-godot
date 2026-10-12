@@ -1,137 +1,94 @@
 extends Control
 
-@onready var fondo_oscuro: ColorRect = $CanvasLayer/ColorRect
-@onready var btn_continuar: Button = $VBoxContainer/VBoxContainer/jugar
-@onready var btn_salir: Button = $VBoxContainer/VBoxContainer/salir
-@onready var btn_nueva_partida: Button = $VBoxContainer/VBoxContainer/nuevaPartida
+## Menú principal: título, subtítulo y acciones (CONTINUAR / NUEVA PARTIDA / SALIR).
+
+@onready var fondo_oscuro: ColorRect = $Fondo/ColorRect
+@onready var btn_continuar: Button = $Centro/Columna/Menu/jugar
+@onready var btn_nueva_partida: Button = $Centro/Columna/Menu/nuevaPartida
+@onready var btn_salir: Button = $Centro/Columna/Menu/salir
 @onready var creditos_label: Label = $CreditosLabel
-@onready var salva_label: Label = $SalvaLabel
+@onready var titulo: Label = $Centro/Columna/Titulo
+@onready var columna: Control = $Centro/Columna
 
 const RUTA_NIVEL := "res://demo/level 1/niviel1.tscn"
-
 const DURACION_ENTRADA := 0.8
-const RETRASO_ENTRE_BOTONES := 0.12
+
 
 func _ready() -> void:
-	if btn_continuar == null or btn_salir == null or btn_nueva_partida == null or fondo_oscuro == null:
-		push_error("MenuPrincipal: falta algún nodo, revisa las rutas @onready")
-		return
+	# Estilo (tema global) + título + hover.
+	EstiloUI.titulo(titulo, 130, EstiloUI.NEON)
+	EstiloUI.aplicar_hover_a($Centro/Columna/Menu)
 
-	# oculta TODO de inmediato, antes de cualquier otra cosa
-	_ocultar_para_entrada()
+	# El menú ahora va a la SELECCIÓN DE PARTIDAS (múltiples slots).
+	btn_continuar.text = "JUGAR"
+	btn_continuar.disabled = false
+	btn_nueva_partida.visible = false
 
-	btn_continuar.pressed.connect(_on_continuar_pressed)
-	btn_salir.pressed.connect(_on_salir_pressed)
-	btn_nueva_partida.pressed.connect(_on_nueva_partida_pressed)
+	var menu: VBoxContainer = $Centro/Columna/Menu
+	var btn_ajustes := Button.new()
+	btn_ajustes.name = "ajustes"
+	btn_ajustes.text = "AJUSTES"
+	btn_ajustes.focus_mode = Control.FOCUS_NONE
+	menu.add_child(btn_ajustes)
+	var salir := menu.get_node_or_null("salir")
+	if salir != null:
+		menu.move_child(btn_ajustes, salir.get_index())
+	EstiloUI.boton_menu(btn_ajustes, 40)
 
-	btn_continuar.disabled = not SaveManager.hay_partida_guardada()
+	for b in [btn_continuar, btn_nueva_partida, btn_salir, btn_ajustes]:
+		b.focus_mode = Control.FOCUS_NONE
+		b.pressed.connect(_on_boton_pressed.bind(b))
 
-	# (Opcional) Muestra en el botón hasta qué oleada llegaste.
-	# Útil para verificar que el guardado de hordas funciona; borra si no.
-	if not btn_continuar.disabled:
-		btn_continuar.text = "Continuar (Oleada %d)" % SaveManager.get_horda()
-
-	# evita que el primer botón reciba foco automático y muestre su
-	# estilo de "focus" brillante al iniciar
-	btn_continuar.focus_mode = Control.FOCUS_NONE
-	btn_salir.focus_mode = Control.FOCUS_NONE
-	btn_nueva_partida.focus_mode = Control.FOCUS_NONE
-
+	# Animación de entrada.
+	columna.modulate.a = 0.0
+	creditos_label.modulate.a = 0.0
 	_animar_entrada()
 
 
-func _ocultar_para_entrada() -> void:
-	fondo_oscuro.color.a = 0.0
-	btn_continuar.modulate.a = 0.0
-	btn_salir.modulate.a = 0.0
-	btn_nueva_partida.modulate.a = 0.0
-	creditos_label.modulate.a = 0.0
-	salva_label.modulate.a = 0.0
+func _on_boton_pressed(boton: Button) -> void:
+	match boton.name:
+		"jugar":
+			_ir_a("res://ui/slots/slots.tscn")
+		"ajustes":
+			_ir_a("res://ui/ajustes/ajustes.tscn")
+		"nuevaPartida":
+			_ir_a("res://ui/slots/slots.tscn")
+		"salir":
+			_salir()
 
 
-# ── Animación de entrada del menú ────────────────────────────────────
+## Transición con fundido a otra escena.
+func _ir_a(ruta: String) -> void:
+	_deshabilitar()
+	var tw := create_tween()
+	tw.tween_property(self, "modulate:a", 0.0, 0.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	tw.tween_callback(func(): get_tree().change_scene_to_file(ruta))
 
+
+func _abrir_nivel() -> void:
+	_deshabilitar()
+	var tw := create_tween()
+	tw.tween_property(self, "modulate:a", 0.0, 0.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	tw.tween_callback(func(): get_tree().change_scene_to_file(RUTA_NIVEL))
+
+
+func _salir() -> void:
+	_deshabilitar()
+	var tw := create_tween()
+	tw.tween_property(self, "modulate:a", 0.0, 0.4).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	tw.tween_callback(func(): get_tree().quit())
+
+
+func _deshabilitar() -> void:
+	for b in $Centro/Columna/Menu.get_children():
+		if b is Button:
+			b.disabled = true
+
+
+## Animación de entrada del menú.
 func _animar_entrada() -> void:
-	var botones: Array[Button] = [btn_continuar, btn_nueva_partida, btn_salir]
-
-	var tween = create_tween()
-	tween.set_parallel(true)
-
-	tween.tween_property(fondo_oscuro, "color:a", 1.0, DURACION_ENTRADA)\
+	var tw := create_tween().set_parallel(true)
+	tw.tween_property(columna, "modulate:a", 1.0, DURACION_ENTRADA)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-
-	for i in botones.size():
-		var boton = botones[i]
-		tween.tween_property(boton, "modulate:a", 1.0, DURACION_ENTRADA)\
-			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)\
-			.set_delay(i * RETRASO_ENTRE_BOTONES)
-
-	# Fade in de los labels de créditos y salva
-	tween.tween_property(creditos_label, "modulate:a", 0.6, DURACION_ENTRADA)\
+	tw.tween_property(creditos_label, "modulate:a", 0.6, DURACION_ENTRADA)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-	tween.tween_property(salva_label, "modulate:a", 0.6, DURACION_ENTRADA)\
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-
-
-# ── Botones ────────────────────────────────────────────────────────
-
-func _on_continuar_pressed() -> void:
-	# La partida YA está cargada en memoria: SaveManager la lee UNA sola vez
-	# en su _ready() al arrancar el juego. NO volver a llamar cargar_partida()
-	# aquí evita revivir datos viejos sobre un reset recién hecho.
-	if not SaveManager.hay_partida_guardada():
-		push_warning("MenuPrincipal: no hay partida guardada para continuar")
-		return
-	_transicion_y_cambiar_escena(RUTA_NIVEL)
-
-
-func _on_nueva_partida_pressed() -> void:
-	# Resetea memoria + disco; el WaveManager de la escena nueva arrancará
-	# en la horda 1 con el pool de enemigos de esa oleada.
-	SaveManager.nueva_partida()
-	_transicion_y_cambiar_escena(RUTA_NIVEL)
-
-
-func _on_salir_pressed() -> void:
-	_animar_salida_app()
-
-
-# ── Transiciones de salida ───────────────────────────────────────────
-
-func _transicion_y_cambiar_escena(ruta: String) -> void:
-	btn_continuar.disabled = true
-	btn_nueva_partida.disabled = true
-	btn_salir.disabled = true
-
-	var tween = create_tween()
-	tween.set_parallel(true)
-	tween.tween_property(self, "modulate:a", 0.0, 0.5)\
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
-	tween.tween_property(fondo_oscuro, "color:a", 0.0, 1.5)\
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
-	tween.tween_property(creditos_label, "modulate:a", 0.0, 0.5)\
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
-	tween.tween_property(salva_label, "modulate:a", 0.0, 0.5)\
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
-	tween.chain().tween_callback(func():
-		get_tree().change_scene_to_file(ruta)
-	)
-
-
-func _animar_salida_app() -> void:
-	btn_continuar.disabled = true
-	btn_nueva_partida.disabled = true
-	btn_salir.disabled = true
-
-	var tween = create_tween()
-	tween.tween_property(self, "modulate:a", 0.0, 0.4)\
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
-	tween.tween_property(fondo_oscuro, "color:a", 0.0, 0.4)\
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
-	tween.tween_property(creditos_label, "modulate:a", 0.0, 0.4)\
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
-	tween.tween_property(salva_label, "modulate:a", 0.0, 0.4)\
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
-	tween.tween_callback(func():
-		get_tree().quit()
-	)

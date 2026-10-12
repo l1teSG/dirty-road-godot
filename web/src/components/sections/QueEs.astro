@@ -1,0 +1,31 @@
+---
+import SectionHeading from '../ui/SectionHeading.astro';
+import Reveal from '../ui/Reveal.astro';
+
+const pilares = [
+  { t: 'Aprende jugando', d: 'Cada enemigo representa un problema ambiental real y enseña algo al aparecer.' },
+  { t: 'Infinito y dinámico', d: '10 etapas y oleadas que escalan: el mundo evoluciona mientras avanzas.' },
+  { t: 'Basado en evidencia', d: 'Gamificación y aprendizaje significativo para una experiencia lúdica y educativa.' },
+];
+---
+<section id="que-es" class="px-4 py-24 sm:py-32">
+  <div class="mx-auto max-w-6xl">
+    <Reveal>
+      <SectionHeading
+        kicker="Sobre el proyecto"
+        titulo="¿Qué es Dirty Road?"
+        descripcion="Un videojuego educativo 2D desarrollado en Godot Engine, enfocado en fomentar la conciencia ambiental en jóvenes mayores de 10 años mediante la gamificación."
+      />
+    </Reveal>
+    <div class="mt-12 grid gap-6 sm:grid-cols-3">
+      {pilares.map((p, i) => (
+        <Reveal delay={i * 100}>
+          <article class="h-full rounded-2xl border border-white/5 bg-bg-alt/70 p-6 backdrop-blur-sm">
+            <h3 class="text-lg font-semibold text-green-bright">{p.t}</h3>
+            <p class="mt-3 text-sm leading-relaxed text-text-secondary">{p.d}</p>
+          </article>
+        </Reveal>
+      ))}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,114 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ecenes/enemies/class/enemigo.gd" id="1_4dfe4"]
+[ext_resource type="FontFile" path="res://themes/Chakra_Petch/ChakraPetch-BoldItalic.ttf" id="2_x2ihk"]
+[ext_resource type="PackedScene" path="res://assets/stage/enemis/stages/stage71-80/dronPesticida.tscn" id="3_cwqdr"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_constructor.gd" id="4_cv174"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_capa.gd" id="5_5iw68"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/MecanicasEnemigo.gd" id="6_u50lh"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/AnimacionEnemigo.gd" id="7_j15qv"]
+
+[sub_resource type="Resource" id="Resource_h2rl2"]
+resource_local_to_scene = true
+script = ExtResource("5_5iw68")
+nombre = "Cuerpo"
+puntos = PackedVector2Array(12, 4, 6, -2, -6, -2, -12, 4, -12, 12, 12, 12)
+color = Color(0.24705882, 0.2901961, 0.26666668, 1)
+
+[sub_resource type="Resource" id="Resource_wcyxm"]
+resource_local_to_scene = true
+script = ExtResource("5_5iw68")
+nombre = "Brazo_izq"
+puntos = PackedVector2Array(-12, 5, -26, 1, -26, 7, -12, 9)
+color = Color(0.18039216, 0.21960784, 0.2, 1)
+
+[sub_resource type="Resource" id="Resource_ui5w7"]
+resource_local_to_scene = true
+script = ExtResource("5_5iw68")
+nombre = "Brazo_der"
+puntos = PackedVector2Array(12, 5, 26, 1, 26, 7, 12, 9)
+color = Color(0.18039216, 0.21960784, 0.2, 1)
+
+[sub_resource type="Resource" id="Resource_o5hsi"]
+resource_local_to_scene = true
+script = ExtResource("5_5iw68")
+nombre = "Rotores"
+puntos = PackedVector2Array(-28, 3, -26, 7, -18, 7, -16, 3, -18, -1, -26, -1)
+color = Color(0.62352943, 0.6901961, 0.65882355, 0.6666667)
+animacion = 5
+anim_velocidad = 4.0
+anim_amplitud = 1.0
+
+[sub_resource type="Resource" id="Resource_n8xnl"]
+resource_local_to_scene = true
+script = ExtResource("5_5iw68")
+nombre = "Rotores_der"
+puntos = PackedVector2Array(28, 3, 26, 7, 18, 7, 16, 3, 18, -1, 26, -1)
+color = Color(0.62352943, 0.6901961, 0.65882355, 0.6666667)
+animacion = 5
+anim_velocidad = 4.0
+anim_amplitud = 1.0
+
+[sub_resource type="Resource" id="Resource_ksvr7"]
+resource_local_to_scene = true
+script = ExtResource("5_5iw68")
+nombre = "Tanque"
+puntos = PackedVector2Array(6, 12, 6, 20, -6, 20, -6, 12)
+color = Color(0.84705883, 0.105882354, 0.3764706, 1)
+animacion = 2
+anim_amplitud = 5.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_3shbg"]
+radius = 28.160255
+
+[node name="enemigo" type="CharacterBody2D" unique_id=2006919752 node_paths=PackedStringArray("boca")]
+script = ExtResource("1_4dfe4")
+life = 26.0
+speed = 95.0
+damage = 9.0
+mov_zigzag_grados = 6.0
+mov_orbita = 0.7
+radio_contacto = 44.16025568065744
+comportamiento_tipo = "rango"
+boca = NodePath("boca")
+nombre_texto = "Dron Pesticida"
+fuente_nombre = ExtResource("2_x2ihk")
+fuente_danio = ExtResource("2_x2ihk")
+
+[node name="FiguraConstructor" type="Node2D" parent="." unique_id=66989019 instance=ExtResource("3_cwqdr")]
+script = ExtResource("4_cv174")
+capas = Array[ExtResource("5_5iw68")]([SubResource("Resource_h2rl2"), SubResource("Resource_wcyxm"), SubResource("Resource_ui5w7"), SubResource("Resource_o5hsi"), SubResource("Resource_n8xnl"), SubResource("Resource_ksvr7")])
+sombra = true
+sombra_ancho = 30.0
+sombra_desfase = 24.0
+sombra_opacidad = 0.18
+color_luz = Color(0.84705883, 0.105882354, 0.3764706, 1)
+posicion_luz = Vector2(0, 14)
+energia_luz = 0.6
+anim_luz = 1
+variacion_luz = 0.2
+texto_figura = "capa Cuerpo 3f4a44: 12,4 6,-2 -6,-2 -12,4 -12,12 12,12
+capa Brazo_izq 2e3833: -12,5 -26,1 -26,7 -12,9
+capa Brazo_der 2e3833: 12,5 26,1 26,7 12,9
+capa Rotores 9fb0a8aa: -28,3 -26,7 -18,7 -16,3 -18,-1 -26,-1
+capa Rotores_der 9fb0a8aa: 28,3 26,7 18,7 16,3 18,-1 26,-1
+capa Tanque d81b60: 6,12 6,20 -6,20 -6,12
+sombra 30 8 24 0.18
+luz d81b60 0,14 0.6 0.5
+escala 1.0
+anim Rotores vibrar 4.0 1.0
+anim Rotores_der vibrar 4.0 1.0
+anim Tanque latir 1.0 5
+animluz pulsar 1.0 0.2"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=233935177]
+shape = SubResource("CircleShape2D_3shbg")
+
+[node name="boca" type="Marker2D" parent="." unique_id=947160021]
+
+[node name="Mecanicas" type="Node2D" parent="." unique_id=438934592]
+script = ExtResource("6_u50lh")
+es_aereo = true
+
+[node name="Animacion" type="Node" parent="." unique_id=1016678420]
+script = ExtResource("7_j15qv")

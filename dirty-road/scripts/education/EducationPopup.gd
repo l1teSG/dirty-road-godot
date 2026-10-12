@@ -155,6 +155,13 @@ func _is_top() -> bool:
 	return m.toast_on_top
 
 
+## Lee un ajuste del usuario (SaveManager) con valor por defecto.
+func _ajuste(clave: String, def: Variant) -> Variant:
+	if SaveManager != null and SaveManager.has_method("get_ajuste"):
+		return SaveManager.get_ajuste(clave, def)
+	return def
+
+
 func _style_of(variant: int) -> int:
 	if _style_override != -1:
 		return _style_override
@@ -278,7 +285,7 @@ func enqueue(
 	_queue.append({
 		"text": text,
 		"variant": variant,
-		"duration": duration,
+		"duration": duration * float(_ajuste("edu_duracion_mult", 1.0)),
 		"subtitle": subtitle,
 		"icon": icon
 	})
@@ -354,6 +361,7 @@ func _display(item: Dictionary) -> void:
 	var kind: int = _kind_of(icon_setting)
 	var show_badge: bool = (
 		bool(_opt("badge_enabled", true))
+		and bool(_ajuste("edu_insignia", true))
 		and kind != BadgeIcon.NONE
 		and (is_card or bool(_opt("badge_show_on_subtitles", false)))
 	)
@@ -546,9 +554,25 @@ func _display(item: Dictionary) -> void:
 	)
 
 	_panel.size = Vector2(width, panel_h)
-	_panel.position = Vector2((vp.x - width) * 0.5, start_y)
+
+	# ── Ajustes del usuario: escala y posición ──
+	var esca: float = clampf(float(_ajuste("edu_escala", 1.0)), 0.4, 2.0)
+	_panel.scale = Vector2(esca, esca)
+	_panel.pivot_offset = Vector2.ZERO
+	var posx: float = (vp.x - width * esca) * 0.5
+	var pos_ajuste: int = int(_ajuste("edu_posicion", 0))
+	if pos_ajuste == 1:
+		end_y = (vp.y - panel_h * esca) * 0.5
+	elif pos_ajuste == 2:
+		end_y = vp.y - panel_h * esca - m.bottom_margin
+
+	_panel.position = Vector2(posx, start_y)
 	_panel.modulate.a = 0.0
 	_panel.visible = true
+
+	# Sonido del popup (si está activado en Ajustes).
+	if bool(_ajuste("edu_sonido", true)) and AudioManager != null and AudioManager.has_method("reproducir"):
+		AudioManager.call("reproducir", "popup")
 
 	_log(
 		"mostrar | variant=%d | estilo=%s | pos=%s | icono=%s | alto=%.0f | ancho=%.0f"

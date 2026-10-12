@@ -1,0 +1,106 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ecenes/enemies/class/enemigo.gd" id="1_xhqn2"]
+[ext_resource type="FontFile" path="res://themes/Chakra_Petch/ChakraPetch-BoldItalic.ttf" id="2_7t73m"]
+[ext_resource type="PackedScene" path="res://assets/stage/enemis/stages/stage61-70/mutante.tscn" id="3_fmvu3"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_constructor.gd" id="4_upwaf"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_capa.gd" id="5_l1hhi"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/MecanicasEnemigo.gd" id="6_aae5q"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/AnimacionEnemigo.gd" id="7_15n41"]
+
+[sub_resource type="Resource" id="Resource_fdylj"]
+resource_local_to_scene = true
+script = ExtResource("5_l1hhi")
+nombre = "Cuerpo"
+puntos = PackedVector2Array(18, 2, 12, 14, -4, 16, -16, 8, -18, -6, -8, -16, 8, -14, 16, -6)
+color = Color(0.3372549, 0.47843137, 0.22745098, 1)
+animacion = 2
+anim_velocidad = 0.9
+
+[sub_resource type="Resource" id="Resource_v1pmy"]
+resource_local_to_scene = true
+script = ExtResource("5_l1hhi")
+nombre = "Vientre"
+puntos = PackedVector2Array(10, 8, -2, 12, -12, 6, -8, -2, 6, -4)
+color = Color(0.47843137, 0.65882355, 0.37254903, 1)
+
+[sub_resource type="Resource" id="Resource_c5loe"]
+resource_local_to_scene = true
+script = ExtResource("5_l1hhi")
+nombre = "Nucleo"
+puntos = PackedVector2Array(-2, 0, 4, 2, 2, 8, -4, 6)
+color = Color(0, 1, 0.49803922, 1)
+animacion = 2
+anim_velocidad = 1.1
+anim_amplitud = 12.0
+
+[sub_resource type="Resource" id="Resource_xd8qm"]
+resource_local_to_scene = true
+script = ExtResource("5_l1hhi")
+nombre = "Ojo"
+puntos = PackedVector2Array(-6, -8, 0, -8, 0, -3, -6, -3)
+color = Color(0.84705883, 0.105882354, 0.3764706, 1)
+animacion = 6
+anim_velocidad = 0.4
+anim_amplitud = 0.3
+
+[sub_resource type="Resource" id="Resource_ljr0y"]
+resource_local_to_scene = true
+script = ExtResource("5_l1hhi")
+nombre = "Brazo"
+puntos = PackedVector2Array(16, -6, 26, -12, 28, -8, 18, -2)
+color = Color(0.2901961, 0.41960785, 0.18431373, 1)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_v77tw"]
+radius = 29.12044
+
+[node name="enemigo" type="CharacterBody2D" unique_id=2006919752]
+script = ExtResource("1_xhqn2")
+life = 90.0
+speed = 80.0
+damage = 18.0
+mov_zigzag_grados = 8.0
+mov_orbita = 0.55
+mov_dash_mult = 1.5
+mov_dash_freq = 0.7
+radio_contacto = 45.12043955712207
+melee_radio = 30.0
+melee_margen_arbol = 16.0
+nombre_texto = "Mutante"
+fuente_nombre = ExtResource("2_7t73m")
+fuente_danio = ExtResource("2_7t73m")
+
+[node name="FiguraConstructor" type="Node2D" parent="." unique_id=66989019 instance=ExtResource("3_fmvu3")]
+script = ExtResource("4_upwaf")
+capas = Array[ExtResource("5_l1hhi")]([SubResource("Resource_fdylj"), SubResource("Resource_v1pmy"), SubResource("Resource_c5loe"), SubResource("Resource_xd8qm"), SubResource("Resource_ljr0y")])
+sombra = true
+sombra_ancho = 36.0
+sombra_alto = 11.0
+sombra_desfase = 15.0
+energia_luz = 0.6
+escala_luz = 0.6
+anim_luz = 3
+velocidad_luz = 0.8
+variacion_luz = 0.25
+texto_figura = "capa Cuerpo 567a3a: 18,2 12,14 -4,16 -16,8 -18,-6 -8,-16 8,-14 16,-6
+capa Vientre 7aa85f: 10,8 -2,12 -12,6 -8,-2 6,-4
+capa Nucleo 00ff7f: -2,0 4,2 2,8 -4,6
+capa Ojo d81b60: -6,-8 0,-8 0,-3 -6,-3
+capa Brazo 4a6b2f: 16,-6 26,-12 28,-8 18,-2
+sombra 36 11 15 0.3
+luz 00ff7f 0,0 0.6 0.6
+escala 1.0
+anim Cuerpo latir 0.9 4
+anim Nucleo latir 1.1 12
+anim Ojo parpadear 0.4 0.3
+animluz respirar 0.8 0.25"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2074511540]
+shape = SubResource("CircleShape2D_v77tw")
+
+[node name="Mecanicas" type="Node2D" parent="." unique_id=2105207626]
+script = ExtResource("6_aae5q")
+regeneracion_hps = 4.0
+
+[node name="Animacion" type="Node" parent="." unique_id=473447976]
+script = ExtResource("7_15n41")

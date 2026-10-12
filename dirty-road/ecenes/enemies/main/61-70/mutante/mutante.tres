@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="EnemigoOleadaConfig" format=3 uid="uid://cpg33qy1m45lc"]
+
+[ext_resource type="PackedScene" path="res://ecenes/enemies/main/61-70/mutante/mutante_enemi.tscn" id="1_kvoal"]
+[ext_resource type="Script" uid="uid://vyt7ho0roxls" path="res://scripts/enemigo_oleada_config.gd" id="2_7j3j5"]
+
+[resource]
+script = ExtResource("2_7j3j5")
+escena = ExtResource("1_kvoal")
+oleada_minima = 7
+max_simultaneos = 3

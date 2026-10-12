@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="EnemigoOleadaConfig" format=3 uid="uid://cnnckantcb1xh"]
+
+[ext_resource type="PackedScene" path="res://ecenes/enemies/main/11-20/neumaticoQuemado/neumaticoQuemado_enemi.tscn" id="1_mxv1w"]
+[ext_resource type="Script" uid="uid://vyt7ho0roxls" path="res://scripts/enemigo_oleada_config.gd" id="2_4cwnt"]
+
+[resource]
+script = ExtResource("2_4cwnt")
+escena = ExtResource("1_mxv1w")
+peso = 1.5
+oleada_minima = 4

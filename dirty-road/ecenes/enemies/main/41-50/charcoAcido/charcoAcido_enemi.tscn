@@ -1,0 +1,92 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ecenes/enemies/class/enemigo.gd" id="1_aa70x"]
+[ext_resource type="FontFile" path="res://themes/Chakra_Petch/ChakraPetch-BoldItalic.ttf" id="2_84pt3"]
+[ext_resource type="PackedScene" path="res://assets/stage/enemis/stages/stage41-50/charcoAcido.tscn" id="3_sd0s4"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_constructor.gd" id="4_mqqfn"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_capa.gd" id="5_g64jc"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/MecanicasEnemigo.gd" id="6_ow2q2"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/AnimacionEnemigo.gd" id="7_6aaux"]
+
+[sub_resource type="Resource" id="Resource_bwq60"]
+resource_local_to_scene = true
+script = ExtResource("5_g64jc")
+nombre = "Charco"
+puntos = PackedVector2Array(26, 6, 14, 12, -6, 14, -24, 8, -16, 2, 4, 0, 20, 0)
+color = Color(0.43529412, 1, 0.18039216, 0.6)
+animacion = 6
+anim_amplitud = 0.15
+
+[sub_resource type="Resource" id="Resource_sfieu"]
+resource_local_to_scene = true
+script = ExtResource("5_g64jc")
+nombre = "Nucleo"
+puntos = PackedVector2Array(14, 5, 0, 9, -12, 5, 0, 2)
+color = Color(0.7019608, 1, 0.4392157, 1)
+
+[sub_resource type="Resource" id="Resource_st123"]
+resource_local_to_scene = true
+script = ExtResource("5_g64jc")
+nombre = "Burbuja"
+puntos = PackedVector2Array(8, 4, 11, 6, 8, 8, 5, 6)
+color = Color(0.8745098, 1, 0.67058825, 1)
+animacion = 2
+anim_velocidad = 1.5
+anim_amplitud = 15.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_h0t5i"]
+radius = 26.683329
+
+[node name="enemigo" type="CharacterBody2D" unique_id=2006919752]
+script = ExtResource("1_aa70x")
+life = 75.0
+speed = 80.0
+damage = 18.0
+mov_zigzag_grados = 8.0
+mov_orbita = 0.55
+mov_dash_mult = 1.5
+mov_dash_freq = 0.7
+radio_contacto = 42.68332812825267
+melee_radio = 30.0
+melee_margen_arbol = 16.0
+categoria = "toxico"
+nombre_texto = "Charco Ácido"
+fuente_nombre = ExtResource("2_84pt3")
+fuente_danio = ExtResource("2_84pt3")
+
+[node name="FiguraConstructor" type="Node2D" parent="." unique_id=66989019 instance=ExtResource("3_sd0s4")]
+script = ExtResource("4_mqqfn")
+capas = Array[ExtResource("5_g64jc")]([SubResource("Resource_bwq60"), SubResource("Resource_sfieu"), SubResource("Resource_st123")])
+sombra = true
+sombra_ancho = 44.0
+sombra_alto = 10.0
+sombra_desfase = 6.0
+sombra_opacidad = 0.18
+color_luz = Color(0.4862745, 1, 0.24705882, 1)
+posicion_luz = Vector2(0, 4)
+escala_luz = 0.7
+anim_luz = 1
+velocidad_luz = 0.8
+variacion_luz = 0.2
+texto_figura = "capa Charco 6fff2e99: 26,6 14,12 -6,14 -24,8 -16,2 4,0 20,0
+capa Nucleo b3ff70: 14,5 0,9 -12,5 0,2
+capa Burbuja dfffab: 8,4 11,6 8,8 5,6
+sombra 44 10 6 0.18
+luz 7cff3f 0,4 0.5 0.7
+escala 1.0
+anim Burbuja latir 1.5 15
+anim Charco parpadear 1.0 0.15
+animluz pulsar 0.8 0.2"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=954756516]
+shape = SubResource("CircleShape2D_h0t5i")
+
+[node name="Mecanicas" type="Node2D" parent="." unique_id=2041628903]
+script = ExtResource("6_ow2q2")
+rastro_danio = true
+hazard_radio = 45.0
+hazard_danio = 5.0
+hazard_duracion = 3.0
+
+[node name="Animacion" type="Node" parent="." unique_id=1297896999]
+script = ExtResource("7_6aaux")

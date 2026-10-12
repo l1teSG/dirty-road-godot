@@ -30,6 +30,12 @@ func _ready() -> void:
 	# ── 0. Ocultar / opacar todo al inicio ─────────────────────────
 	_estado_inicial_oculto()
 
+	# Estilo + título + hover (tema global).
+	var titulo := get_node_or_null("Contenedor/CenterContainer/VBoxContainer/Label")
+	if titulo is Label:
+		EstiloUI.titulo(titulo, 96, EstiloUI.PELIGRO)
+	EstiloUI.aplicar_hover_a($Contenedor/CenterContainer/VBoxContainer)
+
 	# Sistema educativo: mostrar una frase reflexiva aleatoria ANTES de
 	# revelar la pantalla de Game Over. No pausa el juego; simplemente
 	# esperamos a que el popup termine su propia animación antes de

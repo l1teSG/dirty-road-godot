@@ -1,0 +1,98 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ecenes/enemies/class/enemigo.gd" id="1_4popd"]
+[ext_resource type="FontFile" path="res://themes/Chakra_Petch/ChakraPetch-BoldItalic.ttf" id="2_ywnl0"]
+[ext_resource type="PackedScene" path="res://assets/stage/enemis/stages/stage81-90/talador.tscn" id="3_fjdmp"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_constructor.gd" id="4_l2j4t"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_capa.gd" id="5_mgcco"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/AnimacionEnemigo.gd" id="6_u3abu"]
+
+[sub_resource type="Resource" id="Resource_hax3b"]
+resource_local_to_scene = true
+script = ExtResource("5_mgcco")
+nombre = "Cuerpo"
+puntos = PackedVector2Array(-10, -8, 10, -8, 12, 26, -12, 26)
+color = Color(0.5411765, 0.2901961, 0.16470589, 1)
+
+[sub_resource type="Resource" id="Resource_ovj7x"]
+resource_local_to_scene = true
+script = ExtResource("5_mgcco")
+nombre = "Cabeza"
+puntos = PackedVector2Array(-5, -20, 5, -20, 5, -8, -5, -8)
+color = Color(0.84705883, 0.65882355, 0.49803922, 1)
+
+[sub_resource type="Resource" id="Resource_t118x"]
+resource_local_to_scene = true
+script = ExtResource("5_mgcco")
+nombre = "Casco"
+puntos = PackedVector2Array(-7, -25, 7, -25, 7, -20, -7, -20)
+color = Color(0.9098039, 0.78431374, 0.22745098, 1)
+
+[sub_resource type="Resource" id="Resource_2v5y0"]
+resource_local_to_scene = true
+script = ExtResource("5_mgcco")
+nombre = "Mango_hacha"
+puntos = PackedVector2Array(10, -4, 26, -20, 29, -17, 13, -1)
+color = Color(0.41568628, 0.2901961, 0.18431373, 1)
+animacion = 4
+anim_velocidad = 1.5
+anim_amplitud = 8.0
+
+[sub_resource type="Resource" id="Resource_naojb"]
+resource_local_to_scene = true
+script = ExtResource("5_mgcco")
+nombre = "Hoja_hacha"
+puntos = PackedVector2Array(22, -26, 34, -18, 30, -9, 19, -15)
+color = Color(0.72156864, 0.7372549, 0.7529412, 1)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_033oa"]
+radius = 38.470768
+
+[node name="enemigo" type="CharacterBody2D" unique_id=2006919752]
+script = ExtResource("1_4popd")
+life = 85.0
+speed = 80.0
+damage = 18.0
+mov_zigzag_grados = 10.0
+mov_zigzag_freq = 2.0
+mov_orbita = 0.5
+mov_dash_mult = 1.6
+mov_dash_freq = 0.5
+mov_separacion_fuerza = 1.0
+radio_contacto = 54.47076812334269
+melee_radio = 30.0
+melee_margen_arbol = 16.0
+anti_estructura = true
+nombre_texto = "Talador"
+fuente_nombre = ExtResource("2_ywnl0")
+fuente_danio = ExtResource("2_ywnl0")
+orbes_min = 8
+orbes_max = 14
+orbe_valor = 3.0
+
+[node name="FiguraConstructor" type="Node2D" parent="." unique_id=66989019 instance=ExtResource("3_fjdmp")]
+script = ExtResource("4_l2j4t")
+capas = Array[ExtResource("5_mgcco")]([SubResource("Resource_hax3b"), SubResource("Resource_ovj7x"), SubResource("Resource_t118x"), SubResource("Resource_2v5y0"), SubResource("Resource_naojb")])
+sombra = true
+sombra_ancho = 30.0
+sombra_alto = 10.0
+sombra_desfase = 25.0
+sombra_opacidad = 0.35
+color_luz = Color(1, 0.72156864, 0.30980393, 1)
+posicion_luz = Vector2(0, -22)
+escala_luz = 0.45
+texto_figura = "capa Cuerpo 8a4a2a: -10,-8 10,-8 12,26 -12,26
+capa Cabeza d8a87f: -5,-20 5,-20 5,-8 -5,-8
+capa Casco e8c83a: -7,-25 7,-25 7,-20 -7,-20
+capa Mango_hacha 6a4a2f: 10,-4 26,-20 29,-17 13,-1
+capa Hoja_hacha b8bcc0: 22,-26 34,-18 30,-9 19,-15
+sombra 30 10 25 0.35
+luz ffb84f 0,-22 0.5 0.45
+escala 1.0
+anim Mango_hacha oscilar 1.5 8"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=305746632]
+shape = SubResource("CircleShape2D_033oa")
+
+[node name="Animacion" type="Node" parent="." unique_id=209262857]
+script = ExtResource("6_u3abu")

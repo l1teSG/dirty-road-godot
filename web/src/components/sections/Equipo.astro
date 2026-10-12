@@ -1,0 +1,37 @@
+---
+import SectionHeading from '../ui/SectionHeading.astro';
+import Reveal from '../ui/Reveal.astro';
+import { equipo } from '../../lib/apa';
+---
+<section id="equipo" class="px-4 py-24 sm:py-32">
+  <div class="mx-auto max-w-6xl">
+    <Reveal>
+      <SectionHeading
+        kicker="Recursos humanos"
+        titulo="Equipo de desarrollo"
+        descripcion="Proyecto desarrollado en el marco de la Articulación SENA — Técnico en Desarrollo de Software."
+      />
+    </Reveal>
+    <div class="mt-12 grid gap-6 sm:grid-cols-3">
+      {equipo.map((m, i) => (
+        <Reveal delay={i * 100}>
+          <article class="h-full rounded-2xl border border-white/5 bg-bg-alt/60 p-6">
+            <div class="mb-4 h-12 w-12 rounded-full border border-green/30 bg-green/10" />
+            <h3 class="text-base font-semibold text-text-primary">{m.nombre}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-text-secondary">{m.rol}</p>
+          </article>
+        </Reveal>
+      ))}
+    </div>
+    <Reveal delay={200}>
+      <div class="mt-10 rounded-2xl border border-white/5 bg-bg-alt/40 p-6 text-center">
+        <p class="text-sm text-text-secondary">
+          I.E. Técnico Industrial “Julio Flórez” · Especialidad Sistemas Informáticos
+        </p>
+        <p class="mt-1 text-sm text-text-secondary">
+          Articulación SENA — Técnico en Desarrollo de Software
+        </p>
+      </div>
+    </Reveal>
+  </div>
+</section>

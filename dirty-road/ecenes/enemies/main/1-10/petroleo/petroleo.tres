@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="EnemigoOleadaConfig" format=3 uid="uid://bpfs2bj375lby"]
+
+[ext_resource type="Script" uid="uid://vyt7ho0roxls" path="res://scripts/enemigo_oleada_config.gd" id="1_ev4rs"]
+[ext_resource type="PackedScene" uid="uid://cjj3wmko5dp18" path="res://ecenes/enemies/main/1-10/petroleo/petroleo_enemi.tscn" id="1_jo2kw"]
+
+[resource]
+script = ExtResource("1_ev4rs")
+escena = ExtResource("1_jo2kw")
+oleada_minima = 7
+max_simultaneos = 3
+metadata/_custom_type_script = "uid://vyt7ho0roxls"

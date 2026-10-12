@@ -1,0 +1,102 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ecenes/enemies/class/enemigo.gd" id="1_2milx"]
+[ext_resource type="FontFile" path="res://themes/Chakra_Petch/ChakraPetch-BoldItalic.ttf" id="2_mpemt"]
+[ext_resource type="PackedScene" path="res://assets/stage/enemis/stages/stage21-30/redFantasma.tscn" id="3_p64nc"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_constructor.gd" id="4_4ykpn"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_capa.gd" id="5_cbtna"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/MecanicasEnemigo.gd" id="6_4uy3n"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/AnimacionEnemigo.gd" id="7_lb517"]
+
+[sub_resource type="Resource" id="Resource_pfype"]
+resource_local_to_scene = true
+script = ExtResource("5_cbtna")
+nombre = "Malla_A"
+puntos = PackedVector2Array(-18, 14, 14, -18, 18, -14, -14, 18)
+color = Color(0.7490196, 0.9372549, 0.9490196, 0.65882355)
+animacion = 1
+anim_velocidad = 0.6
+anim_amplitud = 5.0
+
+[sub_resource type="Resource" id="Resource_00gbw"]
+resource_local_to_scene = true
+script = ExtResource("5_cbtna")
+nombre = "Malla_B"
+puntos = PackedVector2Array(-14, -18, 18, 14, 14, 18, -18, -14)
+color = Color(0.7490196, 0.9372549, 0.9490196, 0.65882355)
+animacion = 1
+anim_velocidad = 0.6
+anim_amplitud = 5.0
+anim_fase = 3.14
+
+[sub_resource type="Resource" id="Resource_nkivf"]
+resource_local_to_scene = true
+script = ExtResource("5_cbtna")
+nombre = "Malla_C"
+puntos = PackedVector2Array(-16, 2, 16, 2, 16, -2, -16, -2)
+color = Color(0.7490196, 0.9372549, 0.9490196, 0.4392157)
+animacion = 6
+anim_velocidad = 0.8
+anim_amplitud = 0.4
+
+[sub_resource type="Resource" id="Resource_t4w4m"]
+resource_local_to_scene = true
+script = ExtResource("5_cbtna")
+nombre = "Nudo"
+puntos = PackedVector2Array(5, 5, 7, -1, 1, -5, -4, -2, -2, 4)
+color = Color(0.8745098, 1, 1, 1)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_3ix7h"]
+radius = 22.803509
+
+[node name="enemigo" type="CharacterBody2D" unique_id=2006919752]
+script = ExtResource("1_2milx")
+life = 70.0
+speed = 80.0
+damage = 18.0
+mov_zigzag_grados = 8.0
+mov_orbita = 0.55
+mov_dash_mult = 1.5
+mov_dash_freq = 0.7
+radio_contacto = 38.80350850198276
+melee_radio = 30.0
+melee_margen_arbol = 16.0
+categoria = "acuatico"
+nombre_texto = "Red Fantasma"
+fuente_nombre = ExtResource("2_mpemt")
+fuente_danio = ExtResource("2_mpemt")
+
+[node name="FiguraConstructor" type="Node2D" parent="." unique_id=66989019 instance=ExtResource("3_p64nc")]
+script = ExtResource("4_4ykpn")
+capas = Array[ExtResource("5_cbtna")]([SubResource("Resource_pfype"), SubResource("Resource_00gbw"), SubResource("Resource_nkivf"), SubResource("Resource_t4w4m")])
+sombra = true
+sombra_ancho = 26.0
+sombra_desfase = 16.0
+sombra_opacidad = 0.18
+color_luz = Color(0.7490196, 0.9372549, 0.9490196, 1)
+energia_luz = 0.35
+anim_luz = 1
+velocidad_luz = 0.6
+variacion_luz = 0.25
+texto_figura = "capa Malla_A bfeff2a8: -18,14 14,-18 18,-14 -14,18
+capa Malla_B bfeff2a8: -14,-18 18,14 14,18 -18,-14
+capa Malla_C bfeff270: -16,2 16,2 16,-2 -16,-2
+capa Nudo dfffff: 5,5 7,-1 1,-5 -4,-2 -2,4
+sombra 26 8 16 0.18
+luz bfeff2 0,0 0.35 0.5
+escala 1.0
+anim Malla_A flotar 0.6 5
+anim Malla_B flotar 0.6 5 3.14
+anim Malla_C parpadear 0.8 0.4
+animluz pulsar 0.6 0.25"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=904317479]
+shape = SubResource("CircleShape2D_3ix7h")
+
+[node name="Mecanicas" type="Node2D" parent="." unique_id=952613681]
+script = ExtResource("6_4uy3n")
+aura_ralentiza = true
+ralentiza_radio = 110.0
+
+[node name="Animacion" type="Node" parent="." unique_id=1823079443]
+script = ExtResource("7_lb517")

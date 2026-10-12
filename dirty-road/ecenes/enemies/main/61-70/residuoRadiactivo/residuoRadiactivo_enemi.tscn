@@ -1,0 +1,92 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ecenes/enemies/class/enemigo.gd" id="1_xos0f"]
+[ext_resource type="FontFile" path="res://themes/Chakra_Petch/ChakraPetch-BoldItalic.ttf" id="2_1puhc"]
+[ext_resource type="PackedScene" path="res://assets/stage/enemis/stages/stage61-70/residuoRadiactivo.tscn" id="3_6pgub"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_constructor.gd" id="4_s5r81"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_capa.gd" id="5_bhuyn"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/MecanicasEnemigo.gd" id="6_5nxws"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/AnimacionEnemigo.gd" id="7_wpsgi"]
+
+[sub_resource type="Resource" id="Resource_1xfcu"]
+resource_local_to_scene = true
+script = ExtResource("5_bhuyn")
+nombre = "Cuerpo"
+puntos = PackedVector2Array(16, -18, 16, 18, -16, 18, -16, -18)
+color = Color(0.30980393, 0.41960785, 0.2, 1)
+
+[sub_resource type="Resource" id="Resource_kvglk"]
+resource_local_to_scene = true
+script = ExtResource("5_bhuyn")
+nombre = "Tapa"
+puntos = PackedVector2Array(16, -18, 16, -12, -16, -12, -16, -18)
+color = Color(0.22745098, 0.32156864, 0.14901961, 1)
+
+[sub_resource type="Resource" id="Resource_lewn5"]
+resource_local_to_scene = true
+script = ExtResource("5_bhuyn")
+nombre = "Franja"
+puntos = PackedVector2Array(16, -4, 16, 4, -16, 4, -16, -4)
+color = Color(0.78431374, 0.84705883, 0.22745098, 1)
+
+[sub_resource type="Resource" id="Resource_c1gsw"]
+resource_local_to_scene = true
+script = ExtResource("5_bhuyn")
+nombre = "Trebol"
+puntos = PackedVector2Array(0, -3, 3, 0, 0, 3, -3, 0)
+color = Color(0.11764706, 0.14117648, 0.08627451, 1)
+animacion = 3
+anim_velocidad = 0.5
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_fie6m"]
+radius = 24.083189
+
+[node name="enemigo" type="CharacterBody2D" unique_id=2006919752 node_paths=PackedStringArray("boca")]
+script = ExtResource("1_xos0f")
+life = 90.0
+speed = 60.0
+damage = 12.0
+radio_contacto = 40.08318915758459
+comportamiento_tipo = "torreta"
+boca = NodePath("boca")
+categoria = "toxico"
+nombre_texto = "Residuo Radiactivo"
+fuente_nombre = ExtResource("2_1puhc")
+fuente_danio = ExtResource("2_1puhc")
+
+[node name="FiguraConstructor" type="Node2D" parent="." unique_id=66989019 instance=ExtResource("3_6pgub")]
+script = ExtResource("4_s5r81")
+capas = Array[ExtResource("5_bhuyn")]([SubResource("Resource_1xfcu"), SubResource("Resource_kvglk"), SubResource("Resource_lewn5"), SubResource("Resource_c1gsw")])
+sombra = true
+sombra_ancho = 26.0
+sombra_alto = 9.0
+sombra_desfase = 17.0
+sombra_opacidad = 0.35
+color_luz = Color(0.5411765, 1, 0.24705882, 1)
+energia_luz = 1.0
+escala_luz = 0.8
+anim_luz = 1
+velocidad_luz = 0.7
+variacion_luz = 0.25
+texto_figura = "capa Cuerpo 4f6b33: 16,-18 16,18 -16,18 -16,-18
+capa Tapa 3a5226: 16,-18 16,-12 -16,-12 -16,-18
+capa Franja c8d83a: 16,-4 16,4 -16,4 -16,-4
+capa Trebol 1e2416: 0,-3 3,0 0,3 -3,0
+sombra 26 9 17 0.35
+luz 8aff3f 0,0 1.0 0.8
+escala 1.0
+anim Trebol rotar 0.5
+animluz pulsar 0.7 0.25"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=239737022]
+shape = SubResource("CircleShape2D_fie6m")
+
+[node name="boca" type="Marker2D" parent="." unique_id=1311062176]
+
+[node name="Mecanicas" type="Node2D" parent="." unique_id=848989688]
+script = ExtResource("6_5nxws")
+aura_danio = true
+aura_radio = 100.0
+
+[node name="Animacion" type="Node" parent="." unique_id=474636512]
+script = ExtResource("7_wpsgi")

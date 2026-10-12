@@ -1,0 +1,106 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ecenes/enemies/class/enemigo.gd" id="1_qc2wx"]
+[ext_resource type="FontFile" path="res://themes/Chakra_Petch/ChakraPetch-BoldItalic.ttf" id="2_do2ad"]
+[ext_resource type="PackedScene" path="res://assets/stage/enemis/stages/stage41-50/nubeAcida.tscn" id="3_17gbp"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_constructor.gd" id="4_j3128"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_capa.gd" id="5_v630r"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/MecanicasEnemigo.gd" id="6_5pdwe"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/AnimacionEnemigo.gd" id="7_vhevb"]
+
+[sub_resource type="Resource" id="Resource_nvmn3"]
+resource_local_to_scene = true
+script = ExtResource("5_v630r")
+nombre = "Nube"
+puntos = PackedVector2Array(-10, -18, 8, -20, 20, -10, 24, 2, 10, 6, -8, 6, -24, 0, -22, -10)
+color = Color(0.33333334, 0.3764706, 0.22745098, 1)
+animacion = 1
+anim_velocidad = 0.5
+anim_amplitud = 2.5
+
+[sub_resource type="Resource" id="Resource_7b7bk"]
+resource_local_to_scene = true
+script = ExtResource("5_v630r")
+nombre = "Vientre"
+puntos = PackedVector2Array(-14, 4, 12, 4, 6, 12, -8, 12)
+color = Color(0.4862745, 1, 0.24705882, 1)
+
+[sub_resource type="Resource" id="Resource_pcjk0"]
+resource_local_to_scene = true
+script = ExtResource("5_v630r")
+nombre = "Goteo_1"
+puntos = PackedVector2Array(2, 8, 6, 8, 5, 18, 3, 18)
+color = Color(0.4862745, 1, 0.24705882, 1)
+animacion = 6
+anim_velocidad = 1.2
+anim_amplitud = 0.7
+
+[sub_resource type="Resource" id="Resource_eg0hl"]
+resource_local_to_scene = true
+script = ExtResource("5_v630r")
+nombre = "Goteo_2"
+puntos = PackedVector2Array(-10, 6, -6, 6, -7, 14, -9, 14)
+color = Color(0.4862745, 1, 0.24705882, 1)
+animacion = 6
+anim_velocidad = 1.2
+anim_amplitud = 0.7
+anim_fase = 2.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_txk5j"]
+radius = 26.5827
+
+[node name="enemigo" type="CharacterBody2D" unique_id=2006919752 node_paths=PackedStringArray("boca")]
+script = ExtResource("1_qc2wx")
+life = 26.0
+speed = 95.0
+damage = 9.0
+mov_zigzag_grados = 6.0
+mov_orbita = 0.7
+radio_contacto = 42.58270114190806
+comportamiento_tipo = "rango"
+boca = NodePath("boca")
+categoria = "nube"
+nombre_texto = "Nube Ácida"
+fuente_nombre = ExtResource("2_do2ad")
+fuente_danio = ExtResource("2_do2ad")
+
+[node name="FiguraConstructor" type="Node2D" parent="." unique_id=66989019 instance=ExtResource("3_17gbp")]
+script = ExtResource("4_j3128")
+capas = Array[ExtResource("5_v630r")]([SubResource("Resource_nvmn3"), SubResource("Resource_7b7bk"), SubResource("Resource_pcjk0"), SubResource("Resource_eg0hl")])
+sombra = true
+sombra_ancho = 30.0
+sombra_alto = 9.0
+sombra_desfase = 20.0
+sombra_opacidad = 0.2
+color_luz = Color(0.4862745, 1, 0.24705882, 1)
+posicion_luz = Vector2(0, 8)
+energia_luz = 0.6
+escala_luz = 0.8
+anim_luz = 1
+velocidad_luz = 0.9
+variacion_luz = 0.25
+escala_global = 1.1
+texto_figura = "capa Nube 55603a: -10,-18 8,-20 20,-10 24,2 10,6 -8,6 -24,0 -22,-10
+capa Vientre 7cff3f: -14,4 12,4 6,12 -8,12
+capa Goteo_1 7cff3f: 2,8 6,8 5,18 3,18
+capa Goteo_2 7cff3f: -10,6 -6,6 -7,14 -9,14
+sombra 30 9 20 0.2
+luz 7cff3f 0,8 0.6 0.8
+escala 1.1
+anim Nube flotar 0.5 2.5
+anim Goteo_1 parpadear 1.2 0.7
+anim Goteo_2 parpadear 1.2 0.7 2.0
+animluz pulsar 0.9 0.25"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1284826026]
+shape = SubResource("CircleShape2D_txk5j")
+
+[node name="boca" type="Marker2D" parent="." unique_id=929439377]
+
+[node name="Mecanicas" type="Node2D" parent="." unique_id=1967833047]
+script = ExtResource("6_5pdwe")
+aura_danio = true
+aura_dps = 8.0
+
+[node name="Animacion" type="Node" parent="." unique_id=1297191451]
+script = ExtResource("7_vhevb")

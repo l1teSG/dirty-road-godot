@@ -1,0 +1,26 @@
+---
+import SectionHeading from '../ui/SectionHeading.astro';
+import Reveal from '../ui/Reveal.astro';
+import { metodologia } from '../../lib/apa';
+---
+<section id="metodologia" class="px-4 py-24 sm:py-32">
+  <div class="mx-auto max-w-4xl text-center">
+    <Reveal>
+      <SectionHeading
+        kicker="Capítulos 4-6"
+        titulo={metodologia.titulo}
+        descripcion={metodologia.texto}
+        centrado
+      />
+    </Reveal>
+    <Reveal delay={120}>
+      <ul class="mt-10 flex flex-wrap justify-center gap-3">
+        {metodologia.herramientas.map((h) => (
+          <li class="rounded-full border border-green/30 px-5 py-2 font-mono text-sm text-green-bright">
+            {h}
+          </li>
+        ))}
+      </ul>
+    </Reveal>
+  </div>
+</section>
