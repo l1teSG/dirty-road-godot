@@ -125,5 +125,5 @@ grow_horizontal = 2
 grow_vertical = 0
 theme = ExtResource("3_theme")
 theme_override_colors/font_color = Color(0.7882353, 1, 0.627451, 0.6)
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 text = "Desarrollado por Juan Casas, Emanuel Rocero, Miguel Murcia"
