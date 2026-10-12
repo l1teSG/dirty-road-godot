@@ -908,3 +908,18 @@ capa FranjaDer #adff2f: -2,-3 7,-3 7,-6 -2,-6
 capa Charco #1e90ff: -14,16 12,16 10,20 -12,20
 escala 1.1
 sombra 28 8 16 0.4
+---
+NOMBRE: Brújula Solar
+capa Cuerpo #a0522d: 0,16 -15,0 0,-16 15,0
+capa CuerpoInt #cd853f: 0,12 -11,0 0,-12 11,0
+capa Esfera #87ceeb: 0,9 -8,0 0,-9 8,0
+capa AgujaNorte #ff4500: 0,-2 3,0 0,-10 -3,-2
+capa AgujaSur #1a1a1a: 0,2 3,0 0,10 -3,2
+capa Eje #ffffff: -2,0 2,0 0,-2 0,2
+capa MarcaN #ffd700: 0,-12 -2,-10 2,-10
+capa MarcaE #ffd700: 12,0 10,-2 10,2
+capa MarcaS #ffd700: 0,12 -2,10 2,10
+capa MarcaO #ffd700: -12,0 -10,-2 -10,2
+capa RayoSol #ffff00: 16,-10 22,-16 18,-8
+escala 1.0
+sombra 24 8 18 0.4
