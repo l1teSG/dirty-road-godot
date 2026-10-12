@@ -30,9 +30,9 @@ export default function GitHubStats({ owner, repo }: Props) {
         if (!cancelled) {
           setStats(data);
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         if (!cancelled) {
-          setError(err.message ?? 'Error al cargar estadísticas');
+          setError(err instanceof Error ? err.message : 'Error al cargar estadísticas');
         }
       } finally {
         if (!cancelled) {
