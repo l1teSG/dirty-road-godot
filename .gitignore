@@ -29,3 +29,10 @@ apk/
 *.aab
 *.idsig
 .aider*
+
+# Excepción: versionar las cartas (catálogo, descripciones, efectos).
+# assets/ está ignorado, pero las cartas son datos del juego que deben viajar.
+!dirty-road/assets/
+dirty-road/assets/*
+!dirty-road/assets/cards/
+!dirty-road/assets/cards/**

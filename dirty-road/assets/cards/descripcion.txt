@@ -1,0 +1,119 @@
+NOMBRE: Reforestación
+TEXTO: Plantar árboles restaura ecosistemas degradados, previniendo la erosión del suelo y purificando el aire. Mejora: Aumenta la **vida máxima** del árbol principal en un **20%**.
+
+NOMBRE: Bicicleta Ecológica
+TEXTO: El uso de transporte sin emisiones reduce drásticamente la huella de carbono y combate el calentamiento global. Mejora: Aumenta tu **velocidad de movimiento** en un **15%**.
+
+NOMBRE: Herramienta Reciclada
+TEXTO: Forjar herramientas reutilizando chatarra metálica evita la minería destructiva y reduce la basura industrial. Mejora: Aumenta el **daño base** de tus ataques en un **15%**.
+
+NOMBRE: Muro de Ecoladrillos
+TEXTO: Rellenar botellas PET con plásticos de un solo uso crea materiales de construcción altamente aislantes y sostenibles. Mejora: Reduce todo el **daño recibido** por el árbol en un **10%**.
+
+NOMBRE: Recolección Selectiva
+TEXTO: Separar los residuos en la fuente es el paso más vital para la economía circular y para evitar el colapso de los vertederos. Mejora: Aumenta el **radio para atraer orbes** en un **30%**.
+
+NOMBRE: Barrera Viva
+TEXTO: Sembrar arbustos espinosos en lugar de usar cercas de alambre protege a la fauna local y frena la erosión eólica. Mejora: **Devuelve el 25% del daño recibido** directamente a los enemigos atacantes.
+
+NOMBRE: Compostaje Orgánico
+TEXTO: Transformar los desechos de comida en humus devuelve nutrientes vitales a la tierra, cerrando el ciclo biológico natural. Mejora: El árbol **regenera pasivamente** un **1%** de su vida cada **3 segundos**.
+
+NOMBRE: Proyectil de Bambú
+TEXTO: El bambú es un material altamente renovable que crece rápidamente y captura toneladas de CO2 sin necesidad de pesticidas. Mejora: Tus proyectiles ahora son tan fuertes que **perforan a 1 enemigo adicional**.
+
+NOMBRE: Molino de Viento
+TEXTO: Aprovechar la fuerza del viento genera electricidad limpia e inagotable sin liberar gases de efecto invernadero a la atmósfera. Mejora: Aumenta tu **velocidad de ataque** en un **20%**.
+
+NOMBRE: Lente Solar
+TEXTO: Concentrar la luz del sol permite potabilizar agua y generar calor extremo sin depender de combustibles fósiles ni deforestar. Mejora: Aumenta la probabilidad de asestar **golpes críticos** (**doble daño**) en un **10%**.
+
+NOMBRE: Manguera de Goteo
+TEXTO: El riego por goteo maximiza la eficiencia hídrica de los cultivos, llevando el agua directamente a las raíces sin desperdiciarla. Mejora: Tus proyectiles aumentan su **alcance** y viajan un **25%** más lejos.
+
+NOMBRE: Semilla Gigante
+TEXTO: Sembrar especies endémicas robustas asegura la biodiversidad y garantiza que el bosque sobreviva a sequías y plagas. Mejora: Aumenta el **tamaño físico** y el **área de impacto** de todos tus ataques en un **30%**.
+
+NOMBRE: Fertilizante Natural
+TEXTO: Reemplazar químicos por fertilizantes naturales evita la acidificación de los ríos y enriquece la microbiología del suelo. Mejora: Tus ataques aplican **daño continuo orgánico** durante **4 segundos**.
+
+NOMBRE: Injerto Botánico
+TEXTO: Esta técnica milenaria sin daño genético permite combinar la resistencia a enfermedades de una planta con el vigor de otra. Mejora: Disparas un **proyectil extra simultáneo** con cada ataque.
+
+NOMBRE: Gafas Recicladas
+TEXTO: Fabricar plásticos reciclados recuperados del mar crea conciencia global y financia la limpieza de los ecosistemas marinos. Mejora: Aumenta radicalmente la precisión, otorgando **15%** más de **daño crítico**.
+
+NOMBRE: Hacha Confiscada
+TEXTO: Arrebatar herramientas y decomisar maquinaria a los taladores ilegales es la forma más directa de proteger la selva virgen. Mejora: Haces un **40%** más de **daño a los enemigos de élite** y a los **jefes**.
+
+NOMBRE: Semillas de Trueque
+TEXTO: El libre intercambio de semillas ancestrales fomenta la soberanía alimentaria y fortalece la cooperación en comunidades locales. Mejora: Aplica un **descuento permanente** del **15%** en el costo de orbes de futuras mejoras.
+
+NOMBRE: Frasco de Vidrio
+TEXTO: El vidrio es 100% reciclable de forma indefinida sin perder calidad, a diferencia del plástico que se rompe en microplásticos tóxicos. Mejora: Los enemigos derrotados sueltan un **20%** más de **orbes**.
+
+NOMBRE: Linterna de Dinamo
+TEXTO: Generar luz mediante fricción o inducción magnética elimina por completo la necesidad de pilas químicas que contaminan el suelo. Mejora: Expande tu **rango de visión** y reduce la **armadura** de enemigos cercanos en **15%**.
+
+NOMBRE: Zapatillas de Caucho
+TEXTO: El calzado fabricado con llantas recuperadas evita la quema ilegal de neumáticos que libera humo negro mortal a la atmósfera. Mejora: Aumenta tu **velocidad de evasión** (**dash**) y tus **tiempos de reacción**.
+
+NOMBRE: Reloj de Sol
+TEXTO: Observar el cielo y guiarse por la luz natural nos reconecta con los ritmos biológicos y reduce el estrés de la vida tecnológica. Mejora: Reduce el **tiempo de enfriamiento** (**cooldown**) de todas tus habilidades un **15%**.
+
+NOMBRE: Abono Orgánico
+TEXTO: Enriquecer el sustrato del bosque mejora la retención masiva de agua y carbono, mitigando agresivamente el cambio climático. Mejora: Obtienes un **20%** de **experiencia adicional** por cada enemigo destruido.
+
+NOMBRE: Hongo Luminiscente
+TEXTO: La bioluminiscencia es un proceso celular súper eficiente usado por ciertas especies de hongos para subsistir en ecosistemas oscuros. Mejora: Crea un aura a tu alrededor que **ralentiza la velocidad** de los enemigos un **20%**.
+
+NOMBRE: Trébol de Cuatro Hojas
+TEXTO: Conservar los espacios silvestres protege variaciones y mutaciones genéticas raras que enriquecen el banco biológico de la Tierra. Mejora: Aumenta la estadística oculta de "**Suerte**" para que aparezcan **cartas raras**.
+
+NOMBRE: Electroimán Casero
+TEXTO: Reutilizar motores rotos para construir imanes impulsa el derecho a reparar y reduce drásticamente la obsolescencia programada. Mejora: Al destruir chatarra tecnológica, el árbol recupera un **2%** de su **vida**.
+
+NOMBRE: Filtro de Carbón
+TEXTO: El carbón activado natural tiene microporos que atrapan de manera segura partículas pesadas y gases tóxicos emitidos por la industria. Mejora: Te otorga **inmunidad total** contra el daño de nubes de humo y trampas de gas.
+
+NOMBRE: Red de Limpieza Oceánica
+TEXTO: Extraer de los mares las "redes fantasma" de pesca ilegal salva a miles de especies como tortugas y delfines de morir por asfixia. Mejora: Aumenta tu **daño** en un **30%** contra **enemigos acuáticos** y botellas de plástico.
+
+NOMBRE: Granja de Lombrices
+TEXTO: La lombricultura transforma residuos vegetales podridos en el abono más rico y asimilable del mundo, revitalizando tierras infértiles. Mejora: Los enemigos biológicos caídos otorgan el **doble de curación** y más **orbes**.
+
+NOMBRE: Capa de Ozono
+TEXTO: Esta frágil membrana atmosférica absorbe el 99% de la radiación ultravioleta del espacio, siendo el principal escudo vital de la Tierra. Mejora: Obtienes una **barrera** que **bloquea un golpe letal** de un jefe (se recarga).
+
+NOMBRE: Raíces Profundas
+TEXTO: Los árboles antiguos sostienen la tierra con raíces masivas, estabilizando laderas y previniendo desprendimientos durante tormentas. Mejora: Mientras te mantengas completamente **quieto**, tu **daño** y **armadura** suben un **50%**.
+
+NOMBRE: Panel Solar Portátil
+TEXTO: La energía fotovoltaica móvil y descentralizada reduce la necesidad de crear represas destructivas que inundan bosques enteros. Mejora: Tu sistema **regenera vida de forma rápida** únicamente mientras te mantengas en **movimiento**.
+
+NOMBRE: Bloque de Hielo Seco
+TEXTO: Preservar el frío mediante CO2 sólido evita el uso de gases refrigerantes CFC, los cuales destruyen las capas altas de la atmósfera. Mejora: Si un enemigo choca contra el árbol, quedará **congelado** en el acto por **2 segundos**.
+
+NOMBRE: Biopesticida
+TEXTO: Los repelentes hechos con ajo, neem o chiles alejan a las plagas invasivas sin envenenar a las abejas y polinizadores vitales. Mejora: Tus impactos causan un poderoso **daño de toxicidad botánica** que se acumula.
+
+NOMBRE: Pararrayos Reciclado
+TEXTO: Atrapar y conducir la inmensa energía de las tormentas hacia el subsuelo previene incendios forestales espontáneos muy destructivos. Mejora: Libera potentes **descargas eléctricas** a tu alrededor que **paralizan** a los enemigos.
+
+NOMBRE: Manta Ignífuga
+TEXTO: Ahogar el oxígeno de las llamas es la manera más eficiente de detener un incendio forestal incipiente sin gastar un litro de agua. Mejora: Eres **inmune a la quemadura** y los rastros de fuego del suelo se disipan al pisarlos.
+
+NOMBRE: Bomba de Semillas
+TEXTO: El método Nendo Dango consiste en lanzar arcilla con semillas, permitiendo reforestar praderas áridas de difícil acceso a gran escala. Mejora: Tus proyectiles tienen un **15%** de probabilidad de **detonar al chocar en área**.
+
+NOMBRE: Espejo Parabólico
+TEXTO: Reflejar la energía lumínica permite cocinar alimentos a altísima temperatura sin necesidad de talar madera ni generar humo contaminante. Mejora: Te otorga un **10%** de probabilidad pasiva de **esquivar proyectiles por completo**.
+
+NOMBRE: Alarma Temprana
+TEXTO: Ocultar sensores acústicos reciclados en las copas de la selva permite detectar sierras y cazar madereros furtivos en tiempo real. Mejora: Emite una onda de sonido expansiva cada cierto tiempo que **aturde a los rivales**.
+
+NOMBRE: Dron Conservacionista
+TEXTO: El uso de cuadricópteros impulsados por energía solar permite mapear daños ecológicos y lanzar semillas en lugares impenetrables a pie. Mejora: Un dron robótico te sigue y **destruye pasivamente las trampas** de suelo bajo tus pies.
+
+NOMBRE: Fuerza de la Naturaleza
+TEXTO: Un ecosistema maduro, sano y sin interferencias humanas es absolutamente imparable y resiliente frente a cualquier cambio climático. Mejora: Incrementa todas tus **estadísticas ofensivas** un **40%**, pero tu **velocidad** baja un **20%**.

@@ -1,0 +1,563 @@
+NOMBRE: Reforestación
+capa TierraBase #3e2723: -15,15 15,15 10,25 -10,25
+capa TierraAlta #4e342e: -10,15 10,15 0,5
+capa TalloBase #556b2f: -3,5 3,5 2,-10 -2,-10
+capa TalloBrillo #6b8e23: -1,5 1,5 0,-10
+capa CopaFondo #006400: 0,5 -15,-5 -15,-15 0,-25 15,-15 15,-5
+capa CopaCentro #228b22: 0,0 -10,-8 -10,-15 0,-20 10,-15 10,-8
+capa FacetaIzq #32cd32: 0,5 -15,-5 -10,-8 0,0
+capa FacetaDer #2e8b57: 0,5 15,-5 10,-8 0,0
+capa FacetaSupI #3cb371: -15,-15 0,-25 0,-20 -10,-15
+capa FacetaSupD #00ff7f: 15,-15 0,-25 0,-20 10,-15
+capa Fruto1 #ff4500: -8,-10 -5,-12 -6,-8
+capa Fruto2 #ff4500: 8,-12 5,-14 6,-10
+escala 1.2
+sombra 25 8 18 0.4
+---
+NOMBRE: Bicicleta Ecológica
+capa LlantaExt #1a1a1a: 0,20 -14,14 -20,0 -14,-14 0,-20 14,-14 20,0 14,14
+capa LlantaInt #333333: 0,16 -11,11 -16,0 -11,-11 0,-16 11,-11 16,0 11,11
+capa RinInt #c0c0c0: 0,14 -10,10 -14,0 -10,-10 0,-14 10,-10 14,0 10,10
+capa EspacioVacio #2f4f4f: 0,12 -8,8 -12,0 -8,-8 0,-12 8,-8 12,0 8,8
+capa Eje #a9a9a9: -3,0 0,-3 3,0 0,3
+capa Radio1 #ffffff: 0,-12 1,-2 -1,-2
+capa Radio2 #ffffff: 0,12 1,2 -1,2
+capa Radio3 #ffffff: -12,0 -2,1 -2,-1
+capa Radio4 #ffffff: 12,0 2,1 2,-1
+capa Reflector #ffa500: -8,8 -10,6 -6,10
+capa BrilloGoma #4d4d4d: 14,-14 20,0 16,0 11,-11
+escala 1.0
+sombra 20 6 22 0.3
+---
+NOMBRE: Herramienta Reciclada
+capa MangoPunta #8b4513: -2,-20 2,-20 3,-15 -3,-15
+capa MangoLargo #a0522d: -2,-15 2,-15 2,5 -2,5
+capa UnionMetal #808080: -4,5 4,5 3,10 -3,10
+capa PalaBase #4d4d4d: -8,10 8,10 10,25 0,30 -10,25
+capa FacetaPIzq #696969: -8,10 0,15 0,30 -10,25
+capa FacetaPDer #555555: 8,10 0,15 0,30 10,25
+capa FiloPala #a9a9a9: -10,25 0,30 10,25 0,28
+capa BrilloMango #cd853f: -1,-15 0,-15 0,5 -1,5
+capa Tornillo1 #c0c0c0: -2,7 0,6 -1,8
+capa Tornillo2 #c0c0c0: 2,7 1,6 3,8
+escala 1.1
+sombra 15 5 15 0.5
+---
+NOMBRE: Muro de Ecoladrillos
+capa CementoFondo #808080: -18,-15 18,-15 18,15 -18,15
+capa Ladrillo1 #2e8b57: -15,-12 -2,-12 -2,-2 -15,-2
+capa FacetaL1 #3cb371: -15,-12 -2,-12 -2,-7 -15,-7
+capa Ladrillo2 #008b8b: 2,-12 15,-12 15,-2 2,-2
+capa FacetaL2 #20b2aa: 2,-12 15,-12 15,-7 2,-7
+capa Ladrillo3 #8b4513: -8,2 8,2 8,12 -8,12
+capa FacetaL3 #a0522d: -8,2 8,2 8,7 -8,7
+capa Ladrillo4_I #4682b4: -15,2 -10,2 -10,12 -15,12
+capa Ladrillo4_D #4682b4: 10,2 15,2 15,12 10,12
+capa Tapita1 #ff4500: -4,-7 -2,-7 -2,-5 -4,-5
+capa Tapita2 #ffd700: 10,-7 12,-7 12,-5 10,-5
+escala 1.0
+sombra 28 10 16 0.5
+---
+NOMBRE: Recolección Selectiva
+capa BasureroBase #00008b: -10,-15 10,-15 8,20 -8,20
+capa CuerpoFrente #0000cd: -8,-15 8,-15 6,20 -6,20
+capa FacetaLuz #1e90ff: -8,-15 -2,-15 -1,20 -6,20
+capa TapaFondo #00008b: -12,-15 12,-15 10,-20 -10,-20
+capa TapaFrente #0000cd: -10,-16 10,-16 8,-19 -8,-19
+capa AsaTapa #a9a9a9: -3,-20 3,-20 2,-23 -2,-23
+capa LineaRec1 #00ff00: -2,0 2,0 0,-4
+capa LineaRec2 #00ff00: 2,2 5,8 1,5
+capa LineaRec3 #00ff00: -2,2 -5,8 -1,5
+capa BordeSuelo #1a1a1a: -9,20 9,20 9,22 -9,22
+escala 1.1
+sombra 22 7 20 0.3
+---
+NOMBRE: Barrera Viva
+capa TierraBase #5c4033: -15,15 15,15 10,22 -10,22
+capa ArbustoFondo #004d00: 0,-20 -20,5 20,5
+capa ArbustoFrente #006400: 0,-15 -15,10 15,10
+capa FacetaHoja1 #228b22: -15,10 0,-15 0,10
+capa FacetaHoja2 #32cd32: 0,-15 0,10 8,0
+capa Espina1 #8b0000: -10,0 -18,-5 -8,-2
+capa Espina2 #8b0000: 10,0 18,-5 8,-2
+capa Espina3 #8b0000: 0,-15 -5,-25 5,-12
+capa BrilloEspina1 #ff0000: -10,0 -18,-5 -14,-2
+capa BrilloEspina2 #ff0000: 10,0 18,-5 14,-2
+escala 1.1
+sombra 18 5 20 0.4
+---
+NOMBRE: Compostaje Orgánico
+capa CajonMadera #8b4513: -15,-10 15,-10 12,20 -12,20
+capa InteriorCaja #3e2723: -12,-10 12,-10 10,18 -10,18
+capa TierraCompost #4e342e: -12,5 12,5 10,18 -10,18
+capa RestoManzana #ff0000: -8,8 -4,8 -6,12
+capa RestoHoja #808000: 5,10 10,8 8,14
+capa CascaraHuevo #fff8dc: 0,12 4,12 2,16
+capa FacetaCajonI #a0522d: -15,-10 -12,-10 -10,18 -12,20
+capa FacetaCajonD #a0522d: 15,-10 12,-10 10,18 12,20
+capa TablaFrente #cd853f: -13,0 13,0 12,5 -12,5
+capa Gusano #ff69b4: 2,15 5,12 8,16 6,18
+escala 1.1
+sombra 20 8 20 0.4
+---
+NOMBRE: Proyectil de Bambú
+capa DardoFondo #2e8b57: -4,15 4,15 0,-25
+capa Nudo1 #006400: -5,5 5,5 5,8 -5,8
+capa Nudo2 #006400: -4,-5 4,-5 4,-2 -4,-2
+capa Nudo3 #006400: -3,-15 3,-15 3,-12 -3,-12
+capa Punta #9acd32: -3,-15 3,-15 0,-28
+capa FacetaPuntaD #adff2f: 0,-15 3,-15 0,-28
+capa HojaBase #32cd32: -2,-5 -10,0 -8,5
+capa HojaPunta #3cb371: -10,0 -15,10 -8,5
+capa BrilloTallo #98fb98: -1,15 -1,-15 1,-15 1,15
+capa SombraNudo #004d00: -4,6 4,6 4,8 -4,8
+escala 1.0
+sombra 15 5 18 0.5
+---
+NOMBRE: Molino de Viento
+capa BaseTorre #808080: -8,25 8,25 4,0 -4,0
+capa FacetaTorre #a9a9a9: 0,25 8,25 4,0 0,0
+capa MotorCentro #ffffff: -4,-4 4,-4 4,4 -4,4
+capa Aspa1 #e0ffff: -2,2 2,-2 15,-15 10,-20
+capa Aspa2 #e0ffff: -2,-2 2,2 -15,15 -10,20
+capa Aspa3 #e0ffff: -2,-2 -2,2 -15,-15 -20,-10
+capa FacetaA1 #87ceeb: 0,0 2,-2 15,-15
+capa FacetaA2 #87ceeb: 0,0 -2,2 -15,15
+capa FacetaA3 #87ceeb: 0,0 -2,-2 -15,-15
+capa BrilloMotor #f0f8ff: -2,-2 0,-4 2,-2 0,0
+escala 1.0
+sombra 22 8 15 0.3
+---
+NOMBRE: Lente Solar
+capa AroExt #a0522d: 0,15 -15,0 0,-15 15,0
+capa AroInt #8b4513: 0,12 -12,0 0,-12 12,0
+capa Vidrio #87ceeb: 0,10 -10,0 0,-10 10,0
+capa ReflejoSup #ffffff: -5,-5 -8,0 -2,-8
+capa ReflejoInf #e0ffff: 5,5 8,0 2,8
+capa RayoSol #ffd700: 0,0 -5,15 5,15
+capa PuntoCalor #ff4500: 0,15 -2,18 2,18
+capa Mango #4d4d4d: 12,12 15,15 25,25 22,28
+capa FacetaMango #696969: 13,13 15,15 25,25 23,26
+capa FacetaAro #cd853f: 0,15 -15,0 -12,0 0,12
+escala 1.0
+sombra 24 8 20 0.3
+---
+NOMBRE: Manguera de Goteo
+capa RolloManguera #006400: -15,10 15,10 12,-10 -12,-10
+capa HuecoRollo #000000: -8,5 8,5 6,-5 -6,-5
+capa Espiral1 #228b22: -15,10 -12,5 12,-10 8,-5
+capa Espiral2 #32cd32: -12,5 -8,0 8,-5 6,-2
+capa Boquilla #a9a9a9: 15,10 20,15 18,18 13,13
+capa GotaAgua #00bfff: 20,20 18,25 22,25
+capa BrilloGota #ffffff: 19,23 20,22 21,24
+capa FacetaManguera #008000: -15,10 -12,5 -10,10
+capa BordeMetal #c0c0c0: 20,15 22,17 18,18 16,16
+capa Charquito #87ceeb: 15,28 25,28 22,30 18,30
+escala 1.1
+sombra 20 6 15 0.3
+---
+NOMBRE: Semilla Gigante
+capa SemillaFondo #8b4513: 0,20 -15,5 -10,-15 0,-25 10,-15 15,5
+capa SemillaCentro #a0522d: 0,15 -10,5 -8,-10 0,-18 8,-10 10,5
+capa GrietaC #5c4033: 0,15 0,-18 -2,0
+capa FacetaI1 #cd853f: -15,5 -10,5 0,-18 -10,-15
+capa FacetaD1 #deb887: 15,5 10,5 0,-18 10,-15
+capa BrilloSemilla #f4a460: -8,0 -5,-5 -2,0
+capa TalloSup #556b2f: -2,-25 2,-25 0,-30
+capa HojaVerde #32cd32: 0,-30 -8,-25 -5,-20
+capa SombraInf #3e2723: 0,20 -15,5 -10,5 0,15 10,5 15,5
+capa NervioHoja #006400: 0,-30 -5,-23 -4,-22
+escala 1.2
+sombra 28 12 18 0.5
+---
+NOMBRE: Fertilizante Natural
+capa SacoBase #d2b48c: -12,15 12,15 10,-10 -10,-10
+capa SacoCuello #c19a6b: -8,-10 8,-10 5,-15 -5,-15
+capa Cuerda #8b4513: -6,-15 6,-15 5,-12 -5,-12
+capa Nudo #a0522d: 0,-15 -2,-12 0,-10 2,-12
+capa BocaSaco #d2b48c: -5,-15 5,-15 8,-20 -8,-20
+capa FacetaSacoI #deb887: -12,15 -5,15 -5,-10 -10,-10
+capa SombraSacoD #bc8f8f: 12,15 5,15 5,-10 10,-10
+capa EtiquetaHoja #32cd32: -5,0 5,0 0,-8
+capa NervioEtq #006400: 0,-8 0,0 -2,-4
+capa GranoCaido #a0522d: 15,15 12,12 18,12
+escala 1.1
+sombra 20 8 15 0.4
+---
+NOMBRE: Injerto Botánico
+capa TroncoMain #8b4513: -4,20 4,20 2,-10 -2,-10
+capa FacetaTronco #a0522d: 0,20 4,20 2,-10 0,-10
+capa Venda1 #f5deb3: -5,0 5,0 4,5 -4,5
+capa Venda2 #deb887: -4,5 4,5 5,10 -5,10
+capa RamaI #6b4226: -2,-5 -15,-15 -12,-20
+capa RamaD #6b4226: 2,-5 15,-15 12,-20
+capa BroteI #32cd32: -15,-15 -20,-10 -12,-8
+capa BroteD #32cd32: 15,-15 20,-10 12,-8
+capa BrilloBroteI #adff2f: -20,-10 -15,-12 -12,-8
+capa BrilloBroteD #adff2f: 20,-10 15,-12 12,-8
+escala 1.1
+sombra 25 10 20 0.4
+---
+NOMBRE: Gafas Recicladas
+capa MarcoI #008b8b: -15,-5 -5,-5 -5,5 -15,5
+capa MarcoD #008b8b: 5,-5 15,-5 15,5 5,5
+capa Puente #20b2aa: -5,-2 5,-2 5,2 -5,2
+capa CristalI #e0ffff: -13,-3 -7,-3 -7,3 -13,3
+capa CristalD #e0ffff: 7,-3 13,-3 13,3 7,3
+capa PataI #006400: -15,-5 -20,-15 -22,-10
+capa PataD #006400: 15,-5 20,-15 22,-10
+capa ReflejoI #ffffff: -13,-3 -9,1 -13,1
+capa ReflejoD #ffffff: 7,-3 11,1 7,1
+capa FacetaMarco #00ced1: -15,-5 -5,-5 -7,-3 -13,-3
+escala 1.0
+sombra 22 8 20 0.3
+---
+NOMBRE: Hacha Confiscada
+capa MangoBase #8b4513: -2,-20 2,-20 2,20 -2,20
+capa CintaAgarre #cd853f: -3,5 3,5 3,15 -3,15
+capa CintaBrillo #deb887: -1,5 3,5 3,15 -1,15
+capa CabezaMetal #696969: 2,-15 15,-20 15,-5 2,-10
+capa FiloHacha #a9a9a9: 15,-20 18,-12 15,-5
+capa FiloRoto #4d4d4d: 15,-12 12,-12 15,-10
+capa Grieta1 #1a1a1a: 5,-12 10,-10 8,-8
+capa Enredadera #228b22: -2,-5 -8,-2 -2,5
+capa HojaEnredo #32cd32: -8,-2 -12,0 -8,5
+capa Clavo #c0c0c0: 0,-12 1,-11 0,-10
+escala 1.0
+sombra 25 10 18 0.4
+---
+NOMBRE: Semillas de Trueque
+capa MonedaBase #8b4513: 0,15 -15,5 -15,-5 0,-15 15,-5 15,5
+capa MonedaInt #a0522d: 0,10 -10,3 -10,-3 0,-10 10,-3 10,3
+capa BordeLuz #cd853f: 0,-15 -15,-5 0,-5 15,-5
+capa BordeSomb #5c4033: 0,15 -15,5 0,5 15,5
+capa GrabadoHoja #228b22: 0,8 -6,0 0,-8 6,0
+capa GrabadoCentro #32cd32: 0,5 -3,0 0,-5 3,0
+capa AroLuz #deb887: -15,-5 0,-15 -10,-5
+capa SemillaPequeña1 #ffd700: 10,-10 15,-15 12,-8
+capa SemillaPequeña2 #ff8c00: 12,-8 18,-8 15,-5
+capa TexturaMadera #6b4226: 0,8 6,0 3,0 0,5
+escala 1.1
+sombra 20 6 15 0.4
+---
+NOMBRE: Frasco de Vidrio
+capa FrascoBase #add8e6: -12,15 12,15 12,-10 -12,-10
+capa CuelloVidrio #87ceeb: -8,-10 8,-10 8,-15 -8,-15
+capa TapaCorcho #cd853f: -9,-15 9,-15 9,-20 -9,-20
+capa BrilloCorcho #deb887: -9,-15 0,-15 0,-20 -9,-20
+capa ReflejoV1 #ffffff: -8,-5 -5,-5 -5,10 -8,10
+capa ReflejoV2 #ffffff: 8,0 5,0 5,10 8,10
+capa OrbeDentro1 #00bfff: -5,10 0,5 -5,0
+capa OrbeDentro2 #1e90ff: 5,12 8,8 2,8
+capa SombraFrasco #4682b4: -12,15 12,15 8,10 -8,10
+capa EtiquetaRota #f5deb3: -10,0 0,5 0,-5 -10,-2
+escala 1.1
+sombra 22 8 18 0.4
+---
+NOMBRE: Linterna de Dinamo
+capa MangoLuz #4d4d4d: -5,15 5,15 5,0 -5,0
+capa CuerpoLuz #696969: -8,0 8,0 12,-10 -12,-10
+capa FocoAmarillo #ffff00: -8,-10 8,-10 4,-15 -4,-15
+capa ManivelaBrazo #a9a9a9: 5,10 15,5 12,2
+capa ManivelaAsa #ff4500: 15,5 20,8 18,12 12,8
+capa HazDeLuz1 #ffffe0: -4,-15 -15,-25 0,-20
+capa HazDeLuz2 #ffffe0: 4,-15 15,-25 0,-20
+capa FacetaCuerpo #808080: -8,0 0,0 0,-10 -12,-10
+capa BotonVerde #32cd32: -2,5 2,5 2,8 -2,8
+capa BordeGoma #1a1a1a: -12,-10 12,-10 10,-8 -10,-8
+escala 1.0
+sombra 25 8 20 0.3
+---
+NOMBRE: Zapatillas de Caucho
+capa SuelaGoma #1a1a1a: -15,15 15,15 18,20 -12,20
+capa ZapatillaBase #4169e1: -15,15 15,15 10,-5 -10,0
+capa PuntaGoma #ffffff: 5,15 15,15 10,-5
+capa TaconGoma #ffffff: -15,15 -10,15 -10,0
+capa Cordones #00ffff: -5,5 5,0 0,0 -8,5
+capa Lengueta #1e90ff: -10,0 0,-10 -5,-5
+capa FacetaZapI #0000cd: -15,15 -5,15 -10,0
+capa VientoVeloz1 #e0ffff: -20,10 -30,5 -20,0
+capa VientoVeloz2 #e0ffff: -18,15 -25,12 -18,10
+capa Tobillo #87ceeb: -10,0 0,-10 5,-5 0,0
+escala 1.1
+sombra 20 6 15 0.3
+---
+NOMBRE: Reloj de Sol
+capa PiedraBase #808080: 0,15 -20,0 0,-15 20,0
+capa PiedraSup #a9a9a9: 0,10 -15,0 0,-10 15,0
+capa Aguja #d2b48c: 0,0 0,-20 5,-5
+capa SombraAguja #4d4d4d: 0,0 -10,-5 -5,-2
+capa Marca1 #1a1a1a: 0,8 -2,6 2,6
+capa Marca2 #1a1a1a: 12,0 10,-2 10,2
+capa Marca3 #1a1a1a: -12,0 -10,-2 -10,2
+capa FacetaPiedraI #696969: 0,15 -20,0 0,0
+capa Musgo1 #228b22: -15,0 -20,0 -15,-5
+capa Musgo2 #32cd32: 15,0 20,0 10,-5
+escala 1.0
+sombra 22 8 18 0.4
+---
+NOMBRE: Abono Orgánico
+capa PilaTierra #5c4033: -20,15 20,15 0,-15
+capa FacetaTierra1 #8b4513: -20,15 0,-15 0,15
+capa FacetaTierra2 #4e342e: 20,15 0,-15 0,15
+capa SemillaMita #ffdead: 0,0 5,-5 8,0
+capa HojaBrotando #32cd32: 5,-5 10,-15 15,-5
+capa NervioH #006400: 5,-5 10,-15 10,-5
+capa RestoManzana #ff0000: -10,5 -5,0 -2,8
+capa GotaHumedad #00bfff: -5,-5 -3,-8 -1,-5
+capa SombraPila #3e2723: -15,15 15,15 10,18 -10,18
+capa Piedrita #a9a9a9: 10,10 12,8 14,12
+escala 1.1
+sombra 25 10 15 0.5
+---
+NOMBRE: Hongo Luminiscente
+capa TalloFondo #d3d3d3: -4,20 4,20 2,0 -2,0
+capa TalloLuz #f0f8ff: 0,20 4,20 2,0 0,0
+capa SombreroBase #00ced1: -15,0 15,0 0,-15
+capa SombreroLuz #00ffff: -10,0 10,0 0,-10
+capa PuntosLuz1 #ffffff: -8,-5 -5,-3 -6,-7
+capa PuntosLuz2 #ffffff: 8,-5 5,-3 6,-7
+capa PuntosLuz3 #ffffff: 0,-8 -2,-5 2,-5
+capa FacetaSombI #20b2aa: -15,0 0,0 0,-15
+capa Aura1 #e0ffff: -20,5 -15,10 -22,-5
+capa Aura2 #e0ffff: 20,5 15,10 22,-5
+escala 1.1
+sombra 22 8 18 0.4
+---
+NOMBRE: Trébol de Cuatro Hojas
+capa TalloBase #006400: -1,0 1,0 4,25 0,25
+capa Hoja1 #228b22: 0,0 -15,-10 -10,-20 0,-5
+capa Hoja2 #32cd32: 0,0 15,-10 10,-20 0,-5
+capa Hoja3 #2e8b57: 0,0 -15,10 -10,20 0,5
+capa Hoja4 #00ff7f: 0,0 15,10 10,20 0,5
+capa FacetaH1 #98fb98: 0,0 -10,-20 0,-5
+capa FacetaH2 #90ee90: 0,0 10,-20 0,-5
+capa FacetaH3 #3cb371: 0,0 -10,20 0,5
+capa FacetaH4 #00fa9a: 0,0 10,20 0,5
+capa BrilloCentro #ffffff: -3,0 0,-3 3,0 0,3
+escala 1.1
+sombra 20 8 15 0.3
+---
+NOMBRE: Electroimán Casero
+capa NucleoHierro #696969: -8,15 8,15 8,-15 -8,-15
+capa FacetaHierro #808080: -8,15 0,15 0,-15 -8,-15
+capa Bobina1 #ff8c00: -10,-5 10,-5 10,-2 -10,-2
+capa Bobina2 #ffa500: -10,0 10,0 10,3 -10,3
+capa Bobina3 #ff8c00: -10,5 10,5 10,8 -10,8
+capa CablePila #ff0000: 0,-15 0,-25 -10,-20
+capa PilaBase #4169e1: -15,-25 -5,-25 -5,-15 -15,-15
+capa PilaPolo #c0c0c0: -12,-15 -8,-15 -8,-12 -12,-12
+capa OndaMag1 #00ffff: -15,10 -25,15 -15,20
+capa OndaMag2 #00ffff: 15,10 25,15 15,20
+escala 1.1
+sombra 26 10 18 0.4
+---
+NOMBRE: Filtro de Carbón
+capa CilindroBase #2f4f4f: -12,15 12,15 12,-15 -12,-15
+capa TapaFiltro #1a1a1a: -14,-15 14,-15 14,-20 -14,-20
+capa Carbon1 #000000: -8,-5 8,-5 8,5 -8,5
+capa Carbon2 #333333: -5,-2 5,-2 5,2 -5,2
+capa Malla #a9a9a9: -10,10 10,10 10,12 -10,12
+capa Malla2 #a9a9a9: -10,-10 10,-10 10,-8 -10,-8
+capa FacetaCilindro #4d4d4d: -12,15 0,15 0,-15 -12,-15
+capa HojaPura #00ff00: 0,-20 -8,-28 0,-25
+capa BrilloPuro1 #e0ffff: -15,0 -25,-5 -20,5
+capa BrilloPuro2 #e0ffff: 15,0 25,-5 20,5
+escala 1.1
+sombra 25 8 20 0.3
+---
+NOMBRE: Red de Limpieza Oceánica
+capa RedFondo #4682b4: -15,-10 15,-10 10,20 -10,20
+capa Cuerda1 #f5deb3: -15,-10 -10,20 -8,18 -12,-8
+capa Cuerda2 #f5deb3: 15,-10 10,20 8,18 12,-8
+capa Cuerda3 #deb887: -10,0 10,0 8,2 -8,2
+capa BotellaPlastico #00ffff: -5,15 5,15 2,5 -2,5
+capa TapaBotella #ff0000: -2,5 2,5 2,2 -2,2
+capa LataBasura #a9a9a9: 5,10 12,10 10,18 3,18
+capa FacetaBotella #1e90ff: -5,15 0,15 0,5 -2,5
+capa Flotador1 #ff4500: -18,-12 -12,-12 -12,-8 -18,-8
+capa Flotador2 #ff4500: 18,-12 12,-12 12,-8 18,-8
+escala 1.2
+sombra 30 10 20 0.4
+---
+NOMBRE: Granja de Lombrices
+capa CajonTierra #3e2723: -15,10 15,10 10,25 -10,25
+capa TierraSup #4e342e: -15,10 15,10 0,0
+capa Lombriz1 #ff69b4: -10,5 -5,0 -2,8
+capa Lombriz2 #ff1493: 5,8 10,5 8,12
+capa Lombriz3 #ff69b4: 0,15 -5,20 5,20
+capa RayaL1 #c71585: -6,3 -4,4 -5,6
+capa RayaL2 #c71585: 6,7 8,8 7,10
+capa HojaComida #32cd32: -5,-5 5,-5 0,-10
+capa FacetaCajon #5c4033: -15,10 0,10 -5,25 -10,25
+capa Gotita #00ffff: 10,0 12,-5 14,0
+escala 1.1
+sombra 25 8 18 0.4
+---
+NOMBRE: Capa de Ozono
+capa NucleoTierra #2e8b57: 0,10 -10,0 0,-10 10,0
+capa Oceano #1e90ff: -5,5 0,10 5,5 0,0
+capa EscudoSup #87ceeb: -20,0 0,-20 20,0 15,-5 0,-15 -15,-5
+capa EscudoInf #4682b4: -20,0 0,20 20,0 15,5 0,15 -15,5
+capa FacetaESup #00ffff: -20,0 0,-20 0,-15 -15,-5
+capa FacetaEInf #4169e1: 0,20 20,0 15,5 0,15
+capa BrilloCentral #e0ffff: -5,0 0,-5 5,0 0,5
+capa RayoUVBloqueado #ffd700: -15,-20 -20,-25 -10,-15
+capa ChispaUV #ff4500: -15,-20 -12,-18 -18,-18
+capa NubeTierra #ffffff: 5,-5 8,-2 2,-2
+escala 1.1
+sombra 28 10 20 0.3
+---
+NOMBRE: Raíces Profundas
+capa SueloBase #4e342e: -20,10 20,10 15,20 -15,20
+capa RaizPrincipal #8b4513: -5,10 5,10 0,-15
+capa RaizIzq1 #a0522d: -5,5 -15,15 -10,18
+capa RaizDer1 #a0522d: 5,5 15,15 10,18
+capa RaizIzq2 #cd853f: -3,0 -12,5 -8,8
+capa RaizDer2 #cd853f: 3,0 12,5 8,8
+capa EnergiaTierra #32cd32: -2,-15 2,-15 0,-25
+capa FacetaRP #5c4033: -5,10 0,10 0,-15
+capa BrilloEnergia #adff2f: -5,-20 0,-28 5,-20
+capa GrietaSuelo #271a17: -10,15 0,12 10,18
+escala 1.1
+sombra 30 12 25 0.5
+---
+NOMBRE: Panel Solar Portátil
+capa MarcoPanel #4d4d4d: -15,10 15,-10 20,-5 -10,15
+capa CeldaSolar #1e90ff: -12,8 12,-8 16,-4 -8,12
+capa LineaCelda1 #ffffff: -5,4 5,-4 6,-3 -4,5
+capa LineaCelda2 #ffffff: 0,7 10,-1 11,0 1,8
+capa Soporte #a9a9a9: -10,15 -10,25 -5,25 -5,15
+capa Bateria #2f4f4f: 5,5 15,-5 20,0 10,10
+capa LuzBateria #32cd32: 12,5 14,3 15,4 13,6
+capa SolFondo #ffd700: -20,-15 -10,-25 -5,-15
+capa RayoSol #ffff00: -10,-15 -5,-5 -8,-5
+capa ReflejoPanel #87ceeb: -12,8 0,0 -8,12
+escala 1.1
+sombra 22 8 18 0.4
+---
+NOMBRE: Bloque de Hielo Seco
+capa BaseHielo #b0e0e6: 0,-20 15,0 0,20 -15,0
+capa CentroHielo #add8e6: 0,-15 10,0 0,15 -10,0
+capa FacetaH1 #87ceeb: 0,-20 15,0 0,0
+capa FacetaH2 #87cefa: 15,0 0,20 0,0
+capa FacetaH3 #00bfff: 0,20 -15,0 0,0
+capa FacetaH4 #1e90ff: -15,0 0,-20 0,0
+capa NieblaFria1 #ffffff: -20,10 -15,15 -10,10
+capa NieblaFria2 #ffffff: 20,10 15,15 10,10
+capa NieblaFria3 #ffffff: -10,25 0,20 10,25
+capa BrilloHielo #ffffff: 0,-15 5,-5 0,-5
+escala 1.0
+sombra 26 10 18 0.5
+---
+NOMBRE: Biopesticida
+capa BotellaBase #32cd32: -8,15 8,15 8,-5 -8,-5
+capa LiquidoVerde #adff2f: -6,12 6,12 6,0 -6,0
+capa CuelloBotella #228b22: -4,-5 4,-5 4,-10 -4,-10
+capa Gatillo #ff4500: -10,-10 0,-10 0,-15 -10,-12
+capa Boquilla #a9a9a9: -15,-12 -10,-10 -10,-15 -15,-15
+capa FacetaBotella #00fa9a: -8,15 0,15 0,-5 -8,-5
+capa NubeSpray1 #7fff00: -25,-10 -20,-15 -18,-8
+capa NubeSpray2 #7fff00: -30,-15 -22,-20 -20,-12
+capa GotaVeneno #00ff00: -20,0 -18,-5 -16,0
+capa EtiquetaBio #ffffff: -4,5 4,5 4,8 -4,8
+escala 1.1
+sombra 20 8 16 0.4
+---
+NOMBRE: Pararrayos Reciclado
+capa BaseCobre #b87333: -10,20 10,20 5,10 -5,10
+capa Varilla #a9a9a9: -2,10 2,10 2,-20 -2,-20
+capa Punta #c0c0c0: -2,-20 2,-20 0,-28
+capa Plato1 #d2691e: -8,-5 8,-5 8,-2 -8,-2
+capa Plato2 #d2691e: -6,-12 6,-12 6,-9 -6,-9
+capa RayoPrincipal #ffff00: 0,-28 5,-35 -5,-40
+capa ChispaR1 #ffd700: 5,-35 10,-32 8,-38
+capa CableTierra #2f4f4f: 5,15 15,25 12,25
+capa FacetaVarilla #808080: 0,10 2,10 2,-20 0,-20
+capa BrilloPunta #ffffff: -2,-20 0,-20 0,-28
+escala 1.1
+sombra 22 8 18 0.4
+---
+NOMBRE: Manta Ignífuga
+capa MantaBase #cd853f: -15,10 15,10 20,-10 -20,-10
+capa PliegueCentro #deb887: -5,10 5,10 10,-10 -10,-10
+capa PliegueI #a0522d: -15,10 -5,10 -10,-10 -20,-10
+capa PliegueD #a0522d: 15,10 5,10 10,-10 20,-10
+capa FuegoBloqueado #ff4500: -10,15 10,15 0,5
+capa Llamita1 #ff8c00: -10,15 -5,15 -8,8
+capa Llamita2 #ff8c00: 10,15 5,15 8,8
+capa EscudoHex #00ffff: 0,-5 10,0 0,5 -10,0
+capa Costura1 #ffffff: -18,-8 -16,-8 -17,-10
+capa Costura2 #ffffff: 18,-8 16,-8 17,-10
+escala 1.0
+sombra 25 10 16 0.5
+---
+NOMBRE: Bomba de Semillas
+capa BolaBarro #5c4033: 0,15 -12,5 -12,-5 0,-15 12,-5 12,5
+capa BarroOscuro #3e2723: 0,10 -8,3 -8,-3 0,-10 8,-3 8,3
+capa SemillaExp1 #32cd32: -5,-15 -2,-25 2,-15
+capa SemillaExp2 #32cd32: 5,-10 15,-15 10,-5
+capa SemillaExp3 #32cd32: -10,5 -20,10 -12,12
+capa FacetaBarro #8b4513: 0,15 -12,5 0,5
+capa PolvoTierra1 #a0522d: -15,-20 -10,-25 -8,-18
+capa PolvoTierra2 #a0522d: 15,15 20,20 12,22
+capa RaizSaliendo #adff2f: -6,5 -10,15 -4,10
+capa BrilloSemilla #00ff00: -2,-25 0,-20 -2,-15
+escala 1.1
+sombra 22 8 18 0.4
+---
+NOMBRE: Espejo Parabólico
+capa BaseMetal #696969: -10,20 10,20 5,10 -5,10
+capa Brazo #808080: -2,10 2,10 2,0 -2,0
+capa EspejoFondo #4682b4: -15,0 15,0 0,-20
+capa EspejoCristal #87ceeb: -12,-2 12,-2 0,-18
+capa ReflejoLuz #ffffff: -5,-10 5,-10 0,-15
+capa RayoEnemigo #ff0000: 20,-25 5,-10 10,-10
+capa RayoRebotado #ff4500: 5,-10 -15,-25 -10,-25
+capa PuntoImpacto #ffff00: 3,-12 7,-8 5,-10
+capa FacetaEspejo #b0e0e6: -12,-2 0,-2 0,-18
+capa Tornillo #a9a9a9: -2,2 2,2 0,-2
+escala 1.0
+sombra 25 8 20 0.3
+---
+NOMBRE: Alarma Temprana
+capa PosteBase #8b4513: -3,20 3,20 3,0 -3,0
+capa AltavozCuerpo #a9a9a9: 0,0 10,10 15,-5 0,-10
+capa ConoBoca #696969: 15,-5 10,10 20,15 25,-10
+capa InteriorCono #1a1a1a: 20,15 25,-10 18,2
+capa OndaSon1 #32cd32: 30,-5 32,0 30,5
+capa OndaSon2 #3cb371: 35,-10 38,0 35,10
+capa OndaSon3 #2e8b57: 40,-15 45,0 40,15
+capa FacetaCuerpo #c0c0c0: 0,0 10,10 5,0
+capa LuzAlarma #ff0000: -5,-10 5,-10 0,-15
+capa BrilloLuz #ff4500: -2,-12 2,-12 0,-15
+escala 1.1
+sombra 22 8 16 0.4
+---
+NOMBRE: Dron Conservacionista
+capa CuerpoDron #e6e6fa: -10,-5 10,-5 15,5 -15,5
+capa HeliceSupI #a9a9a9: -15,-5 -20,-10 -10,-10
+capa HeliceSupD #a9a9a9: 15,-5 20,-10 10,-10
+capa Camara #1a1a1a: -3,5 3,5 0,10
+capa Lente #00ffff: -1,6 1,6 0,9
+capa AspaMovil1 #d3d3d3: -25,-12 -15,-8 -20,-10
+capa AspaMovil2 #d3d3d3: 25,-12 15,-8 20,-10
+capa RocioAgua1 #87ceeb: -5,15 -10,25 0,25
+capa RocioAgua2 #87ceeb: 5,15 10,25 0,25
+capa GotaDron #00bfff: 0,20 2,25 -2,25
+escala 1.0
+sombra 20 8 15 0.3
+---
+NOMBRE: Fuerza de la Naturaleza
+capa TroncoRey #3e2723: -10,20 10,20 5,-15 -5,-15
+capa Corona1 #228b22: -20,-10 -10,-25 0,-15
+capa Corona2 #32cd32: -10,-15 0,-30 10,-15
+capa Corona3 #228b22: 0,-15 10,-25 20,-10
+capa GemaCentral #ffd700: -5,-5 5,-5 0,5
+capa FacetaGema #ff8c00: -5,-5 0,5 0,-5
+capa RaizPoderI #4e342e: -10,20 -20,25 -15,15
+capa RaizPoderD #4e342e: 10,20 20,25 15,15
+capa BrilloRey1 #adff2f: -10,-25 0,-30 -5,-20
+capa BrilloRey2 #adff2f: 10,-25 0,-30 5,-20
+escala 1.2
+sombra 32 12 22 0.5

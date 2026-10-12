@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="CartasConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://ecenes/cards/CartasConfig.gd" id="1_cc"]
+
+[resource]
+script = ExtResource("1_cc")
+mostrar_cada_n_oleadas = 1
+cartas_por_descanso = 4
