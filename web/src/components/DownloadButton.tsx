@@ -15,6 +15,8 @@ import {
   getLatestRelease,
   detectOS,
   getAssetForOS,
+  getAssetPlatform,
+  platformLabels,
   formatBytes,
   formatDate,
 } from '../lib/github';
@@ -53,9 +55,9 @@ export default function DownloadButton({ owner, repo }: Props) {
         const os = detectOS();
         const matched = getAssetForOS(data.assets, os);
         setAsset(matched);
-      } catch (err: any) {
+      } catch (err: unknown) {
         if (cancelled) return;
-        setError(err.message ?? 'Error desconocido');
+        setError(err instanceof Error ? err.message : 'Error desconocido');
       } finally {
         if (!cancelled) {
           setLoading(false);
@@ -98,11 +100,23 @@ export default function DownloadButton({ owner, repo }: Props) {
   }
 
   // --- Estado: éxito ---
+  const assetPlatform = getAssetPlatform(asset);
+  const platformLabel = assetPlatform !== 'unknown' ? platformLabels[assetPlatform] : '';
+  const buttonLabel = platformLabel ? `Descargar para ${platformLabel}` : `Descargar ${asset.name}`;
+  const detectedOS = detectOS();
+  const mismatch = platformLabel && detectedOS !== 'unknown' && detectedOS !== assetPlatform;
+
   return (
     <div className="flex flex-col items-center gap-3">
       <a href={asset.browser_download_url} target="_blank" rel="noopener noreferrer" className={primaryBtn}>
-        Descargar {asset.name}
+        {buttonLabel}
       </a>
+
+      {mismatch && (
+        <p className="text-xs text-resin">
+          Aún no hay versión para tu sistema; se ofrece la de {platformLabel}.
+        </p>
+      )}
 
       <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs text-moss">
         <span className="tabular-nums">v{release.tag_name}</span>
@@ -110,6 +124,8 @@ export default function DownloadButton({ owner, repo }: Props) {
         <span>{formatDate(release.published_at)}</span>
         <span className="h-3 w-px bg-line-strong" aria-hidden="true" />
         <span className="tabular-nums">{formatBytes(asset.size)}</span>
+        <span className="h-3 w-px bg-line-strong" aria-hidden="true" />
+        <span className="break-all">{asset.name}</span>
       </div>
     </div>
   );

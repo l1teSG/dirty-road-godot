@@ -240,6 +240,43 @@ export function getAssetForOS(
 }
 
 // ---------------------------------------------------------------------------
+// Detección de plataforma de un asset (función pura)
+// ---------------------------------------------------------------------------
+
+export type Platform = 'windows' | 'mac' | 'linux' | 'android' | 'unknown';
+
+/**
+ * Determina a qué plataforma corresponde un asset por su nombre/extensión.
+ * Sirve para etiquetar honestamente la descarga cuando la release no incluye
+ * binarios para el SO del visitante (p. ej. solo hay un APK de Android).
+ */
+export function getAssetPlatform(asset: GitHubAsset): Platform {
+  const n = asset.name.toLowerCase();
+  if (n.endsWith('.apk') || n.includes('android')) return 'android';
+  if (n.endsWith('.exe') || n.endsWith('.msi') || n.includes('windows') || n.includes('win'))
+    return 'windows';
+  if (n.endsWith('.dmg') || n.includes('macos') || n.includes('darwin') || n.includes('osx'))
+    return 'mac';
+  if (
+    n.endsWith('.appimage') ||
+    n.endsWith('.deb') ||
+    n.endsWith('.rpm') ||
+    n.endsWith('.tar.gz') ||
+    n.endsWith('.tar.xz') ||
+    n.includes('linux')
+  )
+    return 'linux';
+  return 'unknown';
+}
+
+export const platformLabels: Record<Exclude<Platform, 'unknown'>, string> = {
+  windows: 'Windows',
+  mac: 'macOS',
+  linux: 'Linux',
+  android: 'Android',
+};
+
+// ---------------------------------------------------------------------------
 // Utilidades de formato
 // ---------------------------------------------------------------------------
 
