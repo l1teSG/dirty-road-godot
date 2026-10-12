@@ -923,3 +923,18 @@ capa MarcaO #ffd700: -12,0 -10,-2 -10,2
 capa RayoSol #ffff00: 16,-10 22,-16 18,-8
 escala 1.0
 sombra 24 8 18 0.4
+---
+NOMBRE: Imán de Chatarrero
+capa BaseHierro #2f4f4f: -8,16 8,16 8,-6 -8,-6
+capa FacetaHierro #4d4d4d: -8,16 0,16 0,-6 -8,-6
+capa PoloN #ff0000: -8,-6 0,-6 0,-16 -8,-16
+capa PoloS #1e90ff: 0,-6 8,-6 8,-16 0,-16
+capa LineaPolo #ffffff: -8,-11 0,-11 0,-9 -8,-9
+capa CableCobre #b87333: 0,-16 0,-24 8,-24 8,-20
+capa Chatarra1 #a9a9a9: -10,8 -6,4 -2,8
+capa Chatarra2 #808080: 4,8 8,4 12,8
+capa Chatarra3 #c0c0c0: -1,12 3,8 7,12
+capa OndaMag1 #00ffff: -14,2 -22,6 -14,10
+capa OndaMag2 #00ffff: 14,2 22,6 14,10
+escala 1.1
+sombra 24 8 18 0.4
