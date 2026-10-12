@@ -129,6 +129,9 @@ func _construir() -> void:
 	_fila_slider(cc, "Tamaño del HUD", "hud_escala", 0.6, 1.2, 0.05, "mult")
 	_fila_slider(cc, "Opacidad del HUD", "hud_opacidad", 0.3, 1.0, 0.05, "pct")
 	_fila_slider(cc, "Zoom de cámara", "camara_zoom", 1.5, 3.0, 0.1, "mult")
+	_fila_opcion(cc, "Mano de los controles", "hud_mano", ["Diestro", "Zurdo"])
+	_fila_slider(cc, "Tamaño de botones", "hud_botones_escala", 0.5, 1.5, 0.05, "mult")
+	_fila_slider(cc, "Tamaño del joystick", "hud_joystick_escala", 0.5, 1.5, 0.05, "mult")
 
 	var cb := _tarjeta(c, "Disparo manual (sin automático)")
 	_fila_check(cb, "Disparo continuo al apuntar", "disparo_continuo_manual")

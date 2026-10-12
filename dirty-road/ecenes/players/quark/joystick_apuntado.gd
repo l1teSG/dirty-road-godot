@@ -87,6 +87,13 @@ func desactivar() -> void:
 		_terminar()
 
 
+## Coloca el joystick de disparo en la mitad derecha (diestro) o izquierda (zurdo).
+func set_lado(zurdo: bool) -> void:
+	anchor_left = 0.0 if zurdo else 0.5
+	anchor_right = 0.5 if zurdo else 1.0
+	queue_redraw()
+
+
 func _draw() -> void:
 	var c := color
 	var base := _origen

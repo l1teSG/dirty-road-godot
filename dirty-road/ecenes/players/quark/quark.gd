@@ -52,6 +52,8 @@ var _dron = null
 var _hud_base_listo: bool = false
 var _base_escala_botones: Vector2 = Vector2.ONE
 var _base_escala_joystick: Vector2 = Vector2.ONE
+var _base_botones_rect: Dictionary = {}
+var _base_joystick_rect: Dictionary = {}
 
 # ── Disparo ───────────────────────────────────────────
 var proyectil: PackedScene = preload("res://ecenes/players/projectile/quark/playerProyectil.tscn")
@@ -475,10 +477,16 @@ func _capturar_escala_hud() -> void:
 	var cont := controles.get_node_or_null("ContenedorBotones")
 	if cont is Control:
 		_base_escala_botones = (cont as Control).scale
+		_base_botones_rect = _rect_ctrl(cont as Control)
 	var joy := controles.get_node_or_null("Joystick")
 	if joy is Control:
 		_base_escala_joystick = (joy as Control).scale
+		_base_joystick_rect = _rect_ctrl(joy as Control)
 	_hud_base_listo = true
+
+
+func _rect_ctrl(c: Control) -> Dictionary:
+	return {"al": c.anchor_left, "ar": c.anchor_right, "ol": c.offset_left, "or": c.offset_right}
 
 
 ## Crea/elimina el joystick de apuntado y aplica escala/opacidad del HUD.
@@ -502,17 +510,46 @@ func _aplicar_hud() -> void:
 		return
 	_capturar_escala_hud()
 	var esc := float(SaveManager.get_ajuste("hud_escala", 1.0))
+	var esc_b := float(SaveManager.get_ajuste("hud_botones_escala", 1.0))
+	var esc_j := float(SaveManager.get_ajuste("hud_joystick_escala", 1.0))
 	var op := float(SaveManager.get_ajuste("hud_opacidad", 1.0))
+	var zurdo := int(SaveManager.get_ajuste("hud_mano", 0)) == 1
 	var cont := controles.get_node_or_null("ContenedorBotones")
 	if cont is Control:
-		(cont as Control).scale = _base_escala_botones * esc
+		(cont as Control).scale = _base_escala_botones * esc * esc_b
 		(cont as Control).modulate = Color(1, 1, 1, op)
+		_espejar_hud(cont as Control, _base_botones_rect, zurdo)
 	var joy := controles.get_node_or_null("Joystick")
 	if joy is Control:
-		(joy as Control).scale = _base_escala_joystick * esc
+		(joy as Control).scale = _base_escala_joystick * esc * esc_j
 		(joy as Control).modulate = Color(1, 1, 1, op)
+		_espejar_hud(joy as Control, _base_joystick_rect, zurdo)
 	if _apuntado is Control:
 		(_apuntado as Control).modulate = Color(1, 1, 1, op)
+		if _apuntado.has_method("set_lado"):
+			_apuntado.call("set_lado", zurdo)
+
+
+## Espeja un control del HUD respecto al centro horizontal (modo zurdo).
+## Usa las anclas/offsets originales de la escena para no acumular desplazamientos.
+func _espejar_hud(c: Control, base: Dictionary, zurdo: bool) -> void:
+	if base.is_empty():
+		return
+	var al: float = base["al"]
+	var ar: float = base["ar"]
+	if not zurdo:
+		c.anchor_left = al
+		c.anchor_right = ar
+		c.offset_left = base["ol"]
+		c.offset_right = base["or"]
+		return
+	var w := get_viewport_rect().size.x
+	var xl := al * w + float(base["ol"])
+	var xr := ar * w + float(base["or"])
+	c.anchor_left = 1.0 - al
+	c.anchor_right = 1.0 - ar
+	c.offset_left = (w - xr) - (1.0 - al) * w
+	c.offset_right = (w - xl) - (1.0 - ar) * w
 
 
 func shot(target: Node2D, _power_actual: String = "basic") -> void:

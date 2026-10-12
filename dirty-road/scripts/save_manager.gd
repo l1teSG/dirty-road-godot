@@ -119,6 +119,9 @@ const AJUSTES_DEFECTO := {
 	"vol_efectos": 0.9,
 	"hud_escala": 1.0,
 	"hud_opacidad": 1.0,
+	"hud_mano": 0,              # 0 diestro, 1 zurdo (espeja los controles)
+	"hud_botones_escala": 1.0,
+	"hud_joystick_escala": 1.0,
 	"fondo_shader": true,
 	# ── General ──
 	"mostrar_fps": false,
@@ -148,6 +151,9 @@ const RANGOS_AJUSTES := {
 	"vol_efectos": [0.0, 1.0],
 	"hud_escala": [0.6, 1.2],
 	"hud_opacidad": [0.3, 1.0],
+	"hud_mano": [0, 1],
+	"hud_botones_escala": [0.5, 1.5],
+	"hud_joystick_escala": [0.5, 1.5],
 	"autoapuntado": [0.0, 1.0],
 	"camara_zoom": [1.5, 3.0],
 }
