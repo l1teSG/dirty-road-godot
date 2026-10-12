@@ -250,13 +250,16 @@ func _fila_check(padre: Node, etiqueta: String, clave: String) -> void:
 	var hb := _fila_base(padre, etiqueta)
 	var chk = INTERRUPTOR_NEON.new()
 	chk.color = EstiloUI.NEON
-	chk.button_pressed = bool(SaveManager.get_ajuste(clave, true))
+	# Primero al árbol: InterruptorNeon._ready() activa toggle_mode. Si se fija
+	# button_pressed antes, BaseButton lo IGNORA (solo funciona en toggle_mode)
+	# y el switch arrancaría siempre en OFF aunque el valor guardado sea true.
+	hb.add_child(chk)
+	chk.set_pressed_no_signal(bool(SaveManager.get_ajuste(clave, true)))
 	chk.toggled.connect(func(v: bool) -> void:
 		_guardar(clave, v)
 		if clave == "fondo_shader":
 			_aplicar_fondo()
 	)
-	hb.add_child(chk)
 
 
 func _fila_slider(padre: Node, etiqueta: String, clave: String,
