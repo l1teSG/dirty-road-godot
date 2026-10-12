@@ -663,3 +663,16 @@ capa Base #4d4d4d: -20,8 -12,8 -12,12 -20,12
 capa BrilloTubo #98fb98: -20,3 -20,-1 -14,-3 -14,1
 escala 1.0
 sombra 26 8 18 0.4
+---
+NOMBRE: Colmillo de Vidrio
+capa ColmilloFondo #4682b4: 0,25 -8,-5 0,-20 8,-5
+capa ColmilloFrente #87ceeb: -3,20 -5,-4 0,-16 3,-4
+capa FacetaI #b0e0e6: -8,-5 0,25 0,-4
+capa FacetaD #00bfff: 8,-5 0,25 0,-4
+capa Punta #e0ffff: 0,-20 -3,-12 0,-16 3,-12
+capa BrilloLinea #ffffff: -1,15 -2,-2 0,-2 1,15
+capa BaseOscura #2f4f4f: -9,-5 9,-5 7,-10 -7,-10
+capa Chispa1 #ffffff: -6,-2 -3,-6 -4,-1
+capa Chispa2 #ffffff: 5,8 8,4 7,9
+escala 1.2
+sombra 18 6 20 0.4
