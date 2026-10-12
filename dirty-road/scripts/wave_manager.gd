@@ -655,6 +655,12 @@ func _escalar_stats(enemigo: Node2D, cfg: Resource) -> void:
 	enemigo.set("speed", vel_base * f_vel)
 	enemigo.set("damage", danio_base * f_danio)
 
+	# Agro por TIPO: override opcional por entrada del pool ("auto" = el del enemigo).
+	if cfg != null:
+		var obj := String(cfg.get("objetivo"))
+		if obj != "" and obj != "auto":
+			enemigo.set("objetivo_tipo", obj)
+
 	if debug_imprimir_info:
 		print("[WaveManager] Stats %s → vida %.1f (×%.2f), daño %.1f (×%.2f), vel %.0f (×%.2f)" \
 			% [enemigo.name, vida_base * f_vida, f_vida, danio_base * f_danio, f_danio, vel_base * f_vel, f_vel])

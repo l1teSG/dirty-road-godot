@@ -11,14 +11,16 @@ extends CharacterBody2D
 ##    grupos cada frame mientras falte algo — nunca queda sin objetivo.
 ##  • life / speed / damage llegan YA escalados por oleada/etapa;
 ##    la vida actual se deriva en _ready() (vida = life).
-##  • OBJETIVO, en orden de precedencia:
-##    1) anti_estructura       → árbol siempre (jefes).
-##    2) aggro_dinamico        → el más cercano (jugador vs árbol),
-##       con histéresis (apágalo para usar la regla clásica).
-##    3) cambiar_a_arbol_cerca → cerca del tronco lo asedian
-##       (histéresis anti-parpadeo configurable).
-##    4) rango_aggro vencido   → de vuelta al árbol.
-##    5) resto                 → jugador.
+##  • OBJETIVO por TIPO (objetivo_tipo), en orden de precedencia:
+##    1) anti_estructura → árbol siempre (jefes).
+##    2) peel activo     → jugador (le pegaste hace poco).
+##    3) "arbol"         → estructura.  "jugador" → el jugador.
+##    4) "mixto"         → jugador, salvo que el árbol esté a menos de
+##       dist_jugador × sesgo_jugador, o que ya esté pegado al tronco.
+##    5) rango_aggro vencido → de vuelta al árbol.
+##    6) resto           → jugador.
+##  "auto" se resuelve en _ready por arquetipo: melee/torreta/embestida→árbol;
+##  enjambre/rango→jugador.
 ##  • Ciclo por frame: aggro/furia → reset de órdenes → _mecanica()
 ##    (del extend) → _comp.pensar() → move_and_slide() → contacto.
 ##  • Los comportamientos (comp_*.gd) SOLO dictan órdenes con la API:
@@ -141,17 +143,34 @@ const COMPORTAMIENTOS: Dictionary = {
 ## árbol (0 = desactivado).
 @export var rango_aggro: float = 320.0
 
-## El más cercano (jugador vs árbol) SIEMPRE gana, con histéresis.
+## LEGADO: el sistema mixto (rol + sesgo) lo reemplaza. Se conserva para no
+## romper escenas viejas; ya no decide el objetivo.
 @export var aggro_dinamico: bool = true
-## Margen anti-parpadeo del aggro dinámico (px).
+## Margen anti-parpadeo del aggro (px).
 @export var aggro_histeresis: float = 40.0
 
 @export_category("Objetivo — proximidad al árbol")
-## Cerca del tronco cambian de target al árbol (regla clásica).
+## Si un cazador queda pegado al tronco (a menos de arbol_cerca_distancia)
+## se pone a asediarlo, aunque prefiera al jugador.
 @export var cambiar_a_arbol_cerca: bool = true
-@export var arbol_cerca_distancia: float = 140.0
+@export var arbol_cerca_distancia: float = 90.0
 ## Histéresis anti-parpadeo (px) para volver al jugador.
 @export var arbol_cerca_histeresis: float = 30.0
+
+@export_category("Objetivo — por TIPO")
+## A quién persigue ESTE tipo de enemigo:
+##  • auto   → se decide por arquetipo (melee/torreta/embestida→árbol;
+##             enjambre/rango→jugador).
+##  • jugador→ siempre a ti (si mueres, pasa al árbol).
+##  • arbol  → siempre a la estructura.
+##  • mixto  → el más cercano con sesgo (ver sesgo_jugador).
+@export_enum("auto", "jugador", "arbol", "mixto") var objetivo_tipo: String = "auto"
+## Sesgo hacia el jugador (solo en modo "mixto"): el árbol solo roba el aggro
+## si está a menos de `dist_jugador × sesgo_jugador`. < 1 favorece al jugador.
+@export_range(0.1, 1.5) var sesgo_jugador: float = 0.65
+## Al recibir daño, el enemigo cambia a perseguirte estos segundos (peel).
+## Nunca aplica a jefes (anti_estructura).
+@export var peel_duracion: float = 3.0
 
 @export_group("Furia (jefes)")
 ## Se activa al bajar de esta fracción de vida (0.4 = 40%).
@@ -235,6 +254,11 @@ var _fase_dash: float = 0.0
 var _t_sep: float = 0.0
 var _sep_vec: Vector2 = Vector2.ZERO
 var _objetivo_es_arbol: bool = false
+## Segundos restantes de "peel" (te persigue tras pegarle).
+var _peel_t: float = 0.0
+## Empuje externo (ondas de raíces del árbol): se suma al movimiento.
+var _empuje_vel: Vector2 = Vector2.ZERO
+var _empuje_t: float = 0.0
 var _golpeado: bool = false
 var _muriente: bool = false
 # ── Efectos de estado (cartas) ──
@@ -263,6 +287,7 @@ const ANIM_SCRIPT := preload("res://ecenes/enemies/class/AnimacionEnemigo.gd")
 func _ready() -> void:
 	add_to_group("enemigos")
 	vida_actual = life   # life llega YA escalado por el WaveManager.
+	_resolver_objetivo_tipo()
 	_instalar_comportamiento()
 	_mostrar_nombre()
 	# Animación: si la escena no la trae, se crea sola (todos los enemigos animan).
@@ -354,11 +379,23 @@ func _estructura_viva() -> bool:
 
 # ───────────── OBJETIVO: JUGADOR O ÁRBOL ─────────────
 
+## Sistema mixto (rol + sesgo + peel). Precedencia:
+##  1) Jefes (anti_estructura) → árbol.
+##  2) Peel activo (le pegaste) → jugador.
+##  3) Asediador → árbol.
+##  4) Cazador → jugador, salvo que el árbol esté a < dist_jugador×sesgo
+##     o que el enemigo ya esté pegado al tronco (asedio clásico).
+##  5) Aggro vencido (jugador muy lejos) → árbol.
+##  6) Default → jugador.
 func objetivo() -> Node2D:
 	var arb: Node2D = arbol if _estructura_viva() else null
 	var jug: Node2D = null
 	if jugador != null and is_instance_valid(jugador):
 		jug = jugador
+	# Jugador MUERTO → no cuenta como objetivo: los enemigos van al árbol
+	# (o a nada si el árbol ya cayó) durante la espera de respawn.
+	if jug != null and jug.has_method("esta_muerto") and jug.esta_muerto():
+		jug = null
 
 	# 1) Jefes: árbol siempre mientras exista.
 	if anti_estructura and arb != null:
@@ -373,38 +410,54 @@ func objetivo() -> Node2D:
 	if arb == null:
 		return jug
 
-	# 2) Aggro dinámico: siempre el más cercano, con histéresis.
-	if aggro_dinamico:
-		var d_jug := global_position.distance_to(jug.global_position)
-		var d_arb := global_position.distance_to(arb.global_position)
-		if _objetivo_es_arbol:
-			if d_jug + aggro_histeresis < d_arb:
-				_objetivo_es_arbol = false
-		elif d_arb + aggro_histeresis < d_jug:
-			_objetivo_es_arbol = true
-		return arb if _objetivo_es_arbol else jug
+	# 2) PEEL: si le pegaste hace poco, te persigue (recompensa la habilidad).
+	if _peel_t > 0.0:
+		return jug
 
-	# 3) Asedio: cerca del tronco cambian al árbol (con histéresis).
-	if cambiar_a_arbol_cerca:
-		var d_arb := global_position.distance_to(arb.global_position)
-		if _objetivo_es_arbol:
-			if d_arb > arbol_cerca_distancia + arbol_cerca_histeresis:
-				_objetivo_es_arbol = false
-		elif d_arb < arbol_cerca_distancia:
-			_objetivo_es_arbol = true
-		if _objetivo_es_arbol:
-			return arb
+	# 3) Rol por TIPO de enemigo (determinista, sin azar).
+	if objetivo_tipo == "arbol":
+		return arb
+	if objetivo_tipo == "jugador":
+		return jug
 
-	# 4) Aggro vencido: el jugador se alejó demasiado → árbol.
-	if rango_aggro > 0.0 and global_position.distance_to(jug.global_position) > rango_aggro:
+	# 4) Mixto: prefiere al JUGADOR. El árbol solo le roba el aggro si
+	#    está significativamente más cerca (sesgo_jugador < 1) o si ya
+	#    está pegado al tronco (asedio clásico con histéresis).
+	var d_jug := global_position.distance_to(jug.global_position)
+	var d_arb := global_position.distance_to(arb.global_position)
+	var umbral := d_jug * sesgo_jugador
+	if cambiar_a_arbol_cerca and d_arb < arbol_cerca_distancia:
+		_objetivo_es_arbol = true
+	elif _objetivo_es_arbol:
+		if umbral + aggro_histeresis < d_arb \
+				and d_arb > arbol_cerca_distancia + arbol_cerca_histeresis:
+			_objetivo_es_arbol = false
+	elif d_arb + aggro_histeresis < umbral:
+		_objetivo_es_arbol = true
+	if _objetivo_es_arbol:
 		return arb
 
-	# 5) Por defecto: jugador.
+	# 5) Aggro vencido: el jugador se alejó demasiado → árbol.
+	if rango_aggro > 0.0 and d_jug > rango_aggro:
+		return arb
+
+	# 6) Por defecto: jugador.
 	return jug
 
 
-## Refresca la regla de objetivo (se llama 1× por frame).
-func _actualizar_aggro(_delta: float) -> void:
+## Resuelve "auto" por arquetipo (comportamiento_tipo). Los jefes ya van al
+## árbol por anti_estructura, así que esto solo aplica a enemigos normales.
+## Pesados/lentos asedian la estructura; rápidos persiguen al jugador.
+func _resolver_objetivo_tipo() -> void:
+	if objetivo_tipo != "auto":
+		return
+	objetivo_tipo = "arbol" if comportamiento_tipo in ["melee", "torreta", "embestida"] else "jugador"
+
+
+## Refresca la regla de objetivo (se llama 1× por frame) y el reloj del peel.
+func _actualizar_aggro(delta: float) -> void:
+	if _peel_t > 0.0:
+		_peel_t -= delta
 	objetivo()
 
 
