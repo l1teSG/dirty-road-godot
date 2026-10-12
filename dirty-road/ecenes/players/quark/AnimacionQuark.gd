@@ -19,6 +19,8 @@ const AMP_BOB: float = 2.0         # rebote vertical del cuerpo (px)
 const FREC_SOMBRA: float = 12.0
 const UMBRAL_MOVIMIENTO: float = 10.0
 const ALPHA_DASH: float = 0.5
+## Amplitud del squash de impacto (golpe / aterrizaje del dash).
+const AMP_SQUASH: float = 0.22
 
 var _jugador: CharacterBody2D = null
 var _cuerpo: Polygon2D = null
@@ -39,6 +41,9 @@ var _fase_sombra: float = 0.0
 var _factor_pulso: float = 1.0
 var _extra_nucleo: float = 0.0
 var _offset_vertical: float = 0.0
+## Squash de impacto (0..1). Se integra en el objetivo de escala del cuerpo
+## para no pelearse con el lerp de cada frame ni con los tweens de flash.
+var _squash: float = 0.0
 
 var _tween_flash: Tween = null
 var _tween_dash: Tween = null
@@ -94,6 +99,15 @@ func _animar_cuerpo(delta: float, moviendo: bool) -> void:
 		objetivo = Vector2(_cuerpo_escala0.x + dir_x * 0.15, _cuerpo_escala0.y - dir_x * 0.08)
 		bob = sin(_fase_paso) * AMP_BOB
 
+	# Squash de impacto (golpe / aterrizaje tras el dash): ancho y bajo,
+	# decae solo. Integrado aquí para que el lerp no lo pise.
+	_squash = maxf(0.0, _squash - delta * 5.0)
+	if _squash > 0.0:
+		var s: float = _squash * _squash
+		objetivo = Vector2(
+			objetivo.x * (1.0 + s * AMP_SQUASH),
+			objetivo.y * (1.0 - s * AMP_SQUASH * 0.8))
+
 	_cuerpo.scale = _cuerpo.scale.lerp(objetivo, delta * 12.0)
 	if _interior != null:
 		_interior.scale = _interior.scale.lerp(_interior_escala0 * (objetivo / _cuerpo_escala0), delta * 12.0)
@@ -131,6 +145,8 @@ func flash_golpe(color: Color, duracion: float) -> void:
 		_cuerpo.modulate = color
 	if _nucleo != null:
 		_nucleo.modulate = color
+	# Squash de impacto: el golpe se siente en el cuerpo, no solo en el color.
+	_squash = 1.0
 
 	_tween_flash = create_tween().set_parallel(true)
 	if _cuerpo != null:
@@ -146,6 +162,9 @@ func set_dash(activo: bool) -> void:
 	_matar(_tween_dash)
 	_tween_dash = create_tween()
 	_tween_dash.tween_property(_jugador, "modulate:a", ALPHA_DASH if activo else 1.0, 0.05)
+	# Al aterrizar el dash: squash breve (recuperación), no solo el fundido.
+	if not activo:
+		_squash = maxf(_squash, 0.7)
 
 
 func _matar(t: Tween) -> void:

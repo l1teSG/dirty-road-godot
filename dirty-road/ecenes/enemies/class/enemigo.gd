@@ -281,8 +281,13 @@ func _fx_ataque() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	# Un enemigo muriendo solo reproduce su pop de muerte: no actúa.
+	if _muriente:
+		return
 	_resolver_referencias_fallback()
 	_actualizar_efectos(delta)
+	if _muriente:
+		return  # murió por quemadura dentro de _actualizar_efectos()
 
 	# Las órdenes se dictan CADA frame: parten de cero.
 	_vel_deseada = Vector2.ZERO
@@ -777,7 +782,20 @@ func _morir() -> void:
 	_detonar_si_toca()
 
 	murio.emit(self)   # UN argumento: firma corregida con WaveManager.
-	queue_free()
+
+	# Pop de muerte: squash + fundido antes de liberar (mismo patrón que
+	# morir_por_fin_de_oleada). El WaveManager cuenta las bajas al salir del
+	# árbol, así que este retardo de ~0.27 s es despreciable.
+	remove_from_group("enemigos")
+	if _anim_fx != null and is_instance_valid(_anim_fx):
+		_anim_fx.set_physics_process(false)
+	velocity = Vector2.ZERO
+	var tw := create_tween()
+	tw.set_parallel(true)
+	tw.tween_property(self, "scale", scale * Vector2(1.22, 0.72), 0.12) \
+			.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tw.tween_property(self, "modulate:a", 0.0, 0.22).set_delay(0.05)
+	tw.chain().tween_callback(queue_free)
 
 
 ## "Bomba de Semillas": probabilidad de explosión en área al morir.

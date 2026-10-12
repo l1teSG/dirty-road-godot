@@ -30,6 +30,12 @@ var _facing := 1.0
 var _furia := 0.0
 var _flash: Tween = null
 var _mod0: Color = Color.WHITE
+## Squash de impacto (0..1) y pop de aparición (0..1). Se integran en el
+## OBJETIVO de escala de cada frame: si se escribieran directo en _fig.scale
+## el lerp del frame siguiente los revierte (squash invisible) y pelearían
+## con el resto de la animación.
+var _golpe: float = 0.0
+var _spawn: float = 0.0
 
 
 func _ready() -> void:
@@ -39,6 +45,7 @@ func _ready() -> void:
 		_esc0 = _fig.scale
 		_pos0 = _fig.position
 		_mod0 = _fig.modulate
+	_spawn = 0.0  # arranca en 0: el pop de aparición se despliega al entrar
 	if _e.has_signal("recibo_danio"):
 		_e.connect("recibo_danio", _on_golpe)
 
@@ -76,6 +83,16 @@ func _physics_process(delta: float) -> void:
 		objetivo.x * (1.0 + estiron * 0.16),
 		objetivo.y * (1.0 - estiron * 0.09))
 
+	# Pop de aparición (overshoot) + squash de impacto, INTEGRADOS en el
+	# objetivo para no pelearse con el lerp de escala de cada frame.
+	_spawn = minf(1.0, _spawn + delta * 5.0)
+	objetivo *= _pop_aparicion(_spawn)
+	_golpe = maxf(0.0, _golpe - delta * 6.0)
+	var golpe_s := _golpe * _golpe
+	objetivo = Vector2(
+		objetivo.x * (1.0 + golpe_s * 0.22),
+		objetivo.y * (1.0 - golpe_s * 0.16))
+
 	# Se interpola SOLO la magnitud (positiva) y la orientación se aplica
 	# después con el signo: así el flip no colapsa la escala al mirar a la izq.
 	var actual := _fig.scale.abs()
@@ -99,7 +116,15 @@ func _on_golpe(_cantidad: float = 0.0) -> void:
 	if _flash != null and _flash.is_valid():
 		_flash.kill()
 	_fig.modulate = Color(3.2, 3.2, 3.2, 1.0)
-	# Encogida breve al recibir daño.
-	_fig.scale = Vector2(_fig.scale.x * 1.08, _fig.scale.y * 0.9)
+	# Encogida al recibir daño: ahora como factor que decae en el objetivo
+	# (antes se escribía directo en _fig.scale y el frame siguiente lo pisaba).
+	_golpe = 1.0
 	_flash = create_tween()
 	_flash.tween_property(_fig, "modulate", _mod0, 0.16)
+
+
+## Ease-out-back: 0 → 1 con un pequeño sobrepaso (anticipación del spawn).
+func _pop_aparicion(t: float) -> float:
+	var c1 := 1.70158
+	var c3 := c1 + 1.0
+	return 1.0 + c3 * pow(t - 1.0, 3.0) + c1 * pow(t - 1.0, 2.0)
