@@ -1128,3 +1128,17 @@ capa Base #5c4033: -10,16 10,16 8,20 -8,20
 capa Brillo #98fb98: -6,-2 -3,-6 -1,-2
 escala 1.1
 sombra 28 10 18 0.4
+---
+NOMBRE: Regeneración Profunda
+capa CorazonFondo #228b22: 0,14 -12,4 -10,-6 -4,-10 0,-4 4,-10 10,-6 12,4
+capa CorazonFrente #32cd32: 0,10 -8,3 -7,-4 -3,-7 0,-3 3,-7 7,-4 8,3
+capa Brillo #adff2f: -6,0 -3,-4 -1,0
+capa RaizAbajo #8b4513: 0,14 -4,22 4,22
+capa RaizIzq #a0522d: -6,12 -14,20 -8,20
+capa RaizDer #a0522d: 6,12 14,20 8,20
+capa HojaIzq #00ff7f: -10,-6 -16,-12 -11,-11
+capa HojaDer #00ff7f: 10,-6 16,-12 11,-11
+capa Pulso1 #ffff00: 0,-16 -6,-10 0,-6 6,-10
+capa Pulso2 #e0ffff: 0,-6 -3,-10 0,-14 3,-10
+escala 1.2
+sombra 24 10 18 0.4
