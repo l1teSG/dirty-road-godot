@@ -305,6 +305,11 @@ func _run_queue() -> void:
 	popup_finished.emit()
 
 
+## ¿Hay un mensaje mostrándose (o cola pendiente)?
+func esta_ocupado() -> bool:
+	return _busy
+
+
 # ───────────────────────── MOSTRAR ─────────────────────────
 
 func _display(item: Dictionary) -> void:

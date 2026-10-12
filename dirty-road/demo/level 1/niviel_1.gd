@@ -20,6 +20,9 @@ const DESPLAZAMIENTO_TEXTO := 20.0
 # Duración completa de una animación de mensaje (entrada + espera + salida)
 const DURACION_MENSAJE_COMPLETO := DURACION_ENTRADA_TEXTO + TIEMPO_VISIBLE_TEXTO + DURACION_SALIDA_TEXTO
 
+## Tope de espera del cartel "HORDA" para no pisar el popup educativo.
+const TIEMPO_MAX_ESPERA_HORDA := 20.0
+
 var tween_actual: Tween
 
 
@@ -147,7 +150,7 @@ func _iniciar_transicion_entrada() -> void:
 	)
 	tween.tween_interval(DURACION_MENSAJE_COMPLETO)
 	tween.tween_callback(func():
-		mostrar_mensaje("HORDA %d" % horda_actual)
+		_mostrar_horda(horda_actual)
 	)
 
 
@@ -155,7 +158,20 @@ func _iniciar_transicion_entrada() -> void:
 
 func _on_oleada_iniciada(num_oleada: int) -> void:
 	horda_actual = num_oleada
-	mostrar_mensaje("HORDA %d" % horda_actual)
+	_mostrar_horda(horda_actual)
+
+
+## Muestra el cartel "HORDA N" DESPUÉS de que termine el popup educativo
+## (p. ej. "ETAPA 1"), para que los mensajes no aparezcan a la vez.
+func _mostrar_horda(num: int) -> void:
+	var t0 := Time.get_ticks_msec()
+	while is_inside_tree() and EducationManager != null and EducationManager.esta_mostrando():
+		if (Time.get_ticks_msec() - t0) / 1000.0 >= TIEMPO_MAX_ESPERA_HORDA:
+			break
+		await get_tree().process_frame
+	if not is_inside_tree():
+		return
+	mostrar_mensaje("HORDA %d" % num)
 
 
 func _on_descanso_iniciado(_tiempo_total: float) -> void:

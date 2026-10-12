@@ -23,6 +23,9 @@ const SETTINGS_GROUP: String = "education_settings"
 
 enum PopupVariant { WAVE_BREAK, DEATH, ENEMY_CARD, SURVIVAL }
 
+## Reemitida desde el popup: la cola de mensajes quedó vacía.
+signal popup_finished
+
 const FALLBACK_ENEMY: Dictionary = {
 	"name": "Contaminación",
 	"represents": "Una amenaza para el ecosistema.",
@@ -60,6 +63,7 @@ func _ready() -> void:
 	_popup = EducationPopup.new()
 	_popup.manager = self
 	add_child(_popup)
+	_popup.popup_finished.connect(_on_popup_finished)
 
 	_survival_timer = Timer.new()
 	_survival_timer.wait_time = 120.0
@@ -338,6 +342,20 @@ func stop_run() -> void:
 
 	if _survival_timer != null:
 		_survival_timer.stop()
+
+
+## ¿Hay mensajes educativos mostrándose o en cola? Lo usa el nivel para
+## no pisar el cartel de "HORDA" con un popup (p. ej. "ETAPA 1").
+func esta_mostrando() -> bool:
+	if _popup == null or not is_instance_valid(_popup):
+		return false
+	if _popup.has_method("esta_ocupado"):
+		return bool(_popup.call("esta_ocupado"))
+	return false
+
+
+func _on_popup_finished() -> void:
+	popup_finished.emit()
 
 
 func on_stage_started(stage_index: int) -> void:
