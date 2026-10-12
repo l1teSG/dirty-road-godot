@@ -36,3 +36,10 @@ apk/
 dirty-road/assets/*
 !dirty-road/assets/cards/
 !dirty-road/assets/cards/**
+
+# Material generado por las herramientas (fotos/trailers).
+capturas/
+
+# Excepción: versionar los scripts de herramientas (*.sh está ignorado).
+!dirty-road/tools/capturas.sh
+!dirty-road/tools/trailer.sh
