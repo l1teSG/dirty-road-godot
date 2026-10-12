@@ -2,6 +2,14 @@
 
 [ext_resource type="Theme" uid="uid://hau5fs7dt6rv" path="res://themes/mainTheme.tres" id="1_hduar"]
 [ext_resource type="Script" uid="uid://bqwdqh2pkke5v" path="res://ui/dead/dead.gd" id="1_yd0cx"]
+[ext_resource type="Shader" uid="uid://clt0vvhrwf7y8" path="res://ui/main/fondo.gdshader" id="2_muerte"]
+
+[sub_resource type="ShaderMaterial" id="mat_fondo_muerte"]
+shader = ExtResource("2_muerte")
+shader_parameter/color_a = Color(0.0509804, 0.00784314, 0.0196078, 1)
+shader_parameter/color_b = Color(0.168627, 0.027451, 0.0627451, 1)
+shader_parameter/color_brillo = Color(1, 0.176471, 0.25098, 1)
+shader_parameter/velocidad = 0.06
 
 [sub_resource type="Curve" id="Curve_hduar"]
 _limits = [0.0, 1.0, 0.5, 1.0]
@@ -18,6 +26,17 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="FondoShader" type="ColorRect" parent="Contenedor" unique_id=1717171717]
+material = SubResource("mat_fondo_muerte")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 1, 1, 1)
 
 [node name="CenterContainer" type="CenterContainer" parent="Contenedor" unique_id=1096868665]
 layout_mode = 1
