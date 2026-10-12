@@ -1183,3 +1183,17 @@ capa Brillo2 #adff2f: 10,-2 12,-6 14,-2
 capa Hoja #32cd32: -14,8 -18,4 -15,10
 escala 1.1
 sombra 24 8 16 0.3
+---
+NOMBRE: Empuje Raigal
+capa SueloFondo #4e342e: -18,18 18,18 16,8 -16,8
+capa RaizBase #8b4513: -8,8 8,8 5,-4 -5,-4
+capa RaizIzq #a0522d: -8,4 -16,-4 -10,6
+capa RaizDer #a0522d: 8,4 16,-4 10,6
+capa RaizSupI #cd853f: -5,-4 -12,-14 -6,-6
+capa RaizSupD #cd853f: 5,-4 12,-14 6,-6
+capa EmpujeArriba #32cd32: 0,-4 -3,-16 3,-16
+capa OndaImpacto1 #adff2f: -14,-10 -18,-16 -12,-14
+capa OndaImpacto2 #adff2f: 14,-10 18,-16 12,-14
+capa Brillo #00ff00: 0,-16 2,-22 -2,-20
+escala 1.1
+sombra 28 10 16 0.5
