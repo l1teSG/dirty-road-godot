@@ -734,3 +734,18 @@ capa Rabito #7a5c3a: -2,-14 2,-14 1,-20 -1,-20
 capa Brillo #deb887: -7,5 -4,1 -2,5
 escala 1.2
 sombra 26 10 18 0.5
+---
+NOMBRE: Hacha Reforzada
+capa MangoFondo #8b4513: -3,-22 3,-22 3,22 -3,22
+capa MangoFrente #a0522d: -1,-22 1,-22 1,22 -1,22
+capa CabezaFondo #696969: 2,-18 16,-24 18,-6 2,-10
+capa CabezaFrente #808080: 4,-16 14,-20 15,-8 4,-11
+capa FiloCortante #d3d3d3: 16,-24 20,-15 18,-6 15,-8 16,-16
+capa Refuerzo1 #a9a9a9: 2,-12 8,-14 8,-10 2,-9
+capa Refuerzo2 #a9a9a9: 2,-18 8,-20 8,-16 2,-15
+capa CintaAgarre #cd853f: -4,2 4,2 4,14 -4,14
+capa CintaBrillo #deb887: -1,2 4,2 4,14 -1,14
+capa Enredadera #32cd32: -3,-4 -8,-1 -3,2
+capa Hoja #adff2f: -8,-1 -12,1 -8,4
+escala 1.0
+sombra 26 10 18 0.4
