@@ -1029,3 +1029,18 @@ capa FacetaTronco #7a5c3a: 0,10 5,10 4,-6 0,-6
 capa Grieta #271a17: -8,12 0,11 8,13
 escala 1.1
 sombra 30 12 18 0.5
+---
+NOMBRE: Neem Concentrado
+capa BotellaFondo #2f4f4f: -8,16 8,16 8,-4 -8,-4
+capa BotellaFrente #4d4d4d: -5,14 5,14 5,-3 -5,-3
+capa Cuello #1a1a1a: -4,-4 4,-4 3,-10 -3,-10
+capa Tapa #228b22: -5,-10 5,-10 4,-14 -4,-14
+capa EtiquetaFondo #f5deb3: -7,6 7,6 7,-1 -7,-1
+capa HojaEtiqueta #006400: 0,5 -3,1 0,-1 3,1
+capa Nervio #228b22: -1,5 1,5 0,-1
+capa GotaConcentrado #8b4513: 4,-14 2,-18 6,-18
+capa Chispa1 #adff2f: -12,2 -15,-2 -11,-1
+capa Chispa2 #32cd32: 12,-2 15,-6 11,-5
+capa BrilloBotella #808080: -5,14 -5,-3 -3,-3 -3,14
+escala 1.1
+sombra 20 8 16 0.4
