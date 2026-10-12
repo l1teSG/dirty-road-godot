@@ -720,3 +720,17 @@ capa Hoja3 #228b22: -4,4 -12,0 -6,2
 capa PuntaHoja #adff2f: 4,-25 8,-30 6,-24
 escala 1.0
 sombra 14 5 20 0.5
+---
+NOMBRE: Bellota Masiva
+capa BellotaFondo #8b4513: 0,20 -13,9 -11,-6 0,-13 11,-6 13,9
+capa BellotaFrente #a0522d: 0,16 -9,7 -8,-4 0,-10 8,-4 9,7
+capa FacetaI #cd853f: -13,9 -11,-6 0,-13 -6,-4 -8,7
+capa FacetaD #6b4226: 13,9 11,-6 0,-13 6,-4 8,7
+capa TapaBase #5c4033: -15,-5 15,-5 13,-14 -13,-14
+capa TapaOscura1 #3e2723: -11,-7 -6,-7 -6,-11 -11,-11
+capa TapaOscura2 #3e2723: -1,-7 4,-7 4,-11 -1,-11
+capa TapaOscura3 #3e2723: 7,-7 12,-7 12,-11 7,-11
+capa Rabito #7a5c3a: -2,-14 2,-14 1,-20 -1,-20
+capa Brillo #deb887: -7,5 -4,1 -2,5
+escala 1.2
+sombra 26 10 18 0.5
