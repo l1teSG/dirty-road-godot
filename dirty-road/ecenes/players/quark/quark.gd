@@ -138,6 +138,9 @@ var _selector := SelectorObjetivo.new()
 func _ready() -> void:
 	add_to_group("jugador")
 	_aplicar_stats_guardados()
+	# Arranca con la vida llena (la vida_real viene de SaveManager, no de la
+	# escena: ver _aplicar_stats_guardados()).
+	life = vida_maxima
 	_crear_componentes()
 	_aplicar_rango_deteccion()
 	_actualizar_barra_vida()
@@ -546,7 +549,17 @@ func _morir() -> void:
 	_flecha.habilitada = false
 	_set_visible_vivo(false)
 	BiomasaManager.reiniciar_biomasa()
+	# Muerto: deja de ser un objetivo. Se sale de los grupos para que los
+	# sistemas que los consultan (IA, auras, proyectiles, orbes) lo ignoren
+	# hasta el respawn.
+	remove_from_group("jugador")
+	remove_from_group("player")
 	died.emit()
+
+
+## ¿Está muerto el jugador? La IA lo consulta en objetivo() para no seguirlo.
+func esta_muerto() -> bool:
+	return _muerto
 
 
 func respawn_at(posicion: Vector2) -> void:
@@ -559,6 +572,9 @@ func respawn_at(posicion: Vector2) -> void:
 	_set_visible_vivo(true)
 	_flecha.habilitada = true
 	_muerto = false
+	# Vuelve a ser objetivo.
+	add_to_group("jugador")
+	add_to_group("player")
 
 
 ## Muestra/oculta todo lo que depende de estar vivo.

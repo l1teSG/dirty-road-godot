@@ -87,8 +87,10 @@ const COMPORTAMIENTOS: Dictionary = {
 @export var dano_al_tocar: bool = false
 ## Daño de contacto NUEVO (0 = usa el flag viejo dano_al_tocar).
 @export var danio_contacto: float = 0.0
-## Radio de la hurtbox de contacto y alcance del golpe directo.
-@export var radio_contacto: float = 22.0
+## Radio de la hurtbox de contacto y alcance del golpe directo. Debe ser
+## >= al punto donde se detienen los comportamientos de contacto (melee_radio)
+## para que el golpe realmente conecte (ver _actualizar_contacto).
+@export var radio_contacto: float = 30.0
 ## Segundos entre daños por contacto (flag viejo y mordisco al árbol).
 @export_range(0.1, 3.0) var periodo_contacto: float = 1.0
 
@@ -700,8 +702,12 @@ func _actualizar_contacto(delta: float) -> void:
 		return
 	if jugador == null or not is_instance_valid(jugador):
 		return
+	# Alcance efectivo: los comportamientos de contacto (enjambre/melee) se
+	# plantan a `melee_radio`; si radio_contacto fuese menor, NUNCA golpearían
+	# (se detienen antes de tocarte). Se usa el mayor de los dos.
+	var alcance := maxf(radio_contacto, melee_radio)
 	# Daño por contacto al JUGADOR (nuevo flag o el legacy).
-	if global_position.distance_to(jugador.global_position) <= radio_contacto \
+	if global_position.distance_to(jugador.global_position) <= alcance \
 			or _chocando_con(jugador):
 		var d := 0.0
 		if danio_contacto > 0.0:
