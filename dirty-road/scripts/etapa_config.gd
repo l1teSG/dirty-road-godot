@@ -8,7 +8,8 @@ extends Resource
 ## oleadas (oleada_minima / oleada_maxima) y su mult_vida propio.
 @export var enemigos: Array[EnemigoOleadaConfig] = []
 ## Si es true, también aparecen los enemigos de las etapas anteriores.
-@export var heredar_enemigos_anteriores: bool = true
+## Por defecto FALSE: cada etapa usa SOLO sus propios enemigos.
+@export var heredar_enemigos_anteriores: bool = false
 
 @export_group("Cantidad por oleada")
 ## Enemigos que spawnean en la PRIMERA oleada de la etapa.

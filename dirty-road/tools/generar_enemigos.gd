@@ -203,7 +203,7 @@ func _initialize() -> void:
 		for o in oleadas:
 			arr.append(o)
 		et.enemigos = arr
-		et.heredar_enemigos_anteriores = true
+		et.heredar_enemigos_anteriores = false
 		et.enemigos_base_por_oleada = int(BASE_OLEADA[i])
 		et.incremento_enemigos_por_oleada = 3
 		et.escalado_vida_por_oleada = 0.30
