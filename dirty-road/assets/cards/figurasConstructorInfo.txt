@@ -849,3 +849,17 @@ capa CruzHoriz #adff2f: -8,-10 -1,-10 -1,-8 -8,-8
 capa BrilloHoja #98fb98: -2,12 -8,3 -6,-6 -3,-3
 escala 1.1
 sombra 26 10 18 0.3
+---
+NOMBRE: Metabolismo Lento
+capa ConchaFondo #6b8e23: 0,12 -14,4 -10,-8 0,-14 10,-8 14,4
+capa ConchaFrente #8fbc8f: 0,8 -9,3 -6,-5 0,-10 6,-5 9,3
+capa Patron1 #3e2723: -1,9 1,9 1,-11 -1,-11
+capa Patron2 #3e2723: -10,3 -1,-11 -1,-9
+capa Patron3 #3e2723: 10,3 1,-11 1,-9
+capa Cabeza #556b2f: 14,4 20,-2 22,2 16,8
+capa Ojo #1a1a1a: 19,0 20,0 20,1 19,1
+capa PataIzq #556b2f: -8,12 -4,12 -4,16 -8,16
+capa PataDer #556b2f: 4,12 8,12 8,16 4,16
+capa Brillo #bdb76b: -10,-6 -6,-9 -4,-5
+escala 1.1
+sombra 26 10 18 0.4
