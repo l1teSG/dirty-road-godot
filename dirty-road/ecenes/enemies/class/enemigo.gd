@@ -331,8 +331,13 @@ func _physics_process(delta: float) -> void:
 	# 3.5) Movilidad dinámica (orbita/zigzag/micro-dash/separación).
 	_aplicar_movilidad(delta)
 
-	# 4) Movimiento.
+	# 4) Movimiento + empuje externo (ondas de raíces del árbol).
 	velocity = _vel_deseada * _velocidad_actual()
+	if _empuje_t > 0.0:
+		_empuje_t -= delta
+		velocity += _empuje_vel
+		if _empuje_t <= 0.0:
+			_empuje_vel = Vector2.ZERO
 	move_and_slide()
 
 	# 5) Contacto DESPUÉS de move_and_slide().
@@ -532,6 +537,15 @@ func aplicar_aturdimiento(duracion: float) -> void:
 func aplicar_quemadura(dps: float, duracion: float) -> void:
 	_burn_dps = maxf(_burn_dps, dps)
 	_burn_t = maxf(_burn_t, duracion)
+
+
+## Empuje externo (lo llama el árbol con sus ondas de raíces). Se suma al
+## movimiento durante `duracion`; el empuje gana aun estando aturdido.
+func aplicar_empuje(dir: Vector2, fuerza: float, duracion: float = 0.25) -> void:
+	if dir == Vector2.ZERO or fuerza <= 0.0:
+		return
+	_empuje_vel = dir.normalized() * fuerza
+	_empuje_t = maxf(_empuje_t, duracion)
 
 
 func _mult_danio_actual() -> float:
@@ -742,6 +756,21 @@ func _chocando_con(obj: Node2D) -> bool:
 # ───────────── DAÑO / MUERTE ─────────────
 
 func recibir_danio(cantidad: float) -> void:
+	_aplicar_danio(cantidad)
+	# PEEL: al golpearlo TÚ (o un efecto tuyo), te hace caso unos segundos.
+	# Nunca aplica a jefes.
+	if not anti_estructura:
+		_peel_t = maxf(_peel_t, peel_duracion)
+
+
+## Daño de fuentes AMBIENTALES (espinas del árbol, auras): no provoca peel,
+## porque no eres tú atacando. Así las espinas no echan a los enemigos del
+## tronco. Mismo contrato de vida que recibir_danio().
+func recibir_danio_ambiental(cantidad: float) -> void:
+	_aplicar_danio(cantidad)
+
+
+func _aplicar_danio(cantidad: float) -> void:
 	if vida_actual <= 0.0:
 		return
 	vida_actual = maxf(0.0, vida_actual - cantidad)

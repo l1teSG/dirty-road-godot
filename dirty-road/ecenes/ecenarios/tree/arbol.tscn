@@ -34,7 +34,6 @@ corner_radius_bottom_left = 2
 [node name="Arbol" type="Area2D" unique_id=157670480 node_paths=PackedStringArray("shapes_danio")]
 script = ExtResource("1_v8n67")
 shapes_danio = [NodePath("CollisionShape2D"), NodePath("StaticBody2D/CollisionShape2D"), NodePath("StaticBody2D/CollisionShape2D2")]
-regeneracion_activa = false
 
 [node name="sombra" type="Polygon2D" parent="." unique_id=532215091]
 z_index = -1
@@ -94,6 +93,7 @@ scale_amount_max = 4.0
 color = Color(0.6666667, 1, 0, 1)
 
 [node name="BarraVida" type="ProgressBar" parent="." unique_id=1303220616]
+z_index = 100
 offset_left = -29.0
 offset_top = -45.0
 offset_right = 31.0

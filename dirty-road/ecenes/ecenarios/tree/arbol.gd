@@ -7,8 +7,13 @@ extends Area2D
 ##  • Contrato único de daño:
 ##      recibir_danio(cantidad: float, fuente: Node = null)
 ##    Aliases take_hit / recibir_dano para scripts viejos.
-##  • SIN armadura y SIN espinas (eliminadas del balance).
-##  • Regeneración 1.5 HP/s después de 8 s sin recibir daño.
+##  • Regeneración configurable (stat arbol.regen / arbol.regen_espera).
+##  • DEFENSAS PROPIAS (base pasiva, mejorables por carta):
+##      - Espinas: devuelve un % del daño recibido al atacante.
+##      - Ondas de raíces: empuje periódico a los enemigos del tronco.
+##      - Aura de purificación: ralentiza cerca y daña a los tóxicos.
+##      - Lianas: enraizan a quien se pegue al tronco demasiado tiempo.
+##      - Barrera de corteza: bloquea golpes letales (cargas).
 ##
 ##  DAÑO FANTASMA (diagnóstico):
 ##  • Activa debug_danio_entrante y cada golpe imprime QUIÉN fue,
@@ -55,10 +60,23 @@ var esta_destruido: bool = false
 ## Cada golpe imprime fuente, vía y cuerpos dentro del área.
 @export var debug_danio_entrante: bool = false
 
-## instance_id del enemigo en contacto → segundos acumulados.
+## instance_id del enemigo en contacto → segundos acumulados (daño).
 var _contactos: Dictionary = {}
+## instance_id → segundos pegado al tronco (para las lianas).
+var _pegado: Dictionary = {}
 ## Cargas de barrera (bloquean un golpe letal cada una).
 var _barrera_restante: int = 0
+## Tope de atacantes simultáneos: ids autorizados a dañar el tronco.
+var _atacantes_ok: Dictionary = {}
+var _t_atacantes: float = 0.0
+
+# ── Defensas propias (temporizadores y radios) ──
+var _t_pulso: float = 0.0
+var _t_aura: float = 0.0
+var _radio_pulso: float = 170.0
+var _radio_aura: float = 200.0
+var _vis_aura: Node2D = null
+var _vis_espinas: Node2D = null
 
 # ── Feedback visual ──
 @onready var _barra: ProgressBar = get_node_or_null("BarraVida")
@@ -85,6 +103,8 @@ func _ready() -> void:
 	body_shape_entered.connect(_on_body_shape_entered)
 	body_shape_exited.connect(_on_body_shape_exited)
 	area_shape_entered.connect(_on_area_shape_entered)
+
+	_crear_visuales_defensa()
 
 	if SaveManager != null and SaveManager.has_signal("stats_actualizados"):
 		SaveManager.stats_actualizados.connect(_on_stats_actualizados)
@@ -114,8 +134,17 @@ func _physics_process(delta: float) -> void:
 		return
 	_actualizar_regeneracion(delta)
 	if danio_contacto_enemigos:
+		_actualizar_atacantes(delta)
 		_procesar_contactos(delta)
 	_actualizar_congelar(delta)
+	_actualizar_raices(delta)
+	_actualizar_aura(delta)
+	# Redibuja las defensas visuales (leer el stat es barato; dibujar solo
+	# si está activa).
+	if _vis_aura != null:
+		_vis_aura.queue_redraw()
+	if _vis_espinas != null:
+		_vis_espinas.queue_redraw()
 
 
 ## "Bloque de Hielo Seco" (arbol.congelar): ralentiza a los enemigos cercanos.
@@ -138,6 +167,147 @@ func _actualizar_congelar(delta: float) -> void:
 				e.call("aplicar_ralentizado", 0.4, 0.8)
 
 
+# ───────────── DEFENSAS PROPIAS ─────────────
+
+## Crea los visuales persistentes de las defensas (aura y espinas).
+func _crear_visuales_defensa() -> void:
+	_vis_aura = VisAura.new()
+	_vis_aura.name = "VisAura"
+	_vis_aura.z_index = -3
+	_vis_aura.set("radio", _radio_aura)
+	add_child(_vis_aura)
+
+	_vis_espinas = VisEspinas.new()
+	_vis_espinas.name = "VisEspinas"
+	_vis_espinas.z_index = 1
+	add_child(_vis_espinas)
+
+
+## Ondas de raíces: cada `arbol.raices_pulso` s empuja a los enemigos del
+## tronco para dar respiro. 0 = desactivado.
+func _actualizar_raices(delta: float) -> void:
+	if SaveManager == null:
+		return
+	var periodo := SaveManager.get_stat("arbol.raices_pulso", 0.0)
+	if periodo <= 0.0:
+		return
+	_t_pulso -= delta
+	if _t_pulso > 0.0:
+		return
+	_t_pulso = periodo
+	var fuerza := SaveManager.get_stat("arbol.raices_empuje", 220.0)
+	for e in get_tree().get_nodes_in_group("enemigos"):
+		if not (e is Node2D):
+			continue
+		var nodo := e as Node2D
+		if global_position.distance_to(nodo.global_position) > _radio_pulso:
+			continue
+		if not e.has_method("aplicar_empuje"):
+			continue
+		var dir := nodo.global_position - global_position
+		if dir == Vector2.ZERO:
+			dir = Vector2.RIGHT
+		e.call("aplicar_empuje", dir, fuerza, 0.25)
+	_fx_pulso()
+
+
+## Aura de purificación: ralentiza a los enemigos cercanos y aplica daño
+## continuo a los de categoría "toxico". Refresco cada 0.6 s. 0 = off.
+func _actualizar_aura(delta: float) -> void:
+	if SaveManager == null:
+		return
+	var ral := SaveManager.get_stat("arbol.aura_purificacion", 0.0)
+	if ral <= 0.0:
+		return
+	_t_aura -= delta
+	if _t_aura > 0.0:
+		return
+	_t_aura = 0.6
+	var dps := SaveManager.get_stat("arbol.aura_dano_toxico", 0.0)
+	for e in get_tree().get_nodes_in_group("enemigos"):
+		if not (e is Node2D):
+			continue
+		if global_position.distance_to((e as Node2D).global_position) > _radio_aura:
+			continue
+		if e.has_method("aplicar_ralentizado"):
+			e.call("aplicar_ralentizado", ral, 0.8)
+		if dps > 0.0 and String(e.get("categoria")) == "toxico" \
+				and e.has_method("aplicar_quemadura"):
+			e.call("aplicar_quemadura", dps, 0.8)
+
+
+## Lianas: enraiza (aturde) al enemigo que lleve pegado al tronco más de
+## `arbol.lianas_tiempo` s. Se dispara una vez por contacto.
+func _procesar_lianas(delta: float, body: Node2D) -> void:
+	if SaveManager == null:
+		return
+	var tiempo := SaveManager.get_stat("arbol.lianas_tiempo", 0.0)
+	if tiempo <= 0.0:
+		return
+	var id := body.get_instance_id()
+	var t := float(_pegado.get(id, 0.0))
+	if t < 0.0:
+		return  # ya enraizado en este contacto
+	t += delta
+	if t >= tiempo:
+		_pegado[id] = -1.0
+		if body.has_method("aplicar_aturdimiento"):
+			body.call("aplicar_aturdimiento", SaveManager.get_stat("arbol.lianas_duracion", 1.5))
+		_fx_lianas(body.global_position)
+	else:
+		_pegado[id] = t
+
+
+# ───────────── FX DE DEFENSAS ─────────────
+
+func _fx_pulso() -> void:
+	var vis := Node2D.new()
+	vis.z_index = 5
+	var r := _radio_pulso
+	vis.draw.connect(func() -> void:
+		vis.draw_arc(Vector2.ZERO, r, 0.0, TAU, 48, Color(0.55, 0.95, 0.35, 0.7), 3.0))
+	vis.global_position = global_position
+	vis.scale = Vector2(0.4, 0.4)
+	get_tree().current_scene.add_child(vis)
+	var tw := vis.create_tween()
+	tw.set_parallel(true)
+	tw.tween_property(vis, "scale", Vector2.ONE, 0.3).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tw.tween_property(vis, "modulate:a", 0.0, 0.35)
+	tw.chain().tween_callback(vis.queue_free)
+
+
+func _fx_lianas(pos: Vector2) -> void:
+	var vis := Node2D.new()
+	vis.z_index = 5
+	vis.draw.connect(func() -> void:
+		vis.draw_arc(Vector2.ZERO, 26.0, 0.0, TAU, 24, Color(0.3, 0.9, 0.3, 0.9), 4.0))
+	vis.global_position = pos
+	get_tree().current_scene.add_child(vis)
+	var tw := vis.create_tween()
+	tw.set_parallel(true)
+	tw.tween_property(vis, "scale", Vector2(0.2, 0.2), 0.4)
+	tw.tween_property(vis, "modulate:a", 0.0, 0.4)
+	tw.chain().tween_callback(vis.queue_free)
+
+
+## Escudo de corteza: aviso visual/sonoro cuando bloquea un golpe letal.
+func _fx_barrera() -> void:
+	if AudioManager != null and AudioManager.has_method("reproducir"):
+		AudioManager.call("reproducir", "muerte", -8.0)
+	var vis := Node2D.new()
+	vis.z_index = 30
+	vis.draw.connect(func() -> void:
+		vis.draw_arc(Vector2.ZERO, 90.0, 0.0, TAU, 48, Color(0.55, 0.85, 1.0, 0.9), 5.0))
+	vis.global_position = global_position + Vector2(0, -60)
+	get_tree().current_scene.add_child(vis)
+	var tw := vis.create_tween()
+	tw.set_parallel(true)
+	tw.tween_property(vis, "scale", Vector2(1.6, 1.6), 0.4)
+	tw.tween_property(vis, "modulate:a", 0.0, 0.45)
+	tw.chain().tween_callback(vis.queue_free)
+	print("[Arbol] 🛡 Barrera de corteza: golpe letal bloqueado (quedan %d cargas)." % _barrera_restante)
+
+
 # ───────────── DAÑO ─────────────
 
 func recibir_danio(cantidad: float, fuente: Node = null) -> void:
@@ -150,20 +320,30 @@ func recibir_danio(cantidad: float, fuente: Node = null) -> void:
 	if SaveManager != null:
 		mult = SaveManager.get_stat("arbol.dano_recibido_mult", 1.0)
 
-	var nuevo := vida_actual - cantidad * mult
+	# Daño efectivo tras resistencia...
+	var efectivo := cantidad * mult
+	# ...y TOPE POR GOLPE: ningún golpe quita más de un % de la vida máxima
+	# (corta los one-shots de las etapas altas).
+	if SaveManager != null:
+		var tope := float(vida_maxima) * SaveManager.get_stat("arbol.tope_golpe_pct", 0.0)
+		if tope > 0.0:
+			efectivo = minf(efectivo, tope)
+
+	var nuevo := vida_actual - efectivo
 	# Barrera: bloquea un golpe letal por carga (lo deja a 1 HP).
 	if nuevo <= 0.0 and _barrera_restante > 0:
 		_barrera_restante -= 1
 		nuevo = 1.0
+		_fx_barrera()
 
 	vida_actual = maxf(nuevo, 0.0)
 	tiempo_latido = 0.0
 	vida_actualizada.emit(vida_actual, vida_maxima)
 
-	_fx_golpe(cantidad)
-	golpe_recibido.emit(cantidad)
+	_fx_golpe(efectivo)
+	golpe_recibido.emit(efectivo)
 
-	_reflejar_espinas(cantidad, fuente)
+	_reflejar_espinas(efectivo, fuente)
 
 	if vida_actual <= 0.0:
 		destruir_arbol()
@@ -176,7 +356,11 @@ func _reflejar_espinas(cantidad: float, fuente: Node) -> void:
 	var espinas := SaveManager.get_stat("arbol.espinas", 0.0)
 	if espinas <= 0.0:
 		return
-	if fuente.has_method("recibir_danio"):
+	# Canal ambiental: el reflejo NO debe disparar el "peel" del enemigo
+	# (si no, las espinas echarían a los asediadores del tronco).
+	if fuente.has_method("recibir_danio_ambiental"):
+		fuente.call("recibir_danio_ambiental", cantidad * espinas)
+	elif fuente.has_method("recibir_danio"):
 		fuente.call("recibir_danio", cantidad * espinas)
 
 
@@ -315,6 +499,7 @@ func _on_body_shape_exited(_body_rid: RID, body: Node2D, _body_shape_index: int,
 	if body == null:
 		return
 	_contactos.erase(body.get_instance_id())
+	_pegado.erase(body.get_instance_id())
 
 
 func _on_area_shape_entered(_area_rid: RID, area: Node2D, _area_shape_index: int, local_shape_index: int) -> void:
@@ -340,6 +525,38 @@ func _shape_registra(local_shape_index: int) -> bool:
 	return nodo != null and shapes_danio.has(nodo)
 
 
+## Tope de atacantes: recalcula (cada 0.2 s) qué enemigos en contacto pueden
+## dañar el tronco. Solo los `arbol.max_atacantes` más cercanos. 0 = sin tope.
+func _actualizar_atacantes(delta: float) -> void:
+	if SaveManager == null:
+		return
+	var maximo := int(SaveManager.get_stat("arbol.max_atacantes", 0.0))
+	if maximo <= 0:
+		_atacantes_ok.clear()  # sin tope: todos valen (ver _puede_atacar)
+		return
+	_t_atacantes -= delta
+	if _t_atacantes > 0.0:
+		return
+	_t_atacantes = 0.2
+	var lista: Array = []
+	for id in _contactos:
+		var body := instance_from_id(id) as Node2D
+		if body == null or not is_instance_valid(body):
+			continue
+		lista.append([global_position.distance_to(body.global_position), id])
+	lista.sort_custom(func(a, b): return a[0] < b[0])
+	_atacantes_ok.clear()
+	for i in mini(maximo, lista.size()):
+		_atacantes_ok[lista[i][1]] = true
+
+
+## ¿Este id puede dañar el tronco? Sin tope (diccionario vacío) = todos.
+func _puede_atacar(id: int) -> bool:
+	if _atacantes_ok.is_empty():
+		return true
+	return _atacantes_ok.has(id)
+
+
 func _procesar_contactos(delta: float) -> void:
 	var ids_fuera: Array = []
 	for id in _contactos:
@@ -354,10 +571,14 @@ func _procesar_contactos(delta: float) -> void:
 		var t: float = float(_contactos[id]) + delta
 		if t >= intervalo_contacto:
 			t = 0.0
-			recibir_danio(_f_nodo(body, "damage", 1.0), body)
+			if _puede_atacar(id):
+				recibir_danio(_f_nodo(body, "damage", 1.0), body)
 		_contactos[id] = t
+		if _puede_atacar(id):
+			_procesar_lianas(delta, body)
 	for id in ids_fuera:
 		_contactos.erase(id)
+		_pegado.erase(id)
 
 
 # ───────────── REGENERACIÓN ─────────────
@@ -399,3 +620,37 @@ func _f_nodo(nodo: Node, propiedad: String, defecto: float) -> float:
 		return defecto
 	var v: Variant = nodo.get(propiedad)
 	return defecto if v == null else float(v)
+
+
+# ───────────── VISUALES DE DEFENSA (dibujo propio) ─────────────
+## Aura de purificación alrededor del tronco. Lee el stat dentro de su
+## propio _draw() para no depender de nadie.
+
+class VisAura extends Node2D:
+	var radio: float = 200.0
+
+	func _draw() -> void:
+		if SaveManager == null:
+			return
+		if SaveManager.get_stat("arbol.aura_purificacion", 0.0) <= 0.0:
+			return
+		draw_circle(Vector2.ZERO, radio, Color(0.35, 1.0, 0.55, 0.06))
+		draw_arc(Vector2.ZERO, radio, 0.0, TAU, 64, Color(0.35, 1.0, 0.55, 0.22), 2.0)
+
+
+## Pinchos sobre el tronco cuando las espinas están activas.
+
+class VisEspinas extends Node2D:
+	func _draw() -> void:
+		if SaveManager == null:
+			return
+		if SaveManager.get_stat("arbol.espinas", 0.0) <= 0.0:
+			return
+		var col := Color(0.55, 0.95, 0.35, 0.9)
+		for i in range(6):
+			var y := -12.0 - float(i) * 17.0
+			var w := 24.0 - float(i) * 1.5
+			draw_colored_polygon(PackedVector2Array([
+				Vector2(-w, y), Vector2(-w - 13.0, y - 5.0), Vector2(-w, y - 11.0)]), col)
+			draw_colored_polygon(PackedVector2Array([
+				Vector2(w, y), Vector2(w + 13.0, y - 5.0), Vector2(w, y - 11.0)]), col)

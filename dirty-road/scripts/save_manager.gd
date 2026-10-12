@@ -72,16 +72,39 @@ const DATOS_DEFECTO := {
 			"dron": 0.0,
 		},
 		"arbol": {
-			"vida_maxima": 800,
-			"dano_recibido_mult": 1.0,
-			"regen": 1.0,
-			"regen_espera": 10.0,
-			"espinas": 0.0,
+			"vida_maxima": 1800,
+			# Resistencia: multiplica TODO el daño recibido (<1 = menos daño).
+			"dano_recibido_mult": 0.70,
+			"regen": 6.0,
+			"regen_espera": 4.0,
+			# Tope de daño por golpe: fracción de la vida máxima que NINGÚN
+			# golpe puede superar (evita one-shots en etapas altas).
+			"tope_golpe_pct": 0.05,
+			# Máximo de enemigos que dañan el tronco a la vez (0 = sin tope).
+			"max_atacantes": 4,
+			# ── Defensas propias del árbol (base pasiva + cartas) ──
+			# Espinas: fracción del daño de contacto/melee que se devuelve.
+			"espinas": 0.10,
+			# Ondas de raíces: cada N s empuja a los enemigos del tronco.
+			"raices_pulso": 6.0,
+			"raices_empuje": 220.0,
+			# Aura de purificación: ralentiza cerca; daña a los tóxicos.
+			"aura_purificacion": 0.20,
+			"aura_dano_toxico": 6.0,
+			# Lianas: enraizan a quien se pegue al tronco demasiado tiempo.
+			"lianas_tiempo": 2.0,
+			"lianas_duracion": 1.5,
+			# Barrera de corteza: bloquea golpes letales (cargas).
 			"barrera": 0,
 			"congelar": 0.0,
 		},
 	},
 }
+
+## Versión de balance de los stats base. Súbela al cambiar DATOS_DEFECTO si
+## quieres que las partidas YA guardadas adopten los nuevos mínimos base sin
+## perder sus mejoras compradas (ver _migrar_balance()).
+const BALANCE_VERSION := 3
 
 # Ajustes por defecto (globales, compartidos por todos los slots).
 const AJUSTES_DEFECTO := {
@@ -263,6 +286,7 @@ func cargar_desde_ruta(ruta: String) -> bool:
 		datos[clave] = resultado[clave]
 	_fusionar_defecto("stats")
 	_fusionar_defecto("mejoras")
+	_migrar_balance()
 
 	datos_actualizados.emit()
 	stats_actualizados.emit()
@@ -287,8 +311,41 @@ func _fusionar_defecto(clave: String) -> void:
 			actual[k] = defecto[k]
 
 
+## Migra partidas guardadas de versiones anteriores al balance actual. Aplica
+## los NUEVOS MÍNIMOS base a las defensas del árbol sin bajar las mejoras ya
+## compradas (solo sube las que estén por debajo / baja el "regar_espera").
+func _migrar_balance() -> void:
+	if int(datos.get("balance_version", 1)) >= BALANCE_VERSION:
+		return
+	# "Al menos este valor": sube si el guardado está por debajo.
+	var al_menos := {
+		"arbol.vida_maxima": 1800.0,
+		"arbol.regen": 6.0,
+		"arbol.espinas": 0.10,
+		"arbol.raices_pulso": 6.0,
+		"arbol.aura_purificacion": 0.20,
+		"arbol.lianas_tiempo": 2.0,
+		"arbol.tope_golpe_pct": 0.05,
+		"arbol.max_atacantes": 4.0,
+	}
+	for ruta in al_menos.keys():
+		if get_stat(ruta, 0.0) < float(al_menos[ruta]):
+			set_stat(ruta, float(al_menos[ruta]))
+	# "Como mucho este valor" (menor = mejor): baja si estaba por encima.
+	var a_lo_mas := {
+		"arbol.regen_espera": 4.0,
+		"arbol.dano_recibido_mult": 0.70,
+	}
+	for ruta in a_lo_mas.keys():
+		if get_stat(ruta, 999.0) > float(a_lo_mas[ruta]):
+			set_stat(ruta, float(a_lo_mas[ruta]))
+	datos["balance_version"] = BALANCE_VERSION
+	print("[SaveManager] Balance migrado a v%d (defensas base del árbol)." % BALANCE_VERSION)
+
+
 func nueva_partida() -> void:
 	datos = DATOS_DEFECTO.duplicate(true)
+	datos["balance_version"] = BALANCE_VERSION
 	_tiempo_jugado = 0.0
 	guardar_partida()  # Sobrescribe el archivo inmediatamente con horda 1
 	datos_actualizados.emit()

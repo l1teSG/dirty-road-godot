@@ -22,7 +22,29 @@ const EFECTOS: Dictionary = {
 	"barreraviva": [["arbol.espinas", "add", 0.25]],
 	"compostajeorganico": [["arbol.regen", "add", 0.5]],
 	"capadeozono": [["arbol.barrera", "add", 1]],
-	"bloquedehieloseco": [["arbol.congelar", "add", 2.0]],  # hook pendiente
+	"bloquedehieloseco": [["arbol.congelar", "add", 2.0]],
+
+	# ── Defensas propias del árbol (mecánicas nuevas) ──
+	# Raíces Sísmicas: pulso más fuerte y más frecuente.
+	"raicessismicas": [
+		["arbol.raices_empuje", "pct", 0.60],
+		["arbol.raices_pulso", "pct", -0.25],
+	],
+	# Aura de Purificación: más ralentización y daño a los tóxicos.
+	"auradedepurificacion": [
+		["arbol.aura_purificacion", "add", 0.15],
+		["arbol.aura_dano_toxico", "add", 5.0],
+	],
+	# Lianas Ancestrales: enraizan antes y por más tiempo.
+	"lianasancestrales": [
+		["arbol.lianas_tiempo", "pct", -0.30],
+		["arbol.lianas_duracion", "add", 1.0],
+	],
+	# Corteza Endurecida: una carga extra de barrera + algo de espinas.
+	"cortezaendurecida": [
+		["arbol.barrera", "add", 1],
+		["arbol.espinas", "add", 0.05],
+	],
 
 	# ── Ofensiva ──
 	"herramientareciclada": [["jugador.danio", "pct", 0.15]],
