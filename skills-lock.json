@@ -12,6 +12,12 @@
       "sourceType": "github",
       "skillPath": "skills/frontend-design/SKILL.md",
       "computedHash": "89496d5dd00f4810205f351759594fc2742bf8eea85a2f2b2d1de59f4bd91576"
+    },
+    "godot-2d-animation": {
+      "source": "thedivergentai/game-design-agentic-skills",
+      "sourceType": "github",
+      "skillPath": "skills/godot-2d-animation/SKILL.md",
+      "computedHash": "75f1a9e279312a91408602d53731f4359d7903a50989b3014682dd1eb0268c3d"
     }
   }
 }
