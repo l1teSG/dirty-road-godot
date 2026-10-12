@@ -1114,3 +1114,17 @@ capa BrilloEnergia #adff2f: 0,-16 2,-22 -2,-20
 capa Grieta #271a17: -18,12 -6,10 4,12
 escala 1.1
 sombra 34 12 18 0.5
+---
+NOMBRE: Cúpula de Hojas
+capa DomoFondo #006400: 0,16 -20,6 -14,-8 0,-16 14,-8 20,6
+capa DomoMedio #228b22: 0,10 -14,3 -9,-6 0,-12 9,-6 14,3
+capa DomoFrente #32cd32: 0,5 -8,0 -5,-4 0,-8 5,-4 8,0
+capa Nervio1 #3cb371: -1,16 1,16 1,-16 -1,-16
+capa Nervio2 #3cb371: -20,6 -1,-16 -1,-14
+capa Nervio3 #3cb371: 20,6 1,-16 1,-14
+capa HojaBordeI #adff2f: -20,6 -14,-8 -16,0
+capa HojaBordeD #adff2f: 20,6 14,-8 16,0
+capa Base #5c4033: -10,16 10,16 8,20 -8,20
+capa Brillo #98fb98: -6,-2 -3,-6 -1,-2
+escala 1.1
+sombra 28 10 18 0.4
