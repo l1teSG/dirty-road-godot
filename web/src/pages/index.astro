@@ -2,7 +2,7 @@
 // Landing de Dirty Road — una sola página, centrada en el scroll.
 // index.astro SOLO ensambla; cada sección vive en su propio archivo.
 import BaseLayout from '../layouts/BaseLayout.astro';
-import FondoShader from '../components/FondoShader.tsx';
+import FondoMenu from '../components/FondoMenu.tsx';
 import Navbar from '../components/Navbar.astro';
 
 import Hero from '../components/sections/Hero.astro';
@@ -23,7 +23,7 @@ import Footer from '../components/sections/Footer.astro';
   title="Dirty Road — Videojuego educativo ambiental"
   description="Shooter de supervivencia con temática ecológica. Defiende el último árbol, recolecta, recicla y reforesta a través de 10 etapas."
 >
-  <FondoShader client:load />
+  <FondoMenu client:load />
   <Navbar />
   <main>
     <Hero />
