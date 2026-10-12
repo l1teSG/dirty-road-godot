@@ -133,9 +133,19 @@ const COMPORTAMIENTOS: Dictionary = {
 @export_range(0.0, 2.0) var embestida_telegrafiar: float = 0.6
 
 @export_group("Disparo")
-## Proyectil usado por disparar_desde() (rango/torreta). Si es null
-## se usa el rombo neón interno (ProyectilDefecto).
+## Proyectil usado por disparar_desde() (rango/torreta). Si es null se usa
+## el PROYECTIL ENEMIGO interno (ProyectilEnemigo) con el estilo de abajo.
 @export var proyectil: PackedScene
+## Estilo visual del proyectil interno. "auto" = según la categoría del
+## enemigo (nube→humo, fuego→fuego, toxico→toxico, acuatico→agua, resto→generico).
+@export_enum("auto", "generico", "humo", "acido", "fuego", "toxico", "electrico", "agua") \
+		var proyectil_estilo: String = "auto"
+## Radio del proyectil interno. 0 = usa el del estilo.
+@export var proyectil_radio: float = 0.0
+## Color propio del proyectil (si el alfa > 0 se usa en vez del del estilo).
+@export var proyectil_color: Color = Color(0, 0, 0, 0)
+## Segundos de aviso (línea de mira) antes de cada disparo de rango/torreta.
+@export var aviso_disparo: float = 0.35
 
 # ───────────── OBJETIVO: JUGADOR O ÁRBOL ─────────────
 
@@ -281,6 +291,8 @@ var _t_mordisco: float = 0.0
 var _label_nombre: TextoFlotante = null
 var _ajustes_nombre: LabelSettings = null
 var _ajustes_danio: LabelSettings = null
+## Línea de mira temporal (aviso de disparo de rango/torreta).
+var _mira: Node2D = null
 
 
 # ───────────── CICLO PRINCIPAL ─────────────
@@ -616,30 +628,85 @@ func _hacer_danio(obj: Node2D, cantidad: float) -> bool:
 	return false
 
 
-## Dispara desde un nodo (normalmente `self`) hacia `dir`. La escena
-## define `proyectil`; si es null, usa el rombo neón interno.
-func disparar_desde(origen: Node2D, dir: Vector2) -> bool:
+## Dispara desde un nodo (normalmente `self`) hacia un PUNTO objetivo.
+## La escena puede definir `proyectil`; si es null, usa ProyectilEnemigo
+## con el estilo/categoría del enemigo.
+func disparar_desde(origen: Node2D, punto: Vector2) -> bool:
 	if origen == null:
 		return false
 	var escena := get_tree().current_scene
 	if escena == null:
 		return false
+
+	# Dirección REAL: del origen (la boca) hacia el punto objetivo.
+	var d := (punto - origen.global_position).normalized()
+	if d == Vector2.ZERO:
+		var obj := objetivo()
+		d = dir_a(obj) if obj != null else Vector2.RIGHT
+
 	var p: Node2D = null
 	if proyectil != null:
 		p = proyectil.instantiate() as Node2D
 	else:
-		p = ProyectilDefecto.new()
+		var pe := ProyectilEnemigo.new()
+		pe.estilo = _estilo_proyectil_resuelto()
+		pe.fuente = self
+		p = pe
 	if p == null:
 		return false
 	escena.add_child(p)
 	p.global_position = origen.global_position
-	var d := dir.normalized()
 	if "velocidad" in p:
 		p.set("velocidad", rango_vel_proyectil if comportamiento_tipo == "rango" else torreta_vel_proyectil)
 	if p.has_method("configurar"):
-		p.call("configurar", d, damage * _mult_danio_actual())
+		if p is ProyectilEnemigo:
+			p.configurar(d, damage * _mult_danio_actual(), proyectil_color, proyectil_radio)
+		else:
+			p.call("configurar", d, damage * _mult_danio_actual())
 	_fx_ataque()
 	return true
+
+
+## Estilo del proyectil interno: el elegido, o deducido de la categoría.
+func _estilo_proyectil_resuelto() -> String:
+	if proyectil_estilo != "auto":
+		return proyectil_estilo
+	match categoria:
+		"nube": return "humo"
+		"fuego": return "fuego"
+		"toxico": return "toxico"
+		"acuatico": return "agua"
+		_: return "generico"
+
+
+# ───────────── LÍNEA DE MIRA (aviso de disparo) ─────────────
+
+## Muestra/actualiza la línea de mira desde la boca hacia `dir_global`.
+func mostrar_mira(dir_global: Vector2) -> void:
+	if dir_global == Vector2.ZERO:
+		return
+	if _mira == null or not is_instance_valid(_mira):
+		_mira = MiraDisparo.new()
+		_mira.z_index = 6
+		_mira.top_level = true
+		add_child(_mira)
+	_mira.set("origen", _boca_global())
+	_mira.set("direccion", dir_global)
+	_mira.visible = true
+	_mira.queue_redraw()
+
+
+## Oculta la línea de mira (al disparar, perder objetivo o morir).
+func ocultar_mira() -> void:
+	if _mira != null and is_instance_valid(_mira):
+		_mira.visible = false
+
+
+## Posición global de la boca (o del propio enemigo si no hay boca).
+func _boca_global() -> Vector2:
+	if boca != null and is_instance_valid(boca):
+		return boca.global_position
+	return global_position
 
 
 # ───────────── MOVILIDAD ─────────────
@@ -1147,9 +1214,29 @@ class TextoFlotante extends Label:
 		scale = Vector2.ONE * s
 
 
+# ───────────── LÍNEA DE MIRA ─────────────
+## Dibuja la trayectoria prevista del disparo (línea discontinua) en
+## coordenadas GLOBALES (top_level). Es un aviso visual antes de disparar.
+
+class MiraDisparo extends Node2D:
+	var origen: Vector2 = Vector2.ZERO
+	var direccion: Vector2 = Vector2.RIGHT
+	var largo: float = 320.0
+
+	func _draw() -> void:
+		var fin := origen + direccion.normalized() * largo
+		var pasos := 20
+		for i in range(pasos):
+			if i % 2 == 0:
+				var a := origen.lerp(fin, float(i) / float(pasos))
+				var b := origen.lerp(fin, float(i + 1) / float(pasos))
+				draw_line(a, b, Color(1.0, 0.35, 0.35, 0.5), 2.0)
+		draw_circle(origen, 4.0, Color(1.0, 0.45, 0.45, 0.85))
+
+
 # ───────────── PROYECTIL INTERNO (rombo neón) ─────────────
-## Se usa cuando la escena no define `proyectil`. Golpea una vez al
-## jugador o al árbol, con la misma cadena de compatibilidad.
+## LEGADO: disparar_desde() ya usa ProyectilEnemigo. Se conserva por
+## compatibilidad por si algo lo referencia.
 
 class ProyectilDefecto:
 	extends Node2D

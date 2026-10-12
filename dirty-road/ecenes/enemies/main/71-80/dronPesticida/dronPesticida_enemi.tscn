@@ -71,6 +71,7 @@ mov_orbita = 0.7
 radio_contacto = 44.16025568065744
 comportamiento_tipo = "rango"
 boca = NodePath("boca")
+proyectil_estilo = "toxico"
 nombre_texto = "Dron Pesticida"
 fuente_nombre = ExtResource("2_x2ihk")
 fuente_danio = ExtResource("2_x2ihk")

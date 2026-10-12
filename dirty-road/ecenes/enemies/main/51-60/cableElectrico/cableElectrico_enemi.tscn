@@ -60,6 +60,7 @@ damage = 12.0
 radio_contacto = 60.01136216933077
 comportamiento_tipo = "torreta"
 boca = NodePath("boca")
+proyectil_estilo = "electrico"
 categoria = "toxico"
 nombre_texto = "Cable Eléctrico"
 fuente_nombre = ExtResource("2_pvc10")

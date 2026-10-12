@@ -47,6 +47,7 @@ mov_orbita = 0.7
 radio_contacto = 51.2
 comportamiento_tipo = "rango"
 boca = NodePath("boca")
+proyectil_estilo = "electrico"
 nombre_texto = "Tormenta"
 fuente_nombre = ExtResource("2_1k8xp")
 fuente_danio = ExtResource("2_1k8xp")

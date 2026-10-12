@@ -40,6 +40,7 @@ speed = 95.0
 damage = 9.0
 comportamiento_tipo = "rango"
 boca = NodePath("Marker2D")
+proyectil_estilo = "humo"
 fuente_nombre = ExtResource("3_nllrl")
 fuente_danio = ExtResource("3_nllrl")
 
