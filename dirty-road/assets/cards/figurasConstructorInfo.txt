@@ -792,3 +792,16 @@ capa Chispa1 #ffd700: -10,-10 -13,-14 -9,-12
 capa Chispa2 #ffff00: 8,-12 11,-16 12,-11
 escala 1.1
 sombra 22 8 16 0.3
+---
+NOMBRE: Corteza Personal
+capa PlacaFondo #6b4226: -14,16 14,16 10,-8 0,-16 -10,-8
+capa PlacaFrente #7a5c3a: -10,12 10,12 6,-6 0,-12 -6,-6
+capa FranjaSuperior #8b4513: -11,-7 11,-7 8,-12 -8,-12
+capa Grieta1 #3e2723: -3,-6 -1,4 -4,10
+capa Grieta2 #3e2723: 4,-4 3,4 6,9
+capa Nudo #a0522d: -8,6 -4,6 -4,2 -8,2
+capa Brillo #cd853f: -14,16 -8,16 -6,-6 -10,-8
+capa Yema #32cd32: 0,-12 -3,-18 2,-17
+capa Hoja #adff2f: 0,-17 5,-21 3,-16
+escala 1.0
+sombra 24 10 16 0.4
