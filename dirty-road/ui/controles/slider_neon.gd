@@ -31,16 +31,28 @@ func _gui_input(event: InputEvent) -> void:
 		if mb.button_index == MOUSE_BUTTON_LEFT:
 			_arrastrando = mb.pressed
 			if mb.pressed:
-				_desde_x(mb.position.x)
+				_desde_x(_local_x(event))
+				accept_event()
 	elif event is InputEventMouseMotion and _arrastrando:
-		_desde_x((event as InputEventMouseMotion).position.x)
+		_desde_x(_local_x(event))
+		accept_event()
 	elif event is InputEventScreenTouch:
 		var st := event as InputEventScreenTouch
 		_arrastrando = st.pressed
 		if st.pressed:
-			_desde_x(st.position.x)
+			_desde_x(_local_x(event))
+			accept_event()
 	elif event is InputEventScreenDrag:
-		_desde_x((event as InputEventScreenDrag).position.x)
+		_desde_x(_local_x(event))
+		accept_event()
+
+
+## Convierte la posición del evento (global/screen) a coordenadas locales del
+## slider. Sin esto, en táctil `position` venía en coords de pantalla y el valor
+## se saturaba al máximo (no bajaba).
+func _local_x(event: InputEvent) -> float:
+	var inv := get_global_transform_with_canvas().affine_inverse()
+	return (inv * event.position).x
 
 
 func _desde_x(x: float) -> void:

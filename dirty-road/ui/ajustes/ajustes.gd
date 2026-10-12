@@ -155,6 +155,7 @@ func _header() -> HBoxContainer:
 	var titulo := Label.new()
 	titulo.text = "AJUSTES"
 	titulo.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	titulo.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	EstiloUI.titulo(titulo, 64, EstiloUI.NEON)
 	hb.add_child(titulo)
 
@@ -172,6 +173,7 @@ func _header() -> HBoxContainer:
 	_chip_guardado.add_theme_stylebox_override("panel", cs)
 	var lbl := Label.new()
 	lbl.text = "Guardado ✓"
+	lbl.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	lbl.add_theme_font_override("font", EstiloUI.F_BOLD)
 	lbl.add_theme_font_size_override("font_size", 22)
 	lbl.add_theme_color_override("font_color", Color(0.04, 0.09, 0.06))
@@ -219,6 +221,7 @@ func _tab(tabs: TabContainer, nombre: String) -> VBoxContainer:
 	var vb := VBoxContainer.new()
 	vb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	vb.add_theme_constant_override("separation", 16)
+	vb.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	scroll.add_child(vb)
 	tabs.add_child(scroll)
 	return vb
@@ -228,21 +231,26 @@ func _tab(tabs: TabContainer, nombre: String) -> VBoxContainer:
 func _tarjeta(padre: Node, texto: String) -> VBoxContainer:
 	var panel := PanelContainer.new()
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	panel.add_theme_stylebox_override("panel", _estilo_tarjeta())
 	padre.add_child(panel)
 
 	var vb := VBoxContainer.new()
 	vb.add_theme_constant_override("separation", 14)
+	vb.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	panel.add_child(vb)
 
 	var fila := HBoxContainer.new()
 	fila.add_theme_constant_override("separation", 12)
+	fila.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var barra := ColorRect.new()
 	barra.color = EstiloUI.NEON
 	barra.custom_minimum_size = Vector2(6, 30)
+	barra.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	fila.add_child(barra)
 	var l := Label.new()
 	l.text = texto
+	l.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	l.add_theme_font_override("font", EstiloUI.F_BOLD)
 	l.add_theme_font_size_override("font_size", 34)
 	l.add_theme_color_override("font_color", EstiloUI.NEON)
@@ -259,8 +267,10 @@ func _fila_base(padre: Node, etiqueta: String) -> HBoxContainer:
 	hb.add_theme_constant_override("separation", 14)
 	hb.custom_minimum_size = Vector2(0, ALTO_FILA)
 	hb.alignment = BoxContainer.ALIGNMENT_CENTER
+	hb.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var l := Label.new()
 	l.text = etiqueta
+	l.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	l.add_theme_font_size_override("font_size", 28)
 	l.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	hb.add_child(l)
@@ -306,6 +316,7 @@ func _fila_slider(padre: Node, etiqueta: String, clave: String,
 
 	var valor := Label.new()
 	valor.custom_minimum_size = Vector2(96, 0)
+	valor.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	valor.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	valor.add_theme_font_override("font", EstiloUI.F_BOLD)
 	valor.add_theme_font_size_override("font_size", 28)
