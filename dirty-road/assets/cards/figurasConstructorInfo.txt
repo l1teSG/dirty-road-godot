@@ -561,3 +561,19 @@ capa BrilloRey1 #adff2f: -10,-25 0,-30 -5,-20
 capa BrilloRey2 #adff2f: 10,-25 0,-30 5,-20
 escala 1.2
 sombra 32 12 22 0.5
+---
+NOMBRE: Raíces Sísmicas
+capa SueloFondo #5c4033: -22,16 22,16 16,6 -16,6
+capa GrietaSuelo #271a17: -16,6 16,6 10,10 0,8 -10,10
+capa RaizFondo #8b4513: 0,8 -6,-6 -2,2 0,8
+capa RaizMedia #a0522d: 0,8 2,-10 -4,0 0,8
+capa RaizFrente #cd853f: 0,8 8,-4 2,2 0,8
+capa RaizDer #a0522d: 6,8 16,-8 10,4
+capa RaizIzq #a0522d: -6,8 -16,-8 -10,4
+capa Onda1 #ff4500: -20,14 -18,4 -14,12
+capa Onda2 #ff8c00: 20,14 18,4 14,12
+capa EnergiaSismica #ffd700: 0,-10 -4,-20 4,-20
+capa Polvo #a9a9a9: -10,-14 -14,-20 -8,-18
+capa Brillo #adff2f: -2,-16 0,-22 2,-16
+escala 1.1
+sombra 34 14 20 0.5
