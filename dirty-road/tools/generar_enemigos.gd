@@ -134,10 +134,12 @@ const CATEGORIAS := {
 }
 
 # ── Multiplicadores por etapa (índice 0 = etapa 1) ──
+## [mult_vida, mult_danio, mult_velocidad]. Alineado con los .tres ajustados
+## (curvas de vida y daño suavizadas).
 const MULT := [
-	[1.00, 1.00, 1.00], [1.35, 1.35, 1.05], [1.75, 1.75, 1.10], [2.25, 2.25, 1.15],
-	[2.85, 2.85, 1.20], [3.55, 3.55, 1.25], [4.40, 4.40, 1.30], [5.40, 5.40, 1.35],
-	[6.60, 6.60, 1.40], [8.00, 8.00, 1.45],
+	[1.00, 1.00, 1.00], [1.15, 1.15, 1.05], [1.30, 1.35, 1.10], [1.50, 1.60, 1.15],
+	[1.70, 1.90, 1.20], [1.90, 2.25, 1.25], [2.10, 2.65, 1.30], [2.30, 3.10, 1.35],
+	[2.50, 3.60, 1.40], [2.80, 4.20, 1.45],
 ]
 
 # ── Ventana/peso de las 3 entradas normales de cada etapa ──
@@ -149,6 +151,10 @@ const VENTANAS := [
 
 # ── Cantidad de enemigos por oleada por etapa ──
 const BASE_OLEADA := [8, 9, 10, 11, 12, 13, 15, 16, 18, 20]
+
+# ── Cadencia de spawn y tope de vivos por etapa ──
+const TIEMPO_SPAWNS := [1.2, 1.25, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0]
+const MAX_VIVOS := [12, 12, 13, 14, 14, 15, 16, 16, 18, 20]
 
 
 func _initialize() -> void:
@@ -205,9 +211,11 @@ func _initialize() -> void:
 		et.enemigos = arr
 		et.heredar_enemigos_anteriores = false
 		et.enemigos_base_por_oleada = int(BASE_OLEADA[i])
-		et.incremento_enemigos_por_oleada = 3
-		et.escalado_vida_por_oleada = 0.30
-		et.escalado_danio_por_oleada = 0.09
+		et.incremento_enemigos_por_oleada = 1
+		et.escalado_vida_por_oleada = 0.10
+		et.escalado_danio_por_oleada = 0.04
+		et.tiempo_entre_spawns = float(TIEMPO_SPAWNS[i])
+		et.max_enemigos_simultaneos = int(MAX_VIVOS[i])
 		et.mult_vida = float(MULT[i][0])
 		et.mult_velocidad = float(MULT[i][2])
 		et.mult_danio = float(MULT[i][1])
