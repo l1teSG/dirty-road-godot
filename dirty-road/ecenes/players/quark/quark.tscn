@@ -12,6 +12,7 @@
 [ext_resource type="Script" uid="uid://drruqg2k50oba" path="res://ecenes/cards/gestorCartas.gd" id="8_cartas"]
 [ext_resource type="Resource" path="res://assets/cards/cartasConfig.tres" id="9_cfg"]
 [ext_resource type="Script" uid="uid://c03wvi3avfsnh" path="res://ecenes/players/quark/menu_debug.gd" id="10_dbg"]
+[ext_resource type="Script" uid="uid://55ggijcywijg" path="res://ecenes/players/quark/joystick_apuntado.gd" id="11_apuntado"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_xqmf3"]
 radius = 463.13
@@ -335,6 +336,10 @@ texture_normal = ExtResource("3_qh7t8")
 texture_pressed = SubResource("GradientTexture2D_fm6mt")
 shape = SubResource("CircleShape2D_v2d8e")
 action = "mega"
+
+[node name="JoystickApuntado" type="Control" parent="controls" index="2" unique_id=1477331095]
+visible = false
+script = ExtResource("11_apuntado")
 
 [node name="Cartas" type="CanvasLayer" parent="." index="13" unique_id=1700597704]
 layer = 100

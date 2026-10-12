@@ -81,18 +81,27 @@ func _terminar() -> void:
 	queue_redraw()
 
 
+## Corta el disparo (lo usa Quark al desactivar el modo manual).
+func desactivar() -> void:
+	if activo:
+		_terminar()
+
+
 func _draw() -> void:
 	var c := color
 	var base := _origen
-	var alfa := 1.0
 	if not activo:
-		# Base tenue fija abajo-derecha para que se vea que existe (por encima
-		# de los botones super/mega para no confundirlos).
-		base = Vector2(size.x * 0.5, size.y - 440.0)
-		alfa = 0.4
-	draw_arc(base, radio, 0.0, TAU, 48, Color(c.r, c.g, c.b, 0.35 * alfa), 3.0)
-	draw_circle(base, radio, Color(c.r, c.g, c.b, 0.06 * alfa))
-	if activo:
-		var k := direccion.limit_length(radio) + _origen
-		draw_circle(k, radio * 0.28, Color(c.r, c.g, c.b, 0.35))
-		draw_arc(k, radio * 0.28, 0.0, TAU, 24, Color(c.r, c.g, c.b, 0.9), 3.0)
+		# Base + perilla visibles en reposo: el jugador debe saber que existe
+		# el joystick de disparo (arriba de los botones super/mega).
+		base = Vector2(size.x * 0.5, size.y - 540.0)
+		draw_arc(base, radio, 0.0, TAU, 48, Color(c.r, c.g, c.b, 0.7), 4.0)
+		draw_circle(base, radio, Color(c.r, c.g, c.b, 0.12))
+		draw_circle(base, radio * 0.3, Color(c.r, c.g, c.b, 0.5))
+		draw_arc(base, radio * 0.3, 0.0, TAU, 24, Color(c.r, c.g, c.b, 0.9), 3.0)
+		return
+
+	draw_arc(base, radio, 0.0, TAU, 48, Color(c.r, c.g, c.b, 0.5), 3.0)
+	draw_circle(base, radio, Color(c.r, c.g, c.b, 0.08))
+	var k := direccion.limit_length(radio) + _origen
+	draw_circle(k, radio * 0.28, Color(c.r, c.g, c.b, 0.5))
+	draw_arc(k, radio * 0.28, 0.0, TAU, 24, Color(c.r, c.g, c.b, 0.95), 3.0)

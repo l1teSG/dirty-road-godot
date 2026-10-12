@@ -43,10 +43,9 @@ const ACC_DEBUG_KILL := "debug_kill"
 @onready var timer_disparo: Timer = $Timer
 @onready var pausa = get_node_or_null("Pausa")
 
-const JOYSTICK_APUNTADO := preload("res://ecenes/players/quark/joystick_apuntado.gd")
 const DRON := preload("res://ecenes/players/quark/dron.gd")
-## Joystick de apuntado (solo modo disparo manual).
-var _apuntado = null
+## Joystick de apuntado/disparo (solo modo disparo manual). Nodo de la escena.
+@onready var _apuntado: JoystickApuntado = $controls/JoystickApuntado
 ## Dron compañero (carta "Dron Conservacionista").
 var _dron = null
 ## Escala base del HUD definida en la escena (para no acumular el ajuste hud_escala).
@@ -366,20 +365,17 @@ func _capturar_escala_hud() -> void:
 
 ## Crea/elimina el joystick de apuntado y aplica escala/opacidad del HUD.
 func _configurar_hud() -> void:
-	if controles == null:
+	if controles == null or _apuntado == null:
 		return
-	if _es_manual():
-		if _apuntado == null:
-			_apuntado = JOYSTICK_APUNTADO.new()
-			_apuntado.name = "JoystickApuntado"
-			controles.add_child(_apuntado)
-			# Al fondo del CanvasLayer: los botones super/mega quedan por encima
-			# y siguen recibiendo el toque (el joystick cubre la mitad derecha).
-			controles.move_child(_apuntado, 0)
+	# El joystick de disparo solo se muestra en modo manual (twin-stick).
+	var manual := _es_manual()
+	_apuntado.visible = manual
+	if manual:
+		# Al fondo del CanvasLayer: los botones super/mega quedan por encima
+		# y siguen recibiendo el toque (el joystick cubre la mitad derecha).
+		controles.move_child(_apuntado, 0)
 	else:
-		if _apuntado != null and is_instance_valid(_apuntado):
-			_apuntado.queue_free()
-		_apuntado = null
+		_apuntado.desactivar()
 	_aplicar_hud()
 
 
