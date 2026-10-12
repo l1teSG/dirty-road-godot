@@ -123,6 +123,13 @@ const BOSS_KITS := {
 							 "inv_escena": "res://ecenes/enemies/main/91-100/deshielo/deshielo_enemi.tscn"},
 }
 
+# ── Estilo del proyectil de rango/torreta ("" / "auto" = por categoría) ──
+const PROYECTILES := {
+	"nubegas": "humo", "humofabrica": "humo", "nubefumigacion": "humo",
+	"nubeacida": "acido", "cableelectrico": "electrico", "tormenta": "electrico",
+	"dronpesticida": "toxico",
+}
+
 # ── Categoría por enemigo (para efectos de cartas) ──
 const CATEGORIAS := {
 	"nubegas": "nube", "humofabrica": "nube", "nubeacida": "nube", "nubefumigacion": "nube",
@@ -241,6 +248,7 @@ func _construir_normal(key: String, nombre: String, shape: String, radio: float)
 	_adjuntar_colision(root, radio)
 	_adjuntar_boca(root, conf)
 	root.set("categoria", str(CATEGORIAS.get(key, "")))
+	root.set("proyectil_estilo", str(PROYECTILES.get(key, "auto")))
 	_adjuntar_mecanicas(root, key)
 	_adjuntar_animacion(root)
 	return _pack(root)
