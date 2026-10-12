@@ -16,6 +16,14 @@ extends Resource
 ## Enemigos extra por cada oleada adicional dentro de la etapa.
 @export var incremento_enemigos_por_oleada: int = 2
 
+@export_group("Spawns")
+## Segundos entre refuerzos en ESTA etapa. 0 = usa el global del WaveManager.
+## Es LA palanca de presión: a menor valor, más rápido se repone el hueco.
+@export var tiempo_entre_spawns: float = 0.0
+## Tope DURO de enemigos vivos en esta etapa. 0 = usa la fórmula
+## (base + incremento × (pos−1)). Evita el agobio en etapas avanzadas.
+@export var max_enemigos_simultaneos: int = 0
+
 @export_group("Escalado por oleada")
 ## Se aplica sobre la OLEADA GLOBAL: vida = base × (1 + (oleada-1) × esto).
 ## 0.07 = +7% compuesto por oleada.

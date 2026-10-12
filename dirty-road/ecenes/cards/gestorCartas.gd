@@ -25,6 +25,7 @@ var _cerrando: bool = false
 var _pool: Array[InfoMejora] = []
 
 func _ready() -> void:
+	add_to_group("cartas")
 	hide()
 
 	if config == null:
@@ -190,12 +191,17 @@ func _on_descanso_iniciado(_tiempo_total: float) -> void:
 
 ## ¿Toca ofrecer cartas en este descanso? (cadencia + min_oleada).
 func _toca_mostrar_cartas() -> bool:
-	var completada := _oleada_completada()
-	if completada < config.min_oleada:
+	return hay_cartas_en(_oleada_completada())
+
+
+## Público: ¿la oleada indicada ofrece cartas? Lo consulta el WaveManager para
+## decidir la duración del descanso (corto sin cartas, largo con cartas).
+func hay_cartas_en(oleada_completada: int) -> bool:
+	if oleada_completada < config.min_oleada:
 		return false
 	if config.mostrar_cada_n_oleadas <= 1:
 		return true
-	return completada % config.mostrar_cada_n_oleadas == 0
+	return oleada_completada % config.mostrar_cada_n_oleadas == 0
 
 ## Nº de la última oleada completada (el WaveManager ya incrementó).
 func _oleada_completada() -> int:

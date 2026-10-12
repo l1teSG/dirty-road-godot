@@ -52,7 +52,11 @@ signal arranque_liberado
 @export var tiempo_entre_spawns: float = 1.2
 ## Duración BASE de la oleada (luego la escalan los aumentos micro/macro).
 @export var tiempo_maximo_oleada: float = 40.0
-@export var tiempo_descanso: float = 5.0
+## Descanso CORTO: cuando el descanso NO muestra cartas.
+@export var tiempo_descanso: float = 2.5
+## Descanso LARGO: cuando el descanso SÍ muestra cartas (el jugador puede
+## cerrar antes con "LISTO").
+@export var tiempo_descanso_cartas: float = 45.0
 
 @export_category("Duración de oleadas")
 ## Aumento MICRO: la oleada N de la etapa dura base × (1 + esto × (N−1)). 0 = fija.
@@ -320,7 +324,7 @@ func iniciar_oleada() -> void:
 		ui_timer.start(1.0)
 
 	if _spawns_activos():
-		spawn_timer.start(tiempo_entre_spawns)
+		spawn_timer.start(_intervalo_spawns_actual())
 
 	_imprimir_pool_si_toca()
 	_notificar_enemigos_restantes()
@@ -413,7 +417,17 @@ func _cerrar_oleada(descanso: float) -> void:
 func _duracion_descanso() -> float:
 	if debug_activo and debug_descanso > 0.0:
 		return debug_descanso
-	return tiempo_descanso
+	# Descanso largo si este descanso mostrará cartas; corto si no.
+	return tiempo_descanso_cartas if _toca_cartas_ahora() else tiempo_descanso
+
+
+## ¿El descanso que va a empezar mostrará cartas? Pregunta al GestorCartas
+## (grupo "cartas"). Sin gestor (debug/prueba) → descanso corto.
+func _toca_cartas_ahora() -> bool:
+	var gestor := get_tree().get_first_node_in_group("cartas")
+	if gestor == null or not gestor.has_method("hay_cartas_en"):
+		return false
+	return bool(gestor.call("hay_cartas_en", oleada_actual))
 
 
 ## Los spawns están activos salvo que el MODO DEBUG los desactive.
@@ -542,9 +556,22 @@ func _tope_simultaneos() -> int:
 	if etapa != null:
 		tope = etapa.enemigos_base_por_oleada \
 			+ etapa.incremento_enemigos_por_oleada * (_pos_en_etapa() - 1)
+		# Cap duro por etapa (si lo define): evita el agobio en avanzas.
+		if etapa.max_enemigos_simultaneos > 0 \
+				and (tope <= 0 or etapa.max_enemigos_simultaneos < tope):
+			tope = etapa.max_enemigos_simultaneos
 	if max_enemigos_simultaneos > 0 and (tope <= 0 or max_enemigos_simultaneos < tope):
 		tope = max_enemigos_simultaneos
 	return tope
+
+
+## Intervalo entre refuerzos: el de la etapa si lo define (>0), si no el global.
+## Es LA palanca de presión de spawn (matar no adelanta la oleada).
+func _intervalo_spawns_actual() -> float:
+	var etapa := _etapa_actual()
+	if etapa != null and etapa.tiempo_entre_spawns > 0.0:
+		return maxf(etapa.tiempo_entre_spawns, 0.05)
+	return maxf(tiempo_entre_spawns, 0.05)
 
 
 ## Pool de la oleada: fijos de debug (si hay) o la etapa con herencia.
