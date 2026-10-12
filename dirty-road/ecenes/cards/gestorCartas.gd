@@ -21,6 +21,7 @@ const CATALOGO_CARDS := preload("res://assets/cards/catalogoCards.gd")
 
 var _boton_saltar: Button
 var _contenido: Control
+var _biomasa_label: Label
 var _cerrando: bool = false
 var _pool: Array[InfoMejora] = []
 
@@ -32,6 +33,10 @@ func _ready() -> void:
 		config = CartasConfig.new()
 
 	_build_ui()
+
+	if BiomasaManager != null and not BiomasaManager.biomasa_incrementada.is_connected(_on_biomasa_ui):
+		BiomasaManager.biomasa_incrementada.connect(_on_biomasa_ui)
+	_refrescar_biomasa_ui()
 
 	_pool = _construir_pool()
 	_log("Pool listo: %d cartas." % _pool.size())
@@ -102,6 +107,16 @@ func _build_ui() -> void:
 	titulo.add_theme_font_size_override("font_size", config.tam_titulo)
 	titulo.add_theme_color_override("font_color", Color(0.6, 1.0, 0.2))
 	vbox.add_child(titulo)
+
+	# Biomasa actual: el gasto de las cartas debe verse aquí (el HUD del
+	# jugador queda tapado por esta pantalla).
+	_biomasa_label = Label.new()
+	_biomasa_label.name = "BiomasaCartas"
+	_biomasa_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_biomasa_label.add_theme_font_override("font", config.fuente_boton)
+	_biomasa_label.add_theme_font_size_override("font_size", config.tam_titulo)
+	_biomasa_label.add_theme_color_override("font_color", Color("ffdd55"))
+	vbox.add_child(_biomasa_label)
 
 	var fila := HBoxContainer.new()
 	fila.name = "Cartas"
@@ -273,6 +288,7 @@ func _mostrar_interfaz_mejoras() -> void:
 		carta_lista.carta_elegida.connect(_on_carta_elegida)
 
 	show()
+	_refrescar_biomasa_ui()
 	_log("UI visible=%s" % visible)
 
 	# Animación de apertura: fade del panel + entrada escalonada de las cartas.
@@ -303,6 +319,7 @@ func _on_carta_elegida(info: InfoMejora) -> void:
 		_log("Comprada OK: %s" % info.id)
 		mejora_comprada.emit(info.id)
 		_animar_carta(info)
+		_feedback_gasto(info.costo_orbes)
 	else:
 		_log("No se pudo comprar: %s (¿sin biomasa?)" % info.id)
 
@@ -316,6 +333,69 @@ func _on_listo_presionado() -> void:
 	_log("LISTO pulsado.")
 	_cerrar_interfaz()
 	_terminar_descanso()
+
+
+# ── Biomasa en pantalla: valor + feedback de gasto ────────────────────────
+
+func _on_biomasa_ui() -> void:
+	_refrescar_biomasa_ui()
+
+
+func _refrescar_biomasa_ui() -> void:
+	if _biomasa_label == null:
+		return
+	var valor: int = BiomasaManager.contador if BiomasaManager != null else 0
+	_biomasa_label.text = "🌱 %d" % valor
+
+
+## Feedback al comprar: destello rojo + "pop" del indicador y un "-coste"
+## flotante. Necesario porque el HUD del jugador queda debajo de esta pantalla.
+func _feedback_gasto(cantidad: int) -> void:
+	_refrescar_biomasa_ui()
+	if _biomasa_label == null:
+		return
+
+	_biomasa_label.pivot_offset = _biomasa_label.size * 0.5
+	_biomasa_label.add_theme_color_override("font_color", Color("ff6b6b"))
+	var tw := create_tween()
+	tw.tween_property(_biomasa_label, "scale", Vector2.ONE * 1.25, 0.08)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tw.tween_property(_biomasa_label, "scale", Vector2.ONE, 0.24)\
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tw.tween_callback(func():
+		if _biomasa_label != null:
+			_biomasa_label.remove_theme_color_override("font_color")
+	)
+
+	_flotar_gasto(cantidad)
+
+
+## Etiqueta "-N" que sube desde el indicador y se desvanece.
+func _flotar_gasto(cantidad: int) -> void:
+	if _biomasa_label == null:
+		return
+	var fantasma := Label.new()
+	fantasma.text = "-%d" % cantidad
+	fantasma.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	fantasma.z_index = 10
+	fantasma.add_theme_font_override("font", config.fuente_boton)
+	fantasma.add_theme_font_size_override("font_size", config.tam_titulo)
+	fantasma.add_theme_color_override("font_color", Color("ff6b6b"))
+	add_child(fantasma)
+	# Justo a la derecha del número (el label ocupa todo el ancho del VBox,
+	# así que se usa el ancho real del texto, no el del Control).
+	var fuente: Font = _biomasa_label.get_theme_font("font")
+	var tam: int = _biomasa_label.get_theme_font_size("font_size")
+	var ancho_texto: float = fuente.get_string_size(
+		_biomasa_label.text, HORIZONTAL_ALIGNMENT_CENTER, -1, tam).x
+	var centro := _biomasa_label.global_position + _biomasa_label.size * 0.5
+	fantasma.global_position = centro + Vector2(ancho_texto * 0.5 + 12.0, -tam * 0.5)
+	var destino := fantasma.global_position + Vector2(0.0, -38.0)
+	var tw := create_tween().set_parallel(true)
+	tw.tween_property(fantasma, "global_position", destino, 0.65)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tw.tween_property(fantasma, "modulate:a", 0.0, 0.65).set_delay(0.2)
+	tw.tween_callback(fantasma.queue_free).set_delay(0.7)
 
 ## Refresca la disponibilidad de compra de todas las cartas visibles.
 func _refrescar_cartas() -> void:
