@@ -606,3 +606,17 @@ capa Brotes #00ff7f: -4,-10 -8,-16 -3,-13
 capa BrilloTronco #8b4513: -4,-22 -2,-22 -2,22 -4,22
 escala 1.1
 sombra 18 6 20 0.5
+---
+NOMBRE: Corteza Endurecida
+capa CortezaFondo #5c4033: -16,16 16,16 16,-16 -16,-16
+capa CortezaFrente #6b4226: -12,12 12,12 12,-12 -12,-12
+capa Franja1 #8b4513: -12,8 12,8 12,4 -12,4
+capa Franja2 #8b4513: -12,-2 12,-2 12,-6 -12,-6
+capa Grieta1 #3e2723: -4,-12 -2,-2 -6,4
+capa Grieta2 #3e2723: 6,-12 4,0 8,6
+capa Nudo #a0522d: 3,-8 7,-8 7,-4 3,-4
+capa Brillo #cd853f: -12,12 -6,12 -6,-12 -12,-12
+capa BordeOscuro #3e2723: -16,16 16,16 15,13 -15,13
+capa Hoja #32cd32: 0,12 -4,18 4,18
+escala 1.1
+sombra 30 12 16 0.4
