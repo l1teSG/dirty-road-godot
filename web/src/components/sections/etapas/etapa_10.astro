@@ -13,10 +13,42 @@ import EtapaDetalle from './EtapaDetalle.astro';
     'Las energías limpias reducen la dependencia de combustibles fósiles.',
   ]}
   enemigos={[
-    { nombre: 'Ola de Calor', representa: 'Temperaturas extremas cada vez más frecuentes.' },
-    { nombre: 'Tormenta', representa: 'Fenómenos climáticos más intensos.' },
-    { nombre: 'Deshielo', representa: 'El derretimiento de los hielos.' },
-    { nombre: 'Calentamiento Global', representa: 'El exceso de gases de efecto invernadero.' },
+    {
+      nombre: 'Ola de Calor',
+      representa: 'Temperaturas extremas cada vez más frecuentes.',
+      datos: [
+        'El calentamiento global hace más frecuentes las olas de calor.',
+        'Las ciudades con más zonas verdes se mantienen más frescas.',
+        'El calor extremo afecta la salud, los cultivos y los ecosistemas.',
+      ],
+    },
+    {
+      nombre: 'Tormenta',
+      representa: 'Fenómenos climáticos más intensos.',
+      datos: [
+        'Un clima más cálido puede intensificar tormentas y lluvias.',
+        'Los manglares y humedales ayudan a amortiguar sus efectos.',
+        'Prepararse y prevenir reduce los daños a las comunidades.',
+      ],
+    },
+    {
+      nombre: 'Deshielo',
+      representa: 'El derretimiento de los hielos.',
+      datos: [
+        'El derretimiento de glaciares y casquetes eleva el nivel del mar.',
+        'Muchos glaciares almacenan agua dulce de la que dependen comunidades.',
+        'Reducir las emisiones frena el ritmo del deshielo.',
+      ],
+    },
+    {
+      nombre: 'Calentamiento Global',
+      representa: 'El exceso de gases de efecto invernadero.',
+      datos: [
+        'El CO₂ proviene sobre todo de quemar combustibles fósiles.',
+        'Las energías renovables y la eficiencia reducen las emisiones.',
+        'Las acciones individuales, sumadas a las colectivas, marcan la diferencia.',
+      ],
+    },
   ]}
   soluciones={[
     'Reducir la huella: ahorrar energía, caminar más y consumir con conciencia.',

@@ -13,10 +13,42 @@ import EtapaDetalle from './EtapaDetalle.astro';
     'Un accidente nuclear puede dejar zonas inhabitables por décadas.',
   ]}
   enemigos={[
-    { nombre: 'Residuo Radiactivo', representa: 'Material que sigue emitiendo radiación durante mucho tiempo.' },
-    { nombre: 'Barril Explosivo', representa: 'Residuos nucleares mal almacenados.' },
-    { nombre: 'Mutante', representa: 'Seres vivos afectados por contaminantes extremos.' },
-    { nombre: 'Reactor Roto', representa: 'El riesgo de los accidentes nucleares.' },
+    {
+      nombre: 'Residuo Radiactivo',
+      representa: 'Material que sigue emitiendo radiación durante mucho tiempo.',
+      datos: [
+        'Algunos isótopos radiactivos tardan miles de años en perder su actividad.',
+        'Pueden acumularse en el suelo, el agua y los seres vivos.',
+        'La exposición alta a la radiación daña las células.',
+      ],
+    },
+    {
+      nombre: 'Barril Explosivo',
+      representa: 'Residuos nucleares mal almacenados.',
+      datos: [
+        'Algunos residuos requieren almacenamiento seguro durante miles de años.',
+        'Un contenedor dañado puede filtrar sustancias al suelo y al agua.',
+        'Su gestión exige control y vigilancia a largo plazo.',
+      ],
+    },
+    {
+      nombre: 'Mutante',
+      representa: 'Seres vivos afectados por contaminantes extremos.',
+      datos: [
+        'Ciertos contaminantes pueden dañar el material genético de los seres vivos.',
+        'Tras un accidente grave, algunas zonas se cierran durante décadas.',
+        'La prevención es mucho más eficaz que la limpieza posterior.',
+      ],
+    },
+    {
+      nombre: 'Reactor Roto',
+      representa: 'El riesgo de los accidentes nucleares.',
+      datos: [
+        'Los accidentes nucleares son poco frecuentes, pero sus efectos son muy duraderos.',
+        'Las energías renovables no generan residuos radiactivos.',
+        'Informarse permite opinar con criterio sobre el futuro energético.',
+      ],
+    },
   ]}
   soluciones={[
     'Gestionar y almacenar los residuos radiactivos con control a largo plazo.',

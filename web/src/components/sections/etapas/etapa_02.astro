@@ -13,10 +13,42 @@ import EtapaDetalle from './EtapaDetalle.astro';
     'Separar la basura facilita muchísimo el reciclaje.',
   ]}
   enemigos={[
-    { nombre: 'Lata Oxidada', representa: 'Residuos metálicos abandonados.' },
-    { nombre: 'Neumático Quemado', representa: 'Llantas desechadas y quemadas al aire libre.' },
-    { nombre: 'Bolsa Plástica', representa: 'Plásticos de un solo uso.' },
-    { nombre: 'Vertedero Viviente', representa: 'Los vertederos desbordados.' },
+    {
+      nombre: 'Lata Oxidada',
+      representa: 'Residuos metálicos abandonados.',
+      datos: [
+        'El aluminio se puede reciclar muchas veces sin perder calidad.',
+        'Reciclar aluminio ahorra gran parte de la energía de fabricarlo nuevo.',
+        'Una lata abandonada puede tardar siglos en degradarse.',
+      ],
+    },
+    {
+      nombre: 'Neumático Quemado',
+      representa: 'Llantas desechadas y quemadas al aire libre.',
+      datos: [
+        'Quemar neumáticos libera humo denso y sustancias tóxicas.',
+        'Las llantas viejas pueden reutilizarse o reciclarse en nuevos productos.',
+        'Los neumáticos abandonados acumulan agua y favorecen plagas como los mosquitos.',
+      ],
+    },
+    {
+      nombre: 'Bolsa Plástica',
+      representa: 'Plásticos de un solo uso.',
+      datos: [
+        'Una bolsa plástica se usa minutos, pero puede durar siglos.',
+        'Las bolsas reutilizables reducen mucho el plástico desechable.',
+        'El viento lleva las bolsas a ríos, campos y mares.',
+      ],
+    },
+    {
+      nombre: 'Vertedero Viviente',
+      representa: 'Los vertederos desbordados.',
+      datos: [
+        'Los vertederos liberan metano al descomponerse los residuos orgánicos.',
+        'Los líquidos de la basura, los lixiviados, pueden contaminar aguas subterráneas.',
+        'Producir menos basura es mejor que gestionar más basura.',
+      ],
+    },
   ]}
   soluciones={[
     'Separar los residuos en la fuente para que el reciclaje funcione de verdad.',

@@ -13,10 +13,42 @@ import EtapaDetalle from './EtapaDetalle.astro';
     'Los árboles filtran partículas contaminantes del aire.',
   ]}
   enemigos={[
-    { nombre: 'Microplástico', representa: 'Fragmentos diminutos de plástico en suelo y agua.' },
-    { nombre: 'Nube de Gas', representa: 'Gases contaminantes en el aire.' },
-    { nombre: 'Petróleo', representa: 'Derrames y residuos de hidrocarburos.' },
-    { nombre: 'Excavadora Tóxica', representa: 'La maquinaria que remueve y contamina el suelo.' },
+    {
+      nombre: 'Microplástico',
+      representa: 'Fragmentos diminutos de plástico en suelo y agua.',
+      datos: [
+        'Los microplásticos miden menos de 5 mm y se han hallado en casi todos los ambientes.',
+        'Muchos nacen cuando el plástico grande se rompe poco a poco.',
+        'Pueden entrar en la cadena alimenticia al ser ingeridos por animales.',
+      ],
+    },
+    {
+      nombre: 'Nube de Gas',
+      representa: 'Gases contaminantes en el aire.',
+      datos: [
+        'Los gases de combustión empeoran la calidad del aire de las ciudades.',
+        'El aire contaminado afecta más a niños y adultos mayores.',
+        'Los árboles y las zonas verdes ayudan a filtrar el aire.',
+      ],
+    },
+    {
+      nombre: 'Petróleo',
+      representa: 'Derrames y residuos de hidrocarburos.',
+      datos: [
+        'Un pequeño derrame de petróleo puede contaminar el suelo y el agua.',
+        'El petróleo cubre plumas y pelaje y dificulta la vida animal.',
+        'Limpiar un derrame puede tardar años.',
+      ],
+    },
+    {
+      nombre: 'Excavadora Tóxica',
+      representa: 'La maquinaria que remueve y contamina el suelo.',
+      datos: [
+        'Remover y compactar el suelo destruye los organismos que lo mantienen vivo.',
+        'Los contaminantes del suelo pasan a las plantas y a quienes las consumen.',
+        'Recuperar un suelo degradado puede tardar décadas.',
+      ],
+    },
   ]}
   soluciones={[
     'Compostar la materia orgánica devuelve nutrientes y vida al suelo.',

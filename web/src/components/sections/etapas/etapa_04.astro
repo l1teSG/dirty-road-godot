@@ -13,10 +13,42 @@ import EtapaDetalle from './EtapaDetalle.astro';
     'Regular las emisiones mejora el aire de ciudades enteras.',
   ]}
   enemigos={[
-    { nombre: 'Humo de Fábrica', representa: 'Emisiones de fábricas sin control.' },
-    { nombre: 'Chimenea', representa: 'Fuentes fijas de contaminación del aire.' },
-    { nombre: 'Hollín', representa: 'Partículas finas de la combustión.' },
-    { nombre: 'Chimenea Gigante', representa: 'La industria que no controla su impacto.' },
+    {
+      nombre: 'Humo de Fábrica',
+      representa: 'Emisiones de fábricas sin control.',
+      datos: [
+        'Las fábricas sin filtros liberan gases y partículas al aire.',
+        'Los filtros y los combustibles más limpios reducen las emisiones.',
+        'Las normas de emisiones mejoran el aire de las ciudades.',
+      ],
+    },
+    {
+      nombre: 'Chimenea',
+      representa: 'Fuentes fijas de contaminación del aire.',
+      datos: [
+        'Las chimeneas concentran las emisiones en un solo punto, pero el viento las dispersa lejos.',
+        'Instalar filtros en las chimeneas reduce mucho lo que llega al aire.',
+        'Medir las emisiones permite detectar y corregir la contaminación.',
+      ],
+    },
+    {
+      nombre: 'Hollín',
+      representa: 'Partículas finas de la combustión.',
+      datos: [
+        'Las partículas finas pueden llegar hasta los pulmones.',
+        'Se generan al quemar combustibles fósiles y biomasa.',
+        'Respirarlas durante años se asocia a enfermedades respiratorias.',
+      ],
+    },
+    {
+      nombre: 'Chimenea Gigante',
+      representa: 'La industria que no controla su impacto.',
+      datos: [
+        'La industria puede reducir su impacto con energías limpias y eficiencia.',
+        'La economía circular reutiliza materiales para generar menos residuos.',
+        'Los consumidores influyen al elegir productos más responsables.',
+      ],
+    },
   ]}
   soluciones={[
     'Instalar filtros y medir las emisiones de fábricas y chimeneas.',

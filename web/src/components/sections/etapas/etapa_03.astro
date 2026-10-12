@@ -13,10 +13,42 @@ import EtapaDetalle from './EtapaDetalle.astro';
     'Los océanos producen más del 50 % del oxígeno del planeta.',
   ]}
   enemigos={[
-    { nombre: 'Botella de Plástico', representa: 'Envases plásticos que llegan al mar.' },
-    { nombre: 'Botella Lanzadora', representa: 'Basura que las corrientes dispersan por el océano.' },
-    { nombre: 'Red Fantasma', representa: 'Redes de pesca abandonadas.' },
-    { nombre: 'Isla de Plástico', representa: 'Las grandes acumulaciones de basura marina.' },
+    {
+      nombre: 'Botella de Plástico',
+      representa: 'Envases plásticos que llegan al mar.',
+      datos: [
+        'Una botella de plástico puede tardar cientos de años en degradarse.',
+        'Reciclar o reutilizar botellas evita que lleguen al mar.',
+        'Llevar tu propia botella reutilizable reduce residuos a diario.',
+      ],
+    },
+    {
+      nombre: 'Botella Lanzadora',
+      representa: 'Basura que las corrientes dispersan por el océano.',
+      datos: [
+        'Las corrientes marinas concentran basura en grandes zonas del océano.',
+        'Gran parte de la basura marina proviene de tierra firme.',
+        'Una botella tirada lejos del mar puede terminar en él por ríos y desagües.',
+      ],
+    },
+    {
+      nombre: 'Red Fantasma',
+      representa: 'Redes de pesca abandonadas.',
+      datos: [
+        'Las redes abandonadas siguen atrapando animales por años.',
+        'Tortugas, delfines y peces pueden quedar enredados en ellas.',
+        'Pescar de forma responsable reduce el equipo perdido en el mar.',
+      ],
+    },
+    {
+      nombre: 'Isla de Plástico',
+      representa: 'Las grandes acumulaciones de basura marina.',
+      datos: [
+        'Las grandes zonas de basura marina son sobre todo plástico fragmentado.',
+        'El plástico se rompe en trozos cada vez más pequeños, pero no desaparece.',
+        'Evitar que el plástico llegue al mar es más eficaz que sacarlo después.',
+      ],
+    },
   ]}
   soluciones={[
     'Rechazar plásticos de un solo uso: pitillos, bolsas y botellas.',

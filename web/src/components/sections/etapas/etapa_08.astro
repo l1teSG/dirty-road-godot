@@ -13,10 +13,42 @@ import EtapaDetalle from './EtapaDetalle.astro';
     'Los polinizadores están desapareciendo por el uso de pesticidas.',
   ]}
   enemigos={[
-    { nombre: 'Dron Pesticida', representa: 'Aplicación aérea de agroquímicos.' },
-    { nombre: 'Nube de Fumigación', representa: 'Pesticidas dispersos en el aire.' },
-    { nombre: 'Plaga', representa: 'Insectos que proliferan cuando se rompe el equilibrio natural.' },
-    { nombre: 'Helicóptero Fumigador', representa: 'La agricultura intensiva dependiente de agroquímicos.' },
+    {
+      nombre: 'Dron Pesticida',
+      representa: 'Aplicación aérea de agroquímicos.',
+      datos: [
+        'La fumigación aérea puede dispersar pesticidas más allá del cultivo.',
+        'Aplicar solo lo necesario reduce el daño ambiental.',
+        'Un uso excesivo afecta a insectos beneficiosos.',
+      ],
+    },
+    {
+      nombre: 'Nube de Fumigación',
+      representa: 'Pesticidas dispersos en el aire.',
+      datos: [
+        'Los pesticidas pueden viajar con el viento y llegar a ríos y poblaciones.',
+        'La lluvia puede arrastrarlos a los ríos y contaminar el agua.',
+        'Las franjas de vegetación junto a los ríos ayudan a filtrar el agua.',
+      ],
+    },
+    {
+      nombre: 'Plaga',
+      representa: 'Insectos que proliferan cuando se rompe el equilibrio natural.',
+      datos: [
+        'Los monocultivos son más vulnerables a plagas y enfermedades.',
+        'Los depredadores naturales controlan plagas sin químicos.',
+        'Rotar y diversificar cultivos mantiene el suelo sano.',
+      ],
+    },
+    {
+      nombre: 'Helicóptero Fumigador',
+      representa: 'La agricultura intensiva dependiente de agroquímicos.',
+      datos: [
+        'Las abejas polinizan un tercio de los alimentos que comemos.',
+        'Los pesticidas y la pérdida de hábitat ponen en riesgo a los polinizadores.',
+        'La agricultura sostenible puede producir alimento cuidando el ecosistema.',
+      ],
+    },
   ]}
   soluciones={[
     'Aplicar solo lo necesario y usar control biológico de plagas.',

@@ -13,10 +13,42 @@ import EtapaDetalle from './EtapaDetalle.astro';
     'La acidificación del océano afecta a los corales y moluscos.',
   ]}
   enemigos={[
-    { nombre: 'Gota Ácida', representa: 'Lluvia con pH bajo.' },
-    { nombre: 'Charco Ácido', representa: 'Agua acidificada que se acumula en el suelo.' },
-    { nombre: 'Nube Ácida', representa: 'Gases ácidos en la atmósfera.' },
-    { nombre: 'Géiser Ácido', representa: 'El efecto acumulado de la lluvia ácida.' },
+    {
+      nombre: 'Gota Ácida',
+      representa: 'Lluvia con pH bajo.',
+      datos: [
+        'La lluvia ácida se forma cuando ciertos gases reaccionan con el agua de la atmósfera.',
+        'Daña hojas y suelos, y debilita los bosques.',
+        'Puede deteriorar edificios y monumentos.',
+      ],
+    },
+    {
+      nombre: 'Charco Ácido',
+      representa: 'Agua acidificada que se acumula en el suelo.',
+      datos: [
+        'Un agua demasiado ácida puede acabar con peces y anfibios.',
+        'Los suelos acidificados pierden nutrientes que las plantas necesitan.',
+        'Reducir las emisiones permite que algunos ecosistemas se recuperen con el tiempo.',
+      ],
+    },
+    {
+      nombre: 'Nube Ácida',
+      representa: 'Gases ácidos en la atmósfera.',
+      datos: [
+        'El dióxido de azufre proviene sobre todo de quemar carbón y petróleo.',
+        'Los óxidos de nitrógeno vienen del tráfico y la industria.',
+        'Estos gases también irritan las vías respiratorias.',
+      ],
+    },
+    {
+      nombre: 'Géiser Ácido',
+      representa: 'El efecto acumulado de la lluvia ácida.',
+      datos: [
+        'La lluvia ácida ha disminuido donde se han reducido las emisiones.',
+        'Las normas ambientales han demostrado que sí funcionan.',
+        'Las energías limpias ayudan a evitar este problema desde el origen.',
+      ],
+    },
   ]}
   soluciones={[
     'Reducir las emisiones de dióxido de azufre y óxidos de nitrógeno.',

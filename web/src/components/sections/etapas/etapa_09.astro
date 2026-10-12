@@ -13,10 +13,42 @@ import EtapaDetalle from './EtapaDetalle.astro';
     'La deforestación aumenta el riesgo de inundaciones.',
   ]}
   enemigos={[
-    { nombre: 'Talador', representa: 'La tala indiscriminada.' },
-    { nombre: 'Motosierra', representa: 'La rapidez con la que se pierde un bosque.' },
-    { nombre: 'Incendio', representa: 'Los incendios forestales.' },
-    { nombre: 'Aserradero Andante', representa: 'La deforestación a gran escala.' },
+    {
+      nombre: 'Talador',
+      representa: 'La tala indiscriminada.',
+      datos: [
+        'La tala sin control destruye el hábitat de miles de especies.',
+        'Cada árbol talado deja de absorber CO₂.',
+        'La madera con certificación proviene de bosques bien manejados.',
+      ],
+    },
+    {
+      nombre: 'Motosierra',
+      representa: 'La rapidez con la que se pierde un bosque.',
+      datos: [
+        'Talar un bosque lleva mucho menos tiempo que restaurarlo.',
+        'Las raíces sujetan el suelo; sin árboles, la lluvia lo arrastra.',
+        'Reforestar ayuda a estabilizar laderas.',
+      ],
+    },
+    {
+      nombre: 'Incendio',
+      representa: 'Los incendios forestales.',
+      datos: [
+        'Los incendios forestales liberan grandes cantidades de CO₂.',
+        'Muchos incendios son provocados o causados por descuidos humanos.',
+        'Apagar bien las fogatas ayuda a prevenirlos.',
+      ],
+    },
+    {
+      nombre: 'Aserradero Andante',
+      representa: 'La deforestación a gran escala.',
+      datos: [
+        'Los bosques regulan el ciclo del agua en grandes regiones.',
+        'La tala ilegal amenaza ecosistemas forestales enteros.',
+        'Proteger los bosques existentes es una de las acciones climáticas más efectivas.',
+      ],
+    },
   ]}
   soluciones={[
     'Proteger los bosques existentes: es una de las acciones climáticas más eficaces.',

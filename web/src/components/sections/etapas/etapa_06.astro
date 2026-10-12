@@ -13,10 +13,42 @@ import EtapaDetalle from './EtapaDetalle.astro';
     'Los desechos electrónicos son de los más difíciles de reciclar.',
   ]}
   enemigos={[
-    { nombre: 'Basura Electrónica', representa: 'Aparatos desechados antes de tiempo.' },
-    { nombre: 'Cable Eléctrico', representa: 'Cables y chatarra electrónica.' },
-    { nombre: 'Batería Tóxica', representa: 'Pilas y baterías desechadas.' },
-    { nombre: 'Montaña de Chatarra', representa: 'La montaña global de residuos electrónicos.' },
+    {
+      nombre: 'Basura Electrónica',
+      representa: 'Aparatos desechados antes de tiempo.',
+      datos: [
+        'Un teléfono contiene metales valiosos y otros contaminantes.',
+        'Reparar un aparato prolonga su vida útil.',
+        'Cambiar de dispositivo con menos frecuencia reduce la basura electrónica.',
+      ],
+    },
+    {
+      nombre: 'Cable Eléctrico',
+      representa: 'Cables y chatarra electrónica.',
+      datos: [
+        'Los cables contienen cobre, que se puede recuperar reciclando.',
+        'Quemar cables al aire libre libera humos tóxicos.',
+        'Reciclar metales evita extraer más materia prima.',
+      ],
+    },
+    {
+      nombre: 'Batería Tóxica',
+      representa: 'Pilas y baterías desechadas.',
+      datos: [
+        'Las pilas y baterías contienen metales que pueden contaminar suelo y agua.',
+        'Deben entregarse en puntos de recolección, no en la basura común.',
+        'Las pilas recargables reducen la cantidad de residuos.',
+      ],
+    },
+    {
+      nombre: 'Montaña de Chatarra',
+      representa: 'La montaña global de residuos electrónicos.',
+      datos: [
+        'Los residuos electrónicos están entre los que más crecen en el mundo.',
+        'Solo una parte de ellos se recicla de forma adecuada.',
+        'Diseñar aparatos reparables ayuda a reducir el problema.',
+      ],
+    },
   ]}
   soluciones={[
     'Reparar y reutilizar aparatos antes de reemplazarlos.',
