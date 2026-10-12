@@ -404,6 +404,8 @@ func _cerrar_oleada(descanso: float) -> void:
 
 	if eliminar_sobrevivientes:
 		_limpiar_enemigos_vivos()
+	# Los orbes que quedaron en el suelo vuelan al jugador al cerrar la oleada.
+	_atraer_orbes_sueltos()
 
 	oleada_completada.emit(oleada_actual)
 	var edu := _educacion()
@@ -508,6 +510,21 @@ func _limpiar_enemigos_vivos() -> void:
 	enemigos_vivos = 0
 	_enemigos_vivos_por_tipo.clear()
 	_notificar_enemigos_restantes()
+
+
+## Orbes que quedaron en el suelo (de enemigos muertos durante la oleada)
+## pasan a perseguir al jugador, en cascada, al cerrar la oleada.
+func _atraer_orbes_sueltos() -> void:
+	var tree := get_tree()
+	if tree == null:
+		return
+	var i := 0
+	for o in tree.get_nodes_in_group("orbe"):
+		if o.has_method("atraer_al_jugador"):
+			o.call("atraer_al_jugador", float(i) * 0.03)
+			i += 1
+	if debug_imprimir_info and i > 0:
+		print("[WaveManager] Fin de oleada: %d orbes sueltos vuelan al jugador." % i)
 
 
 # ───────────── SPAWNS ─────────────

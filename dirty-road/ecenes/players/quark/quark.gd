@@ -562,6 +562,11 @@ func esta_muerto() -> bool:
 	return _muerto
 
 
+## Contraparte positiva (la usan los orbes para saber si imantarse).
+func esta_vivo() -> bool:
+	return not _muerto
+
+
 func respawn_at(posicion: Vector2) -> void:
 	life = vida_maxima
 	global_position = posicion

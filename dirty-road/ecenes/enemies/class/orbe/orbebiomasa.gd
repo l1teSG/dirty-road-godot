@@ -131,7 +131,23 @@ func _buscar_jugador() -> bool:
 
 
 func _jugador_vivo() -> bool:
-	return not _jugador.has_method("esta_vivo") or bool(_jugador.call("esta_vivo"))
+	if _jugador == null:
+		return false
+	# El jugador expone esta_muerto(); se acepta también esta_vivo() por si acaso.
+	if _jugador.has_method("esta_muerto"):
+		return not bool(_jugador.call("esta_muerto"))
+	if _jugador.has_method("esta_vivo"):
+		return bool(_jugador.call("esta_vivo"))
+	return true
+
+
+## Fuerza el auto-imán: el orbe vuela al jugador desde CUALQUIER distancia.
+## Lo usa el WaveManager al cerrar la oleada para recoger los orbes sueltos.
+func atraer_al_jugador(retraso: float = 0.0) -> void:
+	if _caducando:
+		return
+	auto_iman = true
+	retraso_iman = maxf(0.0, retraso)
 
 
 # ── Aparición / caducidad (un solo Tween a la vez) ────
