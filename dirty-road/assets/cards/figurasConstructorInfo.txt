@@ -1085,3 +1085,18 @@ capa Resto1 #8b0000: -8,10 -4,10 -6,14
 capa Resto2 #ff8c00: 7,9 11,9 9,13
 escala 1.1
 sombra 24 8 18 0.4
+---
+NOMBRE: Lluvia de Semillas
+capa NubeFondo #4682b4: -2,10 -18,4 -14,-6 0,-10 14,-6 18,4
+capa NubeFrente #87ceeb: -2,6 -12,2 -8,-4 0,-7 8,-4 12,2
+capa Semilla1 #adff2f: -12,10 -9,13 -12,16 -15,13
+capa Semilla2 #32cd32: 2,12 5,15 2,18 -1,15
+capa Semilla3 #00ff7f: 12,10 15,13 12,16 9,13
+capa Semilla4 #adff2f: -4,16 -1,19 -4,22 -7,19
+capa Semilla5 #32cd32: 8,18 11,21 8,24 5,21
+capa Hoja1 #00ff7f: -16,14 -20,18 -16,20
+capa Hoja2 #3cb371: 16,14 20,18 16,20
+capa Brillo #e0ffff: -8,0 -5,-3 -3,0
+capa Rayo #ffff00: -14,14 -18,20 -15,20
+escala 1.2
+sombra 30 12 16 0.4
