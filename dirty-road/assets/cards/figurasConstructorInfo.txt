@@ -1044,3 +1044,16 @@ capa Chispa2 #32cd32: 12,-2 15,-6 11,-5
 capa BrilloBotella #808080: -5,14 -5,-3 -3,-3 -3,14
 escala 1.1
 sombra 20 8 16 0.4
+---
+NOMBRE: Descarga Estática
+capa NucleoFondo #00ffff: 0,10 -7,3 -7,-3 0,-10 7,-3 7,3
+capa NucleoFrente #e0ffff: 0,6 -4,2 -4,-2 0,-6 4,-2 4,2
+capa Rayo1 #ffff00: 0,-10 -6,-20 0,-18 4,-28 2,-16 8,-18
+capa Rayo2 #ffff00: -7,-2 -18,-8 -14,-4 -22,0
+capa Rayo3 #ffff00: 7,-2 18,-8 14,-4 22,0
+capa Rayo4 #00ffff: 0,10 -4,20 0,18 2,26
+capa Chispa1 #ffd700: -12,8 -16,12 -14,7
+capa Chispa2 #ffd700: 12,8 16,12 14,7
+capa Chispa3 #ffffff: -10,-12 -13,-15 -10,-11
+escala 1.1
+sombra 20 8 18 0.3
