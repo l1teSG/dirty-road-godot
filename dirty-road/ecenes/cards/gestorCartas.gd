@@ -218,10 +218,42 @@ func _mostrar_con_retraso() -> void:
 		await get_tree().create_timer(config.retraso_mostrar).timeout
 	if not is_inside_tree():
 		return
+
+	# Espera a que se recojan los orbes de fin de oleada antes de ofrecer cartas.
+	if config.esperar_orbes:
+		await _esperar_orbes_recogidos()
+		if not is_inside_tree():
+			return
+
 	if wave_manager != null and not bool(wave_manager.get("en_descanso")):
 		_log("El descanso ya terminó antes de mostrar; no se muestran cartas.")
 		return
 	_mostrar_interfaz_mejoras()
+
+
+## Espera hasta que no queden orbes en el grupo "orbe". Exige DOS lecturas
+## seguidas vacías: los orbes que sueltan los enemigos al cerrar la oleada se
+## añaden en diferido (call_deferred), así que un vacío puntual no basta.
+## Corta por timeout (config.espera_max_orbes) o si el descanso termina.
+func _esperar_orbes_recogidos() -> void:
+	if config.espera_max_orbes <= 0.0:
+		return
+	var t0 := Time.get_ticks_msec()
+	var vacios := 0
+	while is_inside_tree():
+		if wave_manager != null and not bool(wave_manager.get("en_descanso")):
+			return
+		if get_tree().get_nodes_in_group("orbe").is_empty():
+			vacios += 1
+			if vacios >= 2:
+				_log("Orbes recogidos; mostrando cartas.")
+				return
+		else:
+			vacios = 0
+		if (Time.get_ticks_msec() - t0) / 1000.0 >= config.espera_max_orbes:
+			_log("Timeout esperando orbes (%.1fs); se muestran las cartas igual." % config.espera_max_orbes)
+			return
+		await get_tree().create_timer(0.1).timeout
 
 func _mostrar_interfaz_mejoras() -> void:
 	if constructor == null or contenedor_visual == null:

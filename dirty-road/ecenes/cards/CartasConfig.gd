@@ -16,6 +16,11 @@ extends Resource
 @export var min_oleada: int = 1
 ## Si es true, se pueden comprar varias cartas en un mismo descanso.
 @export var permitir_multi_compra: bool = true
+## Esperar a que se recojan TODOS los orbes (grupo "orbe") antes de mostrar
+## las cartas, para que no salgan mientras los orbes de fin de oleada vuelan.
+@export var esperar_orbes: bool = true
+## Tope de espera (s) de esos orbes; al agotarse se muestran las cartas igual.
+@export var espera_max_orbes: float = 6.0
 
 @export_group("Rareza · Común")
 @export var peso_comun: float = 100.0
