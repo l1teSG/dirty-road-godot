@@ -199,6 +199,7 @@ usar_temas_por_tipo = false
 [node name="BarraJefe" type="CanvasLayer" parent="." unique_id=1951278937]
 layer = 20
 script = ExtResource("10_bossbar")
+margen_superior = 220.0
 
 [node name="GestorEtapa" type="Node" parent="." unique_id=1775243101]
 script = ExtResource("10_gestor")
