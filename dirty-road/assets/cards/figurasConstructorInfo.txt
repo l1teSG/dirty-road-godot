@@ -966,3 +966,20 @@ capa Travesaño #8b4513: -16,2 16,2 16,-1 -16,-1
 capa Tope #a0522d: -17,-16 17,-16 17,-19 -17,-19
 escala 1.1
 sombra 30 10 16 0.4
+---
+NOMBRE: Veleta Afortunada
+capa Poste #4d4d4d: -1,20 1,20 1,-10 -1,-10
+capa Eje #a9a9a9: -2,-10 2,-10 2,-14 -2,-14
+capa FlechaFondo #ffd700: -16,-6 16,-6 16,-10 -16,-10
+capa FlechaPunta #ff8c00: 16,-6 24,-8 16,-10
+capa FlechaCola #ff8c00: -16,-6 -22,-12 -22,-4
+capa Veleta1 #cd853f: 0,-6 12,-10 12,-2
+capa Veleta2 #cd853f: 0,-6 -12,-10 -12,-2
+capa Veleta3 #cd853f: -1,-6 1,-6 1,2 -1,2
+capa MarcaN #228b22: -6,12 -4,12 -6,10
+capa MarcaE #228b22: 6,12 8,12 8,14
+capa MarcaS #228b22: -6,-6 -4,-6 -6,-8
+capa MarcaO #228b22: 6,-6 8,-6 8,-4
+capa Sol #ffff00: 0,10 -3,13 0,16 3,13
+escala 1.0
+sombra 24 8 18 0.3
