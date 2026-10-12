@@ -24,12 +24,21 @@ void main() {
 }
 `;
 
-// Port 1:1 de ui/main/fondo.gdshader (misma matemática y colores).
+// Port 1:1 de ui/main/fondo.gdshader (misma matemática y colores), con cuatro
+// reacciones al scroll:
+//   A · zoom progresivo      -> u_progress
+//   B · tinte de la sección  -> u_tint / u_tint_mix
+//   C · turbulencia          -> u_velocity
+//   D · contaminación        -> u_progress
 const FRAG_BASE = `
 precision mediump float;
 uniform vec2 u_res;
 uniform float u_time;
 uniform float u_scroll;
+uniform float u_progress;
+uniform float u_velocity;
+uniform vec3 u_tint;
+uniform float u_tint_mix;
 
 float hash(vec2 p) {
   return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123);
@@ -46,13 +55,19 @@ float noise(vec2 p) {
 }
 void main() {
   vec2 uv = gl_FragCoord.xy / u_res;
-  // El fondo se desplaza con el scroll para ligarlo a la navegación.
-  uv += vec2(0.0, u_scroll * 0.12);
-  float t = u_time * 0.06;
 
-  // Dos capas de ruido en movimiento -> manchas orgánicas.
-  float n1 = noise(uv * 3.0 + vec2(t, t * 0.7));
-  float n2 = noise(uv * 6.0 - vec2(t * 0.5, t * 1.1));
+  // A · zoom progresivo: el bosque se "acerca" a medida que bajas.
+  uv = (uv - 0.5) / (1.0 + u_progress * 0.35) + 0.5;
+
+  // El fondo se desplaza con el scroll.
+  uv += vec2(0.0, u_scroll * 0.12);
+
+  // C · turbulencia: scrollear rápido agita el ruido.
+  float t = u_time * 0.06 + u_velocity * 0.4;
+  float turb = 1.0 + abs(u_velocity) * 3.0;
+
+  float n1 = noise(uv * 3.0 * turb + vec2(t, t * 0.7));
+  float n2 = noise(uv * 6.0 * turb - vec2(t * 0.5, t * 1.1));
   float m = clamp(n1 * 0.65 + n2 * 0.35, 0.0, 1.0);
 
   vec3 color_a = vec3(0.0196, 0.0627, 0.0431);
@@ -60,6 +75,13 @@ void main() {
   vec3 color_brillo = vec3(0.6, 1.0, 0.2);
 
   vec3 col = mix(color_a, color_b, m);
+
+  // D · contaminación: la paleta se ensucia hacia ámbar/óxido al avanzar.
+  vec3 warm = vec3(0.62, 0.34, 0.16);
+  col = mix(col, warm, u_progress * 0.14);
+
+  // B · tinte de la sección activa.
+  col = mix(col, u_tint, u_tint_mix * 0.16);
 
   // Vetas diagonales suaves en movimiento.
   float veta = sin((uv.x + uv.y) * 8.0 - t * 6.0) * 0.5 + 0.5;
@@ -125,6 +147,14 @@ function link(gl: WebGLRenderingContext, vs: WebGLShader, fs: WebGLShader) {
   return prog;
 }
 
+/** Convierte '#rrggbb' a un color normalizado 0..1 (o null si no es válido). */
+function hexToRgb(hex: string): [number, number, number] | null {
+  const m = /^#?([0-9a-f]{6})$/i.exec(hex.trim());
+  if (!m) return null;
+  const n = parseInt(m[1], 16);
+  return [((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255];
+}
+
 /** Esporas flotando (port de CPUParticles2D "Particulas"). */
 const SPORE_COLOR = '153, 255, 51'; // #99ff33
 
@@ -170,6 +200,10 @@ export default function FondoMenu() {
       res: gl.getUniformLocation(progBase, 'u_res'),
       time: gl.getUniformLocation(progBase, 'u_time'),
       scroll: gl.getUniformLocation(progBase, 'u_scroll'),
+      progress: gl.getUniformLocation(progBase, 'u_progress'),
+      velocity: gl.getUniformLocation(progBase, 'u_velocity'),
+      tint: gl.getUniformLocation(progBase, 'u_tint'),
+      tintMix: gl.getUniformLocation(progBase, 'u_tint_mix'),
     };
     const compU = progComp
       ? {
@@ -210,19 +244,64 @@ export default function FondoMenu() {
       }
     };
 
+    // Secciones con tinte propio (`data-tint`) para colorear el fondo.
+    const tintEls = Array.from(document.querySelectorAll<HTMLElement>('[data-tint]')).map((el) => ({
+      el,
+      rgb: hexToRgb(el.dataset.tint || '') ?? ([0.35, 0.55, 0.3] as [number, number, number]),
+    }));
+    const tint: [number, number, number] = [0.35, 0.55, 0.3];
+    let tintMix = 0;
+    let prevScroll = window.scrollY;
+    let velocity = 0;
+
     const start = performance.now();
     const frame = (now: number) => {
       const t = (now - start) / 1000;
-      const scroll = window.scrollY / (window.innerHeight || 1);
+      const vh = window.innerHeight || 1;
+      const sy = window.scrollY;
+      const scroll = sy / vh;
+
+      // A/D · progreso del documento (zoom y contaminación).
+      const docH = document.documentElement.scrollHeight - vh;
+      const progress = docH > 0 ? Math.min(Math.max(sy / docH, 0), 1) : 0;
+
+      // C · velocidad del scroll (suavizada y con tope).
+      velocity = velocity * 0.85 + ((sy - prevScroll) / vh) * 0.15;
+      velocity = Math.max(-0.6, Math.min(0.6, velocity));
+      prevScroll = sy;
+
+      // B · tinte de la sección que cruza el centro de la pantalla.
+      let target: [number, number, number] | null = null;
+      for (const item of tintEls) {
+        const r = item.el.getBoundingClientRect();
+        if (r.top <= vh * 0.5 && r.bottom >= vh * 0.5) {
+          target = item.rgb;
+          break;
+        }
+      }
+      if (target) {
+        tint[0] += (target[0] - tint[0]) * 0.06;
+        tint[1] += (target[1] - tint[1]) * 0.06;
+        tint[2] += (target[2] - tint[2]) * 0.06;
+      }
+      tintMix += ((target ? 1 : 0) - tintMix) * 0.06;
+
+      const setBase = (w: number, h: number) => {
+        useProgram(progBase);
+        gl.uniform2f(baseU.res, w, h);
+        gl.uniform1f(baseU.time, t);
+        gl.uniform1f(baseU.scroll, scroll);
+        gl.uniform1f(baseU.progress, progress);
+        gl.uniform1f(baseU.velocity, velocity);
+        gl.uniform3f(baseU.tint, tint[0], tint[1], tint[2]);
+        gl.uniform1f(baseU.tintMix, tintMix);
+      };
 
       if (fboOk && progComp && compU && tex) {
         // Paso 1: shader -> framebuffer (media resolución).
         gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
         gl.viewport(0, 0, texW, texH);
-        useProgram(progBase);
-        gl.uniform2f(baseU.res, texW, texH);
-        gl.uniform1f(baseU.time, t);
-        gl.uniform1f(baseU.scroll, scroll);
+        setBase(texW, texH);
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 
         // Paso 2: bloom + composite -> pantalla.
@@ -238,10 +317,7 @@ export default function FondoMenu() {
       } else {
         // Fallback sin bloom.
         gl.viewport(0, 0, canvas.width, canvas.height);
-        useProgram(progBase);
-        gl.uniform2f(baseU.res, canvas.width, canvas.height);
-        gl.uniform1f(baseU.time, t);
-        gl.uniform1f(baseU.scroll, scroll);
+        setBase(canvas.width, canvas.height);
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
       }
     };
