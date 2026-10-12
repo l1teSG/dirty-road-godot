@@ -117,6 +117,29 @@ Ver `web/AGENTS.md` para más detalle (es la guía de Astro del subproyecto web)
 
 ---
 
+## MCP de Godot (OpenCode)
+
+El servidor MCP **`godot`** (`@coding-solo/godot-mcp`) está configurado en
+`opencode.json` (raíz del repo) y se conecta solo. Expone herramientas
+`tools.godot.*` para lanzar/ejecutar el juego y leer su salida.
+
+- Config: `opencode.json` → `mcp.servers.godot` (`GODOT_PATH=/usr/bin/godot`,
+  `DEBUG=true`).
+- **Úsalo siempre que necesites ejecutar o depurar el juego**, en lugar de
+  invocar `godot` a mano cuando la tarea lo permita:
+  - `get_godot_version` / `get_project_info` — versión y estructura del proyecto.
+  - `run_project` / `stop_project` / `get_debug_output` — ejecutar y capturar
+    errores y `print()`s.
+  - `launch_editor` — abrir el editor de un proyecto.
+  - `list_projects` — localizar proyectos Godot en un directorio.
+  - `create_scene` / `add_node` / `load_sprite` / `save_scene` — edición de escenas.
+  - `get_uid` / `update_project_uids` — UIDs (Godot 4.4+).
+- El proyecto Godot vive en `dirty-road/`: pasa siempre
+  `projectPath: "<repo>/dirty-road"`.
+- Comprobar el estado: `opencode mcp list` (debe aparecer `godot connected`).
+
+---
+
 ## Flujo de trabajo con git
 
 - Ramas por feature: `feature/<tema>` (p. ej. `feature/10-update-wavemanager-enemis`).

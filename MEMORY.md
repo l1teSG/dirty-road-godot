@@ -217,3 +217,22 @@ electrónicos · 7. Energía nuclear y radiación · 8. Pesticidas y agricultura
   programación GDScript.
 - Institución: I.E. Técnico Industrial "Julio Flórez" · Programa: Articulación SENA,
   Técnico en Desarrollo de Software. Licencia **propietaria** (todos los derechos reservados).
+
+---
+
+## 10. Herramientas de agente (MCP)
+
+- **MCP de Godot** (`@coding-solo/godot-mcp`): servidor configurado en
+  `opencode.json` (raíz del repo) bajo `mcp.servers.godot`.
+  - `GODOT_PATH=/usr/bin/godot`, `DEBUG=true`. Godot del entorno: **4.7.2**.
+  - Herramientas `tools.godot.*`: `run_project`, `stop_project`,
+    `get_debug_output`, `launch_editor`, `get_godot_version`, `list_projects`,
+    `get_project_info`, `create_scene`, `add_node`, `load_sprite`,
+    `save_scene`, `export_mesh_library`, `get_uid`, `update_project_uids`.
+  - **Uso preferente**: para ejecutar/depurar el juego y capturar errores en vez
+    de invocar `godot` a mano. `projectPath` = `<repo>/dirty-road`.
+- **Skills de agente** (`.agents/skills/`, en git): `find-skills`,
+  `frontend-design` (Anthropic) y `godot-2d-animation`.
+  - `frontend-design` → rediseño del micrositio `web/`.
+  - `godot-2d-animation` → patrones de animación 2D en Godot (squash & stretch,
+    tween lifecycle, un-frame sync).
