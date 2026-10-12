@@ -952,3 +952,17 @@ capa Semilla3 #00ff7f: 8,6 11,3 14,6 11,9
 capa Brillo #deb887: -12,12 -9,12 -9,-5 -12,-5
 escala 1.1
 sombra 28 10 16 0.4
+---
+NOMBRE: Biblioteca Verde
+capa EstanteFondo #3e2723: -16,18 16,18 16,-16 -16,-16
+capa Libro1 #006400: -13,14 -8,14 -8,-11 -13,-11
+capa Libro2 #2e8b57: -7,14 -2,14 -2,-13 -7,-13
+capa Libro3 #228b22: -1,14 4,14 4,-9 -1,-9
+capa Libro4 #32cd32: 5,14 10,14 10,-12 5,-12
+capa Libro5 #adff2f: 11,14 14,14 14,-10 11,-10
+capa Lomo #8b4513: -2,14 4,14 4,10 -2,10
+capa HojaMarca #00ff7f: 6,12 9,12 7,6
+capa Travesaño #8b4513: -16,2 16,2 16,-1 -16,-1
+capa Tope #a0522d: -17,-16 17,-16 17,-19 -17,-19
+escala 1.1
+sombra 30 10 16 0.4
