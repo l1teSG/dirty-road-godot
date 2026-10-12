@@ -428,6 +428,6 @@ previa y por escrito de los autores. Consulta [`LICENSE`](LICENSE) para los tér
 
 **🌿 Dirty Road** · *Mantén vivo el ecosistema el mayor tiempo posible.*
 
-Hecho con 💚 en Godot · [I.E. Técnico Industrial "Julio Flórez"](https://github.com/l1teSG/dirty-road-godot)
+Hecho en Godot · [I.E. Técnico Industrial "Julio Flórez"](https://github.com/l1teSG/dirty-road-godot)
 
 </div>
