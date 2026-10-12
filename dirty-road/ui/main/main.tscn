@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://d0yifw3ixgw80" path="res://ui/main/main.gd" id="1_main"]
 [ext_resource type="Shader" path="res://ui/main/fondo.gdshader" id="2_shader"]
 [ext_resource type="Theme" uid="uid://hau5fs7dt6rv" path="res://themes/mainTheme.tres" id="3_theme"]
+[ext_resource type="Script" path="res://scripts/ambiente_ajustes.gd" id="4_amb"]
 
 [sub_resource type="ShaderMaterial" id="mat_fondo"]
 shader = ExtResource("2_shader")
@@ -35,6 +36,7 @@ material = SubResource("mat_fondo")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("env")
+script = ExtResource("4_amb")
 
 [node name="Particulas" type="CPUParticles2D" parent="."]
 position = Vector2(960, 540)

@@ -17,6 +17,7 @@
 [ext_resource type="Resource" uid="uid://bpfs2bj375lby" path="res://ecenes/enemies/main/1-10/petroleo/petroleo.tres" id="12_w7ccy"]
 [ext_resource type="PackedScene" uid="uid://4swtich8dpqn" path="res://ecenes/enemies/main/1-10/boss/excavadoraToxica_boss.tscn" id="13_vgl3r"]
 [ext_resource type="Script" uid="uid://8lgx20mmi322" path="res://scripts/education/EducationSettings.gd" id="13_w7ccy"]
+[ext_resource type="Script" path="res://scripts/ambiente_ajustes.gd" id="14_amb"]
 [ext_resource type="Resource" uid="uid://dnuudcymg6p43" path="res://ecenes/enemies/etapas/etapa_02.tres" id="et2"]
 [ext_resource type="Resource" uid="uid://caxny1eoen5vg" path="res://ecenes/enemies/etapas/etapa_03.tres" id="et3"]
 [ext_resource type="Resource" uid="uid://ef8e3q5t1hkn" path="res://ecenes/enemies/etapas/etapa_04.tres" id="et4"]
@@ -63,6 +64,7 @@ color = Color(0.8276091, 0.8656226, 0.9088765, 1)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1336534250]
 environment = SubResource("Environment_ckgak")
+script = ExtResource("14_amb")
 
 [node name="valle" parent="." unique_id=1723520595 instance=ExtResource("2_ckgak")]
 position = Vector2(0, -2)

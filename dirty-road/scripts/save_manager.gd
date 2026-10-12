@@ -123,6 +123,10 @@ const AJUSTES_DEFECTO := {
 	"hud_botones_escala": 1.0,
 	"hud_joystick_escala": 1.0,
 	"fondo_shader": true,
+	# ── Imagen ──
+	"brillo": 1.0,
+	"contraste": 1.0,
+	"saturacion": 1.0,
 	# ── General ──
 	"mostrar_fps": false,
 	"pausa_al_perder_foco": false,
@@ -154,6 +158,9 @@ const RANGOS_AJUSTES := {
 	"hud_mano": [0, 1],
 	"hud_botones_escala": [0.5, 1.5],
 	"hud_joystick_escala": [0.5, 1.5],
+	"brillo": [0.5, 1.5],
+	"contraste": [0.5, 1.5],
+	"saturacion": [0.0, 2.0],
 	"autoapuntado": [0.0, 1.0],
 	"camara_zoom": [1.5, 3.0],
 }

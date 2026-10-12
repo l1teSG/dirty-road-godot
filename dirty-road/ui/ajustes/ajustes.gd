@@ -107,6 +107,11 @@ func _construir() -> void:
 	_fila_check(cg, "Pausar al perder el foco", "pausa_al_perder_foco")
 	_fila_check(cg, "Pantalla completa (escritorio)", "pantalla_completa")
 
+	var cimg := _tarjeta(g, "Imagen")
+	_fila_slider(cimg, "Brillo", "brillo", 0.5, 1.5, 0.05, "mult")
+	_fila_slider(cimg, "Contraste", "contraste", 0.5, 1.5, 0.05, "mult")
+	_fila_slider(cimg, "Saturación", "saturacion", 0.0, 2.0, 0.05, "mult")
+
 	# ── Educación ──
 	var e := _tab(tabs, "Educación")
 	var ce := _tarjeta(e, "Popups educativos")
