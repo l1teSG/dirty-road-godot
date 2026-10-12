@@ -1,0 +1,28 @@
+---
+import EtapaDetalle from './EtapaDetalle.astro';
+---
+<EtapaDetalle
+  n={2}
+  nombre="Basura y vertederos"
+  color="#c2c9b3"
+  problema="La basura mal gestionada contamina suelo, agua y aire."
+  problemas={[
+    'Los vertederos emiten metano, un gas de efecto invernadero.',
+    'Una lata de aluminio puede tardar hasta 200 años en degradarse.',
+    'Una bolsa plástica se usa minutos, pero dura siglos.',
+    'Separar la basura facilita muchísimo el reciclaje.',
+  ]}
+  enemigos={[
+    { nombre: 'Lata Oxidada', representa: 'Residuos metálicos abandonados.' },
+    { nombre: 'Neumático Quemado', representa: 'Llantas desechadas y quemadas al aire libre.' },
+    { nombre: 'Bolsa Plástica', representa: 'Plásticos de un solo uso.' },
+    { nombre: 'Vertedero Viviente', representa: 'Los vertederos desbordados.' },
+  ]}
+  soluciones={[
+    'Separar los residuos en la fuente para que el reciclaje funcione de verdad.',
+    'Reducir y reutilizar envases antes de desecharlos.',
+    'Reciclar aluminio y metales: ahorra gran parte de la energía de fabricarlos.',
+    'Capturar el metano de los rellenos y compostar la materia orgánica.',
+  ]}
+  accion="Separa tus residuos y reutiliza envases antes de desecharlos."
+/>

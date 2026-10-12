@@ -1,0 +1,28 @@
+---
+import EtapaDetalle from './EtapaDetalle.astro';
+---
+<EtapaDetalle
+  n={5}
+  nombre="Lluvia ácida"
+  color="#ccdb99"
+  problema="Los gases industriales vuelven al suelo como lluvia ácida."
+  problemas={[
+    'La lluvia ácida daña bosques, suelos y lagos.',
+    'El dióxido de azufre y los óxidos de nitrógeno causan la lluvia ácida.',
+    'Un agua con pH muy bajo puede acabar con la vida acuática.',
+    'La acidificación del océano afecta a los corales y moluscos.',
+  ]}
+  enemigos={[
+    { nombre: 'Gota Ácida', representa: 'Lluvia con pH bajo.' },
+    { nombre: 'Charco Ácido', representa: 'Agua acidificada que se acumula en el suelo.' },
+    { nombre: 'Nube Ácida', representa: 'Gases ácidos en la atmósfera.' },
+    { nombre: 'Géiser Ácido', representa: 'El efecto acumulado de la lluvia ácida.' },
+  ]}
+  soluciones={[
+    'Reducir las emisiones de dióxido de azufre y óxidos de nitrógeno.',
+    'Ahorrar energía en casa: menos consumo, menos gases contaminantes.',
+    'Neutralizar lagos acidificados y restaurar los bosques dañados.',
+    'Promover transporte limpio y menos tráfico en las ciudades.',
+  ]}
+  accion="Ahorra energía en casa: menos consumo, menos gases contaminantes."
+/>

@@ -1,0 +1,28 @@
+---
+import EtapaDetalle from './EtapaDetalle.astro';
+---
+<EtapaDetalle
+  n={9}
+  nombre="Deforestación"
+  color="#dbba94"
+  problema="Perder bosques acelera el calentamiento global."
+  problemas={[
+    'La deforestación es una de las principales causas de pérdida de biodiversidad.',
+    'La tala ilegal amenaza ecosistemas forestales enteros.',
+    'Los incendios forestales liberan grandes cantidades de CO₂.',
+    'La deforestación aumenta el riesgo de inundaciones.',
+  ]}
+  enemigos={[
+    { nombre: 'Talador', representa: 'La tala indiscriminada.' },
+    { nombre: 'Motosierra', representa: 'La rapidez con la que se pierde un bosque.' },
+    { nombre: 'Incendio', representa: 'Los incendios forestales.' },
+    { nombre: 'Aserradero Andante', representa: 'La deforestación a gran escala.' },
+  ]}
+  soluciones={[
+    'Proteger los bosques existentes: es una de las acciones climáticas más eficaces.',
+    'Plantar árboles nativos y restaurar los hábitats perdidos.',
+    'Elegir papel y madera con certificación de manejo responsable.',
+    'Prevenir incendios: apagar bien las fogatas y no quemar.',
+  ]}
+  accion="Planta un árbol nativo y elige papel y madera con certificación."
+/>

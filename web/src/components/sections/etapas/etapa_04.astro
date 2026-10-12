@@ -1,0 +1,28 @@
+---
+import EtapaDetalle from './EtapaDetalle.astro';
+---
+<EtapaDetalle
+  n={4}
+  nombre="Contaminación industrial"
+  color="#ccc9cc"
+  problema="La industria emite gases y partículas que afectan la salud."
+  problemas={[
+    'La industria es una de las mayores fuentes de emisiones de CO₂.',
+    'Los filtros industriales reducen mucho las partículas contaminantes.',
+    'Las partículas finas del hollín dañan los pulmones.',
+    'Regular las emisiones mejora el aire de ciudades enteras.',
+  ]}
+  enemigos={[
+    { nombre: 'Humo de Fábrica', representa: 'Emisiones de fábricas sin control.' },
+    { nombre: 'Chimenea', representa: 'Fuentes fijas de contaminación del aire.' },
+    { nombre: 'Hollín', representa: 'Partículas finas de la combustión.' },
+    { nombre: 'Chimenea Gigante', representa: 'La industria que no controla su impacto.' },
+  ]}
+  soluciones={[
+    'Instalar filtros y medir las emisiones de fábricas y chimeneas.',
+    'Migrar a combustibles y energías más limpios.',
+    'Aplicar economía circular: reutilizar materiales y generar menos residuos.',
+    'Normar y vigilar los límites de emisión para que se cumplan.',
+  ]}
+  accion="Prefiere productos de empresas que reporten y reduzcan sus emisiones."
+/>

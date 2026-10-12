@@ -2,6 +2,18 @@
 import SectionHeading from '../ui/SectionHeading.astro';
 import Reveal from '../ui/Reveal.astro';
 import { etapas } from '../../lib/etapas';
+
+// Cada etapa vive en su propio archivo con el mismo formato (EtapaDetalle).
+import Etapa01 from './etapas/etapa_01.astro';
+import Etapa02 from './etapas/etapa_02.astro';
+import Etapa03 from './etapas/etapa_03.astro';
+import Etapa04 from './etapas/etapa_04.astro';
+import Etapa05 from './etapas/etapa_05.astro';
+import Etapa06 from './etapas/etapa_06.astro';
+import Etapa07 from './etapas/etapa_07.astro';
+import Etapa08 from './etapas/etapa_08.astro';
+import Etapa09 from './etapas/etapa_09.astro';
+import Etapa10 from './etapas/etapa_10.astro';
 ---
 <section id="etapas" class="border-t border-line px-4 py-24 sm:py-28">
   <div class="mx-auto max-w-6xl">
@@ -12,27 +24,49 @@ import { etapas } from '../../lib/etapas';
         descripcion="Cada etapa es un escenario distinto con su propia paleta, peligros y enemigos. Al vencer al jefe, cruzas la puerta hacia el siguiente escenario."
       />
     </Reveal>
-    <ol class="mt-14 grid gap-x-14 sm:grid-cols-2">
-      {etapas.map((e, i) => (
-        <li
-          data-reveal
-          class="reveal flex items-start gap-4 border-t border-line py-5"
-          style={`transition-delay:${(i % 2) * 70}ms`}
-        >
-          <span class="pt-0.5 text-sm font-semibold tabular-nums text-moss">
-            {String(e.n).padStart(2, '0')}
-          </span>
-          <span
-            class="mt-1.5 h-3 w-3 shrink-0 rounded-[1px]"
-            style={`background:${e.color}`}
-            aria-hidden="true"
-          />
-          <div>
-            <h3 class="font-semibold text-bone">{e.nombre}</h3>
-            <p class="mt-1 text-sm leading-relaxed text-moss">{e.enemigos.join(', ')}</p>
-          </div>
-        </li>
-      ))}
-    </ol>
+
+    <!-- Índice rápido: salta al detalle de cada etapa -->
+    <Reveal>
+      <ol class="mt-14 grid gap-x-14 sm:grid-cols-2">
+        {etapas.map((e, i) => (
+          <li
+            data-reveal
+            class="reveal flex items-start gap-4 border-t border-line py-5"
+            style={`transition-delay:${(i % 2) * 70}ms`}
+          >
+            <a href={`#etapa-${e.n}`} class="group flex flex-1 items-start gap-4">
+              <span class="pt-0.5 text-sm font-semibold tabular-nums text-moss">{String(e.n).padStart(2, '0')}</span>
+              <span
+                class="mt-1.5 h-3 w-3 shrink-0 rounded-[1px]"
+                style={`background:${e.color}`}
+                aria-hidden="true"
+              />
+              <span class="flex-1">
+                <span class="font-semibold text-bone transition-colors group-hover:text-leaf">{e.nombre}</span>
+                <span class="mt-1 block text-sm leading-relaxed text-moss">{e.enemigos.join(', ')}</span>
+              </span>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </Reveal>
+  </div>
+
+  <div class="mx-auto mt-16 max-w-6xl">
+    <Reveal>
+      <h3 class="text-xs font-semibold uppercase tracking-[0.18em] text-moss">Etapa por etapa</h3>
+    </Reveal>
+    <div class="mt-6">
+      <Etapa01 />
+      <Etapa02 />
+      <Etapa03 />
+      <Etapa04 />
+      <Etapa05 />
+      <Etapa06 />
+      <Etapa07 />
+      <Etapa08 />
+      <Etapa09 />
+      <Etapa10 />
+    </div>
   </div>
 </section>

@@ -1,0 +1,28 @@
+---
+import EtapaDetalle from './EtapaDetalle.astro';
+---
+<EtapaDetalle
+  n={6}
+  nombre="Residuos electrónicos"
+  color="#b8ccdb"
+  problema="Los aparatos desechados contienen materiales tóxicos."
+  problemas={[
+    'Los desechos electrónicos contienen materiales tóxicos y valiosos.',
+    'Una sola pila puede contaminar grandes cantidades de agua.',
+    'Del cobre reciclado se puede recuperar gran parte del metal.',
+    'Los desechos electrónicos son de los más difíciles de reciclar.',
+  ]}
+  enemigos={[
+    { nombre: 'Basura Electrónica', representa: 'Aparatos desechados antes de tiempo.' },
+    { nombre: 'Cable Eléctrico', representa: 'Cables y chatarra electrónica.' },
+    { nombre: 'Batería Tóxica', representa: 'Pilas y baterías desechadas.' },
+    { nombre: 'Montaña de Chatarra', representa: 'La montaña global de residuos electrónicos.' },
+  ]}
+  soluciones={[
+    'Reparar y reutilizar aparatos antes de reemplazarlos.',
+    'Llevar pilas y electrónicos a puntos de recolección autorizados.',
+    'Reciclar metales como el cobre para evitar extraer más materia prima.',
+    'Diseñar aparatos reparables y duraderos para que duren más.',
+  ]}
+  accion="Lleva pilas y aparatos viejos a puntos de recolección autorizados."
+/>

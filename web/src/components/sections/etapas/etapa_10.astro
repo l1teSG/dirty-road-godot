@@ -1,0 +1,28 @@
+---
+import EtapaDetalle from './EtapaDetalle.astro';
+---
+<EtapaDetalle
+  n={10}
+  nombre="Cambio climático"
+  color="#ebbd9e"
+  problema="El planeta se calienta y el clima se altera."
+  problemas={[
+    'El calentamiento global hace más frecuentes las olas de calor.',
+    'El cambio climático intensifica tormentas e inundaciones.',
+    'El derretimiento de los hielos eleva el nivel del mar.',
+    'Las energías limpias reducen la dependencia de combustibles fósiles.',
+  ]}
+  enemigos={[
+    { nombre: 'Ola de Calor', representa: 'Temperaturas extremas cada vez más frecuentes.' },
+    { nombre: 'Tormenta', representa: 'Fenómenos climáticos más intensos.' },
+    { nombre: 'Deshielo', representa: 'El derretimiento de los hielos.' },
+    { nombre: 'Calentamiento Global', representa: 'El exceso de gases de efecto invernadero.' },
+  ]}
+  soluciones={[
+    'Reducir la huella: ahorrar energía, caminar más y consumir con conciencia.',
+    'Cambiar a energías renovables y mejorar la eficiencia.',
+    'Ciudades con más zonas verdes que amortiguan el calor extremo.',
+    'Cuidar manglares y humedales que protegen de tormentas e inundaciones.',
+  ]}
+  accion="Reduce tu huella: ahorra energía, camina más y consume con conciencia."
+/>

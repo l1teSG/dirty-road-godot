@@ -1,0 +1,28 @@
+---
+import EtapaDetalle from './EtapaDetalle.astro';
+---
+<EtapaDetalle
+  n={7}
+  nombre="Energía nuclear y radiación"
+  color="#bfe0b8"
+  problema="Algunos residuos permanecen peligrosos durante miles de años."
+  problemas={[
+    'Algunos residuos radiactivos permanecen peligrosos por miles de años.',
+    'Un mal almacenamiento puede contaminar suelo y agua.',
+    'Ciertos contaminantes pueden dañar el material genético.',
+    'Un accidente nuclear puede dejar zonas inhabitables por décadas.',
+  ]}
+  enemigos={[
+    { nombre: 'Residuo Radiactivo', representa: 'Material que sigue emitiendo radiación durante mucho tiempo.' },
+    { nombre: 'Barril Explosivo', representa: 'Residuos nucleares mal almacenados.' },
+    { nombre: 'Mutante', representa: 'Seres vivos afectados por contaminantes extremos.' },
+    { nombre: 'Reactor Roto', representa: 'El riesgo de los accidentes nucleares.' },
+  ]}
+  soluciones={[
+    'Gestionar y almacenar los residuos radiactivos con control a largo plazo.',
+    'Impulsar energías renovables que no generan residuos radiactivos.',
+    'Mantener protocolos de seguridad y vigilancia para prevenir accidentes.',
+    'Informarse para decidir el futuro energético con criterio.',
+  ]}
+  accion="Infórmate y apoya energías limpias y una gestión segura de residuos."
+/>

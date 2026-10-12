@@ -1,0 +1,28 @@
+---
+import EtapaDetalle from './EtapaDetalle.astro';
+---
+<EtapaDetalle
+  n={1}
+  nombre="Contaminación del suelo y el aire"
+  color="#d9d1b8"
+  problema="Los contaminantes dañan el suelo y el aire que respiramos."
+  problemas={[
+    'Un suelo contaminado afecta cultivos, agua y alimentos.',
+    'El aire limpio reduce enfermedades respiratorias crónicas.',
+    'Los suelos sanos almacenan grandes cantidades de carbono.',
+    'Los árboles filtran partículas contaminantes del aire.',
+  ]}
+  enemigos={[
+    { nombre: 'Microplástico', representa: 'Fragmentos diminutos de plástico en suelo y agua.' },
+    { nombre: 'Nube de Gas', representa: 'Gases contaminantes en el aire.' },
+    { nombre: 'Petróleo', representa: 'Derrames y residuos de hidrocarburos.' },
+    { nombre: 'Excavadora Tóxica', representa: 'La maquinaria que remueve y contamina el suelo.' },
+  ]}
+  soluciones={[
+    'Compostar la materia orgánica devuelve nutrientes y vida al suelo.',
+    'Sembrar árboles y zonas verdes que filtran partículas del aire.',
+    'Vigilar y normar la calidad del aire para reducir enfermedades respiratorias.',
+    'Prevenir derrames de hidrocarburos y remediar los suelos ya contaminados.',
+  ]}
+  accion="Compostar tus residuos orgánicos devuelve nutrientes al suelo."
+/>

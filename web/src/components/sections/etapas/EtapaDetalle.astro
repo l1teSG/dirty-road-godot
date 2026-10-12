@@ -1,0 +1,95 @@
+---
+/**
+ * Formato compartido de una etapa. Cada etapa vive en su propio archivo
+ * (`etapa_01.astro` … `etapa_10.astro`) y solo aporta su contenido; la
+ * presentación se mantiene idéntica entre todas.
+ *
+ * Tres bloques, siempre en el mismo orden:
+ *   1. El problema  → qué pasa en el mundo real.
+ *   2. Enemigos del juego → qué representa cada uno.
+ *   3. Soluciones reales → qué se puede hacer de verdad.
+ */
+export interface EnemigoEtapa {
+  nombre: string;
+  representa: string;
+}
+
+export interface Props {
+  n: number;
+  nombre: string;
+  color: string;
+  problema: string;
+  problemas: string[];
+  enemigos: EnemigoEtapa[];
+  soluciones: string[];
+  accion: string;
+}
+
+const { n, nombre, color, problema, problemas, enemigos, soluciones, accion } = Astro.props;
+const num = String(n).padStart(2, '0');
+---
+
+<section id={`etapa-${n}`} data-tint={color} class="scroll-mt-28 border-t border-line py-14 sm:py-16">
+  <div class="grid gap-8 lg:grid-cols-[11rem_minmax(0,1fr)] lg:gap-12">
+    <!-- Riel de la etapa: número, color y nombre -->
+    <div class="flex items-center gap-4 lg:sticky lg:top-28 lg:flex-col lg:items-start lg:gap-2 lg:self-start">
+      <span class="text-4xl font-bold leading-none tabular-nums text-moss/60 sm:text-5xl">{num}</span>
+      <span class="h-3 w-3 shrink-0 rounded-[1px] lg:mt-2" style={`background:${color}`} aria-hidden="true"></span>
+      <h3 class="text-lg font-semibold text-bone lg:mt-1">{nombre}</h3>
+    </div>
+
+    <div class="grid gap-8 md:grid-cols-3 md:gap-6 lg:gap-10">
+      <!-- 1 · El problema -->
+      <div data-reveal class="reveal">
+        <h4 class="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.14em] text-bone">
+          <span class="h-px w-5" style={`background:${color}`} aria-hidden="true"></span>
+          El problema
+        </h4>
+        <p class="mt-4 text-sm leading-relaxed text-moss">{problema}</p>
+        <ul class="mt-4 space-y-2.5">
+          {problemas.map((p) => (
+            <li class="flex gap-3 text-sm leading-relaxed text-moss">
+              <span class="mt-2 h-1 w-1 shrink-0 rounded-[1px]" style={`background:${color}`} aria-hidden="true" />
+              {p}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- 2 · Enemigos del juego -->
+      <div data-reveal class="reveal" style="transition-delay:90ms">
+        <h4 class="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.14em] text-bone">
+          <span class="h-px w-5" style={`background:${color}`} aria-hidden="true"></span>
+          Enemigos del juego
+        </h4>
+        <ul class="mt-4">
+          {enemigos.map((e) => (
+            <li class="border-t border-line py-3 first:border-t-0 first:pt-0">
+              <p class="text-sm font-medium text-bone">{e.nombre}</p>
+              <p class="mt-0.5 text-xs leading-relaxed text-moss">{e.representa}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- 3 · Soluciones reales -->
+      <div data-reveal class="reveal" style="transition-delay:180ms">
+        <h4 class="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.14em] text-bone">
+          <span class="h-px w-5" style={`background:${color}`} aria-hidden="true"></span>
+          Soluciones reales
+        </h4>
+        <ul class="mt-4 space-y-2.5">
+          {soluciones.map((s) => (
+            <li class="flex gap-3 text-sm leading-relaxed text-moss">
+              <span class="mt-2 h-1 w-1 shrink-0 rounded-[1px] bg-leaf" aria-hidden="true" />
+              {s}
+            </li>
+          ))}
+        </ul>
+        <p class="mt-4 border-l-2 pl-4 text-sm leading-relaxed text-bone" style={`border-color:${color}`}>
+          {accion}
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

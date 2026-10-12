@@ -1,0 +1,28 @@
+---
+import EtapaDetalle from './EtapaDetalle.astro';
+---
+<EtapaDetalle
+  n={8}
+  nombre="Pesticidas y agricultura"
+  color="#cfd49e"
+  problema="El exceso de agroquímicos daña la fauna y el agua."
+  problemas={[
+    'El exceso de pesticidas daña a la fauna local.',
+    'Los pesticidas pueden viajar con el viento y llegar a ríos y poblaciones.',
+    'Un ecosistema diverso controla las plagas de forma natural.',
+    'Los polinizadores están desapareciendo por el uso de pesticidas.',
+  ]}
+  enemigos={[
+    { nombre: 'Dron Pesticida', representa: 'Aplicación aérea de agroquímicos.' },
+    { nombre: 'Nube de Fumigación', representa: 'Pesticidas dispersos en el aire.' },
+    { nombre: 'Plaga', representa: 'Insectos que proliferan cuando se rompe el equilibrio natural.' },
+    { nombre: 'Helicóptero Fumigador', representa: 'La agricultura intensiva dependiente de agroquímicos.' },
+  ]}
+  soluciones={[
+    'Aplicar solo lo necesario y usar control biológico de plagas.',
+    'Diversificar y rotar cultivos para mantener el suelo sano.',
+    'Sembrar flores nativas para proteger a los polinizadores.',
+    'Dejar franjas de vegetación junto a los ríos que filtren el agua.',
+  ]}
+  accion="Compra alimentos locales y de cultivo sostenible; siembra flores nativas."
+/>

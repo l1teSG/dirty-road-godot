@@ -1,0 +1,28 @@
+---
+import EtapaDetalle from './EtapaDetalle.astro';
+---
+<EtapaDetalle
+  n={3}
+  nombre="Océanos y plástico"
+  color="#9ec7f5"
+  problema="Gran parte del plástico termina en el mar."
+  problemas={[
+    'Millones de toneladas de plástico llegan a los océanos cada año.',
+    'Las redes de pesca abandonadas siguen atrapando animales por años.',
+    'Muchas aves y tortugas confunden el plástico con comida.',
+    'Los océanos producen más del 50 % del oxígeno del planeta.',
+  ]}
+  enemigos={[
+    { nombre: 'Botella de Plástico', representa: 'Envases plásticos que llegan al mar.' },
+    { nombre: 'Botella Lanzadora', representa: 'Basura que las corrientes dispersan por el océano.' },
+    { nombre: 'Red Fantasma', representa: 'Redes de pesca abandonadas.' },
+    { nombre: 'Isla de Plástico', representa: 'Las grandes acumulaciones de basura marina.' },
+  ]}
+  soluciones={[
+    'Rechazar plásticos de un solo uso: pitillos, bolsas y botellas.',
+    'Usar botellas reutilizables y reciclar los envases que ya tenemos.',
+    'Limpiar playas y retirar las redes fantasma del mar.',
+    'Mejorar el tratamiento de aguas y residuos para que nada llegue al océano.',
+  ]}
+  accion="Rechaza pitillos y envases de un solo uso; limpia playas cuando puedas."
+/>
