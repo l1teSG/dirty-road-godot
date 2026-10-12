@@ -112,6 +112,10 @@ func _construir() -> void:
 	_fila_slider(cimg, "Contraste", "contraste", 0.5, 1.5, 0.05, "mult")
 	_fila_slider(cimg, "Saturación", "saturacion", 0.0, 2.0, 0.05, "mult")
 
+	var ctxt := _tarjeta(g, "Textos del mundo")
+	_fila_slider(ctxt, "Nombres de enemigos", "nombres_enemigos_escala", 0.5, 2.0, 0.05, "mult")
+	_fila_slider(ctxt, "Números de daño", "danio_flotante_escala", 0.5, 2.0, 0.05, "mult")
+
 	# ── Educación ──
 	var e := _tab(tabs, "Educación")
 	var ce := _tarjeta(e, "Popups educativos")

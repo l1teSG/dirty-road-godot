@@ -127,6 +127,9 @@ const AJUSTES_DEFECTO := {
 	"brillo": 1.0,
 	"contraste": 1.0,
 	"saturacion": 1.0,
+	# ── Textos del mundo ──
+	"nombres_enemigos_escala": 1.0,
+	"danio_flotante_escala": 1.0,
 	# ── General ──
 	"mostrar_fps": false,
 	"pausa_al_perder_foco": false,
@@ -161,6 +164,8 @@ const RANGOS_AJUSTES := {
 	"brillo": [0.5, 1.5],
 	"contraste": [0.5, 1.5],
 	"saturacion": [0.0, 2.0],
+	"nombres_enemigos_escala": [0.5, 2.0],
+	"danio_flotante_escala": [0.5, 2.0],
 	"autoapuntado": [0.0, 1.0],
 	"camara_zoom": [1.5, 3.0],
 }

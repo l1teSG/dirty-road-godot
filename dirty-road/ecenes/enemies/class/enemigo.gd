@@ -199,7 +199,7 @@ const COMPORTAMIENTOS: Dictionary = {
 ## Vacío = usa el nombre del nodo. Sobrescribe desde el WaveManager.
 @export var nombre_texto: String = ""
 @export var fuente_nombre: Font
-@export var tamano_nombre: int = 10
+@export var tamano_nombre: int = 20
 @export var color_nombre: Color = Color.WHITE
 @export var offset_nombre: Vector2 = Vector2(0, -30)
 
@@ -208,7 +208,7 @@ const COMPORTAMIENTOS: Dictionary = {
 @export_group("Daño flotante")
 @export var mostrar_danio_flotante: bool = true
 @export var fuente_danio: Font
-@export var tamano_danio: int = 13
+@export var tamano_danio: int = 16
 @export var color_danio: Color = Color.WHITE
 @export var offset_danio: Vector2 = Vector2(0, -18)
 @export var subida_danio: float = 26.0
@@ -1110,6 +1110,13 @@ func _escala_texto_pantalla() -> float:
 	return maxf(0.01, escala * texto_escala_extra)
 
 
+## Escala de un ajuste global de texto (0.25–3), con fallback 1.0.
+func _escala_ajuste(clave: String) -> float:
+	if SaveManager == null:
+		return 1.0
+	return clampf(float(SaveManager.get_ajuste(clave, 1.0)), 0.25, 3.0)
+
+
 func _texto_nombre() -> String:
 	if not nombre_texto.is_empty():
 		return nombre_texto
@@ -1126,7 +1133,7 @@ func _mostrar_nombre() -> void:
 	add_child(l)  # hijo del enemigo: se mueve con él
 	l.reset_size()
 	l.pivot_offset = l.size * 0.5
-	l.escala_pantalla = _escala_texto_pantalla()
+	l.escala_pantalla = _escala_texto_pantalla() * _escala_ajuste("nombres_enemigos_escala")
 	l.position = offset_nombre - l.size * 0.5
 	# Animación de entrada (pop + fundido).
 	l.pop = 0.4
@@ -1158,7 +1165,7 @@ func _mostrar_danio_flotante(cantidad: float) -> void:
 	# Nace centrado sobre el enemigo (vive en la escena para sobrevivir
 	# a la muerte del enemigo).
 	l.pivot_offset = l.size * 0.5
-	l.escala_pantalla = _escala_texto_pantalla()
+	l.escala_pantalla = _escala_texto_pantalla() * _escala_ajuste("danio_flotante_escala")
 	l.global_position = ((global_position + offset_danio) - l.size * 0.5).round()
 	l.pop = 0.4
 	var tw := l.create_tween()
