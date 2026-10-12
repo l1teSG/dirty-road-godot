@@ -649,3 +649,17 @@ capa Hoja #adff2f: 0,-23 5,-27 3,-22
 capa BrilloCentro #ffffff: -1,-2 1,-2 1,0 -1,0
 escala 1.1
 sombra 16 6 18 0.4
+---
+NOMBRE: Telescopio de Bambú
+capa Tubo1 #6b8e23: -20,4 4,-4 4,-10 -20,-2
+capa Tubo2 #556b2f: 4,-4 20,-10 20,-16 4,-10
+capa Nudo1 #3e2723: -8,0 -6,0 -6,-6 -8,-6
+capa Nudo2 #3e2723: 6,-6 8,-6 8,-12 6,-12
+capa LenteFondo #4682b4: 20,-10 24,-12 24,-18 20,-16
+capa LenteCristal #87ceeb: 20,-11 23,-13 23,-17 20,-15
+capa Reflejo #ffffff: 21,-13 22,-14 22,-16
+capa Soporte #a9a9a9: -18,-2 -18,8 -14,8 -14,-1
+capa Base #4d4d4d: -20,8 -12,8 -12,12 -20,12
+capa BrilloTubo #98fb98: -20,3 -20,-1 -14,-3 -14,1
+escala 1.0
+sombra 26 8 18 0.4
