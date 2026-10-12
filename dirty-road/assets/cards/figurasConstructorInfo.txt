@@ -819,3 +819,18 @@ capa DetalleVerde #32cd32: 0,14 -2,14 -1,6
 capa SombraBajo #000000: -12,16 12,16 10,19 -10,19
 escala 1.1
 sombra 26 10 16 0.4
+---
+NOMBRE: Reflejo Felino
+capa EspejoFondo #696969: 0,18 -18,0 0,-18 18,0
+capa EspejoCristal #a9a9a9: 0,14 -14,0 0,-14 14,0
+capa OjoBase1 #ffd700: -9,0 -5,-5 0,0 -5,5
+capa OjoBase2 #ffd700: 9,0 5,-5 0,0 5,5
+capa Pupila1 #1a1a1a: -5,-3 -4,0 -5,3 -6,0
+capa Pupila2 #1a1a1a: 5,-3 6,0 5,3 4,0
+capa Brillo1 #ffffff: -7,-2 -6,-3 -5,-2
+capa Brillo2 #ffffff: 7,-2 8,-3 9,-2
+capa ReflejoEspejo #e0ffff: -12,-4 -6,-10 -10,-2
+capa OrejaIzq #8b4513: -12,-10 -18,-18 -8,-14
+capa OrejaDer #8b4513: 12,-10 18,-18 8,-14
+escala 1.1
+sombra 28 10 18 0.4
