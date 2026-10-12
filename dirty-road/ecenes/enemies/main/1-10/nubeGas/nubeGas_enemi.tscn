@@ -41,6 +41,7 @@ damage = 9.0
 comportamiento_tipo = "rango"
 boca = NodePath("Marker2D")
 proyectil_estilo = "humo"
+nombre_texto = "Nube de gas"
 fuente_nombre = ExtResource("3_nllrl")
 fuente_danio = ExtResource("3_nllrl")
 

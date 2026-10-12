@@ -47,6 +47,7 @@ speed = 72.0
 damage = 20.0
 dano_al_tocar = true
 danio_contacto = 20.0
+nombre_texto = "Petróleo"
 
 [node name="FiguraConstructor" parent="." index="0" unique_id=66989019 instance=ExtResource("2_jem5u")]
 capas = Array[ExtResource("3_v5ir7")]([SubResource("Resource_ex2nk"), SubResource("Resource_jem5u"), SubResource("Resource_v5ir7"), SubResource("Resource_p7mko")])

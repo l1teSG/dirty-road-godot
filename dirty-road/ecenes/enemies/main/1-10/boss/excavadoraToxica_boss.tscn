@@ -54,6 +54,7 @@ recompensa = 225
 anti_estructura = true
 figura = NodePath("FiguraConstructor")
 comportamiento_tipo = "embestida"
+nombre_texto = "Excavadora Tóxica"
 
 [node name="FiguraConstructor" parent="." index="0" unique_id=66989019 instance=ExtResource("2_momxs")]
 capas = Array[ExtResource("3_kj70p")]([SubResource("Resource_fvyy4"), SubResource("Resource_momxs"), SubResource("Resource_kj70p"), SubResource("Resource_bq5cd"), SubResource("Resource_kagq6")])

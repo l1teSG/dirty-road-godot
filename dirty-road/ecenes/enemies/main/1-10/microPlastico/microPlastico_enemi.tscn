@@ -44,7 +44,7 @@ enjambre_separacion = 10.0
 enjambre_vel_extra = 1.2
 mov_zigzag_grados = 6.0
 mov_separacion_fuerza = 0.5
-nombre_texto = "micro plastico"
+nombre_texto = "Microplástico"
 fuente_nombre = ExtResource("3_61hl6")
 fuente_danio = ExtResource("3_61hl6")
 
