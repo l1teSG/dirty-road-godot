@@ -1,7 +1,8 @@
 ---
 // Héroe: el único momento orquestado de la página. A la izquierda, el título
-// como etiqueta de espécimen; a la derecha, el instrumento de anillos del
-// Árbol (dendrocronología) y el medidor de índice de contaminación.
+// como etiqueta de espécimen. A la derecha, una "ventana al juego" que alterna
+// entre el gameplay (trailer) y el instrumento de anillos del Árbol, más el
+// índice de contaminación (vivo: sube con el scroll) y los totales del juego.
 const anillos = [
   { r: 24, w: 1.5, c: 'leaf', o: 0.95, d: '0.30s' },
   { r: 44, w: 1, c: 'leaf', o: 0.6, d: '0.40s' },
@@ -11,7 +12,7 @@ const anillos = [
   { r: 116, w: 1, c: 'leaf', o: 0.25, d: '0.80s' },
 ];
 
-// Índice de contaminación de muestra (marca del instrumento, no un dato real).
+// Índice de contaminación inicial (el script lo anima con el scroll).
 const indice = 7;
 const total = 10;
 ---
@@ -60,49 +61,86 @@ const total = 10;
     </div>
 
     <div class="rise" style="animation-delay:.30s">
-      <div class="tile relative overflow-hidden p-6" data-parallax="0.04">
-        <div class="flex items-center justify-between">
-          <p class="text-sm font-medium text-bone">Árbol central</p>
-          <p class="text-sm text-moss">muestra viva</p>
+      <div class="tile relative overflow-hidden p-4 sm:p-6" data-parallax="0.04">
+        <div class="flex items-center justify-between gap-3">
+          <p class="text-sm font-medium text-bone">Ventana al juego</p>
+          <div class="flex shrink-0 rounded-full border border-line p-0.5 text-xs" role="group" aria-label="Qué ver en la ventana">
+            <button
+              data-ver="gameplay"
+              class="rounded-full bg-surface-2 px-3 py-1 font-medium text-bone transition-colors"
+              aria-pressed="true"
+            >
+              Gameplay
+            </button>
+            <button
+              data-ver="instrumento"
+              class="rounded-full px-3 py-1 font-medium text-moss transition-colors hover:text-bone"
+              aria-pressed="false"
+            >
+              Instrumento
+            </button>
+          </div>
         </div>
 
-        <div class="mx-auto mt-2 max-w-[280px]" data-rotate="4">
-          <svg viewBox="0 0 240 240" class="w-full" role="img" aria-label="Corte transversal del tronco con sus anillos de crecimiento">
-          <g fill="none">
-            {anillos.map((a) => (
-              <circle
-                cx="120"
-                cy="120"
-                r={a.r}
-                stroke-width={a.w}
-                class="ring-in"
-                style={`stroke:var(--color-${a.c});opacity:${a.o};animation-delay:${a.d}`}
-              />
-            ))}
-          </g>
-          <!-- radios: el tronco leído como dato -->
-          <g stroke="var(--color-leaf)" stroke-width="1" opacity="0.28">
-            {[0, 45, 90, 135, 180, 225, 270, 315].map((deg) => (
-              <line
-                x1="120"
-                y1="120"
-                x2={120 + 116 * Math.cos((deg * Math.PI) / 180)}
-                y2={120 + 116 * Math.sin((deg * Math.PI) / 180)}
-              />
-            ))}
-          </g>
-          <circle cx="120" cy="120" r="5" fill="var(--color-leaf)" />
-          </svg>
+        <div class="mt-4">
+          <video
+            data-panel="gameplay"
+            class="aspect-video w-full rounded-[3px] border border-line bg-surface object-cover"
+            src="/video/trailer.mp4"
+            poster="/images/juego/etapas/etapa_01.png"
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="metadata"
+            aria-label="Gameplay de Dirty Road"
+          ></video>
+
+          <div data-panel="instrumento" class="hidden">
+            <div class="flex aspect-video w-full items-center justify-center">
+              <div class="mx-auto max-w-[240px]" data-rotate="4">
+                <svg viewBox="0 0 240 240" class="w-full" role="img" aria-label="Corte transversal del tronco con sus anillos de crecimiento">
+                  <g fill="none">
+                    {anillos.map((a) => (
+                      <circle
+                        cx="120"
+                        cy="120"
+                        r={a.r}
+                        stroke-width={a.w}
+                        class="ring-in"
+                        style={`stroke:var(--color-${a.c});opacity:${a.o};animation-delay:${a.d}`}
+                      />
+                    ))}
+                  </g>
+                  <!-- radios: el tronco leído como dato -->
+                  <g stroke="var(--color-leaf)" stroke-width="1" opacity="0.28">
+                    {[0, 45, 90, 135, 180, 225, 270, 315].map((deg) => (
+                      <line
+                        x1="120"
+                        y1="120"
+                        x2={120 + 116 * Math.cos((deg * Math.PI) / 180)}
+                        y2={120 + 116 * Math.sin((deg * Math.PI) / 180)}
+                      />
+                    ))}
+                  </g>
+                  <circle cx="120" cy="120" r="5" fill="var(--color-leaf)" />
+                </svg>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="mt-4">
           <div class="flex items-baseline justify-between text-sm">
             <span class="text-moss">Índice de contaminación</span>
-            <span class="font-semibold text-resin">{indice} / {total}</span>
+            <span class="font-semibold text-resin"><span id="indice-valor">{indice}</span> / {total}</span>
           </div>
           <div class="mt-2 flex gap-[3px]" aria-hidden="true">
             {Array.from({ length: total }).map((_, i) => (
-              <span class={`h-2 flex-1 rounded-[1px] ${i < indice ? 'bg-resin' : 'bg-surface-2'}`} />
+              <span
+                data-indice-bar
+                class={`h-2 flex-1 rounded-[1px] ${i < indice ? 'bg-resin' : 'bg-surface-2'}`}
+              />
             ))}
           </div>
           <div class="mt-5 grid grid-cols-3 gap-4 border-t border-line pt-4 text-sm">
@@ -124,3 +162,61 @@ const total = 10;
     </div>
   </div>
 </section>
+
+<script>
+  // Toggle de la "ventana al juego": Gameplay (trailer) o Instrumento (árbol).
+  const botones = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-ver]'));
+  const panelGameplay = document.querySelector<HTMLElement>('[data-panel="gameplay"]');
+  const panelInstrumento = document.querySelector<HTMLElement>('[data-panel="instrumento"]');
+  const video = panelGameplay instanceof HTMLVideoElement ? panelGameplay : null;
+
+  const activo = 'rounded-full bg-surface-2 px-3 py-1 font-medium text-bone transition-colors';
+  const inactivo =
+    'rounded-full px-3 py-1 font-medium text-moss transition-colors hover:text-bone';
+
+  const mostrar = (modo: string) => {
+    const esGameplay = modo === 'gameplay';
+    panelGameplay?.classList.toggle('hidden', !esGameplay);
+    panelInstrumento?.classList.toggle('hidden', esGameplay);
+    if (video) {
+      if (esGameplay) void video.play().catch(() => {});
+      else video.pause();
+    }
+    for (const b of botones) {
+      const on = b.dataset.ver === modo;
+      b.setAttribute('aria-pressed', String(on));
+      b.className = on ? activo : inactivo;
+    }
+  };
+
+  for (const b of botones) {
+    b.addEventListener('click', () => mostrar(b.dataset.ver || 'gameplay'));
+  }
+
+  // Contaminómetro vivo: sube con el progreso de lectura de la página.
+  const indiceValor = document.getElementById('indice-valor');
+  const barras = Array.from(document.querySelectorAll<HTMLElement>('[data-indice-bar]'));
+  if (indiceValor && barras.length) {
+    const actualizarIndice = () => {
+      const docH = document.documentElement.scrollHeight - window.innerHeight;
+      const p = docH > 0 ? Math.min(Math.max(window.scrollY / docH, 0), 1) : 0;
+      const idx = Math.round(p * barras.length);
+      indiceValor.textContent = String(idx);
+      barras.forEach((b, i) => {
+        b.classList.toggle('bg-resin', i < idx);
+        b.classList.toggle('bg-surface-2', i >= idx);
+      });
+    };
+    let pendiente = false;
+    const alScroll = () => {
+      if (pendiente) return;
+      pendiente = true;
+      requestAnimationFrame(() => {
+        actualizarIndice();
+        pendiente = false;
+      });
+    };
+    window.addEventListener('scroll', alScroll, { passive: true });
+    actualizarIndice();
+  }
+</script>
