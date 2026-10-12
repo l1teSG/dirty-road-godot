@@ -490,8 +490,9 @@ func _actualizar_furia() -> void:
 	if vida_actual <= 0.0 or vida_actual > life * furia_umbral_vida:
 		return
 	_en_furia = true
-	print("[Enemigo] ☠ FURIA activada en %s (vida <= %.0f%%)"
-			% [name, furia_umbral_vida * 100.0])
+	if OS.is_debug_build():
+		print("[Enemigo] ☠ FURIA activada en %s (vida <= %.0f%%)"
+				% [name, furia_umbral_vida * 100.0])
 	if _tween_furia != null and _tween_furia.is_valid():
 		_tween_furia.kill()
 	_tween_furia = create_tween().set_loops()
@@ -914,7 +915,8 @@ func morir_por_fin_de_oleada() -> void:
 		return
 	_muriente = true
 	_soltar_orbes(true)
-	print("[Enemigo] '%s': fin de oleada → suelta orbes auto-imán y desaparece." % name)
+	if OS.is_debug_build():
+		print("[Enemigo] '%s': fin de oleada → suelta orbes auto-imán y desaparece." % name)
 	remove_from_group("enemigos")
 	set_deferred("monitoring", false)
 	var tw := create_tween()
@@ -1030,15 +1032,17 @@ func _instalar_comportamiento() -> void:
 	if script_comp == null:
 		var ruta: String = String(COMPORTAMIENTOS.get(comportamiento_tipo, ""))
 		var existe := ruta != "" and ResourceLoader.exists(ruta)
-		print("[Enemigo] %s → tipo='%s' → ruta='%s' → existe=%s"
-				% [name, comportamiento_tipo, ruta, existe])
+		if OS.is_debug_build():
+			print("[Enemigo] %s → tipo='%s' → ruta='%s' → existe=%s"
+					% [name, comportamiento_tipo, ruta, existe])
 		if existe:
 			script_comp = load(ruta) as GDScript
 
 	# Diagnóstico del resultado.
 	if script_comp != null:
-		print("[Enemigo] ✅ comportamiento '%s' instalado en %s"
-				% [comportamiento_tipo, name])
+		if OS.is_debug_build():
+			print("[Enemigo] ✅ comportamiento '%s' instalado en %s"
+					% [comportamiento_tipo, name])
 	else:
 		printerr("[Enemigo] ❌ '%s' NO cargó (ruta inexistente o script que no compila) → FALLBACK melee en %s"
 				% [comportamiento_tipo, name])

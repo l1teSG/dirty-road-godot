@@ -178,7 +178,7 @@ func _autodiagnostico() -> void:
 
 
 func _log(msg: String) -> void:
-	if DEBUG:
+	if DEBUG and OS.is_debug_build():
 		print("[Biomasa %.2fs] %s" % [Time.get_ticks_msec() / 1000.0, msg])
 
 

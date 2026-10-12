@@ -74,7 +74,7 @@ func _conectar_wave_manager() -> void:
 
 
 func _log(msg: String) -> void:
-	if debug:
+	if debug and OS.is_debug_build():
 		print("[GestorCartas] ", msg)
 
 # ── UI ─────────────────────────────────────────────────────────────────────
