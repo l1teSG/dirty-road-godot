@@ -30,8 +30,8 @@ const pilares = [
       />
     </Reveal>
     <div class="mt-14 grid gap-px overflow-hidden rounded-[3px] border border-line bg-line sm:grid-cols-3">
-      {pilares.map((p) => (
-        <Reveal class="h-full">
+      {pilares.map((p, i) => (
+        <Reveal class="h-full" delay={i * 90}>
           <article class="h-full bg-surface p-7" style={`border-top:2px solid var(--color-${p.c})`}>
             <h3 class="text-lg font-semibold text-bone">{p.t}</h3>
             <p class="mt-3 text-sm leading-relaxed text-moss">{p.d}</p>

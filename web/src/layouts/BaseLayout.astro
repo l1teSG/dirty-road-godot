@@ -43,9 +43,13 @@ const ogImage = new URL('/images/juego/og.png', Astro.site).href;
   <body class="grain relative min-h-screen bg-bg font-display text-bone antialiased">
     <slot />
     <script>
-      // Animación de aparición al hacer scroll (Reveal).
       const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (!reduce) {
+
+      // 1) Aparición al entrar en viewport (opacidad + ascenso + desenfoque).
+      const revealTargets = document.querySelectorAll<HTMLElement>('[data-reveal]');
+      if (reduce) {
+        revealTargets.forEach((el) => el.classList.add('visible'));
+      } else {
         const io = new IntersectionObserver(
           (entries) => {
             for (const e of entries) {
@@ -57,10 +61,82 @@ const ogImage = new URL('/images/juego/og.png', Astro.site).href;
           },
           { rootMargin: '0px 0px -10% 0px', threshold: 0.1 },
         );
-        document.querySelectorAll('[data-reveal]').forEach((el) => io.observe(el));
-      } else {
-        document.querySelectorAll('[data-reveal]').forEach((el) => el.classList.add('visible'));
+        revealTargets.forEach((el) => io.observe(el));
       }
+
+      // 2) Contadores animados (10 etapas, 100 oleadas, 40 enemigos…).
+      const counters = document.querySelectorAll<HTMLElement>('[data-count]');
+      if (counters.length) {
+        const easeOut = (k: number) => 1 - Math.pow(1 - k, 3);
+        const ioCount = new IntersectionObserver(
+          (entries) => {
+            for (const e of entries) {
+              if (!e.isIntersecting) continue;
+              const el = e.target as HTMLElement;
+              ioCount.unobserve(el);
+              const target = Number(el.dataset.count) || 0;
+              if (reduce) {
+                el.textContent = target.toLocaleString('es-CO');
+                continue;
+              }
+              const t0 = performance.now();
+              const dur = 1200;
+              const step = (now: number) => {
+                const k = Math.min((now - t0) / dur, 1);
+                el.textContent = Math.round(target * easeOut(k)).toLocaleString('es-CO');
+                if (k < 1) requestAnimationFrame(step);
+              };
+              requestAnimationFrame(step);
+            }
+          },
+          { threshold: 0.4 },
+        );
+        counters.forEach((c) => ioCount.observe(c));
+      }
+
+      // 3) Parallax/rotación ligados al scroll + barra de progreso + estado del nav.
+      const parallaxEls = Array.from(
+        document.querySelectorAll<HTMLElement>('[data-parallax], [data-rotate]'),
+      );
+      const progress = document.getElementById('scroll-progress');
+      const nav = document.getElementById('site-nav');
+
+      const updateOnScroll = () => {
+        const vh = window.innerHeight || 1;
+        const sy = window.scrollY || 0;
+
+        const docH = document.documentElement.scrollHeight - vh;
+        const p = docH > 0 ? Math.min(Math.max(sy / docH, 0), 1) : 0;
+        if (progress) progress.style.transform = `scaleX(${p})`;
+        if (nav) nav.classList.toggle('is-scrolled', sy > 8);
+
+        if (reduce) return;
+        for (const el of parallaxEls) {
+          const rect = el.getBoundingClientRect();
+          const center = rect.top + rect.height / 2;
+          const rel = (center - vh / 2) / vh; // ~ -1 .. 1 según la posición
+          const speed = Number(el.dataset.parallax) || 0;
+          const rot = Number(el.dataset.rotate) || 0;
+          const y = -rel * speed * 100;
+          let tf = `translate3d(0, ${y.toFixed(1)}px, 0)`;
+          if (rot) tf += ` rotate(${(-rel * rot).toFixed(2)}deg)`;
+          el.style.transform = tf;
+        }
+      };
+
+      let ticking = false;
+      const onScroll = () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+          updateOnScroll();
+          ticking = false;
+        });
+      };
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll);
+      updateOnScroll();
     </script>
   </body>
 </html>

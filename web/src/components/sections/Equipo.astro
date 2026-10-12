@@ -20,8 +20,8 @@ const iniciales = (nombre: string) =>
       />
     </Reveal>
     <div class="mt-14 grid gap-px overflow-hidden rounded-[3px] border border-line bg-line sm:grid-cols-3">
-      {equipo.map((m) => (
-        <Reveal class="h-full">
+      {equipo.map((m, i) => (
+        <Reveal class="h-full" delay={i * 100}>
           <article class="h-full bg-surface p-7">
             <div
               class="flex h-10 w-10 items-center justify-center rounded-[3px] border border-line-strong font-semibold text-leaf"

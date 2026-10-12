@@ -12,25 +12,27 @@ import { etapas } from '../../lib/etapas';
         descripcion="Cada etapa es un escenario distinto con su propia paleta, peligros y enemigos. Al vencer al jefe, cruzas la puerta hacia el siguiente escenario."
       />
     </Reveal>
-    <Reveal>
-      <ol class="mt-14 grid gap-x-14 sm:grid-cols-2">
-        {etapas.map((e) => (
-          <li class="flex items-start gap-4 border-t border-line py-5">
-            <span class="pt-0.5 text-sm font-semibold tabular-nums text-moss">
-              {String(e.n).padStart(2, '0')}
-            </span>
-            <span
-              class="mt-1.5 h-3 w-3 shrink-0 rounded-[1px]"
-              style={`background:${e.color}`}
-              aria-hidden="true"
-            />
-            <div>
-              <h3 class="font-semibold text-bone">{e.nombre}</h3>
-              <p class="mt-1 text-sm leading-relaxed text-moss">{e.enemigos.join(', ')}</p>
-            </div>
-          </li>
-        ))}
-      </ol>
-    </Reveal>
+    <ol class="mt-14 grid gap-x-14 sm:grid-cols-2">
+      {etapas.map((e, i) => (
+        <li
+          data-reveal
+          class="reveal flex items-start gap-4 border-t border-line py-5"
+          style={`transition-delay:${(i % 2) * 70}ms`}
+        >
+          <span class="pt-0.5 text-sm font-semibold tabular-nums text-moss">
+            {String(e.n).padStart(2, '0')}
+          </span>
+          <span
+            class="mt-1.5 h-3 w-3 shrink-0 rounded-[1px]"
+            style={`background:${e.color}`}
+            aria-hidden="true"
+          />
+          <div>
+            <h3 class="font-semibold text-bone">{e.nombre}</h3>
+            <p class="mt-1 text-sm leading-relaxed text-moss">{e.enemigos.join(', ')}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
   </div>
 </section>

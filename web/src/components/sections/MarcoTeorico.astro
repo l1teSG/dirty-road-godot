@@ -12,12 +12,16 @@ import { marcoTecnico, referencias } from '../../lib/apa';
         descripcion={marcoTecnico.texto}
       />
     </Reveal>
-    <Reveal>
-      <ul class="mt-14 grid gap-x-14 gap-y-5 sm:grid-cols-2">
-        {referencias.map((r) => (
-          <li class="border-l-2 border-leaf/40 pl-4 text-sm leading-relaxed text-moss">{r}</li>
-        ))}
-      </ul>
-    </Reveal>
+    <ul class="mt-14 grid gap-x-14 gap-y-5 sm:grid-cols-2">
+      {referencias.map((r, i) => (
+        <li
+          data-reveal
+          class="reveal border-l-2 border-leaf/40 pl-4 text-sm leading-relaxed text-moss"
+          style={`transition-delay:${i * 60}ms`}
+        >
+          {r}
+        </li>
+      ))}
+    </ul>
   </div>
 </section>

@@ -9,7 +9,7 @@ const links = [
 ];
 ---
 
-<header class="fixed inset-x-0 top-0 z-40 border-b border-line bg-bg/80 backdrop-blur">
+<header id="site-nav" class="fixed inset-x-0 top-0 z-40 border-b border-line bg-bg/80 backdrop-blur">
   <nav class="mx-auto flex max-w-6xl items-center gap-6 px-4 py-3">
     <a href="#top" class="text-[1.05rem] font-bold tracking-tight text-bone">
       Dirty <span class="text-leaf">Road</span>
@@ -58,6 +58,8 @@ const links = [
       </li>
     </ul>
   </div>
+
+  <div id="scroll-progress" class="absolute inset-x-0 bottom-0 h-[2px] bg-leaf" aria-hidden="true"></div>
 </header>
 
 <script>

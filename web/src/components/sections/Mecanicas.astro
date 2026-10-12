@@ -22,22 +22,24 @@ const mecanicas = [
         descripcion="Diseño visual 2D, interacción fluida con el entorno y una propuesta que conecta conceptos ecológicos con decisiones dentro del juego."
       />
     </Reveal>
-    <Reveal>
-      <ul class="mt-14 grid gap-x-14 sm:grid-cols-2">
-        {mecanicas.map((m) => (
-          <li class="flex gap-5 border-t border-line py-6">
-            <span
-              class="mt-1.5 h-2.5 w-2.5 shrink-0 rounded-[1px]"
-              style={`background:var(--color-${m.c})`}
-              aria-hidden="true"
-            />
-            <div>
-              <h3 class="font-semibold text-bone">{m.t}</h3>
-              <p class="mt-1.5 text-sm leading-relaxed text-moss">{m.d}</p>
-            </div>
-          </li>
-        ))}
-      </ul>
-    </Reveal>
+    <ul class="mt-14 grid gap-x-14 sm:grid-cols-2">
+      {mecanicas.map((m, i) => (
+        <li
+          data-reveal
+          class="reveal flex gap-5 border-t border-line py-6"
+          style={`transition-delay:${i * 70}ms`}
+        >
+          <span
+            class="mt-1.5 h-2.5 w-2.5 shrink-0 rounded-[1px]"
+            style={`background:var(--color-${m.c})`}
+            aria-hidden="true"
+          />
+          <div>
+            <h3 class="font-semibold text-bone">{m.t}</h3>
+            <p class="mt-1.5 text-sm leading-relaxed text-moss">{m.d}</p>
+          </div>
+        </li>
+      ))}
+    </ul>
   </div>
 </section>
