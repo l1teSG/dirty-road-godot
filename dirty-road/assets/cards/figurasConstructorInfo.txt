@@ -691,3 +691,18 @@ capa BrilloAsta #cd853f: -1,20 -1,-14 1,-14 1,20
 capa Nudo #3e2723: -3,18 3,18 3,16 -3,16
 escala 1.1
 sombra 16 5 20 0.4
+---
+NOMBRE: Racimo de Semillas
+capa RacimoFondo #8b4513: 0,20 -14,8 -10,-6 0,-10 10,-6 14,8
+capa RacimoFrente #a0522d: 0,16 -9,6 -6,-4 0,-7 6,-4 9,6
+capa Semilla1 #adff2f: -6,8 -3,5 0,8 -3,11
+capa Semilla2 #32cd32: 2,6 5,3 8,6 5,9
+capa Semilla3 #00ff7f: -4,2 -1,-1 2,2 -1,5
+capa Semilla4 #adff2f: 4,0 7,-3 10,0 7,3
+capa Tallo #006400: 0,-10 -2,-18 1,-16
+capa Hoja #32cd32: 1,-16 6,-22 4,-15
+capa Brillo #deb887: -9,6 -5,6 -4,-4
+capa Destello1 #ffff00: -14,-4 -11,-8 -10,-3
+capa Destello2 #ffff00: 14,-4 11,-8 10,-3
+escala 1.2
+sombra 26 10 16 0.4
