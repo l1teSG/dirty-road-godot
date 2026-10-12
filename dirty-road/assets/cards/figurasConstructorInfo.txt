@@ -983,3 +983,18 @@ capa MarcaO #228b22: 6,-6 8,-6 8,-4
 capa Sol #ffff00: 0,10 -3,13 0,16 3,13
 escala 1.0
 sombra 24 8 18 0.3
+---
+NOMBRE: Faro de Reciclaje
+capa BaseFaro #4d4d4d: -12,20 12,20 8,16 -8,16
+capa TorreFondo #696969: -8,16 8,16 6,-6 -6,-6
+capa TorreFrente #808080: -4,16 4,16 3,-6 -3,-6
+capa FranjaRoja1 #ff4500: -8,8 8,8 8,4 -8,4
+capa FranjaRoja2 #ff4500: -7,-2 7,-2 7,-6 -7,-6
+capa LinternaFondo #ffff00: -7,-6 7,-6 5,-14 -5,-14
+capa LinternaFrente #ffffe0: -4,-7 4,-7 3,-13 -3,-13
+capa Techo #1a1a1a: -6,-14 6,-14 0,-20
+capa HazIzq #ffff00: -7,-10 -22,-16 -22,-4
+capa HazDer #ffff00: 7,-10 22,-16 22,-4
+capa ReciclaHoja #32cd32: 0,4 -3,-2 3,-2
+escala 1.1
+sombra 26 10 18 0.4
