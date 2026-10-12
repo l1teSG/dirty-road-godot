@@ -893,3 +893,18 @@ capa DetalleVerde #32cd32: 0,4 -4,4 -2,-2
 capa Brillo #cd853f: -18,4 -8,4 -8,-2 -18,-2
 escala 1.1
 sombra 30 8 12 0.3
+---
+NOMBRE: Botas de Goma
+capa BotaIzqFondo #2e8b57: -13,15 -4,15 -4,-13 -13,-13
+capa PieIzq #2e8b57: -13,15 -1,15 -1,7 -13,7
+capa BotaDerFondo #228b22: -2,15 7,15 7,-13 -2,-13
+capa PieDer #228b22: -2,15 10,15 10,7 -2,7
+capa SuelaIzq #1a1a1a: -14,15 0,15 0,12 -14,12
+capa SuelaDer #1a1a1a: -3,15 11,15 11,12 -3,12
+capa FacetaIzq #3cb371: -13,15 -9,15 -9,-13 -13,-13
+capa FacetaDer #3cb371: 0,15 4,15 4,-13 0,-13
+capa FranjaIzq #adff2f: -13,0 -4,0 -4,-3 -13,-3
+capa FranjaDer #adff2f: -2,-3 7,-3 7,-6 -2,-6
+capa Charco #1e90ff: -14,16 12,16 10,20 -12,20
+escala 1.1
+sombra 28 8 16 0.4
