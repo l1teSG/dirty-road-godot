@@ -834,3 +834,18 @@ capa OrejaIzq #8b4513: -12,-10 -18,-18 -8,-14
 capa OrejaDer #8b4513: 12,-10 18,-18 8,-14
 escala 1.1
 sombra 28 10 18 0.4
+---
+NOMBRE: Savia Curativa
+capa HojaFondo #228b22: 0,16 -16,4 -8,-8 0,-12 8,-8 16,4
+capa HojaFrente #32cd32: 0,12 -11,3 -6,-6 0,-9 6,-6 11,3
+capa Nervio #006400: -1,-12 1,-12 1,15 -1,15
+capa NervioIzq #006400: -12,4 0,-12 0,-10
+capa NervioDer #006400: 12,4 0,-12 0,-10
+capa GotaFondo #00ced1: 4,0 8,6 6,12 2,12 0,6
+capa GotaFrente #87ceeb: 4,2 6,6 5,10 3,10 2,6
+capa BrilloGota #ffffff: 3,4 4,3 5,4
+capa CruzVert #adff2f: -5,-14 -3,-14 -3,-4 -5,-4
+capa CruzHoriz #adff2f: -8,-10 -1,-10 -1,-8 -8,-8
+capa BrilloHoja #98fb98: -2,12 -8,3 -6,-6 -3,-3
+escala 1.1
+sombra 26 10 18 0.3
