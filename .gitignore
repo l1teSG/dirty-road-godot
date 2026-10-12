@@ -43,3 +43,4 @@ capturas/
 # Excepción: versionar los scripts de herramientas (*.sh está ignorado).
 !dirty-road/tools/capturas.sh
 !dirty-road/tools/trailer.sh
+!dirty-road/tools/fotos_web.sh
