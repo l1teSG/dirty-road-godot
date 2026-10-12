@@ -17,9 +17,8 @@ import {
   getAssetForOS,
   formatBytes,
   formatDate,
-  GitHubRelease,
-  GitHubAsset,
 } from '../lib/github';
+import type { GitHubRelease, GitHubAsset } from '../lib/github';
 
 interface Props {
   owner: string;

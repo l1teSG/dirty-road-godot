@@ -28,5 +28,25 @@ const {
   </head>
   <body class="min-h-screen bg-bg text-text-primary font-display antialiased">
     <slot />
+    <script>
+      // Animación de aparición al hacer scroll (Reveal).
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!reduce) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const e of entries) {
+              if (e.isIntersecting) {
+                e.target.classList.add('visible');
+                io.unobserve(e.target);
+              }
+            }
+          },
+          { rootMargin: '0px 0px -10% 0px', threshold: 0.1 },
+        );
+        document.querySelectorAll('[data-reveal]').forEach((el) => io.observe(el));
+      } else {
+        document.querySelectorAll('[data-reveal]').forEach((el) => el.classList.add('visible'));
+      }
+    </script>
   </body>
 </html>

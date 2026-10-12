@@ -1,0 +1,88 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ecenes/enemies/class/enemigo.gd" id="1_0jfum"]
+[ext_resource type="FontFile" path="res://themes/Chakra_Petch/ChakraPetch-BoldItalic.ttf" id="2_1lx2a"]
+[ext_resource type="PackedScene" path="res://assets/stage/enemis/stages/stage21-30/botellaLanzadora.tscn" id="3_ocldk"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_constructor.gd" id="4_u2c34"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_capa.gd" id="5_8hmch"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/AnimacionEnemigo.gd" id="6_qjvpx"]
+
+[sub_resource type="Resource" id="Resource_vencx"]
+resource_local_to_scene = true
+script = ExtResource("5_8hmch")
+nombre = "Cuerpo"
+puntos = PackedVector2Array(12, -14, 12, 14, 6, 20, -6, 20, -12, 14, -12, -14, -6, -19, 6, -19)
+color = Color(0.49803922, 0.7882353, 0.8666667, 1)
+
+[sub_resource type="Resource" id="Resource_pio8s"]
+resource_local_to_scene = true
+script = ExtResource("5_8hmch")
+nombre = "Brazo"
+puntos = PackedVector2Array(12, -10, 24, -16, 27, -11, 14, -3)
+color = Color(0.41568628, 0.70980394, 0.78431374, 1)
+animacion = 4
+anim_velocidad = 1.2
+anim_amplitud = 6.0
+
+[sub_resource type="Resource" id="Resource_p80cu"]
+resource_local_to_scene = true
+script = ExtResource("5_8hmch")
+nombre = "Proyectil"
+puntos = PackedVector2Array(38, -20, 41, -14, 36, -9, 31, -13)
+color = Color(0.68235296, 1, 1, 1)
+animacion = 6
+anim_velocidad = 2.0
+anim_amplitud = 0.3
+
+[sub_resource type="Resource" id="Resource_j0q3o"]
+resource_local_to_scene = true
+script = ExtResource("5_8hmch")
+nombre = "Tapa"
+puntos = PackedVector2Array(6, -19, 6, -23, -6, -23, -6, -19)
+color = Color(0.84705883, 0.105882354, 0.3764706, 1)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_nrm71"]
+radius = 41.15814
+
+[node name="enemigo" type="CharacterBody2D" unique_id=2006919752 node_paths=PackedStringArray("boca")]
+script = ExtResource("1_0jfum")
+life = 30.0
+speed = 95.0
+damage = 9.0
+mov_zigzag_grados = 6.0
+mov_orbita = 0.7
+radio_contacto = 57.15814014262549
+comportamiento_tipo = "rango"
+boca = NodePath("boca")
+categoria = "acuatico"
+nombre_texto = "Botella Lanzadora"
+fuente_nombre = ExtResource("2_1lx2a")
+fuente_danio = ExtResource("2_1lx2a")
+
+[node name="FiguraConstructor" type="Node2D" parent="." unique_id=66989019 instance=ExtResource("3_ocldk")]
+script = ExtResource("4_u2c34")
+capas = Array[ExtResource("5_8hmch")]([SubResource("Resource_vencx"), SubResource("Resource_pio8s"), SubResource("Resource_p80cu"), SubResource("Resource_j0q3o")])
+sombra = true
+sombra_ancho = 22.0
+sombra_desfase = 19.0
+sombra_opacidad = 0.35
+color_luz = Color(0.37254903, 0.83137256, 0.9098039, 1)
+posicion_luz = Vector2(0, -2)
+escala_global = 0.95
+texto_figura = "capa Cuerpo 7fc9dd: 12,-14 12,14 6,20 -6,20 -12,14 -12,-14 -6,-19 6,-19
+capa Brazo 6ab5c8: 12,-10 24,-16 27,-11 14,-3
+capa Proyectil aeffff: 38,-20 41,-14 36,-9 31,-13
+capa Tapa d81b60: 6,-19 6,-23 -6,-23 -6,-19
+sombra 22 8 19 0.35
+luz 5fd4e8 0,-2 0.5 0.5
+escala 0.95
+anim Brazo oscilar 1.2 6
+anim Proyectil parpadear 2.0 0.3"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=553907992]
+shape = SubResource("CircleShape2D_nrm71")
+
+[node name="boca" type="Marker2D" parent="." unique_id=82246052]
+
+[node name="Animacion" type="Node" parent="." unique_id=1513918713]
+script = ExtResource("6_qjvpx")

@@ -1,0 +1,121 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ecenes/enemies/class/enemigo.gd" id="1_ir0pm"]
+[ext_resource type="FontFile" path="res://themes/Chakra_Petch/ChakraPetch-BoldItalic.ttf" id="2_fuxrs"]
+[ext_resource type="PackedScene" path="res://assets/stage/enemis/stages/stage61-70/boss/ReactorRoto.tscn" id="3_tcgoh"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_constructor.gd" id="4_c2ofc"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_capa.gd" id="5_md6re"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/BossAttackComponent.gd" id="6_h80sg"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/AnimacionEnemigo.gd" id="7_f7orb"]
+
+[sub_resource type="Resource" id="Resource_2aqux"]
+resource_local_to_scene = true
+script = ExtResource("5_md6re")
+nombre = "Contencion"
+puntos = PackedVector2Array(50, 26, 20, 38, -20, 38, -50, 26, -50, -10, -20, -34, 20, -34, 50, -10)
+color = Color(0.2901961, 0.32156864, 0.34509805, 1)
+
+[sub_resource type="Resource" id="Resource_isugg"]
+resource_local_to_scene = true
+script = ExtResource("5_md6re")
+nombre = "Grieta"
+puntos = PackedVector2Array(-4, -30, 2, -12, -4, 8, 4, 30, 0, 34, -8, 10, 0, -10, -8, -28)
+color = Color(0, 1, 0.49803922, 1)
+animacion = 6
+anim_velocidad = 1.3
+anim_amplitud = 0.5
+
+[sub_resource type="Resource" id="Resource_kxaqd"]
+resource_local_to_scene = true
+script = ExtResource("5_md6re")
+nombre = "Nucleo"
+puntos = PackedVector2Array(22, 4, 14, 14, 0, 18, -14, 14, -22, 4, -14, -6, 0, -10, 14, -6)
+color = Color(0.5411765, 1, 0.24705882, 1)
+animacion = 2
+anim_amplitud = 6.0
+
+[sub_resource type="Resource" id="Resource_po38o"]
+resource_local_to_scene = true
+script = ExtResource("5_md6re")
+nombre = "Nucleo_interior"
+puntos = PackedVector2Array(10, 4, 6, 9, 0, 11, -6, 9, -10, 4, -6, -1, 0, -3, 6, -1)
+color = Color(0.91764706, 1, 0.7490196, 1)
+animacion = 2
+anim_amplitud = 10.0
+anim_fase = 0.8
+
+[sub_resource type="Resource" id="Resource_sf5io"]
+resource_local_to_scene = true
+script = ExtResource("5_md6re")
+nombre = "Escape"
+puntos = PackedVector2Array(30, -34, 40, -58, 52, -48, 40, -30)
+color = Color(0.41568628, 0.47843137, 0.41568628, 0.6901961)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_w15og"]
+radius = 141.53445
+
+[node name="enemigo" type="CharacterBody2D" unique_id=2006919752 node_paths=PackedStringArray("boca")]
+script = ExtResource("1_ir0pm")
+life = 1400.0
+speed = 95.0
+damage = 9.0
+mov_zigzag_grados = 10.0
+mov_zigzag_freq = 2.0
+mov_orbita = 0.5
+mov_dash_mult = 1.6
+mov_dash_freq = 0.5
+mov_separacion_fuerza = 1.0
+radio_contacto = 90.0
+comportamiento_tipo = "rango"
+boca = NodePath("boca")
+anti_estructura = true
+categoria = "elite"
+nombre_texto = "Reactor Roto"
+fuente_nombre = ExtResource("2_fuxrs")
+fuente_danio = ExtResource("2_fuxrs")
+orbes_min = 8
+orbes_max = 14
+orbe_valor = 3.0
+
+[node name="FiguraConstructor" type="Node2D" parent="." unique_id=66989019 instance=ExtResource("3_tcgoh")]
+script = ExtResource("4_c2ofc")
+capas = Array[ExtResource("5_md6re")]([SubResource("Resource_2aqux"), SubResource("Resource_isugg"), SubResource("Resource_kxaqd"), SubResource("Resource_po38o"), SubResource("Resource_sf5io")])
+sombra = true
+sombra_ancho = 90.0
+sombra_alto = 22.0
+sombra_desfase = 34.0
+color_luz = Color(0.5411765, 1, 0.24705882, 1)
+posicion_luz = Vector2(0, 4)
+energia_luz = 1.2
+escala_luz = 1.5
+anim_luz = 1
+velocidad_luz = 0.8
+escala_global = 2.0
+texto_figura = "capa Contencion 4a5258: 50,26 20,38 -20,38 -50,26 -50,-10 -20,-34 20,-34 50,-10
+capa Grieta 00ff7f: -4,-30 2,-12 -4,8 4,30 0,34 -8,10 0,-10 -8,-28
+capa Nucleo 8aff3f: 22,4 14,14 0,18 -14,14 -22,4 -14,-6 0,-10 14,-6
+capa Nucleo_interior eaffbf: 10,4 6,9 0,11 -6,9 -10,4 -6,-1 0,-3 6,-1
+capa Escape 6a7a6ab0: 30,-34 40,-58 52,-48 40,-30
+sombra 90 22 34 0.3
+luz 8aff3f 0,4 1.2 1.5
+escala 2.0
+anim Nucleo latir 1.0 6
+anim Nucleo_interior latir 1.0 10 0.8
+anim Grieta parpadear 1.3 0.5
+animluz pulsar 0.8 0.3"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1299028823]
+shape = SubResource("CircleShape2D_w15og")
+
+[node name="boca" type="Marker2D" parent="." unique_id=1956128193]
+
+[node name="Ataques" type="Node2D" parent="." unique_id=473318106]
+script = ExtResource("6_h80sg")
+meteoros = true
+rayo = true
+aura_pulso = true
+rayo_color = Color(0.7, 1, 0.4, 0.85)
+pulso_color = Color(0.6, 1, 0.3, 0.5)
+
+[node name="Animacion" type="Node" parent="." unique_id=1069494360]
+script = ExtResource("7_f7orb")

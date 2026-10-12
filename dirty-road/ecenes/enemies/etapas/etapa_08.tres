@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="EtapaConfig" format=3 uid="uid://dfuqyrgooog2e"]
+
+[ext_resource type="Script" uid="uid://vyt7ho0roxls" path="res://scripts/enemigo_oleada_config.gd" id="1_w2q3g"]
+[ext_resource type="Resource" uid="uid://ce3b27n5khl7k" path="res://ecenes/enemies/main/71-80/dronPesticida/dronPesticida.tres" id="2_6g7r4"]
+[ext_resource type="Resource" uid="uid://b8qmcgj5ho5l6" path="res://ecenes/enemies/main/71-80/nubeFumigacion/nubeFumigacion.tres" id="3_vntdx"]
+[ext_resource type="Resource" uid="uid://cn17gt4fe1j34" path="res://ecenes/enemies/main/71-80/plaga/plaga.tres" id="4_5eotr"]
+[ext_resource type="PackedScene" path="res://ecenes/enemies/main/71-80/boss/helicopteroFumigador_boss.tscn" id="5_x38v0"]
+[ext_resource type="Script" uid="uid://b07d7n2c62y1x" path="res://scripts/etapa_config.gd" id="6_x47eu"]
+
+[resource]
+script = ExtResource("6_x47eu")
+nombre = "Etapa 8: Pesticidas y agricultura"
+enemigos = Array[ExtResource("1_w2q3g")]([ExtResource("2_6g7r4"), ExtResource("3_vntdx"), ExtResource("4_5eotr")])
+enemigos_base_por_oleada = 16
+incremento_enemigos_por_oleada = 3
+escalado_vida_por_oleada = 0.3
+escalado_danio_por_oleada = 0.09
+mult_vida = 5.4
+mult_velocidad = 1.35
+mult_danio = 5.4
+jefe_escena = ExtResource("5_x38v0")
+jefe_nombre = "Helicóptero Fumigador"
+jefe_escoltas = 6

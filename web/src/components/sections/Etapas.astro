@@ -1,0 +1,44 @@
+---
+import SectionHeading from '../ui/SectionHeading.astro';
+import Reveal from '../ui/Reveal.astro';
+import { etapas } from '../../lib/etapas';
+---
+<section id="etapas" class="px-4 py-24 sm:py-32">
+  <div class="mx-auto max-w-6xl">
+    <Reveal>
+      <SectionHeading
+        kicker="10 etapas · 100 oleadas"
+        titulo="Un viaje por los problemas ambientales"
+        descripcion="Cada etapa es un escenario distinto con su propia paleta, peligros y enemigos. Al vencer al jefe, cruzas la puerta hacia el siguiente escenario."
+      />
+    </Reveal>
+    <div class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {etapas.map((e, i) => (
+        <Reveal delay={(i % 3) * 80}>
+          <article
+            class="relative h-full overflow-hidden rounded-2xl border border-white/5 bg-bg-alt/60 p-5"
+            style={`box-shadow: inset 0 0 0 1px ${e.color}22`}
+          >
+            <div class="flex items-center gap-3">
+              <span
+                class="flex h-9 w-9 items-center justify-center rounded-lg font-mono text-sm font-bold text-bg"
+                style={`background:${e.color}`}
+              >
+                {e.n}
+              </span>
+              <h3 class="text-base font-semibold text-text-primary">{e.nombre}</h3>
+            </div>
+            <p class="mt-4 font-mono text-xs uppercase tracking-wider text-text-secondary">Enemigos</p>
+            <ul class="mt-2 flex flex-wrap gap-2">
+              {e.enemigos.map((en) => (
+                <li class="rounded-full border border-white/10 px-2.5 py-1 text-xs text-text-secondary">
+                  {en}
+                </li>
+              ))}
+            </ul>
+          </article>
+        </Reveal>
+      ))}
+    </div>
+  </div>
+</section>

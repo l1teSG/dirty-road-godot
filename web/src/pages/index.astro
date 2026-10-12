@@ -1,32 +1,42 @@
 ---
-// Página principal de descarga de Dirty Road.
-// Ensambla todos los componentes: Hero, GitHubStats, Changelog,
-// ScreenshotGallery y Footer dentro del BaseLayout.
+// Landing de Dirty Road — una sola página, centrada en el scroll.
+// index.astro SOLO ensambla; cada sección vive en su propio archivo.
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Hero from '../components/Hero';
-import GitHubStats from '../components/GitHubStats';
-import Changelog from '../components/Changelog';
-import ScreenshotGallery from '../components/ScreenshotGallery';
-import Footer from '../components/Footer.astro';
+import FondoShader from '../components/FondoShader.tsx';
+import Navbar from '../components/Navbar.astro';
+
+import Hero from '../components/sections/Hero.astro';
+import QueEs from '../components/sections/QueEs.astro';
+import Problema from '../components/sections/Problema.astro';
+import Objetivos from '../components/sections/Objetivos.astro';
+import Mecanicas from '../components/sections/Mecanicas.astro';
+import Etapas from '../components/sections/Etapas.astro';
+import Galeria from '../components/sections/Galeria.astro';
+import MarcoTeorico from '../components/sections/MarcoTeorico.astro';
+import Metodologia from '../components/sections/Metodologia.astro';
+import Equipo from '../components/sections/Equipo.astro';
+import Descargar from '../components/sections/Descargar.astro';
+import Footer from '../components/sections/Footer.astro';
 ---
+
 <BaseLayout
-  title="Dirty Road - Videojuego educativo ambiental"
-  description="Videojuego educativo 2D que fomenta la conciencia ambiental. Recolecta, recicla y reforesta con Renata."
+  title="Dirty Road — Videojuego educativo ambiental"
+  description="Shooter de supervivencia con temática ecológica. Defiende el último árbol, recolecta, recicla y reforesta a través de 10 etapas."
 >
+  <FondoShader client:load />
+  <Navbar />
   <main>
-    <Hero client:load />
-    <section class="px-4 py-12">
-      <GitHubStats client:load owner="l1teSG" repo="dirty-road-godot" />
-    </section>
-    <section class="px-4 py-12">
-      <div class="mx-auto max-w-3xl">
-        <h2 class="mb-6 text-2xl font-semibold text-text-primary sm:text-3xl">
-          Novedades
-        </h2>
-        <Changelog client:load owner="l1teSG" repo="dirty-road-godot" />
-      </div>
-    </section>
-    <ScreenshotGallery client:load />
-    <Footer />
+    <Hero />
+    <QueEs />
+    <Problema />
+    <Objetivos />
+    <Mecanicas />
+    <Etapas />
+    <Galeria />
+    <MarcoTeorico />
+    <Metodologia />
+    <Equipo />
+    <Descargar />
   </main>
+  <Footer />
 </BaseLayout>

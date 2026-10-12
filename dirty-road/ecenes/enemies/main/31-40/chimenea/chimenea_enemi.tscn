@@ -1,0 +1,84 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ecenes/enemies/class/enemigo.gd" id="1_c1bsn"]
+[ext_resource type="FontFile" path="res://themes/Chakra_Petch/ChakraPetch-BoldItalic.ttf" id="2_u1o2l"]
+[ext_resource type="PackedScene" path="res://assets/stage/enemis/stages/stage31-40/chimenea.tscn" id="3_g5aju"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_constructor.gd" id="4_0jwxf"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_capa.gd" id="5_imc2a"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/AnimacionEnemigo.gd" id="6_3u40b"]
+
+[sub_resource type="Resource" id="Resource_cwluy"]
+resource_local_to_scene = true
+script = ExtResource("5_imc2a")
+nombre = "Torre"
+puntos = PackedVector2Array(12, 28, 12, -16, 8, -26, -8, -26, -12, -16, -12, 28)
+color = Color(0.3529412, 0.27450982, 0.22745098, 1)
+
+[sub_resource type="Resource" id="Resource_cek0a"]
+resource_local_to_scene = true
+script = ExtResource("5_imc2a")
+nombre = "Franja"
+puntos = PackedVector2Array(12, -6, 12, 2, -12, 2, -12, -6)
+color = Color(0.27450982, 0.21176471, 0.17254902, 1)
+
+[sub_resource type="Resource" id="Resource_4ymtg"]
+resource_local_to_scene = true
+script = ExtResource("5_imc2a")
+nombre = "Boca"
+puntos = PackedVector2Array(8, -26, 8, -32, -8, -32, -8, -26)
+color = Color(0.16470589, 0.12941177, 0.10980392, 1)
+
+[sub_resource type="Resource" id="Resource_fdm25"]
+resource_local_to_scene = true
+script = ExtResource("5_imc2a")
+nombre = "Humo"
+puntos = PackedVector2Array(-10, -32, 0, -46, 8, -38, 2, -30)
+color = Color(0.41568628, 0.41568628, 0.41568628, 0.6901961)
+animacion = 1
+anim_velocidad = 0.7
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_b2aa3"]
+radius = 46.0
+
+[node name="enemigo" type="CharacterBody2D" unique_id=2006919752 node_paths=PackedStringArray("boca")]
+script = ExtResource("1_c1bsn")
+life = 90.0
+speed = 60.0
+damage = 12.0
+radio_contacto = 62.0
+comportamiento_tipo = "torreta"
+boca = NodePath("boca")
+categoria = "fuego"
+nombre_texto = "Chimenea"
+fuente_nombre = ExtResource("2_u1o2l")
+fuente_danio = ExtResource("2_u1o2l")
+
+[node name="FiguraConstructor" type="Node2D" parent="." unique_id=66989019 instance=ExtResource("3_g5aju")]
+script = ExtResource("4_0jwxf")
+capas = Array[ExtResource("5_imc2a")]([SubResource("Resource_cwluy"), SubResource("Resource_cek0a"), SubResource("Resource_4ymtg"), SubResource("Resource_fdm25")])
+sombra = true
+sombra_ancho = 26.0
+sombra_alto = 9.0
+sombra_desfase = 27.0
+sombra_opacidad = 0.35
+color_luz = Color(0.72156864, 0.32941177, 0.16470589, 1)
+posicion_luz = Vector2(0, 24)
+anim_luz = 2
+velocidad_luz = 0.6
+texto_figura = "capa Torre 5a463a: 12,28 12,-16 8,-26 -8,-26 -12,-16 -12,28
+capa Franja 46362c: 12,-6 12,2 -12,2 -12,-6
+capa Boca 2a211c: 8,-26 8,-32 -8,-32 -8,-26
+capa Humo 6a6a6ab0: -10,-32 0,-46 8,-38 2,-30
+sombra 26 9 27 0.35
+luz b8542a 0,24 0.5 0.5
+escala 1.0
+anim Humo flotar 0.7 4
+animluz trueno 0.6 0.3"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1635918877]
+shape = SubResource("CircleShape2D_b2aa3")
+
+[node name="boca" type="Marker2D" parent="." unique_id=1324093597]
+
+[node name="Animacion" type="Node" parent="." unique_id=1638595418]
+script = ExtResource("6_3u40b")

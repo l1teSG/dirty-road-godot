@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="EnemigoOleadaConfig" format=3 uid="uid://bqb7ayl2iu42m"]
+
+[ext_resource type="PackedScene" path="res://ecenes/enemies/main/51-60/cableElectrico/cableElectrico_enemi.tscn" id="1_ouqaa"]
+[ext_resource type="Script" uid="uid://vyt7ho0roxls" path="res://scripts/enemigo_oleada_config.gd" id="2_2yi7d"]
+
+[resource]
+script = ExtResource("2_2yi7d")
+escena = ExtResource("1_ouqaa")
+peso = 1.5
+oleada_minima = 4

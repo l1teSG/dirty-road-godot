@@ -1,0 +1,90 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ecenes/enemies/class/enemigo.gd" id="1_facct"]
+[ext_resource type="FontFile" path="res://themes/Chakra_Petch/ChakraPetch-BoldItalic.ttf" id="2_m47wv"]
+[ext_resource type="PackedScene" path="res://assets/stage/enemis/stages/stage71-80/plaga.tscn" id="3_3vllv"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_constructor.gd" id="4_butql"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_capa.gd" id="5_jp7yo"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/AnimacionEnemigo.gd" id="6_380he"]
+
+[sub_resource type="Resource" id="Resource_egd40"]
+resource_local_to_scene = true
+script = ExtResource("5_jp7yo")
+nombre = "Cuerpo"
+puntos = PackedVector2Array(8, 0, 5, 6, -3, 8, -9, 3, -9, -3, -3, -8, 5, -6)
+color = Color(0.47843137, 0.16470589, 0.2901961, 1)
+animacion = 4
+anim_velocidad = 2.0
+
+[sub_resource type="Resource" id="Resource_4tom0"]
+resource_local_to_scene = true
+script = ExtResource("5_jp7yo")
+nombre = "Cabeza"
+puntos = PackedVector2Array(8, -3, 14, 0, 8, 3)
+color = Color(0.84705883, 0.105882354, 0.3764706, 1)
+
+[sub_resource type="Resource" id="Resource_vk811"]
+resource_local_to_scene = true
+script = ExtResource("5_jp7yo")
+nombre = "Ala"
+puntos = PackedVector2Array(-2, -4, 8, -14, 12, -8, 2, -2)
+color = Color(0.72156864, 0.37254903, 0.78431374, 0.6666667)
+animacion = 5
+anim_velocidad = 5.0
+anim_amplitud = 1.0
+
+[sub_resource type="Resource" id="Resource_5s7ro"]
+resource_local_to_scene = true
+script = ExtResource("5_jp7yo")
+nombre = "Ojo"
+puntos = PackedVector2Array(7, -2, 10, -2, 10, 1, 7, 1)
+color = Color(0, 1, 0.49803922, 1)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_05i2e"]
+radius = 12.899612
+
+[node name="enemigo" type="CharacterBody2D" unique_id=2006919752]
+script = ExtResource("1_facct")
+life = 14.0
+speed = 190.0
+damage = 10.0
+mov_zigzag_grados = 22.0
+mov_zigzag_freq = 3.0
+mov_orbita = 0.35
+mov_dash_mult = 1.3
+mov_dash_freq = 0.6
+dano_al_tocar = true
+danio_contacto = 10.0
+radio_contacto = 28.89961239727768
+comportamiento_tipo = "enjambre"
+enjambre_separacion = 24.0
+nombre_texto = "Plaga"
+fuente_nombre = ExtResource("2_m47wv")
+fuente_danio = ExtResource("2_m47wv")
+
+[node name="FiguraConstructor" type="Node2D" parent="." unique_id=66989019 instance=ExtResource("3_3vllv")]
+script = ExtResource("4_butql")
+capas = Array[ExtResource("5_jp7yo")]([SubResource("Resource_egd40"), SubResource("Resource_4tom0"), SubResource("Resource_vk811"), SubResource("Resource_5s7ro")])
+sombra = true
+sombra_ancho = 9.0
+sombra_alto = 3.0
+sombra_desfase = 7.0
+sombra_opacidad = 0.2
+color_luz = Color(0.84705883, 0.105882354, 0.3764706, 1)
+escala_luz = 0.35
+escala_global = 0.8
+texto_figura = "capa Cuerpo 7a2a4a: 8,0 5,6 -3,8 -9,3 -9,-3 -3,-8 5,-6
+capa Cabeza d81b60: 8,-3 14,0 8,3
+capa Ala b85fc8aa: -2,-4 8,-14 12,-8 2,-2
+capa Ojo 00ff7f: 7,-2 10,-2 10,1 7,1
+sombra 9 3 7 0.2
+luz d81b60 0,0 0.5 0.35
+escala 0.8
+anim Ala vibrar 5.0 1.0
+anim Cuerpo oscilar 2.0 4"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1380479133]
+shape = SubResource("CircleShape2D_05i2e")
+
+[node name="Animacion" type="Node" parent="." unique_id=518412219]
+script = ExtResource("6_380he")

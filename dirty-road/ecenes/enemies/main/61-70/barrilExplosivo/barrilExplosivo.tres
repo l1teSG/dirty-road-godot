@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="EnemigoOleadaConfig" format=3 uid="uid://d4kvqk6pfs7j6"]
+
+[ext_resource type="PackedScene" path="res://ecenes/enemies/main/61-70/barrilExplosivo/barrilExplosivo_enemi.tscn" id="1_wtqgh"]
+[ext_resource type="Script" uid="uid://vyt7ho0roxls" path="res://scripts/enemigo_oleada_config.gd" id="2_5m4xk"]
+
+[resource]
+script = ExtResource("2_5m4xk")
+escena = ExtResource("1_wtqgh")
+peso = 1.5
+oleada_minima = 4

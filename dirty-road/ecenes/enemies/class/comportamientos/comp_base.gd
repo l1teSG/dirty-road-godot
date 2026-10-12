@@ -1,16 +1,18 @@
 class_name ComportamientoEnemigo
-extends Node
+extends RefCounted
 
 ## ══════════════════════════════════════════════════════════
 ##  COMPORTAMIENTO ENEMIGO — base (solo lógica, sin escena).
-##  • El Enemigo la instala (add_child), llama iniciar() una vez
-##    y pensar() cada frame físico, antes de move_and_slide().
+##  • RefCounted: el Enemigo la crea con .new() SIN add_child;
+##    al morir el enemigo se libera sola (sin fugas de memoria).
+##  • El Enemigo llama iniciar() una vez y pensar() cada frame
+##    físico, antes de move_and_slide().
 ##  • Órdenes SIEMPRE por la API: objetivo(), distancia_a(),
 ##    dir_a(), mover_hacia(), mover_en(), detener(),
-##    atacar_objetivo(obj), disparar_desde(nodo, dir).
+##    atacar_objetivo(obj), disparar_desde(nodo, punto).
 ##  • NUNCA escribir e.life; daño SIEMPRE vía e.damage (escalado).
-##  • El árbol llega por objetivo(): estos ayudantes solo añaden
-##    márgenes y detección de choque contra la estructura.
+##  • El árbol llega por objetivo(): aquí solo añadimos márgenes
+##    y detección de choque contra la estructura.
 ## ══════════════════════════════════════════════════════════
 
 var e: Enemigo = null
@@ -41,34 +43,13 @@ func debug_dibujar_en(_enemigo: Enemigo) -> void: pass
 func _f(nombre: String, defecto: float) -> float:
 	if e == null:
 		return defecto
-	var v = e.get(nombre)
+	var v: Variant = e.get(nombre)
 	return defecto if v == null else float(v)
 
 
-## true si el objetivo actual es el árbol/estructura a defender.
-func _es_arbol(n: Node2D) -> bool:
-	return e != null and n != null and n == e.arbol
-
-
-## Nodo de salida de proyectiles: la boca si existe, si no el propio enemigo.
-func _origen_disparo() -> Node2D:
-	if e != null and e.boca != null and is_instance_valid(e.boca):
-		return e.boca
-	return e
-
-
-## true si el deslizamiento de move_and_slide() chocó contra el
-## objetivo o uno de sus hijos (p. ej. el tronco del árbol).
-func _choco_con(obj: Node2D) -> bool:
-	if e == null or obj == null:
-		return false
-	for i in e.get_slide_collision_count():
-		var col: Object = e.get_slide_collision(i).get_collider()
-		if col == null:
-			continue
-		if col == obj:
-			return true
-		var n := col as Node
-		if n != null and obj.is_ancestor_of(n):
-			return true
-	return false
+## Igual que _f pero para booleanos.
+func _b(nombre: String, defecto: bool) -> bool:
+	if e == null:
+		return defecto
+	var v: Variant = e.get(nombre)
+	return defecto if v == null else bool(v)

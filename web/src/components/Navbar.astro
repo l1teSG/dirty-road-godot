@@ -1,0 +1,63 @@
+---
+// Barra de navegación fija y responsive (menú móvil con botón).
+const links = [
+  { href: '#que-es', label: '¿Qué es?' },
+  { href: '#mecanicas', label: 'Mecánicas' },
+  { href: '#etapas', label: 'Etapas' },
+  { href: '#galeria', label: 'Galería' },
+  { href: '#equipo', label: 'Equipo' },
+];
+---
+
+<header class="fixed inset-x-0 top-0 z-40 border-b border-white/5 bg-bg/75 backdrop-blur">
+  <nav class="mx-auto flex max-w-6xl items-center gap-4 px-4 py-3">
+    <a href="#top" class="font-mono text-sm font-bold tracking-widest text-green-bright">
+      DIRTY&nbsp;ROAD
+    </a>
+
+    <ul class="ml-auto hidden items-center gap-5 text-sm text-text-secondary md:flex">
+      {links.map((l) => (
+        <li><a class="transition-colors hover:text-green-bright" href={l.href}>{l.label}</a></li>
+      ))}
+    </ul>
+
+    <a
+      href="#descargar"
+      class="ml-auto hidden rounded-full border border-green/40 px-4 py-1.5 text-sm font-semibold text-green-bright transition-colors hover:bg-green/10 md:ml-4 md:inline-block"
+    >
+      Descargar
+    </a>
+
+    <button
+      id="menu-btn"
+      class="ml-auto rounded-lg border border-white/10 px-3 py-1.5 text-lg text-green-bright md:hidden"
+      aria-label="Abrir menú"
+    >
+      ☰
+    </button>
+  </nav>
+
+  <div id="menu-panel" class="hidden border-t border-white/5 bg-bg/95 md:hidden">
+    <ul class="flex flex-col gap-1 px-4 py-3 text-text-secondary">
+      {links.map((l) => (
+        <li><a class="block rounded-lg px-3 py-2.5 hover:bg-white/5 hover:text-green-bright" href={l.href}>{l.label}</a></li>
+      ))}
+      <li>
+        <a class="mt-1 block rounded-lg border border-green/40 px-3 py-2.5 text-center font-semibold text-green-bright" href="#descargar">
+          Descargar
+        </a>
+      </li>
+    </ul>
+  </div>
+</header>
+
+<script>
+  const btn = document.getElementById('menu-btn');
+  const panel = document.getElementById('menu-panel');
+  if (btn && panel) {
+    btn.addEventListener('click', () => panel.classList.toggle('hidden'));
+    panel.querySelectorAll('a').forEach((a) =>
+      a.addEventListener('click', () => panel.classList.add('hidden')),
+    );
+  }
+</script>

@@ -1,26 +1,16 @@
-[gd_scene format=3 uid="uid://c8ukhxusib8qb"]
+[gd_scene load_steps=6 format=3 uid="uid://c8ukhxusib8qb"]
 
-[ext_resource type="Script" uid="uid://d0yifw3ixgw80" path="res://ui/main/main.gd" id="2_7mc2q"]
-[ext_resource type="Script" uid="uid://cm8ldnknxd1fs" path="res://ui/main/color_rect.gd" id="2_ircy7"]
+[ext_resource type="Script" uid="uid://d0yifw3ixgw80" path="res://ui/main/main.gd" id="1_main"]
+[ext_resource type="Shader" path="res://ui/main/fondo.gdshader" id="2_shader"]
+[ext_resource type="Theme" uid="uid://hau5fs7dt6rv" path="res://themes/mainTheme.tres" id="3_theme"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3a1op"]
-bg_color = Color(0.6, 0.6, 0.6, 0)
-border_color = Color(0.6, 1, 0.2, 1)
-border_blend = true
+[sub_resource type="ShaderMaterial" id="mat_fondo"]
+shader = ExtResource("2_shader")
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7mc2q"]
-bg_color = Color(0.6, 0.6, 0.6, 0)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.6, 1, 0.2, 1)
-border_blend = true
-
-[sub_resource type="Environment" id="Environment_7cwo5"]
+[sub_resource type="Environment" id="env"]
 glow_enabled = true
 
-[node name="Main" type="Control" unique_id=607975645]
+[node name="Main" type="Control"]
 custom_minimum_size = Vector2(250, 80)
 layout_mode = 3
 anchors_preset = 15
@@ -28,126 +18,112 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-script = ExtResource("2_7mc2q")
+theme = ExtResource("3_theme")
+script = ExtResource("1_main")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1797260839]
+[node name="Fondo" type="CanvasLayer" parent="."]
 layer = -2
 
-[node name="ColorRect" type="ColorRect" parent="CanvasLayer" unique_id=1301635943]
+[node name="ColorRect" type="ColorRect" parent="Fondo"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.019607844, 0.039215688, 0.03137255, 0.78431374)
-script = ExtResource("2_ircy7")
+color = Color(0.019607844, 0.039215688, 0.03137255, 1)
+material = SubResource("mat_fondo")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1981766110]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("env")
+
+[node name="Particulas" type="CPUParticles2D" parent="."]
+position = Vector2(960, 540)
+amount = 40
+lifetime = 6.0
+emission_shape = 3
+emission_rect_extents = Vector2(1004.5, 781.7)
+spread = 180.0
+gravity = Vector2(0, -10)
+scale_amount_max = 3.0
+color = Color(0.6, 1, 0.2, 0.44705883)
+
+[node name="Centro" type="CenterContainer" parent="."]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -405.5
-offset_top = -288.5
-offset_right = 494.5
-offset_bottom = 411.5
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer" unique_id=654017836]
+[node name="Columna" type="VBoxContainer" parent="Centro"]
 layout_mode = 2
-theme_override_constants/separation = 20
+theme_override_constants/separation = 16
 
-[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer" unique_id=813626048]
-z_index = 3
+[node name="Titulo" type="Label" parent="Centro/Columna"]
 layout_mode = 2
+theme = ExtResource("3_theme")
 theme_override_colors/font_color = Color(0.6, 1, 0.2, 1)
-theme_override_font_sizes/font_size = 100
-theme_override_styles/normal = SubResource("StyleBoxFlat_3a1op")
+theme_override_font_sizes/font_size = 130
 text = "DIRTY ROAD"
 horizontal_alignment = 1
 vertical_alignment = 1
 uppercase = true
 
-[node name="Control" type="Control" parent="VBoxContainer/VBoxContainer" unique_id=803231444]
-custom_minimum_size = Vector2(0, 50)
+[node name="Subtitulo" type="Label" parent="Centro/Columna"]
+layout_mode = 2
+theme = ExtResource("3_theme")
+theme_override_colors/font_color = Color(0.7882353, 1, 0.627451, 0.9)
+theme_override_font_sizes/font_size = 30
+text = "SALVA EL BOSQUE"
+horizontal_alignment = 1
+uppercase = true
+
+[node name="Espacio" type="Control" parent="Centro/Columna"]
+custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 
-[node name="jugar" type="Button" parent="VBoxContainer/VBoxContainer" unique_id=645948470]
+[node name="Menu" type="VBoxContainer" parent="Centro/Columna"]
+custom_minimum_size = Vector2(520, 0)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.84705883, 1, 0.9019608, 1)
-theme_override_font_sizes/font_size = 50
-theme_override_styles/normal = SubResource("StyleBoxFlat_7mc2q")
+theme_override_constants/separation = 16
+
+[node name="jugar" type="Button" parent="Centro/Columna/Menu"]
+custom_minimum_size = Vector2(0, 68)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("3_theme")
+theme_override_font_sizes/font_size = 32
 text = "CONTINUAR"
 
-[node name="nuevaPartida" type="Button" parent="VBoxContainer/VBoxContainer" unique_id=1923487128]
+[node name="nuevaPartida" type="Button" parent="Centro/Columna/Menu"]
+custom_minimum_size = Vector2(0, 68)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.84705883, 1, 0.9019608, 1)
-theme_override_font_sizes/font_size = 50
-theme_override_styles/normal = SubResource("StyleBoxFlat_7mc2q")
+size_flags_horizontal = 3
+theme = ExtResource("3_theme")
+theme_override_font_sizes/font_size = 32
 text = "NUEVA PARTIDA"
 
-[node name="salir" type="Button" parent="VBoxContainer/VBoxContainer" unique_id=1305349753]
+[node name="salir" type="Button" parent="Centro/Columna/Menu"]
+custom_minimum_size = Vector2(0, 68)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.84705883, 1, 0.9019608, 1)
-theme_override_font_sizes/font_size = 50
-theme_override_styles/normal = SubResource("StyleBoxFlat_7mc2q")
+size_flags_horizontal = 3
+theme = ExtResource("3_theme")
+theme_override_font_sizes/font_size = 32
 text = "SALIR"
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1311166310]
-environment = SubResource("Environment_7cwo5")
-
-[node name="CPUParticles2D" type="CPUParticles2D" parent="." unique_id=1360477686]
-position = Vector2(1002, 593)
-amount = 40
-lifetime = 6.0
-preprocess = 1.48
-explosiveness = 0.15
-randomness = 0.34
-lifetime_randomness = 0.44
-emission_shape = 3
-emission_rect_extents = Vector2(1075.5, 721.7)
-spread = 180.0
-gravity = Vector2(0, -10)
-initial_velocity_min = 0.3
-initial_velocity_max = 267.91
-linear_accel_min = 28.17
-linear_accel_max = 45.07
-scale_amount_max = 10.8
-color = Color(0.6, 1, 0.2, 0.44705883)
-
-[node name="CreditosLabel" type="Label" parent="." unique_id=2000000001]
+[node name="CreditosLabel" type="Label" parent="."]
 layout_mode = 0
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 10.5
-offset_top = -32.0
-offset_right = 421.5
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_colors/font_color = Color(0.6, 1, 0.2, 0.6)
-theme_override_font_sizes/font_size = 14
-text = "Desarrollado por Juan Casas, Emanuel Rocero, Miguel Murcia"
-
-[node name="SalvaLabel" type="Label" parent="." unique_id=2000000002]
-layout_mode = 0
-anchor_left = 1.0
+anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -200.0
-offset_top = -32.0
-offset_right = -16.0
-grow_horizontal = 0
+offset_left = 28.0
+offset_top = -44.0
+offset_right = -28.0
+offset_bottom = -20.0
+grow_horizontal = 2
 grow_vertical = 0
-theme_override_colors/font_color = Color(0.6, 1, 0.2, 0.6)
-theme_override_font_sizes/font_size = 14
-text = "SALVA A LOS ÁRBOLES"
-
-[connection signal="button_down" from="VBoxContainer/VBoxContainer/nuevaPartida" to="." method="_on_nueva_partida_button_down"]
-[connection signal="button_down" from="VBoxContainer/VBoxContainer/salir" to="." method="_on_salir_button_down"]
+theme = ExtResource("3_theme")
+theme_override_colors/font_color = Color(0.7882353, 1, 0.627451, 0.6)
+theme_override_font_sizes/font_size = 16
+text = "Desarrollado por Juan Casas, Emanuel Rocero, Miguel Murcia"

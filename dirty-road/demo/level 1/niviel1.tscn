@@ -10,10 +10,21 @@
 [ext_resource type="Script" uid="uid://b07d7n2c62y1x" path="res://scripts/etapa_config.gd" id="8_trm6e"]
 [ext_resource type="Script" uid="uid://vyt7ho0roxls" path="res://scripts/enemigo_oleada_config.gd" id="9_cc5k1"]
 [ext_resource type="Resource" uid="uid://gbevvyqlsqel" path="res://ecenes/enemies/main/1-10/microPlastico/microPlastico.tres" id="10_1o1kr"]
+[ext_resource type="Script" uid="uid://7pv5w878iiq8" path="res://ui/barra_jefe.gd" id="10_bossbar"]
+[ext_resource type="Script" uid="uid://nbgw0apaidmu" path="res://ecenes/etapas/gestor_etapa.gd" id="10_gestor"]
 [ext_resource type="Resource" uid="uid://ca3fyboai1h7f" path="res://ecenes/enemies/main/1-10/nubeGas/nubeGas.tres" id="11_cc5k1"]
 [ext_resource type="Resource" uid="uid://bpfs2bj375lby" path="res://ecenes/enemies/main/1-10/petroleo/petroleo.tres" id="12_w7ccy"]
 [ext_resource type="PackedScene" uid="uid://4swtich8dpqn" path="res://ecenes/enemies/main/1-10/boss/excavadoraToxica_boss.tscn" id="13_vgl3r"]
 [ext_resource type="Script" uid="uid://8lgx20mmi322" path="res://scripts/education/EducationSettings.gd" id="13_w7ccy"]
+[ext_resource type="Resource" path="res://ecenes/enemies/etapas/etapa_02.tres" id="et2"]
+[ext_resource type="Resource" path="res://ecenes/enemies/etapas/etapa_03.tres" id="et3"]
+[ext_resource type="Resource" path="res://ecenes/enemies/etapas/etapa_04.tres" id="et4"]
+[ext_resource type="Resource" path="res://ecenes/enemies/etapas/etapa_05.tres" id="et5"]
+[ext_resource type="Resource" path="res://ecenes/enemies/etapas/etapa_06.tres" id="et6"]
+[ext_resource type="Resource" path="res://ecenes/enemies/etapas/etapa_07.tres" id="et7"]
+[ext_resource type="Resource" path="res://ecenes/enemies/etapas/etapa_08.tres" id="et8"]
+[ext_resource type="Resource" path="res://ecenes/enemies/etapas/etapa_09.tres" id="et9"]
+[ext_resource type="Resource" path="res://ecenes/enemies/etapas/etapa_10.tres" id="et10"]
 
 [sub_resource type="Environment" id="Environment_ckgak"]
 background_mode = 3
@@ -30,13 +41,15 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.5, 0)
 
-[sub_resource type="Resource" id="Resource_2fick"]
+[sub_resource type="Resource" id="Resource_bfnr7"]
 script = ExtResource("8_trm6e")
-nombre = "0-10"
 enemigos = Array[ExtResource("9_cc5k1")]([ExtResource("10_1o1kr"), ExtResource("11_cc5k1"), ExtResource("12_w7ccy")])
+heredar_enemigos_anteriores = false
+enemigos_base_por_oleada = 8
+incremento_enemigos_por_oleada = 3
+escalado_vida_por_oleada = 0.3
+escalado_danio_por_oleada = 0.09
 jefe_escena = ExtResource("13_vgl3r")
-jefe_nombre = "EXCAVADORA"
-jefe_tiempo_descanso = 60.0
 metadata/_custom_type_script = "uid://b07d7n2c62y1x"
 
 [node name="Niviel1" type="Node2D" unique_id=1415381483]
@@ -54,30 +67,19 @@ position = Vector2(0, -2)
 [node name="ClassPlayer" parent="." unique_id=508460008 node_paths=PackedStringArray("respawn_manager") groups=["jugador", "player"] instance=ExtResource("3_k6hvo")]
 position = Vector2(373, -69)
 cadencia_basic = 0.2
-danio_disparo = 10.0
-velocidad_proyectil = 400.0
-prob_critico = 0.05
-mult_critico = 2.0
-rango_deteccion = 1.0
 aceleracion = 1800.0
 friccion = 2200.0
 velocidad_dash = 700.0
 duracion_dash = 0.14
 cooldown_dash = 0.8
-invulnerable_en_dash = true
 danio_meteorito = 50000
 tiempo_advertencia_meteorito = 0.6
 retraso_entre_meteoritos = 0.08
 respawn_manager = NodePath("../RespawnManager")
-duracion_flash_golpe = 0.1
-regeneracion_por_segundo = 4.0
-retraso_regeneracion = 0.3
-distancia_flecha_arbol = 45.0
 life = 100
 
 [node name="Arbol" parent="." unique_id=157670480 groups=["arbol"] instance=ExtResource("5_q0v6s")]
 vida_maxima = 1000
-regeneracion_por_segundo = 1.5
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=671132988]
 
@@ -126,11 +128,19 @@ tiempo_respawn = 3.0
 [node name="PuntoRespawn" type="Marker2D" parent="RespawnManager" unique_id=1900412234]
 position = Vector2(0, 63)
 
-[node name="WaveManager" type="Node2D" parent="." unique_id=196695999 node_paths=PackedStringArray("puntos_spawn", "punto_spawn_jefe")]
+[node name="WaveManager" type="Node2D" parent="." unique_id=196695999 node_paths=PackedStringArray("puntos_spawn", "punto_spawn_jefe") groups=["wave_manager"]]
 script = ExtResource("8_bfnr7")
-puntos_spawn = [NodePath("1"), NodePath("2"), NodePath("3"), NodePath("4"), NodePath("5"), NodePath("6"), NodePath("7"), NodePath("8")]
+puntos_spawn = [NodePath("1"), NodePath("2"), NodePath("3"), NodePath("4"), NodePath("5"), NodePath("6"), NodePath("7"), NodePath("8"), NodePath("9"), NodePath("10"), NodePath("11"), NodePath("12"), NodePath("13")]
 punto_spawn_jefe = NodePath("boss")
-etapas = Array[ExtResource("8_trm6e")]([SubResource("Resource_2fick")])
+etapas = Array[ExtResource("8_trm6e")]([SubResource("Resource_bfnr7"), ExtResource("et2"), ExtResource("et3"), ExtResource("et4"), ExtResource("et5"), ExtResource("et6"), ExtResource("et7"), ExtResource("et8"), ExtResource("et9"), ExtResource("et10")])
+tiempo_entre_spawns = 0.9
+tiempo_maximo_oleada = 30.0
+tiempo_descanso = 12.0
+debug_no_guardar = false
+tiempo_maximo_espera = 10.0
+
+[node name="12" type="Marker2D" parent="WaveManager" unique_id=1278994098]
+position = Vector2(239, 511)
 
 [node name="1" type="Marker2D" parent="WaveManager" unique_id=2027456952]
 position = Vector2(0, 631)
@@ -145,19 +155,31 @@ position = Vector2(641, -3)
 position = Vector2(-658, -1)
 
 [node name="5" type="Marker2D" parent="WaveManager" unique_id=1680291380]
-position = Vector2(618, 610)
+position = Vector2(474, 465)
 
 [node name="6" type="Marker2D" parent="WaveManager" unique_id=1143169971]
-position = Vector2(-658, -658)
+position = Vector2(-517, -586)
 
 [node name="7" type="Marker2D" parent="WaveManager" unique_id=11557122]
-position = Vector2(647, -664)
+position = Vector2(525, -611)
 
 [node name="8" type="Marker2D" parent="WaveManager" unique_id=89181954]
-position = Vector2(-643, 619)
+position = Vector2(-552, 516)
+
+[node name="9" type="Marker2D" parent="WaveManager" unique_id=1253623536]
+position = Vector2(-613, -321)
+
+[node name="10" type="Marker2D" parent="WaveManager" unique_id=1976119549]
+position = Vector2(622, -406)
+
+[node name="11" type="Marker2D" parent="WaveManager" unique_id=1262030741]
+position = Vector2(-239, 593)
 
 [node name="boss" type="Marker2D" parent="WaveManager" unique_id=72402954]
 position = Vector2(0, 400)
+
+[node name="13" type="Marker2D" parent="WaveManager" unique_id=669944040]
+position = Vector2(520, 234)
 
 [node name="popopManger" type="Node" parent="." unique_id=575266947]
 
@@ -173,3 +195,10 @@ subtitles_font_size = 35
 subtitles_width_ratio = 0.92
 badge_enabled = false
 usar_temas_por_tipo = false
+
+[node name="BarraJefe" type="CanvasLayer" parent="." unique_id=1951278937]
+layer = 20
+script = ExtResource("10_bossbar")
+
+[node name="GestorEtapa" type="Node" parent="." unique_id=1775243101]
+script = ExtResource("10_gestor")

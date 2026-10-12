@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://j47rhlvwu4o2"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_7cwo5"]
+radius = 6.01
+
+[sub_resource type="Gradient" id="Gradient_yjo30"]
+colors = PackedColorArray(0.36862746, 1, 0.35686275, 1, 1, 1, 1, 0.03137255)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_7cwo5"]
+gradient = SubResource("Gradient_yjo30")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[node name="Orbe" type="Area2D" unique_id=1050397362]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2117274160]
+shape = SubResource("CircleShape2D_7cwo5")
+
+[node name="PointLight2D" type="PointLight2D" parent="." unique_id=993777750]
+color = Color(8.278489e-06, 0.71891797, 0.12864485, 1)
+energy = 2.85
+texture = SubResource("GradientTexture2D_7cwo5")

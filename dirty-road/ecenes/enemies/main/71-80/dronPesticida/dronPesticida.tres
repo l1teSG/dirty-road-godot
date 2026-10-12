@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="EnemigoOleadaConfig" format=3 uid="uid://ce3b27n5khl7k"]
+
+[ext_resource type="PackedScene" path="res://ecenes/enemies/main/71-80/dronPesticida/dronPesticida_enemi.tscn" id="1_ulcb8"]
+[ext_resource type="Script" uid="uid://vyt7ho0roxls" path="res://scripts/enemigo_oleada_config.gd" id="2_8313m"]
+
+[resource]
+script = ExtResource("2_8313m")
+escena = ExtResource("1_ulcb8")
+peso = 3.0

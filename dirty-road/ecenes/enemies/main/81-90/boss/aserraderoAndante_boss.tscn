@@ -1,0 +1,110 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ecenes/enemies/class/enemigo.gd" id="1_2xod1"]
+[ext_resource type="FontFile" path="res://themes/Chakra_Petch/ChakraPetch-BoldItalic.ttf" id="2_ftiku"]
+[ext_resource type="PackedScene" path="res://assets/stage/enemis/stages/stage81-90/boss/aserraderoAndante.tscn" id="3_6pg0i"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_constructor.gd" id="4_ghvlb"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_capa.gd" id="5_wnvqm"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/BossAttackComponent.gd" id="6_jg241"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/AnimacionEnemigo.gd" id="7_axp6h"]
+
+[sub_resource type="Resource" id="Resource_f2gty"]
+resource_local_to_scene = true
+script = ExtResource("5_wnvqm")
+nombre = "Caseta"
+puntos = PackedVector2Array(40, 10, 40, 30, -40, 30, -40, 10, -30, -24, 30, -24)
+color = Color(0.3529412, 0.27450982, 0.22745098, 1)
+
+[sub_resource type="Resource" id="Resource_8iflt"]
+resource_local_to_scene = true
+script = ExtResource("5_wnvqm")
+nombre = "Techo"
+puntos = PackedVector2Array(-34, -24, 0, -42, 34, -24)
+color = Color(0.22745098, 0.18039216, 0.14901961, 1)
+
+[sub_resource type="Resource" id="Resource_f2shv"]
+resource_local_to_scene = true
+script = ExtResource("5_wnvqm")
+nombre = "Hoja_circular"
+puntos = PackedVector2Array(44, 4, 52, 8, 56, 16, 52, 24, 44, 28, 36, 24, 32, 16, 36, 8)
+color = Color(0.72156864, 0.7372549, 0.7529412, 1)
+animacion = 3
+anim_velocidad = 1.5
+
+[sub_resource type="Resource" id="Resource_55o1w"]
+resource_local_to_scene = true
+script = ExtResource("5_wnvqm")
+nombre = "Chimenea"
+puntos = PackedVector2Array(16, -24, 24, -24, 24, -48, 16, -48)
+color = Color(0.2901961, 0.22745098, 0.18039216, 1)
+
+[sub_resource type="Resource" id="Resource_opyrj"]
+resource_local_to_scene = true
+script = ExtResource("5_wnvqm")
+nombre = "Patas"
+puntos = PackedVector2Array(-32, 30, -24, 30, -24, 38, 24, 38, 24, 30, 32, 30, 32, 44, -32, 44)
+color = Color(0.22745098, 0.18039216, 0.14901961, 1)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_8515f"]
+radius = 116.48176
+
+[node name="enemigo" type="CharacterBody2D" unique_id=2006919752]
+script = ExtResource("1_2xod1")
+life = 1650.0
+speed = 75.0
+damage = 22.0
+mov_zigzag_grados = 10.0
+mov_zigzag_freq = 2.0
+mov_orbita = 0.5
+mov_dash_mult = 1.6
+mov_dash_freq = 0.5
+mov_separacion_fuerza = 1.0
+dano_al_tocar = true
+danio_contacto = 22.0
+radio_contacto = 90.0
+comportamiento_tipo = "embestida"
+anti_estructura = true
+categoria = "elite"
+nombre_texto = "Aserradero Andante"
+fuente_nombre = ExtResource("2_ftiku")
+fuente_danio = ExtResource("2_ftiku")
+orbes_min = 8
+orbes_max = 14
+orbe_valor = 3.0
+
+[node name="FiguraConstructor" type="Node2D" parent="." unique_id=66989019 instance=ExtResource("3_6pg0i")]
+script = ExtResource("4_ghvlb")
+capas = Array[ExtResource("5_wnvqm")]([SubResource("Resource_f2gty"), SubResource("Resource_8iflt"), SubResource("Resource_f2shv"), SubResource("Resource_55o1w"), SubResource("Resource_opyrj")])
+sombra = true
+sombra_ancho = 70.0
+sombra_alto = 16.0
+sombra_desfase = 42.0
+color_luz = Color(1, 0.5411765, 0.24705882, 1)
+posicion_luz = Vector2(20, -44)
+energia_luz = 0.9
+escala_luz = 1.2
+anim_luz = 2
+velocidad_luz = 0.8
+escala_global = 2.0
+texto_figura = "capa Caseta 5a463a: 40,10 40,30 -40,30 -40,10 -30,-24 30,-24
+capa Techo 3a2e26: -34,-24 0,-42 34,-24
+capa Hoja_circular b8bcc0: 44,4 52,8 56,16 52,24 44,28 36,24 32,16 36,8
+capa Chimenea 4a3a2e: 16,-24 24,-24 24,-48 16,-48
+capa Patas 3a2e26: -32,30 -24,30 -24,38 24,38 24,30 32,30 32,44 -32,44
+sombra 70 16 42 0.3
+luz ff8a3f 20,-44 0.9 1.2
+escala 2.0
+anim Hoja_circular rotar 1.5
+animluz trueno 0.8 0.3"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=847317098]
+shape = SubResource("CircleShape2D_8515f")
+
+[node name="Ataques" type="Node2D" parent="." unique_id=1292273201]
+script = ExtResource("6_jg241")
+onda = true
+abanico = true
+ab_color = Color(0.9, 0.6, 0.3, 1)
+
+[node name="Animacion" type="Node" parent="." unique_id=995089855]
+script = ExtResource("7_axp6h")

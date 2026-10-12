@@ -1,0 +1,108 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ecenes/enemies/class/enemigo.gd" id="1_xetn3"]
+[ext_resource type="FontFile" path="res://themes/Chakra_Petch/ChakraPetch-BoldItalic.ttf" id="2_u600v"]
+[ext_resource type="PackedScene" path="res://assets/stage/enemis/stages/stage61-70/barrilExplosivo.tscn" id="3_dg4bn"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_constructor.gd" id="4_pgpoi"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_capa.gd" id="5_ntmkg"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/MecanicasEnemigo.gd" id="6_fkeqq"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/AnimacionEnemigo.gd" id="7_1bxfq"]
+
+[sub_resource type="Resource" id="Resource_tupoj"]
+resource_local_to_scene = true
+script = ExtResource("5_ntmkg")
+nombre = "Cuerpo"
+puntos = PackedVector2Array(14, -18, 14, 18, -14, 18, -14, -18)
+color = Color(0.6392157, 0.20392157, 0.16470589, 1)
+
+[sub_resource type="Resource" id="Resource_jrfwt"]
+resource_local_to_scene = true
+script = ExtResource("5_ntmkg")
+nombre = "Tapa"
+puntos = PackedVector2Array(14, -18, 14, -14, -14, -14, -14, -18)
+color = Color(0.47843137, 0.14117648, 0.10980392, 1)
+
+[sub_resource type="Resource" id="Resource_wd4wu"]
+resource_local_to_scene = true
+script = ExtResource("5_ntmkg")
+nombre = "Aro"
+puntos = PackedVector2Array(14, -10, 14, -7, -14, -7, -14, -10)
+color = Color(0.47843137, 0.14117648, 0.10980392, 1)
+
+[sub_resource type="Resource" id="Resource_jc2oj"]
+resource_local_to_scene = true
+script = ExtResource("5_ntmkg")
+nombre = "Banda_peligro"
+puntos = PackedVector2Array(3, -14, 3, 14, -3, 14, -3, -14)
+color = Color(0.9098039, 0.72156864, 0.22745098, 1)
+animacion = 6
+anim_velocidad = 2.0
+anim_amplitud = 0.4
+
+[sub_resource type="Resource" id="Resource_kwk1m"]
+resource_local_to_scene = true
+script = ExtResource("5_ntmkg")
+nombre = "Mecha"
+puntos = PackedVector2Array(0, -18, 3, -26, 8, -22, 4, -17)
+color = Color(1, 0.5411765, 0.24705882, 1)
+animacion = 5
+anim_velocidad = 3.0
+anim_amplitud = 1.5
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_eow85"]
+radius = 26.172504
+
+[node name="enemigo" type="CharacterBody2D" unique_id=2006919752]
+script = ExtResource("1_xetn3")
+life = 80.0
+speed = 75.0
+damage = 22.0
+mov_zigzag_grados = 10.0
+mov_orbita = 0.35
+mov_dash_mult = 1.6
+mov_dash_freq = 0.5
+dano_al_tocar = true
+danio_contacto = 22.0
+radio_contacto = 42.1725046566048
+comportamiento_tipo = "embestida"
+categoria = "fuego"
+nombre_texto = "Barril Explosivo"
+fuente_nombre = ExtResource("2_u600v")
+fuente_danio = ExtResource("2_u600v")
+
+[node name="FiguraConstructor" type="Node2D" parent="." unique_id=66989019 instance=ExtResource("3_dg4bn")]
+script = ExtResource("4_pgpoi")
+capas = Array[ExtResource("5_ntmkg")]([SubResource("Resource_tupoj"), SubResource("Resource_jrfwt"), SubResource("Resource_wd4wu"), SubResource("Resource_jc2oj"), SubResource("Resource_kwk1m")])
+sombra = true
+sombra_alto = 9.0
+sombra_desfase = 17.0
+sombra_opacidad = 0.35
+color_luz = Color(1, 0.41568628, 0.16470589, 1)
+energia_luz = 0.8
+escala_luz = 0.7
+anim_luz = 2
+velocidad_luz = 1.2
+variacion_luz = 0.4
+texto_figura = "capa Cuerpo a3342a: 14,-18 14,18 -14,18 -14,-18
+capa Tapa 7a241c: 14,-18 14,-14 -14,-14 -14,-18
+capa Aro 7a241c: 14,-10 14,-7 -14,-7 -14,-10
+capa Banda_peligro e8b83a: 3,-14 3,14 -3,14 -3,-14
+capa Mecha ff8a3f: 0,-18 3,-26 8,-22 4,-17
+sombra 24 9 17 0.35
+luz ff6a2a 0,0 0.8 0.7
+escala 1.0
+anim Mecha vibrar 3.0 1.5
+anim Banda_peligro parpadear 2.0 0.4
+animluz trueno 1.2 0.4"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=354539292]
+shape = SubResource("CircleShape2D_eow85")
+
+[node name="Mecanicas" type="Node2D" parent="." unique_id=6207468]
+script = ExtResource("6_fkeqq")
+explota_al_morir = true
+explota_radio = 105.0
+explota_danio = 34.0
+
+[node name="Animacion" type="Node" parent="." unique_id=317999685]
+script = ExtResource("7_1bxfq")

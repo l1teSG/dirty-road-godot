@@ -1,0 +1,117 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ecenes/enemies/class/enemigo.gd" id="1_hpopn"]
+[ext_resource type="FontFile" path="res://themes/Chakra_Petch/ChakraPetch-BoldItalic.ttf" id="2_a42we"]
+[ext_resource type="PackedScene" path="res://assets/stage/enemis/stages/stage41-50/boss/geiserAcido.tscn" id="3_fgks8"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_constructor.gd" id="4_68elm"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_capa.gd" id="5_6atfo"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/BossAttackComponent.gd" id="6_cdsxd"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/AnimacionEnemigo.gd" id="7_m0dk4"]
+
+[sub_resource type="Resource" id="Resource_m1tla"]
+resource_local_to_scene = true
+script = ExtResource("5_6atfo")
+nombre = "Roca"
+puntos = PackedVector2Array(40, 22, 18, 34, -20, 34, -42, 20, -30, 2, 0, -4, 30, 2)
+color = Color(0.2901961, 0.26666668, 0.21960784, 1)
+
+[sub_resource type="Resource" id="Resource_gceyn"]
+resource_local_to_scene = true
+script = ExtResource("5_6atfo")
+nombre = "Boca"
+puntos = PackedVector2Array(18, 0, -18, 0, -10, -8, 10, -8)
+color = Color(0.18039216, 0.16470589, 0.13333334, 1)
+
+[sub_resource type="Resource" id="Resource_r5ll8"]
+resource_local_to_scene = true
+script = ExtResource("5_6atfo")
+nombre = "Columna"
+puntos = PackedVector2Array(10, -8, -10, -8, -6, -52, 6, -52)
+color = Color(0.4862745, 1, 0.24705882, 0.72156864)
+animacion = 2
+anim_velocidad = 1.2
+anim_amplitud = 6.0
+
+[sub_resource type="Resource" id="Resource_4muca"]
+resource_local_to_scene = true
+script = ExtResource("5_6atfo")
+nombre = "Corona"
+puntos = PackedVector2Array(-18, -52, 0, -70, 20, -54, 8, -46, -6, -48)
+color = Color(0.6392157, 1, 0.37254903, 1)
+animacion = 2
+anim_amplitud = 5.0
+anim_fase = 1.0
+
+[sub_resource type="Resource" id="Resource_qwfsg"]
+resource_local_to_scene = true
+script = ExtResource("5_6atfo")
+nombre = "Charco"
+puntos = PackedVector2Array(44, 24, 0, 36, -44, 24, 0, 30)
+color = Color(0.43529412, 1, 0.18039216, 0.6)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_c332k"]
+radius = 126.0
+
+[node name="enemigo" type="CharacterBody2D" unique_id=2006919752 node_paths=PackedStringArray("boca")]
+script = ExtResource("1_hpopn")
+life = 1400.0
+speed = 60.0
+damage = 12.0
+mov_zigzag_grados = 10.0
+mov_zigzag_freq = 2.0
+mov_orbita = 0.5
+mov_dash_mult = 1.6
+mov_dash_freq = 0.5
+mov_separacion_fuerza = 1.0
+radio_contacto = 90.0
+comportamiento_tipo = "torreta"
+boca = NodePath("boca")
+anti_estructura = true
+categoria = "elite"
+nombre_texto = "Géiser Ácido"
+fuente_nombre = ExtResource("2_a42we")
+fuente_danio = ExtResource("2_a42we")
+orbes_min = 8
+orbes_max = 14
+orbe_valor = 3.0
+
+[node name="FiguraConstructor" type="Node2D" parent="." unique_id=66989019 instance=ExtResource("3_fgks8")]
+script = ExtResource("4_68elm")
+capas = Array[ExtResource("5_6atfo")]([SubResource("Resource_m1tla"), SubResource("Resource_gceyn"), SubResource("Resource_r5ll8"), SubResource("Resource_4muca"), SubResource("Resource_qwfsg")])
+sombra = true
+sombra_ancho = 72.0
+sombra_alto = 16.0
+sombra_desfase = 30.0
+sombra_opacidad = 0.28
+color_luz = Color(0.4862745, 1, 0.24705882, 1)
+posicion_luz = Vector2(0, -20)
+energia_luz = 1.0
+escala_luz = 1.4
+anim_luz = 3
+velocidad_luz = 0.9
+escala_global = 1.8
+texto_figura = "capa Roca 4a4438: 40,22 18,34 -20,34 -42,20 -30,2 0,-4 30,2
+capa Boca 2e2a22: 18,0 -18,0 -10,-8 10,-8
+capa Columna 7cff3fb8: 10,-8 -10,-8 -6,-52 6,-52
+capa Corona a3ff5f: -18,-52 0,-70 20,-54 8,-46 -6,-48
+capa Charco 6fff2e99: 44,24 0,36 -44,24 0,30
+sombra 72 16 30 0.28
+luz 7cff3f 0,-20 1.0 1.4
+escala 1.8
+anim Columna latir 1.2 6
+anim Corona latir 1.0 5 1.0
+animluz respirar 0.9 0.3"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1308160333]
+shape = SubResource("CircleShape2D_c332k")
+
+[node name="boca" type="Marker2D" parent="." unique_id=87579669]
+
+[node name="Ataques" type="Node2D" parent="." unique_id=1533161487]
+script = ExtResource("6_cdsxd")
+meteoros = true
+onda = true
+met_color = Color(0.75, 0.95, 0.2, 0.6)
+
+[node name="Animacion" type="Node" parent="." unique_id=684769159]
+script = ExtResource("7_m0dk4")

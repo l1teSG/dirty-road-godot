@@ -2,10 +2,9 @@
 
 [ext_resource type="PackedScene" uid="uid://cgh5ie63rhuf4" path="res://ecenes/enemies/class/clase_enemigo.tscn" id="1_ex2nk"]
 [ext_resource type="PackedScene" uid="uid://ddoa3og3e6cid" path="res://assets/stage/enemis/stages/stage1-10/petroleo.tscn" id="2_jem5u"]
-[ext_resource type="FontFile" uid="uid://vnsqj7q05uej" path="res://themes/Chakra_Petch/ChakraPetch-BoldItalic.ttf" id="2_v5ir7"]
 [ext_resource type="Script" uid="uid://dtju1od6upjok" path="res://assets/stage/enemis/classShape/figura_capa.gd" id="3_v5ir7"]
 
-[sub_resource type="Resource" id="Resource_p7mko"]
+[sub_resource type="Resource" id="Resource_ex2nk"]
 resource_local_to_scene = true
 script = ExtResource("3_v5ir7")
 nombre = "Charco"
@@ -15,7 +14,7 @@ animacion = 2
 anim_velocidad = 0.6
 anim_amplitud = 3.0
 
-[sub_resource type="Resource" id="Resource_c1oee"]
+[sub_resource type="Resource" id="Resource_jem5u"]
 resource_local_to_scene = true
 script = ExtResource("3_v5ir7")
 nombre = "Reflejo"
@@ -25,14 +24,14 @@ animacion = 4
 anim_velocidad = 0.8
 anim_amplitud = 2.0
 
-[sub_resource type="Resource" id="Resource_xrqp2"]
+[sub_resource type="Resource" id="Resource_v5ir7"]
 resource_local_to_scene = true
 script = ExtResource("3_v5ir7")
 nombre = "Nucleo"
 puntos = PackedVector2Array(-4, 2, 2, 4, 4, -1, -2, -4)
 color = Color(0.84705883, 0.105882354, 0.3764706, 0.34901962)
 
-[sub_resource type="Resource" id="Resource_2hnu0"]
+[sub_resource type="Resource" id="Resource_p7mko"]
 resource_local_to_scene = true
 script = ExtResource("3_v5ir7")
 nombre = "Ojo"
@@ -42,21 +41,15 @@ color = Color(0, 1, 0.49803922, 1)
 [sub_resource type="CircleShape2D" id="CircleShape2D_mbucg"]
 radius = 22.022715
 
-[node name="enemigo" unique_id=2006919752 node_paths=PackedStringArray("figura") instance=ExtResource("1_ex2nk")]
-life = 60.0
-speed = 45.0
-damage = 8.0
-radio_contacto = 26.0
-recompensa = 3
-figura = NodePath("FiguraConstructor")
-melee_radio = 26.0
-melee_recarga = 1.6
-nombre_mostrado = "petroleo"
-fuente_nombre = ExtResource("2_v5ir7")
-fuente_danio = ExtResource("2_v5ir7")
+[node name="enemigo" unique_id=2006919752 instance=ExtResource("1_ex2nk")]
+life = 70.0
+speed = 72.0
+damage = 20.0
+dano_al_tocar = true
+danio_contacto = 20.0
 
 [node name="FiguraConstructor" parent="." index="0" unique_id=66989019 instance=ExtResource("2_jem5u")]
-capas = Array[ExtResource("3_v5ir7")]([SubResource("Resource_p7mko"), SubResource("Resource_c1oee"), SubResource("Resource_xrqp2"), SubResource("Resource_2hnu0")])
+capas = Array[ExtResource("3_v5ir7")]([SubResource("Resource_ex2nk"), SubResource("Resource_jem5u"), SubResource("Resource_v5ir7"), SubResource("Resource_p7mko")])
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." index="1" unique_id=382105858]
 shape = SubResource("CircleShape2D_mbucg")

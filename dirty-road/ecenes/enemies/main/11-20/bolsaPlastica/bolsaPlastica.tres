@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="EnemigoOleadaConfig" format=3 uid="uid://dsho3uuo2dcwv"]
+
+[ext_resource type="PackedScene" path="res://ecenes/enemies/main/11-20/bolsaPlastica/bolsaPlastica_enemi.tscn" id="1_5marx"]
+[ext_resource type="Script" uid="uid://vyt7ho0roxls" path="res://scripts/enemigo_oleada_config.gd" id="2_daesp"]
+
+[resource]
+script = ExtResource("2_daesp")
+escena = ExtResource("1_5marx")
+oleada_minima = 7
+max_simultaneos = 3

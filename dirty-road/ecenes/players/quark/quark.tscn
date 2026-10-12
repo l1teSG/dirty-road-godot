@@ -9,6 +9,9 @@
 [ext_resource type="Script" uid="uid://cpnygtexsikdx" path="res://ecenes/players/quark/texto_biomasa.gd" id="6_tnb2i"]
 [ext_resource type="PackedScene" uid="uid://bnsgn8vqai733" path="res://ecenes/players/pausa/pausa.tscn" id="6_ycxd3"]
 [ext_resource type="FontFile" uid="uid://vnsqj7q05uej" path="res://themes/Chakra_Petch/ChakraPetch-BoldItalic.ttf" id="7_ehraa"]
+[ext_resource type="Script" uid="uid://drruqg2k50oba" path="res://ecenes/cards/gestorCartas.gd" id="8_cartas"]
+[ext_resource type="Resource" path="res://assets/cards/cartasConfig.tres" id="9_cfg"]
+[ext_resource type="Script" uid="uid://c03wvi3avfsnh" path="res://ecenes/players/quark/menu_debug.gd" id="10_dbg"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_xqmf3"]
 radius = 463.13
@@ -35,14 +38,23 @@ fill_to = Vector2(0.5, 0)
 radius = 7.81025
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mvreb"]
-bg_color = Color(0, 0, 0, 0.60784316)
+bg_color = Color(0.047058824, 0.1, 0.078431375, 0.85)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.22745098, 0.2901961, 0.25882354, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lx2x3"]
-bg_color = Color(0, 1, 0.53333336, 1)
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
+bg_color = Color(0, 1, 0.49803922, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
 
 [sub_resource type="Gradient" id="Gradient_jlxlp"]
 offsets = PackedFloat32Array(0, 0.7, 1)
@@ -85,18 +97,24 @@ radius = 38.0
 [node name="ClassPlayer" unique_id=508460008 instance=ExtResource("1_hr2c7")]
 z_index = 10
 script = ExtResource("2_lx2x3")
-cadencia_basic = 0.3
+cadencia_basic = 0.9
+danio_disparo = 10.0
+velocidad_proyectil = 400.0
+prob_critico = 0.05
+mult_critico = 2.0
+rango_deteccion = 1.0
+disparoON = true
 aceleracion = 300.0
 friccion = 100.0
 velocidad_dash = 300.0
 duracion_dash = 3.0
 cooldown_dash = 1.0
+invulnerable_en_dash = true
 danio_meteorito = 500
 radio_impacto_meteorito = 400.0
 tiempo_advertencia_meteorito = 0.4
 retraso_entre_meteoritos = 0.5
 vida_maxima = 100
-disparoON = true
 color_flash_golpe = Color(0.69803923, 0, 0, 1)
 duracion_flash_golpe = 0.3
 regeneracion_por_segundo = 5.0
@@ -110,7 +128,6 @@ color_flecha_arbol = Color(1, 0.85, 0.2, 0.95)
 tamano_flecha_arbol = Vector2(18, 14)
 duracion_animacion_flecha = 0.25
 ID = "quark"
-life = 200
 speed = 500.0
 metadata/_edit_horizontal_guides_ = [759.0]
 
@@ -166,10 +183,9 @@ shape = SubResource("CircleShape2D_7cwo5")
 [node name="aim" type="Marker2D" parent="." index="9" unique_id=182942934]
 position = Vector2(20, 0)
 
-[node name="ui" type="CanvasLayer" parent="." index="10" unique_id=1985090240 node_paths=PackedStringArray("label_enemigo", "label_tiempo", "label_oleada")]
+[node name="ui" type="CanvasLayer" parent="." index="10" unique_id=1985090240 node_paths=PackedStringArray("label_tiempo", "label_oleada")]
 layer = 0
 script = ExtResource("3_fm6mt")
-label_enemigo = NodePath("margenUi/ContenedorVertical/enemigos")
 label_tiempo = NodePath("MarginContainer/contador")
 label_oleada = NodePath("margenUi/ContenedorVertical/oleadas")
 
@@ -212,12 +228,7 @@ theme_override_font_sizes/font_size = 40
 text = "0 / 10"
 script = ExtResource("6_tnb2i")
 
-[node name="enemigos" type="Label" parent="ui/margenUi/ContenedorVertical" index="2" unique_id=137329923]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.90922785, 0.50769645, 0.5711142, 1)
-theme_override_font_sizes/font_size = 40
-
-[node name="oleadas" type="Label" parent="ui/margenUi/ContenedorVertical" index="3" unique_id=1247948870]
+[node name="oleadas" type="Label" parent="ui/margenUi/ContenedorVertical" index="2" unique_id=1247948870]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.61960787, 0.83137256, 0.2509804, 1)
 theme_override_fonts/font = ExtResource("7_ehraa")
@@ -321,6 +332,15 @@ texture_normal = ExtResource("3_qh7t8")
 texture_pressed = SubResource("GradientTexture2D_fm6mt")
 shape = SubResource("CircleShape2D_v2d8e")
 action = "mega"
+
+[node name="Cartas" type="CanvasLayer" parent="." index="13" unique_id=1700597704]
+layer = 100
+script = ExtResource("8_cartas")
+config = ExtResource("9_cfg")
+
+[node name="MenuDebug" type="CanvasLayer" parent="." index="14" unique_id=2070407684]
+script = ExtResource("10_dbg")
+abrir_al_iniciar = true
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]

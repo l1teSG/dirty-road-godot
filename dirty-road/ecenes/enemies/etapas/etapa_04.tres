@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="EtapaConfig" format=3 uid="uid://ef8e3q5t1hkn"]
+
+[ext_resource type="Script" uid="uid://vyt7ho0roxls" path="res://scripts/enemigo_oleada_config.gd" id="1_ugwg8"]
+[ext_resource type="Resource" uid="uid://btrqgjt0ja5o1" path="res://ecenes/enemies/main/31-40/humoFabrica/humoFabrica.tres" id="2_dxa4n"]
+[ext_resource type="Resource" uid="uid://tuv07soepcby" path="res://ecenes/enemies/main/31-40/chimenea/chimenea.tres" id="3_2cydb"]
+[ext_resource type="Resource" uid="uid://ft51dft6ipdx" path="res://ecenes/enemies/main/31-40/hollin/hollin.tres" id="4_5h1ri"]
+[ext_resource type="PackedScene" path="res://ecenes/enemies/main/31-40/boss/chimeneaGigante_boss.tscn" id="5_0prke"]
+[ext_resource type="Script" uid="uid://b07d7n2c62y1x" path="res://scripts/etapa_config.gd" id="6_hbkwq"]
+
+[resource]
+script = ExtResource("6_hbkwq")
+nombre = "Etapa 4: Contaminación industrial"
+enemigos = Array[ExtResource("1_ugwg8")]([ExtResource("2_dxa4n"), ExtResource("3_2cydb"), ExtResource("4_5h1ri")])
+enemigos_base_por_oleada = 11
+incremento_enemigos_por_oleada = 3
+escalado_vida_por_oleada = 0.3
+escalado_danio_por_oleada = 0.09
+mult_vida = 2.25
+mult_velocidad = 1.15
+mult_danio = 2.25
+jefe_escena = ExtResource("5_0prke")
+jefe_nombre = "Chimenea Gigante"
+jefe_escoltas = 6

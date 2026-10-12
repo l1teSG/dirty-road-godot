@@ -1,0 +1,40 @@
+---
+import SectionHeading from '../ui/SectionHeading.astro';
+import Reveal from '../ui/Reveal.astro';
+
+// Marcadores de captura (sustituir por imágenes reales del juego).
+const capturas = [
+  { t: 'El árbol central', c: '#0c140d' },
+  { t: 'Oleadas de enemigos', c: '#0e1a12' },
+  { t: 'Jefe de etapa', c: '#160d12' },
+  { t: 'Escenario ácido', c: '#141a0c' },
+  { t: 'Mejoras entre oleadas', c: '#0c1418' },
+  { t: 'Cambio climático', c: '#1a120c' },
+];
+---
+<section id="galeria" class="px-4 py-24 sm:py-32">
+  <div class="mx-auto max-w-6xl">
+    <Reveal>
+      <SectionHeading
+        kicker="Galería"
+        titulo="Mira el juego"
+        descripcion="Capturas del gameplay: combate, jefes y escenarios temáticos."
+      />
+    </Reveal>
+    <div class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {capturas.map((cap, i) => (
+        <Reveal delay={(i % 3) * 80}>
+          <figure
+            class="group relative aspect-video overflow-hidden rounded-2xl border border-white/5"
+            style={`background: radial-gradient(circle at 50% 40%, ${cap.c}, #070c07 75%)`}
+          >
+            <div class="radial-vignette absolute inset-0 opacity-70" />
+            <figcaption class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-bg to-transparent p-4 text-sm font-medium text-text-primary">
+              {cap.t}
+            </figcaption>
+          </figure>
+        </Reveal>
+      ))}
+    </div>
+  </div>
+</section>

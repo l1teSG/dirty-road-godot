@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="EnemigoOleadaConfig" format=3 uid="uid://tuv07soepcby"]
+
+[ext_resource type="PackedScene" path="res://ecenes/enemies/main/31-40/chimenea/chimenea_enemi.tscn" id="1_7twue"]
+[ext_resource type="Script" uid="uid://vyt7ho0roxls" path="res://scripts/enemigo_oleada_config.gd" id="2_d2jpp"]
+
+[resource]
+script = ExtResource("2_d2jpp")
+escena = ExtResource("1_7twue")
+peso = 1.5
+oleada_minima = 4

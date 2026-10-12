@@ -1,0 +1,19 @@
+---
+import SectionHeading from '../ui/SectionHeading.astro';
+import Reveal from '../ui/Reveal.astro';
+import { problema, justificacion } from '../../lib/apa';
+---
+<section id="problema" class="px-4 py-24 sm:py-32">
+  <div class="mx-auto grid max-w-6xl gap-10 md:grid-cols-2">
+    <Reveal>
+      <SectionHeading kicker="Capítulo 1" titulo={problema.titulo} />
+      <p class="mt-6 text-base leading-relaxed text-text-secondary">{problema.texto}</p>
+    </Reveal>
+    <Reveal delay={120}>
+      <div class="rounded-2xl border border-green/15 bg-bg-alt/60 p-8 backdrop-blur-sm">
+        <h3 class="text-lg font-semibold text-green-bright">{justificacion.titulo}</h3>
+        <p class="mt-4 text-base leading-relaxed text-text-secondary">{justificacion.texto}</p>
+      </div>
+    </Reveal>
+  </div>
+</section>

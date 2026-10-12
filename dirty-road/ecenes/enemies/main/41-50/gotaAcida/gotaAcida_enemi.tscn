@@ -1,0 +1,87 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ecenes/enemies/class/enemigo.gd" id="1_16bd0"]
+[ext_resource type="FontFile" path="res://themes/Chakra_Petch/ChakraPetch-BoldItalic.ttf" id="2_n4dgs"]
+[ext_resource type="PackedScene" path="res://assets/stage/enemis/stages/stage41-50/gotaAcida.tscn" id="3_euclu"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_constructor.gd" id="4_w04hm"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_capa.gd" id="5_vdmu1"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/MecanicasEnemigo.gd" id="6_1m0ah"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/AnimacionEnemigo.gd" id="7_gopk6"]
+
+[sub_resource type="Resource" id="Resource_xi1uo"]
+resource_local_to_scene = true
+script = ExtResource("5_vdmu1")
+nombre = "Cuerpo"
+puntos = PackedVector2Array(0, -22, 10, -4, 14, 6, 10, 16, 0, 20, -10, 16, -14, 6, -10, -4)
+color = Color(0.4862745, 1, 0.24705882, 1)
+
+[sub_resource type="Resource" id="Resource_w4bkn"]
+resource_local_to_scene = true
+script = ExtResource("5_vdmu1")
+nombre = "Nucleo"
+puntos = PackedVector2Array(0, -8, 6, 4, 0, 14, -6, 4)
+color = Color(0.7882353, 1, 0.43529412, 1)
+animacion = 2
+anim_amplitud = 8.0
+
+[sub_resource type="Resource" id="Resource_rwy8a"]
+resource_local_to_scene = true
+script = ExtResource("5_vdmu1")
+nombre = "Brillo"
+puntos = PackedVector2Array(-6, -2, -2, -6, 0, 0, -3, 3)
+color = Color(0.91764706, 1, 0.7490196, 0.6666667)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_s8ntl"]
+radius = 22.0
+
+[node name="enemigo" type="CharacterBody2D" unique_id=2006919752]
+script = ExtResource("1_16bd0")
+life = 18.0
+speed = 150.0
+damage = 10.0
+mov_zigzag_grados = 22.0
+mov_zigzag_freq = 3.0
+mov_orbita = 0.35
+mov_dash_mult = 1.3
+mov_dash_freq = 0.6
+dano_al_tocar = true
+danio_contacto = 10.0
+radio_contacto = 38.0
+comportamiento_tipo = "enjambre"
+enjambre_separacion = 24.0
+categoria = "toxico"
+nombre_texto = "Gota Ácida"
+fuente_nombre = ExtResource("2_n4dgs")
+fuente_danio = ExtResource("2_n4dgs")
+
+[node name="FiguraConstructor" type="Node2D" parent="." unique_id=66989019 instance=ExtResource("3_euclu")]
+script = ExtResource("4_w04hm")
+capas = Array[ExtResource("5_vdmu1")]([SubResource("Resource_xi1uo"), SubResource("Resource_w4bkn"), SubResource("Resource_rwy8a")])
+sombra = true
+sombra_ancho = 20.0
+sombra_alto = 7.0
+sombra_desfase = 18.0
+sombra_opacidad = 0.28
+color_luz = Color(0.4862745, 1, 0.24705882, 1)
+energia_luz = 0.7
+escala_luz = 0.6
+anim_luz = 1
+texto_figura = "capa Cuerpo 7cff3f: 0,-22 10,-4 14,6 10,16 0,20 -10,16 -14,6 -10,-4
+capa Nucleo c9ff6f: 0,-8 6,4 0,14 -6,4
+capa Brillo eaffbfaa: -6,-2 -2,-6 0,0 -3,3
+sombra 20 7 18 0.28
+luz 7cff3f 0,0 0.7 0.6
+escala 1.0
+anim Nucleo latir 1.0 8
+animluz pulsar 1.0 0.3"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=225661768]
+shape = SubResource("CircleShape2D_s8ntl")
+
+[node name="Mecanicas" type="Node2D" parent="." unique_id=152770022]
+script = ExtResource("6_1m0ah")
+deja_zona = true
+hazard_radio = 55.0
+
+[node name="Animacion" type="Node" parent="." unique_id=785860642]
+script = ExtResource("7_gopk6")

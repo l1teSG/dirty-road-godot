@@ -1,0 +1,118 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ecenes/enemies/class/enemigo.gd" id="1_xn6kt"]
+[ext_resource type="FontFile" path="res://themes/Chakra_Petch/ChakraPetch-BoldItalic.ttf" id="2_h6j4n"]
+[ext_resource type="PackedScene" path="res://assets/stage/enemis/stages/stage71-80/boss/helicopteroFumigador.tscn" id="3_24hrd"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_constructor.gd" id="4_wlrno"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_capa.gd" id="5_1r546"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/MecanicasEnemigo.gd" id="6_c1snd"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/BossAttackComponent.gd" id="7_uiq3a"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/AnimacionEnemigo.gd" id="8_qtjxh"]
+
+[sub_resource type="Resource" id="Resource_vb05o"]
+resource_local_to_scene = true
+script = ExtResource("5_1r546")
+nombre = "Cabina"
+puntos = PackedVector2Array(20, 0, 14, 12, -8, 14, -18, 8, -18, -4, -8, -12, 12, -10)
+color = Color(0.24705882, 0.2901961, 0.26666668, 1)
+
+[sub_resource type="Resource" id="Resource_qeyko"]
+resource_local_to_scene = true
+script = ExtResource("5_1r546")
+nombre = "Cola"
+puntos = PackedVector2Array(-16, -2, -44, -6, -44, 0, -16, 4)
+color = Color(0.18039216, 0.21960784, 0.2, 1)
+
+[sub_resource type="Resource" id="Resource_nj5il"]
+resource_local_to_scene = true
+script = ExtResource("5_1r546")
+nombre = "Rotor"
+puntos = PackedVector2Array(-34, -16, 34, -16, 34, -13, -34, -13)
+color = Color(0.62352943, 0.6901961, 0.65882355, 0.6666667)
+animacion = 5
+anim_velocidad = 5.0
+anim_amplitud = 1.5
+
+[sub_resource type="Resource" id="Resource_8xlsl"]
+resource_local_to_scene = true
+script = ExtResource("5_1r546")
+nombre = "Tanque"
+puntos = PackedVector2Array(2, 14, 14, 14, 12, 24, 0, 24)
+color = Color(0.84705883, 0.105882354, 0.3764706, 1)
+
+[sub_resource type="Resource" id="Resource_0adun"]
+resource_local_to_scene = true
+script = ExtResource("5_1r546")
+nombre = "Patines"
+puntos = PackedVector2Array(-14, 20, 10, 20, 10, 23, -14, 23)
+color = Color(0.5411765, 0.52156866, 0.47058824, 1)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_vullo"]
+radius = 79.93297
+
+[node name="enemigo" type="CharacterBody2D" unique_id=2006919752 node_paths=PackedStringArray("boca")]
+script = ExtResource("1_xn6kt")
+life = 1450.0
+speed = 95.0
+damage = 9.0
+mov_zigzag_grados = 10.0
+mov_zigzag_freq = 2.0
+mov_orbita = 0.5
+mov_dash_mult = 1.6
+mov_dash_freq = 0.5
+mov_separacion_fuerza = 1.0
+radio_contacto = 90.0
+comportamiento_tipo = "rango"
+boca = NodePath("boca")
+anti_estructura = true
+categoria = "elite"
+nombre_texto = "Helicóptero Fumigador"
+fuente_nombre = ExtResource("2_h6j4n")
+fuente_danio = ExtResource("2_h6j4n")
+orbes_min = 8
+orbes_max = 14
+orbe_valor = 3.0
+
+[node name="FiguraConstructor" type="Node2D" parent="." unique_id=66989019 instance=ExtResource("3_24hrd")]
+script = ExtResource("4_wlrno")
+capas = Array[ExtResource("5_1r546")]([SubResource("Resource_vb05o"), SubResource("Resource_qeyko"), SubResource("Resource_nj5il"), SubResource("Resource_8xlsl"), SubResource("Resource_0adun")])
+sombra = true
+sombra_ancho = 58.0
+sombra_alto = 13.0
+sombra_desfase = 26.0
+sombra_opacidad = 0.2
+color_luz = Color(0.84705883, 0.105882354, 0.3764706, 1)
+posicion_luz = Vector2(0, 4)
+energia_luz = 0.8
+escala_luz = 1.1
+anim_luz = 1
+variacion_luz = 0.2
+escala_global = 1.8
+texto_figura = "capa Cabina 3f4a44: 20,0 14,12 -8,14 -18,8 -18,-4 -8,-12 12,-10
+capa Cola 2e3833: -16,-2 -44,-6 -44,0 -16,4
+capa Rotor 9fb0a8aa: -34,-16 34,-16 34,-13 -34,-13
+capa Tanque d81b60: 2,14 14,14 12,24 0,24
+capa Patines 8a8578: -14,20 10,20 10,23 -14,23
+sombra 58 13 26 0.2
+luz d81b60 0,4 0.8 1.1
+escala 1.8
+anim Rotor vibrar 5.0 1.5
+animluz pulsar 1.0 0.2"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1954483169]
+shape = SubResource("CircleShape2D_vullo")
+
+[node name="boca" type="Marker2D" parent="." unique_id=646845881]
+
+[node name="Mecanicas" type="Node2D" parent="." unique_id=131069651]
+script = ExtResource("6_c1snd")
+es_aereo = true
+
+[node name="Ataques" type="Node2D" parent="." unique_id=105825929]
+script = ExtResource("7_uiq3a")
+meteoros = true
+abanico = true
+ab_color = Color(0.7, 0.9, 0.4, 1)
+
+[node name="Animacion" type="Node" parent="." unique_id=83520699]
+script = ExtResource("8_qtjxh")

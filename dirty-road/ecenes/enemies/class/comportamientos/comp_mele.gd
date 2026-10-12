@@ -1,26 +1,10 @@
 ## MELEE — persigue a objetivo() (jugador o árbol) y pega al llegar.
 ## Parámetros (Inspector del Enemigo → grupo "Melee"):
 ## melee_radio, melee_recarga, melee_mult_persecucion,
-## melee_margen_arbol (opcional).
+## melee_margen_arbol (alcance extra contra el tronco).
 extends ComportamientoEnemigo
 
-var radio_ataque: float = 30.0
-var recarga: float = 1.0
-var mult_persecucion: float = 1.0
-## Alcance extra SOLO contra el árbol: el tronco bloquea antes de
-## llegar a su centro, así que muerde desde fuera.
-var margen_arbol: float = 14.0
-
 var _t: float = 0.0
-
-
-func iniciar(enemigo: Enemigo) -> void:
-	e = enemigo
-	radio_ataque = _f("melee_radio", radio_ataque)
-	recarga = _f("melee_recarga", recarga)
-	mult_persecucion = _f("melee_mult_persecucion", mult_persecucion)
-	margen_arbol = _f("melee_margen_arbol", margen_arbol)
-	_t = 0.0
 
 
 func pensar(enemigo: Enemigo, delta: float) -> void:
@@ -30,18 +14,26 @@ func pensar(enemigo: Enemigo, delta: float) -> void:
 	if obj == null:
 		e.detener()
 		return
-	var radio := radio_ataque + (margen_arbol if _es_arbol(obj) else 0.0)
-	if e.distancia_a(obj) > radio:
-		e.mover_hacia(obj.global_position, mult_persecucion)
-	else:
-		e.detener()
-		# Si el daño por contacto automático está activo
-		# (dano_al_tocar), el comp solo posiciona: evita doble daño.
-		if _t <= 0.0 and not e.dano_al_tocar:
-			if e.atacar_objetivo(obj):
-				_t = recarga
+
+	# Contra el árbol el tronco bloquea antes del centro: margen extra.
+	var margen := _f("melee_margen_arbol", 14.0) if obj == e.arbol else 0.0
+	var alcance := _f("melee_radio", 30.0) + margen
+
+	if e.distancia_a(obj) > alcance:
+		# Persigue; el sprint extra solo aplica persiguiendo al jugador.
+		var mult := _f("melee_mult_persecucion", 1.0) if obj == e.jugador else 1.0
+		e.mover_hacia(obj.global_position, mult)
+		return
+
+	e.detener()
+	# Petróleo y compañía ya pegan solos por contacto (dano_al_tocar):
+	# no duplicar el golpe.
+	if e.dano_al_tocar:
+		return
+	if _t <= 0.0 and e.atacar_objetivo(obj):
+		_t = maxf(_f("melee_recarga", 1.0), 0.05)
 
 
 func debug_dibujar_en(enemigo: Enemigo) -> void:
-	enemigo.draw_arc(Vector2.ZERO, radio_ataque + margen_arbol, 0.0, TAU, 32,
-			Color(0.847, 0.106, 0.376, 0.5), 1.5)   # magenta paleta
+	var r := _f("melee_radio", 30.0) + _f("melee_margen_arbol", 14.0)
+	enemigo.draw_arc(Vector2.ZERO, r, 0.0, TAU, 32, Color(0.0, 1.0, 0.5, 0.35), 1.0)

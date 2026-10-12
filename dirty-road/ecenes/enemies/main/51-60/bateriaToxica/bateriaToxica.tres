@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="EnemigoOleadaConfig" format=3 uid="uid://eafw171fwvyr"]
+
+[ext_resource type="PackedScene" path="res://ecenes/enemies/main/51-60/bateriaToxica/bateriaToxica_enemi.tscn" id="1_tkcgn"]
+[ext_resource type="Script" uid="uid://vyt7ho0roxls" path="res://scripts/enemigo_oleada_config.gd" id="2_nynh0"]
+
+[resource]
+script = ExtResource("2_nynh0")
+escena = ExtResource("1_tkcgn")
+oleada_minima = 7
+max_simultaneos = 3

@@ -1,0 +1,97 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ecenes/enemies/class/enemigo.gd" id="1_p87ml"]
+[ext_resource type="FontFile" path="res://themes/Chakra_Petch/ChakraPetch-BoldItalic.ttf" id="2_yyqci"]
+[ext_resource type="PackedScene" path="res://assets/stage/enemis/stages/stage81-90/incendio.tscn" id="3_qq3h4"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_constructor.gd" id="4_8h7v6"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_capa.gd" id="5_ee6j4"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/MecanicasEnemigo.gd" id="6_dtwjh"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/AnimacionEnemigo.gd" id="7_op7k5"]
+
+[sub_resource type="Resource" id="Resource_vod3f"]
+resource_local_to_scene = true
+script = ExtResource("5_ee6j4")
+nombre = "Fuego_exterior"
+puntos = PackedVector2Array(0, -32, 9, -18, 17, -8, 13, 2, 19, 12, 6, 18, -8, 18, -19, 10, -13, 0, -17, -10, -9, -18)
+color = Color(1, 0.41568628, 0.16470589, 1)
+animacion = 2
+anim_amplitud = 6.0
+
+[sub_resource type="Resource" id="Resource_skxy5"]
+resource_local_to_scene = true
+script = ExtResource("5_ee6j4")
+nombre = "Fuego_interior"
+puntos = PackedVector2Array(0, -18, 6, -8, 10, 0, 4, 10, -4, 10, -10, 0, -6, -8)
+color = Color(1, 0.72156864, 0.24705882, 1)
+animacion = 2
+anim_velocidad = 1.4
+anim_amplitud = 8.0
+anim_fase = 0.8
+
+[sub_resource type="Resource" id="Resource_07l5l"]
+resource_local_to_scene = true
+script = ExtResource("5_ee6j4")
+nombre = "Nucleo"
+puntos = PackedVector2Array(0, -8, 4, -2, 3, 6, -3, 6, -4, -2)
+color = Color(1, 0.9607843, 0.62352943, 1)
+animacion = 2
+anim_velocidad = 1.8
+anim_amplitud = 10.0
+anim_fase = 1.6
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_sgyna"]
+radius = 32.0
+
+[node name="enemigo" type="CharacterBody2D" unique_id=2006919752]
+script = ExtResource("1_p87ml")
+speed = 150.0
+damage = 10.0
+mov_zigzag_grados = 22.0
+mov_zigzag_freq = 3.0
+mov_orbita = 0.35
+mov_dash_mult = 1.3
+mov_dash_freq = 0.6
+dano_al_tocar = true
+danio_contacto = 10.0
+radio_contacto = 48.0
+comportamiento_tipo = "enjambre"
+enjambre_separacion = 24.0
+categoria = "fuego"
+nombre_texto = "Incendio"
+fuente_nombre = ExtResource("2_yyqci")
+fuente_danio = ExtResource("2_yyqci")
+
+[node name="FiguraConstructor" type="Node2D" parent="." unique_id=66989019 instance=ExtResource("3_qq3h4")]
+script = ExtResource("4_8h7v6")
+capas = Array[ExtResource("5_ee6j4")]([SubResource("Resource_vod3f"), SubResource("Resource_skxy5"), SubResource("Resource_07l5l")])
+sombra = true
+sombra_ancho = 30.0
+sombra_alto = 10.0
+sombra_desfase = 16.0
+sombra_opacidad = 0.25
+color_luz = Color(1, 0.41568628, 0.16470589, 1)
+energia_luz = 1.1
+escala_luz = 1.0
+anim_luz = 2
+velocidad_luz = 1.2
+variacion_luz = 0.45
+texto_figura = "capa Fuego_exterior ff6a2a: 0,-32 9,-18 17,-8 13,2 19,12 6,18 -8,18 -19,10 -13,0 -17,-10 -9,-18
+capa Fuego_interior ffb83f: 0,-18 6,-8 10,0 4,10 -4,10 -10,0 -6,-8
+capa Nucleo fff59f: 0,-8 4,-2 3,6 -3,6 -4,-2
+sombra 30 10 16 0.25
+luz ff6a2a 0,0 1.1 1.0
+escala 1.0
+anim Fuego_exterior latir 1.0 6
+anim Fuego_interior latir 1.4 8 0.8
+anim Nucleo latir 1.8 10 1.6
+animluz trueno 1.2 0.45"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1100405760]
+shape = SubResource("CircleShape2D_sgyna")
+
+[node name="Mecanicas" type="Node2D" parent="." unique_id=1404975203]
+script = ExtResource("6_dtwjh")
+divide_al_morir = true
+
+[node name="Animacion" type="Node" parent="." unique_id=520780499]
+script = ExtResource("7_op7k5")

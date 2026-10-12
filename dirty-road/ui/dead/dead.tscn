@@ -3,24 +3,6 @@
 [ext_resource type="Theme" uid="uid://hau5fs7dt6rv" path="res://themes/mainTheme.tres" id="1_hduar"]
 [ext_resource type="Script" uid="uid://bqwdqh2pkke5v" path="res://ui/dead/dead.gd" id="1_yd0cx"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o43wt"]
-bg_color = Color(0.6, 0.6, 0.6, 0)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.6, 1, 0.2, 1)
-border_blend = true
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b14hx"]
-bg_color = Color(0.6, 0.6, 0.6, 0)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.6, 1, 0.2, 1)
-border_blend = true
-
 [sub_resource type="Curve" id="Curve_hduar"]
 _limits = [0.0, 1.0, 0.5, 1.0]
 _data = [Vector2(0.5, 0.84269667), 0.0, 0.0, 0, 0, Vector2(0.734375, 0.44943827), 0.0, 0.0, 0, 0, Vector2(0.875, 1), 0.0, 0.0, 0, 0, Vector2(0.9609375, 0.50561804), 0.0, 0.0, 0, 0]
@@ -57,9 +39,9 @@ layout_mode = 2
 [node name="Label" type="Label" parent="Contenedor/CenterContainer/VBoxContainer" unique_id=1332421629]
 layout_mode = 2
 theme = ExtResource("1_hduar")
-theme_override_colors/font_color = Color(0.29564208, 0.5194653, 0.47586936, 1)
-theme_override_font_sizes/font_size = 200
-text = "Murio el arbol!!!!"
+theme_override_colors/font_color = Color(1, 0.3019608, 0.42745098, 1)
+theme_override_font_sizes/font_size = 96
+text = "EL ÁRBOL HA CAÍDO"
 
 [node name="HSeparator" type="HSeparator" parent="Contenedor/CenterContainer/VBoxContainer" unique_id=97175232]
 layout_mode = 2
@@ -69,17 +51,15 @@ theme = ExtResource("1_hduar")
 z_index = 6
 layout_mode = 2
 theme = ExtResource("1_hduar")
-theme_override_font_sizes/font_size = 80
-theme_override_styles/normal = SubResource("StyleBoxFlat_o43wt")
-text = "Nueva partida"
+theme_override_font_sizes/font_size = 44
+text = "NUEVA PARTIDA"
 
 [node name="salir" type="Button" parent="Contenedor/CenterContainer/VBoxContainer" unique_id=761343034]
 z_index = 6
 layout_mode = 2
 theme = ExtResource("1_hduar")
-theme_override_font_sizes/font_size = 80
-theme_override_styles/normal = SubResource("StyleBoxFlat_b14hx")
-text = "Salir"
+theme_override_font_sizes/font_size = 44
+text = "SALIR"
 
 [node name="ColorRect" type="ColorRect" parent="Contenedor" unique_id=193978876]
 layout_mode = 1

@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="EtapaConfig" format=3 uid="uid://bm4lvdip7pkse"]
+
+[ext_resource type="Script" uid="uid://vyt7ho0roxls" path="res://scripts/enemigo_oleada_config.gd" id="1_x7hjq"]
+[ext_resource type="Resource" uid="uid://3dm7s0gchexu" path="res://ecenes/enemies/main/41-50/gotaAcida/gotaAcida.tres" id="2_4l1m2"]
+[ext_resource type="Resource" uid="uid://cdqyoqrvn86nk" path="res://ecenes/enemies/main/41-50/charcoAcido/charcoAcido.tres" id="3_8fcp8"]
+[ext_resource type="Resource" uid="uid://b74yoftx6p0m" path="res://ecenes/enemies/main/41-50/nubeAcida/nubeAcida.tres" id="4_p5cwq"]
+[ext_resource type="PackedScene" path="res://ecenes/enemies/main/41-50/boss/geiserAcido_boss.tscn" id="5_fr5y6"]
+[ext_resource type="Script" uid="uid://b07d7n2c62y1x" path="res://scripts/etapa_config.gd" id="6_g7se3"]
+
+[resource]
+script = ExtResource("6_g7se3")
+nombre = "Etapa 5: Lluvia ácida"
+enemigos = Array[ExtResource("1_x7hjq")]([ExtResource("2_4l1m2"), ExtResource("3_8fcp8"), ExtResource("4_p5cwq")])
+enemigos_base_por_oleada = 12
+incremento_enemigos_por_oleada = 3
+escalado_vida_por_oleada = 0.3
+escalado_danio_por_oleada = 0.09
+mult_vida = 2.85
+mult_velocidad = 1.2
+mult_danio = 2.85
+jefe_escena = ExtResource("5_fr5y6")
+jefe_nombre = "Géiser Ácido"
+jefe_escoltas = 6

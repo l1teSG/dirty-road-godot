@@ -1,0 +1,93 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ecenes/enemies/class/enemigo.gd" id="1_38lpt"]
+[ext_resource type="FontFile" path="res://themes/Chakra_Petch/ChakraPetch-BoldItalic.ttf" id="2_n0kht"]
+[ext_resource type="PackedScene" path="res://assets/stage/enemis/stages/stage11-20/lataOxidada.tscn" id="3_1rtgh"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_constructor.gd" id="4_x57wp"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_capa.gd" id="5_nblg3"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/AnimacionEnemigo.gd" id="6_nwa5h"]
+
+[sub_resource type="Resource" id="Resource_axhod"]
+resource_local_to_scene = true
+script = ExtResource("5_nblg3")
+nombre = "Cuerpo"
+puntos = PackedVector2Array(11, -8, 11, 8, 6, 12, -6, 12, -11, 8, -11, -8, -6, -11, 6, -11)
+color = Color(0.5411765, 0.52156866, 0.47058824, 1)
+
+[sub_resource type="Resource" id="Resource_s8j51"]
+resource_local_to_scene = true
+script = ExtResource("5_nblg3")
+nombre = "Tapa"
+puntos = PackedVector2Array(11, -8, 6, -11, -6, -11, -11, -8, -6, -5, 6, -5)
+color = Color(0.65882355, 0.63529414, 0.5803922, 1)
+
+[sub_resource type="Resource" id="Resource_8aci3"]
+resource_local_to_scene = true
+script = ExtResource("5_nblg3")
+nombre = "Oxido_A"
+puntos = PackedVector2Array(2, -2, 9, 1, 7, 8, 0, 5)
+color = Color(0.6392157, 0.2901961, 0.16470589, 1)
+animacion = 5
+anim_velocidad = 1.2
+anim_amplitud = 1.5
+
+[sub_resource type="Resource" id="Resource_g7ykl"]
+resource_local_to_scene = true
+script = ExtResource("5_nblg3")
+nombre = "Oxido_B"
+puntos = PackedVector2Array(-9, 0, -5, 2, -7, 9, -10, 6)
+color = Color(0.47843137, 0.22745098, 0.1254902, 1)
+animacion = 5
+anim_velocidad = 1.2
+anim_amplitud = 1.5
+anim_fase = 3.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_11rjt"]
+
+[node name="enemigo" type="CharacterBody2D" unique_id=2006919752]
+script = ExtResource("1_38lpt")
+life = 22.0
+speed = 150.0
+damage = 10.0
+mov_zigzag_grados = 22.0
+mov_zigzag_freq = 3.0
+mov_orbita = 0.35
+mov_dash_mult = 1.3
+mov_dash_freq = 0.6
+dano_al_tocar = true
+danio_contacto = 10.0
+radio_contacto = 26.0
+comportamiento_tipo = "enjambre"
+enjambre_separacion = 24.0
+nombre_texto = "Lata Oxidada"
+fuente_nombre = ExtResource("2_n0kht")
+fuente_danio = ExtResource("2_n0kht")
+
+[node name="FiguraConstructor" type="Node2D" parent="." unique_id=66989019 instance=ExtResource("3_1rtgh")]
+script = ExtResource("4_x57wp")
+capas = Array[ExtResource("5_nblg3")]([SubResource("Resource_axhod"), SubResource("Resource_s8j51"), SubResource("Resource_8aci3"), SubResource("Resource_g7ykl")])
+sombra = true
+sombra_ancho = 22.0
+sombra_alto = 7.0
+sombra_desfase = 12.0
+sombra_opacidad = 0.35
+color_luz = Color(1, 0.53333336, 0.26666668, 1)
+energia_luz = 0.45
+escala_luz = 0.45
+escala_global = 0.7
+texto_figura = "capa Cuerpo 8a8578: 11,-8 11,8 6,12 -6,12 -11,8 -11,-8 -6,-11 6,-11  
+capa Tapa a8a294: 11,-8 6,-11 -6,-11 -11,-8 -6,-5 6,-5  
+capa Oxido_A a34a2a: 2,-2 9,1 7,8 0,5  
+capa Oxido_B 7a3a20: -9,0 -5,2 -7,9 -10,6  
+sombra 22 7 12 0.35  
+luz ff8844 0,0 0.45 0.45  
+escala 0.7  
+anim Oxido_A vibrar 1.2 1.5  
+anim Oxido_B vibrar 1.2 1.5 3.0  
+"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=569953469]
+shape = SubResource("CircleShape2D_11rjt")
+
+[node name="Animacion" type="Node" parent="." unique_id=2074877839]
+script = ExtResource("6_nwa5h")

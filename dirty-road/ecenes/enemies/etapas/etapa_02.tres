@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="EtapaConfig" format=3 uid="uid://dnuudcymg6p43"]
+
+[ext_resource type="Script" uid="uid://vyt7ho0roxls" path="res://scripts/enemigo_oleada_config.gd" id="1_qkbm4"]
+[ext_resource type="Resource" uid="uid://vellbvm8hgho" path="res://ecenes/enemies/main/11-20/lataOxidada/lataOxidada.tres" id="2_3810p"]
+[ext_resource type="Resource" uid="uid://cnnckantcb1xh" path="res://ecenes/enemies/main/11-20/neumaticoQuemado/neumaticoQuemado.tres" id="3_aur04"]
+[ext_resource type="Resource" uid="uid://dsho3uuo2dcwv" path="res://ecenes/enemies/main/11-20/bolsaPlastica/bolsaPlastica.tres" id="4_p2nnf"]
+[ext_resource type="PackedScene" path="res://ecenes/enemies/main/11-20/boss/vertederoViviente_boss.tscn" id="5_uqga0"]
+[ext_resource type="Script" uid="uid://b07d7n2c62y1x" path="res://scripts/etapa_config.gd" id="6_fwhav"]
+
+[resource]
+script = ExtResource("6_fwhav")
+nombre = "Etapa 2: Basura y vertederos"
+enemigos = Array[ExtResource("1_qkbm4")]([ExtResource("2_3810p"), ExtResource("3_aur04"), ExtResource("4_p2nnf")])
+enemigos_base_por_oleada = 9
+incremento_enemigos_por_oleada = 3
+escalado_vida_por_oleada = 0.3
+escalado_danio_por_oleada = 0.09
+mult_vida = 1.35
+mult_velocidad = 1.05
+mult_danio = 1.35
+jefe_escena = ExtResource("5_uqga0")
+jefe_nombre = "Vertedero Viviente"
+jefe_escoltas = 6

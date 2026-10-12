@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="EnemigoOleadaConfig" format=3 uid="uid://btrqgjt0ja5o1"]
+
+[ext_resource type="PackedScene" path="res://ecenes/enemies/main/31-40/humoFabrica/humoFabrica_enemi.tscn" id="1_vlff0"]
+[ext_resource type="Script" uid="uid://vyt7ho0roxls" path="res://scripts/enemigo_oleada_config.gd" id="2_cgh4e"]
+
+[resource]
+script = ExtResource("2_cgh4e")
+escena = ExtResource("1_vlff0")
+peso = 3.0

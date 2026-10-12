@@ -1,0 +1,114 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ecenes/enemies/class/enemigo.gd" id="1_whisx"]
+[ext_resource type="FontFile" path="res://themes/Chakra_Petch/ChakraPetch-BoldItalic.ttf" id="2_m8y1g"]
+[ext_resource type="PackedScene" path="res://assets/stage/enemis/stages/stage11-20/boss/vertederoViviente.tscn" id="3_pcpxq"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_constructor.gd" id="4_48bmf"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_capa.gd" id="5_2i3rc"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/BossAttackComponent.gd" id="6_ir0sq"]
+[ext_resource type="PackedScene" path="res://ecenes/enemies/main/11-20/lataOxidada/lataOxidada_enemi.tscn" id="7_kl7fi"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/AnimacionEnemigo.gd" id="8_mv2rk"]
+
+[sub_resource type="Resource" id="Resource_0sn5y"]
+resource_local_to_scene = true
+script = ExtResource("5_2i3rc")
+nombre = "Charco"
+puntos = PackedVector2Array(70, 24, 40, 34, -40, 34, -70, 24, -40, 17, 40, 17)
+color = Color(0.21176471, 0.3529412, 0.1254902, 1)
+
+[sub_resource type="Resource" id="Resource_r8uor"]
+resource_local_to_scene = true
+script = ExtResource("5_2i3rc")
+nombre = "Montana"
+puntos = PackedVector2Array(60, 10, 40, 26, 0, 30, -40, 26, -60, 10, -48, -14, -20, -30, 20, -28, 48, -12)
+color = Color(0.22745098, 0.19607843, 0.14901961, 1)
+
+[sub_resource type="Resource" id="Resource_ha26b"]
+resource_local_to_scene = true
+script = ExtResource("5_2i3rc")
+nombre = "Bolsas"
+puntos = PackedVector2Array(-34, -8, -20, -20, -6, -12, -12, 2, -30, 6)
+color = Color(0.3529412, 0.32156864, 0.27058825, 1)
+
+[sub_resource type="Resource" id="Resource_onc26"]
+resource_local_to_scene = true
+script = ExtResource("5_2i3rc")
+nombre = "Chatarra"
+puntos = PackedVector2Array(-30, -26, -22, -44, -14, -26, -20, -18)
+color = Color(0.43529412, 0.41568628, 0.37254903, 1)
+
+[sub_resource type="Resource" id="Resource_a43ds"]
+resource_local_to_scene = true
+script = ExtResource("5_2i3rc")
+nombre = "Ojo"
+puntos = PackedVector2Array(-14, -16, -4, -16, -4, -8, -14, -8)
+color = Color(0, 1, 0.49803922, 1)
+animacion = 2
+anim_amplitud = 8.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_5l4bp"]
+radius = 162.8
+
+[node name="enemigo" type="CharacterBody2D" unique_id=2006919752]
+script = ExtResource("1_whisx")
+life = 1200.0
+speed = 75.0
+damage = 22.0
+mov_zigzag_grados = 10.0
+mov_zigzag_freq = 2.0
+mov_orbita = 0.5
+mov_dash_mult = 1.6
+mov_dash_freq = 0.5
+mov_separacion_fuerza = 1.0
+dano_al_tocar = true
+danio_contacto = 22.0
+radio_contacto = 90.0
+comportamiento_tipo = "embestida"
+anti_estructura = true
+categoria = "elite"
+nombre_texto = "Vertedero Viviente"
+fuente_nombre = ExtResource("2_m8y1g")
+fuente_danio = ExtResource("2_m8y1g")
+orbes_min = 8
+orbes_max = 14
+orbe_valor = 3.0
+
+[node name="FiguraConstructor" type="Node2D" parent="." unique_id=66989019 instance=ExtResource("3_pcpxq")]
+script = ExtResource("4_48bmf")
+capas = Array[ExtResource("5_2i3rc")]([SubResource("Resource_0sn5y"), SubResource("Resource_r8uor"), SubResource("Resource_ha26b"), SubResource("Resource_onc26"), SubResource("Resource_a43ds")])
+sombra = true
+sombra_ancho = 120.0
+sombra_alto = 26.0
+sombra_desfase = 28.0
+color_luz = Color(0.5411765, 1, 0.24705882, 1)
+posicion_luz = Vector2(0, -12)
+energia_luz = 0.9
+escala_luz = 1.4
+anim_luz = 1
+velocidad_luz = 0.8
+variacion_luz = 0.2
+escala_global = 2.2
+texto_figura = "capa Charco 365a20: 70,24 40,34 -40,34 -70,24 -40,17 40,17
+capa Montana 3a3226: 60,10 40,26 0,30 -40,26 -60,10 -48,-14 -20,-30 20,-28 48,-12
+capa Bolsas 5a5245: -34,-8 -20,-20 -6,-12 -12,2 -30,6
+capa Chatarra 6f6a5f: -30,-26 -22,-44 -14,-26 -20,-18
+capa Ojo 00ff7f: -14,-16 -4,-16 -4,-8 -14,-8
+sombra 120 26 28 0.3
+luz 8aff3f 0,-12 0.9 1.4
+escala 2.2
+anim Ojo latir 1.0 8
+animluz pulsar 0.8 0.2"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1332182677]
+shape = SubResource("CircleShape2D_5l4bp")
+
+[node name="Ataques" type="Node2D" parent="." unique_id=2081598986]
+script = ExtResource("6_ir0sq")
+meteoros = true
+invocar = true
+met_cantidad = 7
+met_color = Color(0.55, 0.5, 0.35, 0.6)
+inv_escena = ExtResource("7_kl7fi")
+
+[node name="Animacion" type="Node" parent="." unique_id=1188349097]
+script = ExtResource("8_mv2rk")

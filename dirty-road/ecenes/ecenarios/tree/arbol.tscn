@@ -4,7 +4,7 @@
 [ext_resource type="FontFile" uid="uid://vnsqj7q05uej" path="res://themes/Chakra_Petch/ChakraPetch-BoldItalic.ttf" id="2_ryl7s"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7cwo5"]
-size = Vector2(78, 47)
+size = Vector2(150, 180)
 
 [sub_resource type="Gradient" id="Gradient_rbule"]
 colors = PackedColorArray(1, 1, 1, 1, 0, 1, 0.53333336, 0.007843138)
@@ -31,10 +31,10 @@ corner_radius_top_right = 2
 corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
 
-[node name="Arbol" type="Area2D" unique_id=157670480]
+[node name="Arbol" type="Area2D" unique_id=157670480 node_paths=PackedStringArray("shapes_danio")]
 script = ExtResource("1_v8n67")
-vida_maxima = 5000
-regeneracion_por_segundo = 20.0
+shapes_danio = [NodePath("CollisionShape2D"), NodePath("StaticBody2D/CollisionShape2D"), NodePath("StaticBody2D/CollisionShape2D2")]
+regeneracion_activa = false
 
 [node name="sombra" type="Polygon2D" parent="." unique_id=532215091]
 z_index = -1
@@ -57,7 +57,7 @@ color = Color(0, 1, 0.53333336, 1)
 polygon = PackedVector2Array(-10, -280, 50, -230, 90, -180, 45, -140, 0, -120, -45, -130, -100, -170, -60, -230)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1355414515]
-position = Vector2(0, -9.5)
+position = Vector2(0, -45)
 shape = SubResource("RectangleShape2D_7cwo5")
 
 [node name="LuzArbol" type="PointLight2D" parent="." unique_id=46945719]

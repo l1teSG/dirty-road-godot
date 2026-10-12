@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="EnemigoOleadaConfig" format=3 uid="uid://do168yl258rmv"]
+
+[ext_resource type="PackedScene" path="res://ecenes/enemies/main/51-60/basuraElectronica/basuraElectronica_enemi.tscn" id="1_3bfg2"]
+[ext_resource type="Script" uid="uid://vyt7ho0roxls" path="res://scripts/enemigo_oleada_config.gd" id="2_fg746"]
+
+[resource]
+script = ExtResource("2_fg746")
+escena = ExtResource("1_3bfg2")
+peso = 3.0

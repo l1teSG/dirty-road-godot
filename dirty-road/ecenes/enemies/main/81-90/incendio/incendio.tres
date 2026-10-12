@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="EnemigoOleadaConfig" format=3 uid="uid://bylcape1xow84"]
+
+[ext_resource type="PackedScene" path="res://ecenes/enemies/main/81-90/incendio/incendio_enemi.tscn" id="1_x244k"]
+[ext_resource type="Script" uid="uid://vyt7ho0roxls" path="res://scripts/enemigo_oleada_config.gd" id="2_acp5b"]
+
+[resource]
+script = ExtResource("2_acp5b")
+escena = ExtResource("1_x244k")
+oleada_minima = 7
+max_simultaneos = 3

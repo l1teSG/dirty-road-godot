@@ -1,39 +1,17 @@
-[gd_scene format=3 uid="uid://bnsgn8vqai733"]
+[gd_scene load_steps=5 format=3 uid="uid://bnsgn8vqai733"]
 
-[ext_resource type="Theme" path="res://themes/mainTheme.tres" id="1_1yxvs"]
-[ext_resource type="Script" path="res://ecenes/players/pausa/pausa.gd" id="1_b5l1p"]
+[ext_resource type="Theme" uid="uid://hau5fs7dt6rv" path="res://themes/mainTheme.tres" id="1_theme"]
+[ext_resource type="Script" uid="uid://fkvpi5sixu0g" path="res://ecenes/players/pausa/pausa.gd" id="2_script"]
+[ext_resource type="Shader" path="res://ecenes/players/pausa/fondo_pausa.gdshader" id="3_shader"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g2h5g"]
-bg_color = Color(0.6, 0.6, 0.6, 0)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.6, 1, 0.2, 1)
-border_blend = true
+[sub_resource type="ShaderMaterial" id="mat_brillo"]
+shader = ExtResource("3_shader")
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_crj17"]
-bg_color = Color(0.6, 0.6, 0.6, 0)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.6, 1, 0.2, 1)
-border_blend = true
+[node name="Pausa" type="CanvasLayer"]
+process_mode = 3
+script = ExtResource("2_script")
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tap61"]
-bg_color = Color(0.6, 0.6, 0.6, 0)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.6, 1, 0.2, 1)
-border_blend = true
-
-[node name="Pausa" type="CanvasLayer" unique_id=565747821]
-script = ExtResource("1_b5l1p")
-
-[node name="Contenedor" type="Control" parent="." unique_id=36797821]
+[node name="Contenedor" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -41,59 +19,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="CenterContainer" type="CenterContainer" parent="Contenedor" unique_id=1328952975]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -307.5
-offset_top = -250.0
-offset_right = 307.5
-offset_bottom = 250.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Contenedor/CenterContainer" unique_id=2113082568]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Contenedor/CenterContainer/VBoxContainer" unique_id=268053565]
-layout_mode = 2
-theme = ExtResource("1_1yxvs")
-theme_override_colors/font_color = Color(0.20784314, 1, 0.16862746, 1)
-theme_override_font_sizes/font_size = 80
-text = "MENU DE PAUSA"
-
-[node name="HSeparator" type="HSeparator" parent="Contenedor/CenterContainer/VBoxContainer" unique_id=2063077115]
-layout_mode = 2
-theme = ExtResource("1_1yxvs")
-
-[node name="continuar" type="Button" parent="Contenedor/CenterContainer/VBoxContainer" unique_id=431089943]
-z_index = 6
-layout_mode = 2
-theme = ExtResource("1_1yxvs")
-theme_override_font_sizes/font_size = 80
-theme_override_styles/normal = SubResource("StyleBoxFlat_g2h5g")
-text = "continuar"
-
-[node name="nuevaPartida" type="Button" parent="Contenedor/CenterContainer/VBoxContainer" unique_id=724464612]
-z_index = 6
-layout_mode = 2
-theme = ExtResource("1_1yxvs")
-theme_override_font_sizes/font_size = 80
-theme_override_styles/normal = SubResource("StyleBoxFlat_crj17")
-text = "nueva partida"
-
-[node name="salir" type="Button" parent="Contenedor/CenterContainer/VBoxContainer" unique_id=290195262]
-z_index = 6
-layout_mode = 2
-theme = ExtResource("1_1yxvs")
-theme_override_font_sizes/font_size = 80
-theme_override_styles/normal = SubResource("StyleBoxFlat_tap61")
-text = "salir"
-
-[node name="ColorRect" type="ColorRect" parent="Contenedor" unique_id=1214515014]
+[node name="Fondo" type="ColorRect" parent="Contenedor"]
+z_index = -1
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -101,11 +28,85 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(0.019607844, 0.039215688, 0.03137255, 0.7647059)
+color = Color(0.019607844, 0.039215688, 0.03137255, 0.62)
 
-[node name="CPUParticles2D" type="CPUParticles2D" parent="Contenedor" unique_id=1303598093]
-position = Vector2(940, 534)
-amount = 40
+[node name="Brillo" type="ColorRect" parent="Contenedor"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+material = SubResource("mat_brillo")
+
+[node name="Centro" type="CenterContainer" parent="Contenedor"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="Contenedor/Centro"]
+custom_minimum_size = Vector2(560, 0)
+layout_mode = 2
+theme = ExtResource("1_theme")
+
+[node name="VBox" type="VBoxContainer" parent="Contenedor/Centro/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="Titulo" type="Label" parent="Contenedor/Centro/Panel/VBox"]
+layout_mode = 2
+theme = ExtResource("1_theme")
+theme_override_colors/font_color = Color(0.6, 1, 0.2, 1)
+theme_override_font_sizes/font_size = 72
+text = "PAUSA"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="Info" type="Label" parent="Contenedor/Centro/Panel/VBox"]
+layout_mode = 2
+theme = ExtResource("1_theme")
+theme_override_colors/font_color = Color(0.7882353, 1, 0.627451, 0.9)
+theme_override_font_sizes/font_size = 20
+text = "OLEADA 1   ·   🌱 0"
+horizontal_alignment = 1
+
+[node name="Divisor" type="ColorRect" parent="Contenedor/Centro/Panel/VBox"]
+custom_minimum_size = Vector2(0, 3)
+layout_mode = 2
+color = Color(0.6, 1, 0.2, 0.5)
+
+[node name="continuar" type="Button" parent="Contenedor/Centro/Panel/VBox"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_theme")
+theme_override_font_sizes/font_size = 30
+text = "CONTINUAR"
+
+[node name="nuevaPartida" type="Button" parent="Contenedor/Centro/Panel/VBox"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_theme")
+theme_override_font_sizes/font_size = 30
+text = "NUEVA PARTIDA"
+
+[node name="salir" type="Button" parent="Contenedor/Centro/Panel/VBox"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_theme")
+theme_override_font_sizes/font_size = 30
+text = "SALIR"
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="Contenedor"]
+position = Vector2(960, 540)
+amount = 80
 lifetime = 6.0
 emission_shape = 3
 emission_rect_extents = Vector2(1004.5, 781.7)
@@ -114,6 +115,6 @@ gravity = Vector2(0, -10)
 scale_amount_max = 3.0
 color = Color(0.6, 1, 0.2, 0.44705883)
 
-[connection signal="button_down" from="Contenedor/CenterContainer/VBoxContainer/continuar" to="." method="_on_button_button_down"]
-[connection signal="button_down" from="Contenedor/CenterContainer/VBoxContainer/nuevaPartida" to="." method="_on_nueva_partida_button_down"]
-[connection signal="button_down" from="Contenedor/CenterContainer/VBoxContainer/salir" to="." method="_on_salir_button_down"]
+[connection signal="button_down" from="Contenedor/Centro/Panel/VBox/continuar" to="." method="_on_button_button_down"]
+[connection signal="button_down" from="Contenedor/Centro/Panel/VBox/nuevaPartida" to="." method="_on_nueva_partida_button_down"]
+[connection signal="button_down" from="Contenedor/Centro/Panel/VBox/salir" to="." method="_on_salir_button_down"]

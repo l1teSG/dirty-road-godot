@@ -1,0 +1,89 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ecenes/enemies/class/enemigo.gd" id="1_0f8pk"]
+[ext_resource type="FontFile" path="res://themes/Chakra_Petch/ChakraPetch-BoldItalic.ttf" id="2_4la5u"]
+[ext_resource type="PackedScene" path="res://assets/stage/enemis/stages/stage11-20/bolsaPlastica.tscn" id="3_kxdii"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_constructor.gd" id="4_3yc1p"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_capa.gd" id="5_4qcnj"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/MecanicasEnemigo.gd" id="6_2vrkv"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/AnimacionEnemigo.gd" id="7_ptp5u"]
+
+[sub_resource type="Resource" id="Resource_svk3u"]
+resource_local_to_scene = true
+script = ExtResource("5_4qcnj")
+nombre = "Cuerpo"
+puntos = PackedVector2Array(16, -4, 20, 6, 10, 14, -8, 14, -18, 6, -14, -6, -4, -12, 8, -12)
+color = Color(0.9098039, 0.9254902, 0.8862745, 0.72156864)
+animacion = 1
+anim_velocidad = 0.6
+anim_amplitud = 3.0
+
+[sub_resource type="Resource" id="Resource_1j5vm"]
+resource_local_to_scene = true
+script = ExtResource("5_4qcnj")
+nombre = "Pliegue"
+puntos = PackedVector2Array(-14, -6, -4, -12, 2, -2, -8, 4)
+color = Color(0.53333336, 0.65882355, 0.6901961, 0.63529414)
+animacion = 1
+anim_velocidad = 0.6
+anim_amplitud = 3.0
+anim_fase = 1.5
+
+[sub_resource type="Resource" id="Resource_t65fw"]
+resource_local_to_scene = true
+script = ExtResource("5_4qcnj")
+nombre = "Nudo"
+puntos = PackedVector2Array(-4, -12, 0, -19, 6, -15, 8, -12, 3, -9, -1, -9)
+color = Color(0.8117647, 0.83137256, 0.7764706, 1)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_hoasr"]
+radius = 19.836582
+
+[node name="enemigo" type="CharacterBody2D" unique_id=2006919752]
+script = ExtResource("1_0f8pk")
+speed = 170.0
+damage = 10.0
+mov_zigzag_grados = 22.0
+mov_zigzag_freq = 3.0
+mov_orbita = 0.35
+mov_dash_mult = 1.3
+mov_dash_freq = 0.6
+dano_al_tocar = true
+danio_contacto = 10.0
+radio_contacto = 35.836582366930045
+comportamiento_tipo = "enjambre"
+enjambre_separacion = 24.0
+nombre_texto = "Bolsa Plástica"
+fuente_nombre = ExtResource("2_4la5u")
+fuente_danio = ExtResource("2_4la5u")
+
+[node name="FiguraConstructor" type="Node2D" parent="." unique_id=66989019 instance=ExtResource("3_kxdii")]
+script = ExtResource("4_3yc1p")
+capas = Array[ExtResource("5_4qcnj")]([SubResource("Resource_svk3u"), SubResource("Resource_1j5vm"), SubResource("Resource_t65fw")])
+sombra = true
+sombra_ancho = 20.0
+sombra_alto = 7.0
+sombra_desfase = 18.0
+sombra_opacidad = 0.2
+color_luz = Color(0.8745098, 1, 0.8745098, 1)
+energia_luz = 0.3
+escala_global = 0.95
+texto_figura = "capa Cuerpo e8ece2b8: 16,-4 20,6 10,14 -8,14 -18,6 -14,-6 -4,-12 8,-12  
+capa Pliegue 88a8b0a2: -14,-6 -4,-12 2,-2 -8,4  
+capa Nudo cfd4c6: -4,-12 0,-19 6,-15 8,-12 3,-9 -1,-9  
+sombra 20 7 18 0.2  
+luz dfffdf 0,0 0.3 0.5  
+escala 0.95  
+anim Cuerpo flotar 0.6 3.0  
+anim Pliegue flotar 0.6 3.0 1.5 
+"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=82047002]
+shape = SubResource("CircleShape2D_hoasr")
+
+[node name="Mecanicas" type="Node2D" parent="." unique_id=1177073210]
+script = ExtResource("6_2vrkv")
+es_aereo = true
+
+[node name="Animacion" type="Node" parent="." unique_id=641657925]
+script = ExtResource("7_ptp5u")

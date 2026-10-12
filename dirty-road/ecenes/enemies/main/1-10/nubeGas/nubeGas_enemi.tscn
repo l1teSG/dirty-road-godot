@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://csk8lc57rlfwy"]
 
 [ext_resource type="PackedScene" uid="uid://cgh5ie63rhuf4" path="res://ecenes/enemies/class/clase_enemigo.tscn" id="1_2dhvw"]
-[ext_resource type="Script" uid="uid://7wwisup7lilo" path="res://ecenes/enemies/class/comportamientos/comp_rango.gd" id="2_nllrl"]
 [ext_resource type="FontFile" uid="uid://vnsqj7q05uej" path="res://themes/Chakra_Petch/ChakraPetch-BoldItalic.ttf" id="3_nllrl"]
 [ext_resource type="PackedScene" uid="uid://cjx0su50n0cgy" path="res://assets/stage/enemis/stages/stage1-10/nubeGas.tscn" id="3_tfaec"]
 [ext_resource type="Script" uid="uid://dtju1od6upjok" path="res://assets/stage/enemis/classShape/figura_capa.gd" id="4_76bpx"]
@@ -35,23 +34,13 @@ color = Color(0.91764706, 1, 0.43529412, 1)
 [sub_resource type="CircleShape2D" id="CircleShape2D_7cwo5"]
 radius = 23.345236
 
-[node name="enemigo" unique_id=2006919752 node_paths=PackedStringArray("figura", "boca") instance=ExtResource("1_2dhvw")]
-life = 24.0
-speed = 55.0
-damage = 4.0
-velocidad_multiplicador = 1.4
-radio_contacto = 18.0
-recompensa = 2
-figura = NodePath("FiguraConstructor")
-boca = NodePath("Marker2D")
+[node name="enemigo" unique_id=2006919752 node_paths=PackedStringArray("boca") instance=ExtResource("1_2dhvw")]
+life = 28.0
+speed = 95.0
+damage = 9.0
 comportamiento_tipo = "rango"
-comportamiento_personalizado = ExtResource("2_nllrl")
-rango_distancia = 200.0
-rango_margen = 50.0
-rango_recarga = 2.4
-rango_vel_strafe = 0.3
-rango_dispersion = 10.0
-nombre_mostrado = "nube gas"
+boca = NodePath("Marker2D")
+fuente_nombre = ExtResource("3_nllrl")
 fuente_danio = ExtResource("3_nllrl")
 
 [node name="FiguraConstructor" parent="." index="0" unique_id=66989019 instance=ExtResource("3_tfaec")]

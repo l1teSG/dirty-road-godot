@@ -1,0 +1,107 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ecenes/enemies/class/enemigo.gd" id="1_xalyu"]
+[ext_resource type="FontFile" path="res://themes/Chakra_Petch/ChakraPetch-BoldItalic.ttf" id="2_pvc10"]
+[ext_resource type="PackedScene" path="res://assets/stage/enemis/stages/stage51-60/cableElectrico.tscn" id="3_akhe2"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_constructor.gd" id="4_cmgci"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_capa.gd" id="5_augbv"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/MecanicasEnemigo.gd" id="6_ymn58"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/AnimacionEnemigo.gd" id="7_10euw"]
+
+[sub_resource type="Resource" id="Resource_in6by"]
+resource_local_to_scene = true
+script = ExtResource("5_augbv")
+nombre = "Cable_A"
+puntos = PackedVector2Array(-20, 8, -8, -8, -2, -4, -14, 12)
+color = Color(0.2901961, 0.22745098, 0.18039216, 1)
+animacion = 5
+anim_velocidad = 2.0
+anim_amplitud = 1.0
+
+[sub_resource type="Resource" id="Resource_a5hax"]
+resource_local_to_scene = true
+script = ExtResource("5_augbv")
+nombre = "Cable_B"
+puntos = PackedVector2Array(-4, 10, 8, -6, 14, -2, 2, 14)
+color = Color(0.22745098, 0.18039216, 0.14901961, 1)
+
+[sub_resource type="Resource" id="Resource_u4by2"]
+resource_local_to_scene = true
+script = ExtResource("5_augbv")
+nombre = "Cable_C"
+puntos = PackedVector2Array(12, 8, 24, -8, 30, -4, 18, 12)
+color = Color(0.2901961, 0.22745098, 0.18039216, 1)
+
+[sub_resource type="Resource" id="Resource_f4ynm"]
+resource_local_to_scene = true
+script = ExtResource("5_augbv")
+nombre = "Enchufe"
+puntos = PackedVector2Array(28, -6, 36, -6, 36, 4, 28, 4)
+color = Color(0.5411765, 0.52156866, 0.47058824, 1)
+
+[sub_resource type="Resource" id="Resource_3flbl"]
+resource_local_to_scene = true
+script = ExtResource("5_augbv")
+nombre = "Chispa"
+puntos = PackedVector2Array(36, -3, 42, -5, 44, 1, 40, 3)
+color = Color(1, 0.9607843, 0.62352943, 1)
+animacion = 6
+anim_velocidad = 3.0
+anim_amplitud = 1.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_sl5sj"]
+radius = 44.011364
+
+[node name="enemigo" type="CharacterBody2D" unique_id=2006919752 node_paths=PackedStringArray("boca")]
+script = ExtResource("1_xalyu")
+life = 90.0
+speed = 60.0
+damage = 12.0
+radio_contacto = 60.01136216933077
+comportamiento_tipo = "torreta"
+boca = NodePath("boca")
+categoria = "toxico"
+nombre_texto = "Cable Eléctrico"
+fuente_nombre = ExtResource("2_pvc10")
+fuente_danio = ExtResource("2_pvc10")
+
+[node name="FiguraConstructor" type="Node2D" parent="." unique_id=66989019 instance=ExtResource("3_akhe2")]
+script = ExtResource("4_cmgci")
+capas = Array[ExtResource("5_augbv")]([SubResource("Resource_in6by"), SubResource("Resource_a5hax"), SubResource("Resource_u4by2"), SubResource("Resource_f4ynm"), SubResource("Resource_3flbl")])
+sombra = true
+sombra_ancho = 50.0
+sombra_alto = 10.0
+sombra_desfase = 12.0
+sombra_opacidad = 0.28
+color_luz = Color(0.2509804, 0.8784314, 1, 1)
+energia_luz = 0.8
+escala_luz = 0.6
+anim_luz = 2
+velocidad_luz = 1.5
+variacion_luz = 0.5
+texto_figura = "capa Cable_A 4a3a2e: -20,8 -8,-8 -2,-4 -14,12
+capa Cable_B 3a2e26: -4,10 8,-6 14,-2 2,14
+capa Cable_C 4a3a2e: 12,8 24,-8 30,-4 18,12
+capa Enchufe 8a8578: 28,-6 36,-6 36,4 28,4
+capa Chispa fff59f: 36,-3 42,-5 44,1 40,3
+sombra 50 10 12 0.28
+luz 40e0ff 0,0 0.8 0.6
+escala 1.0
+anim Chispa parpadear 3.0 1.0
+anim Cable_A vibrar 2.0 1.0
+animluz trueno 1.5 0.5"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1867513227]
+shape = SubResource("CircleShape2D_sl5sj")
+
+[node name="boca" type="Marker2D" parent="." unique_id=1156609695]
+
+[node name="Mecanicas" type="Node2D" parent="." unique_id=1557179954]
+script = ExtResource("6_ymn58")
+aura_danio = true
+aura_radio = 80.0
+aura_dps = 14.0
+aura_periodo = 0.7
+
+[node name="Animacion" type="Node" parent="." unique_id=1409603964]
+script = ExtResource("7_10euw")

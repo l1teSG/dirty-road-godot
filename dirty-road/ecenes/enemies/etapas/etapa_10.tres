@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="EtapaConfig" format=3 uid="uid://dh7xun87aixv0"]
+
+[ext_resource type="Script" uid="uid://vyt7ho0roxls" path="res://scripts/enemigo_oleada_config.gd" id="1_fvl4s"]
+[ext_resource type="Resource" uid="uid://b0yl6a2jy6put" path="res://ecenes/enemies/main/91-100/olaCalor/olaCalor.tres" id="2_yjuog"]
+[ext_resource type="Resource" uid="uid://c8bv365k5afx3" path="res://ecenes/enemies/main/91-100/tormenta/tormenta.tres" id="3_nk06n"]
+[ext_resource type="Resource" uid="uid://bgx3gris3bqmw" path="res://ecenes/enemies/main/91-100/deshielo/deshielo.tres" id="4_kst3v"]
+[ext_resource type="PackedScene" path="res://ecenes/enemies/main/91-100/boss/calentamientoGlobal_boss.tscn" id="5_dbmnd"]
+[ext_resource type="Script" uid="uid://b07d7n2c62y1x" path="res://scripts/etapa_config.gd" id="6_qr1xy"]
+
+[resource]
+script = ExtResource("6_qr1xy")
+nombre = "Etapa 10: Cambio climático"
+enemigos = Array[ExtResource("1_fvl4s")]([ExtResource("2_yjuog"), ExtResource("3_nk06n"), ExtResource("4_kst3v")])
+enemigos_base_por_oleada = 20
+incremento_enemigos_por_oleada = 3
+escalado_vida_por_oleada = 0.3
+escalado_danio_por_oleada = 0.09
+mult_vida = 8.0
+mult_velocidad = 1.45
+mult_danio = 8.0
+jefe_escena = ExtResource("5_dbmnd")
+jefe_nombre = "Calentamiento Global"
+jefe_escoltas = 6

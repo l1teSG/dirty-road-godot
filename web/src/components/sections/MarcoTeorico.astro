@@ -1,0 +1,25 @@
+---
+import SectionHeading from '../ui/SectionHeading.astro';
+import Reveal from '../ui/Reveal.astro';
+import { marcoTecnico, referencias } from '../../lib/apa';
+---
+<section id="marco" class="px-4 py-24 sm:py-32">
+  <div class="mx-auto max-w-6xl">
+    <Reveal>
+      <SectionHeading
+        kicker="Capítulo 3"
+        titulo={marcoTecnico.titulo}
+        descripcion={marcoTecnico.texto}
+      />
+    </Reveal>
+    <div class="mt-12 grid gap-4 sm:grid-cols-2">
+      {referencias.map((r, i) => (
+        <Reveal delay={(i % 2) * 80}>
+          <p class="rounded-xl border-l-2 border-green/40 bg-bg-alt/40 py-3 pl-4 pr-3 text-sm leading-relaxed text-text-secondary">
+            {r}
+          </p>
+        </Reveal>
+      ))}
+    </div>
+  </div>
+</section>

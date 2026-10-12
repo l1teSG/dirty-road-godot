@@ -1,0 +1,104 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ecenes/enemies/class/enemigo.gd" id="1_tlmla"]
+[ext_resource type="FontFile" path="res://themes/Chakra_Petch/ChakraPetch-BoldItalic.ttf" id="2_ho76d"]
+[ext_resource type="PackedScene" path="res://assets/stage/enemis/stages/stage51-60/bateriaToxica.tscn" id="3_ykynd"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_constructor.gd" id="4_gaibm"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_capa.gd" id="5_d5aej"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/MecanicasEnemigo.gd" id="6_avuwb"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/AnimacionEnemigo.gd" id="7_b3mnw"]
+
+[sub_resource type="Resource" id="Resource_cnaej"]
+resource_local_to_scene = true
+script = ExtResource("5_d5aej")
+nombre = "Cuerpo"
+puntos = PackedVector2Array(14, -16, 14, 16, -14, 16, -14, -16)
+color = Color(0.20784314, 0.3764706, 0.2901961, 1)
+
+[sub_resource type="Resource" id="Resource_8l3lt"]
+resource_local_to_scene = true
+script = ExtResource("5_d5aej")
+nombre = "Terminal"
+puntos = PackedVector2Array(8, -16, 8, -22, -8, -22, -8, -16)
+color = Color(0.5411765, 0.52156866, 0.47058824, 1)
+
+[sub_resource type="Resource" id="Resource_3oh8y"]
+resource_local_to_scene = true
+script = ExtResource("5_d5aej")
+nombre = "Franja_peligro"
+puntos = PackedVector2Array(14, -4, 14, 4, -14, 4, -14, -4)
+color = Color(0.78431374, 0.72156864, 0.22745098, 1)
+
+[sub_resource type="Resource" id="Resource_ng8ra"]
+resource_local_to_scene = true
+script = ExtResource("5_d5aej")
+nombre = "Fuga"
+puntos = PackedVector2Array(10, 16, 16, 24, 4, 22, -6, 26, -14, 20, -14, 16)
+color = Color(0.4862745, 1, 0.24705882, 1)
+animacion = 2
+anim_velocidad = 1.4
+anim_amplitud = 8.0
+
+[sub_resource type="Resource" id="Resource_7atvm"]
+resource_local_to_scene = true
+script = ExtResource("5_d5aej")
+nombre = "Simbolo"
+puntos = PackedVector2Array(0, -10, 4, -6, 0, -2, -4, -6)
+color = Color(0.84705883, 0.105882354, 0.3764706, 1)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_wtsbb"]
+radius = 28.84441
+
+[node name="enemigo" type="CharacterBody2D" unique_id=2006919752]
+script = ExtResource("1_tlmla")
+life = 80.0
+speed = 75.0
+damage = 22.0
+mov_zigzag_grados = 10.0
+mov_orbita = 0.35
+mov_dash_mult = 1.6
+mov_dash_freq = 0.5
+dano_al_tocar = true
+danio_contacto = 22.0
+radio_contacto = 44.84441020371192
+comportamiento_tipo = "embestida"
+categoria = "toxico"
+nombre_texto = "Batería Tóxica"
+fuente_nombre = ExtResource("2_ho76d")
+fuente_danio = ExtResource("2_ho76d")
+
+[node name="FiguraConstructor" type="Node2D" parent="." unique_id=66989019 instance=ExtResource("3_ykynd")]
+script = ExtResource("4_gaibm")
+capas = Array[ExtResource("5_d5aej")]([SubResource("Resource_cnaej"), SubResource("Resource_8l3lt"), SubResource("Resource_3oh8y"), SubResource("Resource_ng8ra"), SubResource("Resource_7atvm")])
+sombra = true
+sombra_ancho = 22.0
+sombra_desfase = 24.0
+sombra_opacidad = 0.35
+color_luz = Color(0.4862745, 1, 0.24705882, 1)
+posicion_luz = Vector2(0, 6)
+energia_luz = 0.7
+escala_luz = 0.6
+anim_luz = 1
+velocidad_luz = 1.2
+variacion_luz = 0.35
+texto_figura = "capa Cuerpo 35604a: 14,-16 14,16 -14,16 -14,-16
+capa Terminal 8a8578: 8,-16 8,-22 -8,-22 -8,-16
+capa Franja_peligro c8b83a: 14,-4 14,4 -14,4 -14,-4
+capa Fuga 7cff3f: 10,16 16,24 4,22 -6,26 -14,20 -14,16
+capa Simbolo d81b60: 0,-10 4,-6 0,-2 -4,-6
+sombra 22 8 24 0.35
+luz 7cff3f 0,6 0.7 0.6
+escala 1.0
+anim Fuga latir 1.4 8
+animluz pulsar 1.2 0.35"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1116655274]
+shape = SubResource("CircleShape2D_wtsbb")
+
+[node name="Mecanicas" type="Node2D" parent="." unique_id=331519314]
+script = ExtResource("6_avuwb")
+explota_al_morir = true
+explota_danio = 28.0
+
+[node name="Animacion" type="Node" parent="." unique_id=1682913012]
+script = ExtResource("7_b3mnw")

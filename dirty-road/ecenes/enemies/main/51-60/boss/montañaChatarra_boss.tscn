@@ -1,0 +1,112 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ecenes/enemies/class/enemigo.gd" id="1_axp8u"]
+[ext_resource type="FontFile" path="res://themes/Chakra_Petch/ChakraPetch-BoldItalic.ttf" id="2_pa407"]
+[ext_resource type="PackedScene" path="res://assets/stage/enemis/stages/stage51-60/boss/montañaChatarra.tscn" id="3_2pa0a"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_constructor.gd" id="4_y4uk1"]
+[ext_resource type="Script" path="res://assets/stage/enemis/classShape/figura_capa.gd" id="5_i5dsd"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/BossAttackComponent.gd" id="6_2kslc"]
+[ext_resource type="Script" path="res://ecenes/enemies/class/AnimacionEnemigo.gd" id="7_nwtpw"]
+
+[sub_resource type="Resource" id="Resource_u0kn8"]
+resource_local_to_scene = true
+script = ExtResource("5_i5dsd")
+nombre = "Base"
+puntos = PackedVector2Array(60, 16, 30, 34, -30, 34, -60, 16, -44, -10, 0, -26, 44, -10)
+color = Color(0.2901961, 0.27450982, 0.2509804, 1)
+
+[sub_resource type="Resource" id="Resource_dcnvh"]
+resource_local_to_scene = true
+script = ExtResource("5_i5dsd")
+nombre = "Chatarra_superior"
+puntos = PackedVector2Array(-30, -8, -10, -30, 14, -26, 32, -8, 10, -18, -12, -16)
+color = Color(0.37254903, 0.3529412, 0.3137255, 1)
+
+[sub_resource type="Resource" id="Resource_laoiv"]
+resource_local_to_scene = true
+script = ExtResource("5_i5dsd")
+nombre = "Pantalla"
+puntos = PackedVector2Array(8, 2, 24, 2, 24, 16, 8, 16)
+color = Color(0.0627451, 0.078431375, 0.09411765, 1)
+
+[sub_resource type="Resource" id="Resource_0i530"]
+resource_local_to_scene = true
+script = ExtResource("5_i5dsd")
+nombre = "Pantalla_on"
+puntos = PackedVector2Array(12, 6, 20, 6, 20, 12, 12, 12)
+color = Color(0.2509804, 0.8784314, 1, 1)
+animacion = 6
+anim_velocidad = 0.8
+anim_amplitud = 0.6
+
+[sub_resource type="Resource" id="Resource_eto8j"]
+resource_local_to_scene = true
+script = ExtResource("5_i5dsd")
+nombre = "Antena"
+puntos = PackedVector2Array(20, -16, 34, -38, 38, -34, 24, -14)
+color = Color(0.41568628, 0.39215687, 0.3529412, 1)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_8frmi"]
+radius = 124.1934
+
+[node name="enemigo" type="CharacterBody2D" unique_id=2006919752]
+script = ExtResource("1_axp8u")
+life = 1500.0
+speed = 75.0
+damage = 22.0
+mov_zigzag_grados = 10.0
+mov_zigzag_freq = 2.0
+mov_orbita = 0.5
+mov_dash_mult = 1.6
+mov_dash_freq = 0.5
+mov_separacion_fuerza = 1.0
+dano_al_tocar = true
+danio_contacto = 22.0
+radio_contacto = 90.0
+comportamiento_tipo = "embestida"
+anti_estructura = true
+categoria = "elite"
+nombre_texto = "Montaña de Chatarra"
+fuente_nombre = ExtResource("2_pa407")
+fuente_danio = ExtResource("2_pa407")
+orbes_min = 8
+orbes_max = 14
+orbe_valor = 3.0
+
+[node name="FiguraConstructor" type="Node2D" parent="." unique_id=66989019 instance=ExtResource("3_2pa0a")]
+script = ExtResource("4_y4uk1")
+capas = Array[ExtResource("5_i5dsd")]([SubResource("Resource_u0kn8"), SubResource("Resource_dcnvh"), SubResource("Resource_laoiv"), SubResource("Resource_0i530"), SubResource("Resource_eto8j")])
+sombra = true
+sombra_ancho = 105.0
+sombra_alto = 24.0
+sombra_desfase = 32.0
+color_luz = Color(0.2509804, 0.8784314, 1, 1)
+posicion_luz = Vector2(16, 9)
+energia_luz = 0.9
+escala_luz = 1.2
+anim_luz = 1
+velocidad_luz = 1.1
+variacion_luz = 0.2
+escala_global = 2.0
+texto_figura = "capa Base 4a4640: 60,16 30,34 -30,34 -60,16 -44,-10 0,-26 44,-10
+capa Chatarra_superior 5f5a50: -30,-8 -10,-30 14,-26 32,-8 10,-18 -12,-16
+capa Pantalla 101418: 8,2 24,2 24,16 8,16
+capa Pantalla_on 40e0ff: 12,6 20,6 20,12 12,12
+capa Antena 6a645a: 20,-16 34,-38 38,-34 24,-14
+sombra 105 24 32 0.3
+luz 40e0ff 16,9 0.9 1.2
+escala 2.0
+anim Pantalla_on parpadear 0.8 0.6
+animluz pulsar 1.1 0.2"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=512483190]
+shape = SubResource("CircleShape2D_8frmi")
+
+[node name="Ataques" type="Node2D" parent="." unique_id=601435642]
+script = ExtResource("6_2kslc")
+rayo = true
+onda = true
+rayo_color = Color(0.6, 0.85, 1, 0.85)
+
+[node name="Animacion" type="Node" parent="." unique_id=1942067710]
+script = ExtResource("7_nwtpw")

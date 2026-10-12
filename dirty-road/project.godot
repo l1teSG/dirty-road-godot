@@ -23,6 +23,8 @@ config/icon="uid://dqcco4yhy6ldm"
 EducationManager="*uid://7rfhdfi1gfn3"
 SaveManager="*uid://cmkryrq7ecb2c"
 BiomasaManager="*uid://dghni3v7to2ax"
+MejorasManager="*res://scripts/mejoras_manager.gd"
+AudioManager="*res://scripts/audio_manager.gd"
 
 [display]
 
@@ -82,6 +84,10 @@ fire_player=""
 enemi=""
 arbol=""
 player=""
+
+[gui]
+
+theme="res://themes/mainTheme.tres"
 
 [input]
 

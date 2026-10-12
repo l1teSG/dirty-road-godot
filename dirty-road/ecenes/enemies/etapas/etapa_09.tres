@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="EtapaConfig" format=3 uid="uid://bd1jv0o42i0jm"]
+
+[ext_resource type="Script" uid="uid://vyt7ho0roxls" path="res://scripts/enemigo_oleada_config.gd" id="1_lm5kr"]
+[ext_resource type="Resource" uid="uid://ja2u08a8acux" path="res://ecenes/enemies/main/81-90/talador/talador.tres" id="2_0qny4"]
+[ext_resource type="Resource" uid="uid://dxk4q3j5sfxyc" path="res://ecenes/enemies/main/81-90/motosierra/motosierra.tres" id="3_ceilt"]
+[ext_resource type="Resource" uid="uid://bylcape1xow84" path="res://ecenes/enemies/main/81-90/incendio/incendio.tres" id="4_wngkv"]
+[ext_resource type="PackedScene" path="res://ecenes/enemies/main/81-90/boss/aserraderoAndante_boss.tscn" id="5_8k8l1"]
+[ext_resource type="Script" uid="uid://b07d7n2c62y1x" path="res://scripts/etapa_config.gd" id="6_0c4ng"]
+
+[resource]
+script = ExtResource("6_0c4ng")
+nombre = "Etapa 9: Deforestación"
+enemigos = Array[ExtResource("1_lm5kr")]([ExtResource("2_0qny4"), ExtResource("3_ceilt"), ExtResource("4_wngkv")])
+enemigos_base_por_oleada = 18
+incremento_enemigos_por_oleada = 3
+escalado_vida_por_oleada = 0.3
+escalado_danio_por_oleada = 0.09
+mult_vida = 6.6
+mult_velocidad = 1.4
+mult_danio = 6.6
+jefe_escena = ExtResource("5_8k8l1")
+jefe_nombre = "Aserradero Andante"
+jefe_escoltas = 6

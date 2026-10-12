@@ -1,55 +1,232 @@
 extends Node
 
-const RUTA_GUARDADO := "user://partida.save"
+## ══════════════════════════════════════════════════════════
+##  SAVE MANAGER (autoload)
+##  · Guardado de partida POR SLOTS (máx. 5): user://partida_1..5.save
+##  · Metadatos de slots: user://slots.json (oleada, etapa, biomasa, fecha, tiempo)
+##  · Ajustes GLOBALES: user://ajustes.save (no se borran con "Nueva partida")
+##
+##  Todo el código existente (get_horda, cargar_partida, nueva_partida…)
+##  sigue funcionando, pero opera sobre el SLOT ACTUAL.
+## ══════════════════════════════════════════════════════════
 
-# Valores por defecto para una partida nueva
+## Se emite cuando 'datos' cambia por completo (cargar o nueva partida).
+signal datos_actualizados
+## Se emite cuando cambia un stat concreto (para que el jugador/árbol se refresquen).
+signal stats_actualizados
+## Se emite cuando cambia cualquier ajuste.
+signal ajustes_cambiados
+## Se emite cuando la lista de slots cambia (crear/borrar/guardar).
+signal slots_cambiados
+
+const MAX_SLOTS := 5
+const RUTA_AJUSTES := "user://ajustes.save"
+const RUTA_SLOTS_META := "user://slots.json"
+
+# Valores por defecto para una partida nueva.
 const DATOS_DEFECTO := {
 	"horda_actual": 1,
 	"vida_jugador": 100,
 	"vida_maxima": 100,
+	"biomasa": 0,
+	# id_carta -> nivel comprado (acumulable)
+	"mejoras": {},
+	# Stats finales (base + mejoras). El jugador y el árbol leen de aquí.
+	"stats": {
+		"jugador": {
+			"vida_maxima": 100,
+			"velocidad": 320.0,
+			"danio": 12.0,
+			"cadencia": 0.5,
+			"critico_prob": 0.05,
+			"critico_mult": 1.75,
+			"perforacion": 0,
+			"proyectiles_extra": 0,
+			"alcance": 1.0,
+			"tamano": 1.0,
+			"velocidad_dash": 620.0,
+			"cooldown_dash": 1.1,
+			"regen": 0.6,
+			"regen_espera": 6.0,
+			"super_danio": 80.0,
+			"super_radio": 130.0,
+			"orbes_radio": 1.0,
+			"orbes_valor": 1.0,
+			"xp_mult": 1.0,
+			"suerte": 0.0,
+			"armadura": 0.0,
+			"esquiva": 0.0,
+			"danio_continuo": 0.0,
+			"danio_elite": 0.0,
+			"danio_acuaticos": 0.0,
+			"danio_toxico": 0.0,
+			"detonar_prob": 0.0,
+			"descuento": 0.0,
+			"vision": 0.0,
+			"ralentizar": 0.0,
+			"inmunidad_nube": 0.0,
+			"inmunidad_fuego": 0.0,
+			"bonus_quieto": 0.0,
+			"paralizar": 0.0,
+			"aturdir": 0.0,
+			"dron": 0.0,
+		},
+		"arbol": {
+			"vida_maxima": 800,
+			"dano_recibido_mult": 1.0,
+			"regen": 1.0,
+			"regen_espera": 10.0,
+			"espinas": 0.0,
+			"barrera": 0,
+			"congelar": 0.0,
+		},
+	},
 }
 
-var datos: Dictionary = DATOS_DEFECTO.duplicate()
+# Ajustes por defecto (globales, compartidos por todos los slots).
+const AJUSTES_DEFECTO := {
+	"disparo_automatico": true,
+	"edu_escala": 1.0,
+	"edu_posicion": 0,          # 0 arriba, 1 centro, 2 abajo
+	"edu_duracion_mult": 1.0,
+	"edu_insignia": true,
+	"edu_sonido": true,
+	"vol_master": 1.0,
+	"vol_musica": 0.7,
+	"vol_efectos": 0.9,
+	"hud_escala": 1.0,
+	"hud_opacidad": 1.0,
+	"fondo_shader": true,
+}
 
-## Se activa al llamar nueva_partida() desde un menú. El WaveManager la
-## consulta al arrancar para IGNORAR los overrides de debug en esa partida
-## (oleada inicial / enemigos fijos), así "Nueva partida" siempre empieza
-## en la horda 1 con el pool correcto de la etapa.
-var evitar_debug_esta_partida := false
+var datos: Dictionary = DATOS_DEFECTO.duplicate(true)
+var ajustes: Dictionary = AJUSTES_DEFECTO.duplicate(true)
+
+## Slot activo (1..MAX_SLOTS).
+var slot_actual: int = 1
+## Tiempo jugado acumulado de la partida en curso (segundos).
+var _tiempo_jugado: float = 0.0
+var _acumulando: bool = false
 
 
 func _ready() -> void:
-	# Los autoloads persisten entre escenas: la partida se carga UNA vez
-	# por arranque del juego, aquí. NO llames cargar_partida() desde una
-	# escena: una recarga volvería a leer el archivo y podría revivir
-	# datos de una partida que nueva_partida() acaba de borrar.
-	cargar_partida()
+	cargar_ajustes()
+	# Recuerda el último slot usado si existía.
+	var meta := _leer_meta()
+	if meta.has("ultimo_slot"):
+		slot_actual = clampi(int(meta["ultimo_slot"]), 1, MAX_SLOTS)
+	# Carga la partida del slot actual UNA sola vez al arrancar.
+	if hay_partida_guardada():
+		cargar_partida()
+
+
+func _process(delta: float) -> void:
+	if _acumulando:
+		_tiempo_jugado += delta
+
+
+## El nivel llama a esto al entrar salir; controla el cronómetro de la partida.
+func set_jugando(activo: bool) -> void:
+	_acumulando = activo
+
+
+# ───────────── SLOTS ─────────────
+
+func ruta_slot(n: int) -> String:
+	return "user://partida_%d.save" % clampi(n, 1, MAX_SLOTS)
+
+
+func slot_actual_ruta() -> String:
+	return ruta_slot(slot_actual)
 
 
 func hay_partida_guardada() -> bool:
-	return FileAccess.file_exists(RUTA_GUARDADO)
+	return slot_tiene_partida(slot_actual)
 
+
+func slot_tiene_partida(n: int) -> bool:
+	return FileAccess.file_exists(ruta_slot(n))
+
+
+func set_slot_actual(n: int) -> void:
+	slot_actual = clampi(n, 1, MAX_SLOTS)
+	var meta := _leer_meta()
+	meta["ultimo_slot"] = slot_actual
+	_guardar_meta(meta)
+
+
+## Lista de slots con metadatos para el menú.
+func listar_slots() -> Array:
+	var meta := _leer_meta()
+	var lista: Array = []
+	for n in range(1, MAX_SLOTS + 1):
+		var info: Dictionary = meta.get(str(n), {})
+		var tiene := slot_tiene_partida(n)
+		lista.append({
+			"slot": n,
+			"existe": tiene,
+			"horda": int(info.get("horda", 1)),
+			"etapa": int(info.get("etapa", 1)),
+			"biomasa": int(info.get("biomasa", 0)),
+			"fecha": str(info.get("fecha", "")),
+			"tiempo": float(info.get("tiempo", 0.0)),
+			"activo": n == slot_actual,
+		})
+	return lista
+
+
+## Carga un slot y lo deja como actual. Devuelve true si había partida.
+func cargar_slot(n: int) -> bool:
+	set_slot_actual(n)
+	if not slot_tiene_partida(n):
+		datos = DATOS_DEFECTO.duplicate(true)
+		return false
+	return cargar_partida()
+
+
+## Crea una partida nueva en un slot (sobrescribe).
+func nueva_partida_slot(n: int) -> void:
+	set_slot_actual(n)
+	_tiempo_jugado = 0.0
+	nueva_partida()
+
+
+## Borra un slot (partida + metadatos).
+func borrar_slot(n: int) -> void:
+	var ruta := ruta_slot(n)
+	if FileAccess.file_exists(ruta):
+		DirAccess.remove_absolute(ruta)
+	var meta := _leer_meta()
+	meta.erase(str(n))
+	_guardar_meta(meta)
+	slots_cambiados.emit()
+
+
+# ───────────── GUARDADO DE PARTIDA ─────────────
 
 func guardar_partida() -> void:
-	var archivo = FileAccess.open(RUTA_GUARDADO, FileAccess.WRITE)
+	var archivo := FileAccess.open(slot_actual_ruta(), FileAccess.WRITE)
 	if archivo == null:
 		push_error("SaveManager: no se pudo abrir el archivo para guardar")
 		return
-
 	archivo.store_string(JSON.stringify(datos))
 	archivo.close()
+	_guardar_meta_slot()
+	slots_cambiados.emit()
 
 
 func cargar_partida() -> bool:
-	if not hay_partida_guardada():
-		return false
+	return cargar_desde_ruta(slot_actual_ruta())
 
-	var archivo = FileAccess.open(RUTA_GUARDADO, FileAccess.READ)
+
+func cargar_desde_ruta(ruta: String) -> bool:
+	if not FileAccess.file_exists(ruta):
+		return false
+	var archivo := FileAccess.open(ruta, FileAccess.READ)
 	if archivo == null:
 		push_error("SaveManager: no se pudo abrir el archivo para leer")
 		return false
-
-	var contenido = archivo.get_as_text()
+	var contenido := archivo.get_as_text()
 	archivo.close()
 
 	var resultado = JSON.parse_string(contenido)
@@ -57,49 +234,200 @@ func cargar_partida() -> bool:
 		push_error("SaveManager: archivo de guardado corrupto")
 		return false
 
-	# combina con los valores por defecto, así si agregas campos nuevos
-	# en el futuro y cargas una partida vieja, no faltan claves
-	datos = DATOS_DEFECTO.duplicate()
+	datos = DATOS_DEFECTO.duplicate(true)
 	for clave in resultado.keys():
 		datos[clave] = resultado[clave]
+	_fusionar_defecto("stats")
+	_fusionar_defecto("mejoras")
 
+	datos_actualizados.emit()
+	stats_actualizados.emit()
 	return true
 
 
+## Rellena las claves que falten de un sub-diccionario anidado con los defaults.
+func _fusionar_defecto(clave: String) -> void:
+	var actual = datos.get(clave)
+	var defecto = DATOS_DEFECTO.get(clave, {})
+	if typeof(actual) != TYPE_DICTIONARY or typeof(defecto) != TYPE_DICTIONARY:
+		datos[clave] = (defecto as Dictionary).duplicate(true)
+		return
+	for k in defecto.keys():
+		if typeof(defecto[k]) == TYPE_DICTIONARY:
+			if typeof(actual.get(k)) != TYPE_DICTIONARY:
+				actual[k] = {}
+			for kk in (defecto[k] as Dictionary).keys():
+				if not actual[k].has(kk):
+					actual[k][kk] = defecto[k][kk]
+		elif not actual.has(k):
+			actual[k] = defecto[k]
+
+
 func nueva_partida() -> void:
-	# Resetea memoria Y disco. A partir de esta llamada get_horda() == 1
-	# y la bandera evitar_debug_esta_partida queda activa para el
-	# WaveManager de la escena que se cargue a continuación.
-	datos = DATOS_DEFECTO.duplicate()
-	evitar_debug_esta_partida = true
-	if hay_partida_guardada():
-		DirAccess.remove_absolute(RUTA_GUARDADO)
+	datos = DATOS_DEFECTO.duplicate(true)
+	_tiempo_jugado = 0.0
+	guardar_partida()  # Sobrescribe el archivo inmediatamente con horda 1
+	datos_actualizados.emit()
+	stats_actualizados.emit()
 
 
 func borrar_partida() -> void:
-	if hay_partida_guardada():
-		DirAccess.remove_absolute(RUTA_GUARDADO)
+	borrar_slot(slot_actual)
 
 
-# ── Helpers para leer/escribir campos individuales sin tocar todo el dict ──
+# ───────────── METADATOS DE SLOTS ─────────────
+
+func _leer_meta() -> Dictionary:
+	if not FileAccess.file_exists(RUTA_SLOTS_META):
+		return {}
+	var f := FileAccess.open(RUTA_SLOTS_META, FileAccess.READ)
+	if f == null:
+		return {}
+	var txt := f.get_as_text()
+	f.close()
+	var d = JSON.parse_string(txt)
+	return d if typeof(d) == TYPE_DICTIONARY else {}
+
+
+func _guardar_meta(meta: Dictionary) -> void:
+	var f := FileAccess.open(RUTA_SLOTS_META, FileAccess.WRITE)
+	if f == null:
+		return
+	f.store_string(JSON.stringify(meta))
+	f.close()
+
+
+func _guardar_meta_slot() -> void:
+	var meta := _leer_meta()
+	meta["ultimo_slot"] = slot_actual
+	meta[str(slot_actual)] = {
+		"horda": get_horda(),
+		"etapa": _etapa_desde_horda(get_horda()),
+		"biomasa": get_biomasa(),
+		"fecha": Time.get_datetime_string_from_system(false, true),
+		"tiempo": _tiempo_jugado,
+	}
+	_guardar_meta(meta)
+
+
+func _etapa_desde_horda(horda: int) -> int:
+	return clampi(int((maxi(horda, 1) - 1) / 10) + 1, 1, 10)
+
+
+# ───────────── AJUSTES ─────────────
+
+func get_ajuste(clave: String, defecto: Variant = null) -> Variant:
+	if ajustes.has(clave):
+		return ajustes[clave]
+	if defecto != null:
+		return defecto
+	return AJUSTES_DEFECTO.get(clave, null)
+
+
+func set_ajuste(clave: String, valor: Variant) -> void:
+	ajustes[clave] = valor
+	guardar_ajustes()
+	ajustes_cambiados.emit()
+
+
+func guardar_ajustes() -> void:
+	var f := FileAccess.open(RUTA_AJUSTES, FileAccess.WRITE)
+	if f == null:
+		push_error("SaveManager: no se pudo guardar ajustes")
+		return
+	f.store_string(JSON.stringify(ajustes))
+	f.close()
+
+
+func cargar_ajustes() -> void:
+	ajustes = AJUSTES_DEFECTO.duplicate(true)
+	if not FileAccess.file_exists(RUTA_AJUSTES):
+		return
+	var f := FileAccess.open(RUTA_AJUSTES, FileAccess.READ)
+	if f == null:
+		return
+	var txt := f.get_as_text()
+	f.close()
+	var d = JSON.parse_string(txt)
+	if typeof(d) == TYPE_DICTIONARY:
+		for k in d.keys():
+			ajustes[k] = d[k]
+
+
+func reset_ajustes() -> void:
+	ajustes = AJUSTES_DEFECTO.duplicate(true)
+	guardar_ajustes()
+	ajustes_cambiados.emit()
+
+
+# ───────────── Helpers de partida (sin tocar todo el dict) ─────────────
 
 func set_horda(numero: int) -> void:
-	datos["horda_actual"] = maxi(numero, 1)
-
+	datos["horda_actual"] = numero
 
 func get_horda() -> int:
-	return maxi(int(datos.get("horda_actual", 1)), 1)
-
+	return int(datos.get("horda_actual", 1))
 
 func set_vida(actual: int, maxima: int = -1) -> void:
 	datos["vida_jugador"] = actual
 	if maxima > 0:
 		datos["vida_maxima"] = maxima
 
-
 func get_vida() -> int:
-	return datos.get("vida_jugador", 100)
-
+	return int(datos.get("vida_jugador", 100))
 
 func get_vida_maxima() -> int:
-	return datos.get("vida_maxima", 100)
+	return int(datos.get("vida_maxima", 100))
+
+func set_biomasa(cantidad: int) -> void:
+	datos["biomasa"] = cantidad
+
+func get_biomasa() -> int:
+	return int(datos.get("biomasa", 0))
+
+
+# ───────────── STATS ─────────────
+
+func get_stat(ruta: String, defecto: float = 0.0) -> float:
+	var partes := ruta.split(".", false, 1)
+	var stats: Dictionary = datos.get("stats", {})
+	if partes.size() == 2:
+		var grupo: Dictionary = stats.get(partes[0], {})
+		if grupo.has(partes[1]):
+			return float(grupo[partes[1]])
+	return defecto
+
+func set_stat(ruta: String, valor) -> void:
+	var partes := ruta.split(".", false, 1)
+	if partes.size() != 2:
+		push_warning("SaveManager.set_stat: ruta inválida '%s'" % ruta)
+		return
+	var stats: Dictionary = datos.get("stats", {})
+	if not stats.has(partes[0]):
+		stats[partes[0]] = {}
+	stats[partes[0]][partes[1]] = valor
+
+func sumar_stat(ruta: String, delta: float) -> void:
+	set_stat(ruta, get_stat(ruta) + delta)
+
+func multiplicar_stat(ruta: String, pct: float) -> void:
+	set_stat(ruta, get_stat(ruta) * (1.0 + pct))
+
+func notificar_stats() -> void:
+	stats_actualizados.emit()
+
+
+# ───────────── MEJORAS ─────────────
+
+func get_mejora(id: String) -> int:
+	var mejoras: Dictionary = datos.get("mejoras", {})
+	return int(mejoras.get(id, 0))
+
+func subir_mejora(id: String) -> int:
+	var mejoras: Dictionary = datos.get("mejoras", {})
+	mejoras[id] = int(mejoras.get(id, 0)) + 1
+	datos["mejoras"] = mejoras
+	return mejoras[id]
+
+func get_mejoras() -> Dictionary:
+	return (datos.get("mejoras", {}) as Dictionary).duplicate()
