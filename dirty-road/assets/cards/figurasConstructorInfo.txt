@@ -998,3 +998,19 @@ capa HazDer #ffff00: 7,-10 22,-16 22,-4
 capa ReciclaHoja #32cd32: 0,4 -3,-2 3,-2
 escala 1.1
 sombra 26 10 18 0.4
+---
+NOMBRE: Luciérnaga Guardiana
+capa CuerpoFondo #2e8b57: 0,14 -10,4 -10,-6 0,-14 10,-6 10,4
+capa CuerpoFrente #3cb371: 0,10 -6,3 -6,-4 0,-10 6,-4 6,3
+capa Cabeza #006400: 0,-14 -6,-20 0,-24 6,-20
+capa Ojo1 #ffd700: -3,-19 -1,-19 -2,-17
+capa Ojo2 #ffd700: 1,-19 3,-19 2,-17
+capa Ala1 #e0ffff: -10,-4 -20,-14 -8,-8
+capa Ala2 #e0ffff: 10,-4 20,-14 8,-8
+capa AlaInt1 #adff2f: -10,-4 -16,-10 -8,-7
+capa BrillosFondo #ffff00: 0,18 -10,8 -10,-2 0,-18 10,-2 10,8
+capa LuzCola #ffff00: 0,16 -3,22 3,22
+capa Chispa1 #ffffff: -16,-18 -13,-21 -12,-17
+capa Chispa2 #ffffff: 16,-18 13,-21 12,-17
+escala 1.2
+sombra 22 8 18 0.3
