@@ -4,46 +4,105 @@ import Reveal from '../ui/Reveal.astro';
 import DownloadButton from '../DownloadButton';
 import GitHubStats from '../GitHubStats';
 import Changelog from '../Changelog';
+import QRCode from 'qrcode';
 
 const owner = 'l1teSG';
 const repo = 'dirty-road-godot';
+
+// Cabina de descarga (DG1): pitch + sellos + botón a la izquierda; captura y QR
+// a la derecha. El QR se genera en build-time como SVG (sin JS en el cliente).
+const releasesUrl = `https://github.com/${owner}/${repo}/releases/latest`;
+const qrSvg = await QRCode.toString(releasesUrl, {
+  type: 'svg',
+  margin: 1,
+  width: 200,
+  color: { dark: '#eef1e3', light: '#00000000' },
+});
+
+const sellos = ['Gratis', 'Android (APK)', 'Sin anuncios'];
 ---
 <section id="descargar" data-tint="#e3a63b" class="border-t border-line px-4 py-24 sm:py-28">
-  <div class="mx-auto max-w-3xl text-center">
-    <Reveal>
-      <SectionHeading
-        kicker="Juega gratis"
-        titulo="Descarga Dirty Road"
-        descripcion="Disponible gratis para Android (APK). Descarga, instala y empieza a defender el árbol."
-        centrado
-      />
-    </Reveal>
-    <Reveal delay={100}>
-      <div class="tile mx-auto mt-12 max-w-xl p-8">
-        <DownloadButton client:load owner={owner} repo={repo} />
+  <div class="mx-auto max-w-6xl">
+    <div class="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
+      <!-- Pitch + descarga -->
+      <div>
+        <Reveal>
+          <SectionHeading
+            kicker="Juega gratis"
+            titulo="Descarga Dirty Road"
+            descripcion="Defiende el último árbol desde tu teléfono. Descarga el APK, instálalo y empieza a jugar en segundos."
+          />
+        </Reveal>
+
+        <Reveal delay={80}>
+          <ul class="mt-7 flex flex-wrap gap-2">
+            {sellos.map((s) => (
+              <li class="rounded-full border border-line bg-surface px-3 py-1 text-xs font-medium text-moss">{s}</li>
+            ))}
+          </ul>
+        </Reveal>
+
+        <Reveal delay={140}>
+          <div class="tile mt-8 p-6 sm:p-7">
+            <DownloadButton client:load owner={owner} repo={repo} />
+          </div>
+        </Reveal>
+
+        <Reveal delay={200}>
+          <div class="mt-6">
+            <GitHubStats client:load owner={owner} repo={repo} />
+          </div>
+        </Reveal>
       </div>
-    </Reveal>
-    <Reveal delay={150}>
-      <div class="mt-8">
-        <GitHubStats client:load owner={owner} repo={repo} />
-      </div>
-    </Reveal>
-    <Reveal delay={200}>
-      <div class="mx-auto mt-14 max-w-2xl text-left">
-        <h3 class="mb-4 border-b border-line pb-3 text-lg font-semibold text-bone">Novedades</h3>
+
+      <!-- Captura + QR -->
+      <Reveal delay={140}>
+        <div class="mx-auto w-full max-w-md">
+          <div class="rounded-[1.75rem] border border-line-strong bg-surface p-2 shadow-glow-leaf">
+            <img
+              src="/images/juego/etapas/etapa_01.png"
+              alt="Captura de Dirty Road en un dispositivo"
+              width="640"
+              height="360"
+              loading="lazy"
+              decoding="async"
+              class="aspect-video w-full rounded-[1.25rem] object-cover"
+            />
+          </div>
+
+          <div class="mt-6 flex items-center gap-4 rounded-[3px] border border-line bg-surface p-4">
+            <div class="h-20 w-20 shrink-0 [&_svg]:h-full [&_svg]:w-full" set:html={qrSvg} aria-hidden="true"></div>
+            <div>
+              <p class="text-sm font-medium text-bone">Escaneá para instalar</p>
+              <p class="mt-1 text-xs leading-relaxed text-moss">
+                Abre la última versión en tu teléfono y descarga el APK.
+              </p>
+            </div>
+          </div>
+        </div>
+      </Reveal>
+    </div>
+
+    <!-- Novedades -->
+    <Reveal delay={160}>
+      <div class="mx-auto mt-16 max-w-3xl rounded-[4px] border border-line bg-surface/60 p-6 sm:p-8">
+        <div class="mb-5 flex items-center gap-3 border-b border-line pb-4">
+          <span class="h-px w-6 bg-leaf" aria-hidden="true"></span>
+          <h3 class="text-lg font-semibold text-bone">Novedades</h3>
+        </div>
         <Changelog client:load owner={owner} repo={repo} />
+        <div class="mt-8 border-t border-line pt-5">
+          <a
+            href={`https://github.com/${owner}/${repo}/releases`}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group inline-flex items-center gap-3 text-sm text-moss transition-colors hover:text-bone"
+          >
+            Ver todas las versiones en GitHub
+            <span class="h-px w-8 bg-leaf transition-all duration-300 group-hover:w-14" aria-hidden="true"></span>
+          </a>
+        </div>
       </div>
-    </Reveal>
-    <Reveal delay={250}>
-      <a
-        href={`https://github.com/${owner}/${repo}/releases`}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="group mt-10 inline-flex items-center gap-3 text-sm text-moss transition-colors hover:text-bone"
-      >
-        Ver todas las versiones en GitHub
-        <span class="h-px w-8 bg-leaf transition-all duration-300 group-hover:w-14" aria-hidden="true"></span>
-      </a>
     </Reveal>
   </div>
 </section>
