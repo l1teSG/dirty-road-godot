@@ -99,6 +99,18 @@ const AJUSTES_DEFECTO := {
 	"fondo_shader": true,
 }
 
+# Rangos válidos de los ajustes (se aplican al cargar para sanear valores).
+const RANGOS_AJUSTES := {
+	"edu_escala": [0.6, 1.6],
+	"edu_posicion": [0, 2],
+	"edu_duracion_mult": [0.5, 2.0],
+	"vol_master": [0.0, 1.0],
+	"vol_musica": [0.0, 1.0],
+	"vol_efectos": [0.0, 1.0],
+	"hud_escala": [0.6, 1.2],
+	"hud_opacidad": [0.3, 1.0],
+}
+
 var datos: Dictionary = DATOS_DEFECTO.duplicate(true)
 var ajustes: Dictionary = AJUSTES_DEFECTO.duplicate(true)
 
@@ -108,8 +120,20 @@ var slot_actual: int = 1
 var _tiempo_jugado: float = 0.0
 var _acumulando: bool = false
 
+## Ajustes pendientes de escribir a disco (evita escribir en cada tick del slider).
+var _sucio_ajustes: bool = false
+var _timer_ajustes: Timer = null
+
 
 func _ready() -> void:
+	# Escritura diferida de ajustes: agrupa ráfagas de cambios (sliders) en una
+	# sola escritura y se fuerza con flush_ajustes() al salir/pausar la app.
+	_timer_ajustes = Timer.new()
+	_timer_ajustes.one_shot = true
+	_timer_ajustes.wait_time = 0.4
+	_timer_ajustes.timeout.connect(guardar_ajustes)
+	add_child(_timer_ajustes)
+
 	cargar_ajustes()
 	# Recuerda el último slot usado si existía.
 	var meta := _leer_meta()
@@ -317,20 +341,37 @@ func _etapa_desde_horda(horda: int) -> int:
 # ───────────── AJUSTES ─────────────
 
 func get_ajuste(clave: String, defecto: Variant = null) -> Variant:
+	# Asegura que toda clave conocida exista en memoria (defecto si faltaba).
+	if not ajustes.has(clave) and AJUSTES_DEFECTO.has(clave):
+		ajustes[clave] = AJUSTES_DEFECTO[clave]
 	if ajustes.has(clave):
 		return ajustes[clave]
 	if defecto != null:
 		return defecto
-	return AJUSTES_DEFECTO.get(clave, null)
+	return null
 
 
 func set_ajuste(clave: String, valor: Variant) -> void:
 	ajustes[clave] = valor
-	guardar_ajustes()
+	# No escribe a disco en cada cambio: marca sucio y reprograma el volcado.
+	_sucio_ajustes = true
+	if _timer_ajustes != null:
+		_timer_ajustes.start()
+	else:
+		guardar_ajustes()
 	ajustes_cambiados.emit()
 
 
+## Fuerza la escritura si hay cambios pendientes. Llamar al salir/pausar/cerrar.
+func flush_ajustes() -> void:
+	if _sucio_ajustes:
+		guardar_ajustes()
+
+
 func guardar_ajustes() -> void:
+	_sucio_ajustes = false
+	if _timer_ajustes != null:
+		_timer_ajustes.stop()
 	var f := FileAccess.open(RUTA_AJUSTES, FileAccess.WRITE)
 	if f == null:
 		push_error("SaveManager: no se pudo guardar ajustes")
@@ -341,23 +382,51 @@ func guardar_ajustes() -> void:
 
 func cargar_ajustes() -> void:
 	ajustes = AJUSTES_DEFECTO.duplicate(true)
-	if not FileAccess.file_exists(RUTA_AJUSTES):
-		return
-	var f := FileAccess.open(RUTA_AJUSTES, FileAccess.READ)
-	if f == null:
-		return
-	var txt := f.get_as_text()
-	f.close()
-	var d = JSON.parse_string(txt)
-	if typeof(d) == TYPE_DICTIONARY:
-		for k in d.keys():
-			ajustes[k] = d[k]
+	if FileAccess.file_exists(RUTA_AJUSTES):
+		var f := FileAccess.open(RUTA_AJUSTES, FileAccess.READ)
+		if f != null:
+			var txt := f.get_as_text()
+			f.close()
+			var d = JSON.parse_string(txt)
+			if typeof(d) == TYPE_DICTIONARY:
+				for k in d.keys():
+					ajustes[k] = d[k]
+	# Claves nuevas que no estaban en el archivo guardado.
+	for k in AJUSTES_DEFECTO.keys():
+		if not ajustes.has(k):
+			ajustes[k] = AJUSTES_DEFECTO[k]
+	_sanear_ajustes()
+
+
+## Recorta valores fuera de rango (archivos viejos o editados a mano).
+func _sanear_ajustes() -> void:
+	for clave in RANGOS_AJUSTES.keys():
+		if not ajustes.has(clave):
+			continue
+		var r: Array = RANGOS_AJUSTES[clave]
+		var v = ajustes[clave]
+		if typeof(v) == TYPE_BOOL or typeof(v) == TYPE_NIL:
+			continue
+		if typeof(v) == TYPE_INT:
+			ajustes[clave] = clampi(int(v), int(r[0]), int(r[1]))
+		elif typeof(v) == TYPE_FLOAT:
+			ajustes[clave] = clampf(float(v), float(r[0]), float(r[1]))
 
 
 func reset_ajustes() -> void:
 	ajustes = AJUSTES_DEFECTO.duplicate(true)
 	guardar_ajustes()
 	ajustes_cambiados.emit()
+
+
+## Vuelca los ajustes cuando la app pierde foco, se pausa o se cierra.
+func _notification(what: int) -> void:
+	match what:
+		NOTIFICATION_WM_CLOSE_REQUEST, \
+		NOTIFICATION_WM_GO_BACK_REQUEST, \
+		NOTIFICATION_APPLICATION_PAUSED, \
+		NOTIFICATION_APPLICATION_FOCUS_OUT:
+			flush_ajustes()
 
 
 # ───────────── Helpers de partida (sin tocar todo el dict) ─────────────

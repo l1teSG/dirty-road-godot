@@ -9,9 +9,10 @@ extends Control
 const RUTA_NIVEL := "res://demo/level 1/niviel1.tscn"
 const RUTA_MENU := "res://ui/main/main.tscn"
 const RUTA_SHADER := "res://ui/main/fondo.gdshader"
+const CONFIRMACION := preload("res://ui/confirmacion.gd")
 
 var _lista: VBoxContainer
-var _confirm: ConfirmationDialog
+var _confirm = null
 var _pendiente: int = 0
 
 
@@ -43,7 +44,7 @@ func _construir() -> void:
 	add_child(centro)
 
 	var col := VBoxContainer.new()
-	col.add_theme_constant_override("separation", 22)
+	col.add_theme_constant_override("separation", 18)
 	centro.add_child(col)
 
 	var titulo := Label.new()
@@ -53,24 +54,21 @@ func _construir() -> void:
 	col.add_child(titulo)
 
 	_lista = VBoxContainer.new()
-	_lista.add_theme_constant_override("separation", 14)
+	_lista.add_theme_constant_override("separation", 12)
 	col.add_child(_lista)
 
 	var volver := Button.new()
 	volver.text = "VOLVER"
-	volver.custom_minimum_size = Vector2(320, 76)
+	volver.custom_minimum_size = Vector2(320, 72)
 	volver.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	volver.focus_mode = Control.FOCUS_NONE
 	EstiloUI.boton_menu(volver, 36)
 	volver.pressed.connect(_ir_al_menu)
 	col.add_child(volver)
 
-	_confirm = ConfirmationDialog.new()
-	_confirm.title = "Confirmar"
-	_confirm.ok_button_text = "BORRAR"
-	_confirm.cancel_button_text = "CANCELAR"
-	_confirm.confirmed.connect(_on_confirmar)
+	_confirm = CONFIRMACION.new()
 	add_child(_confirm)
+	_confirm.confirmado.connect(_on_confirmar)
 
 
 func _refrescar() -> void:
@@ -82,7 +80,7 @@ func _refrescar() -> void:
 
 func _tarjeta(s: Dictionary) -> Control:
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(900, 150)
+	panel.custom_minimum_size = Vector2(900, 140)
 
 	var hb := HBoxContainer.new()
 	hb.add_theme_constant_override("separation", 20)
@@ -139,8 +137,10 @@ func _on_jugar(slot: int, existe: bool) -> void:
 
 func _pedir_borrar(slot: int) -> void:
 	_pendiente = slot
-	_confirm.dialog_text = "¿Borrar la partida del slot %d?" % slot
-	_confirm.popup_centered()
+	_confirm.abrir(
+		"¿Borrar la partida del slot %d? Esta acción no se puede deshacer." % slot,
+		"BORRAR", "CANCELAR", true
+	)
 
 
 func _on_confirmar() -> void:

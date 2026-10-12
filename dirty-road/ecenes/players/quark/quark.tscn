@@ -12,6 +12,7 @@
 [ext_resource type="Script" uid="uid://drruqg2k50oba" path="res://ecenes/cards/gestorCartas.gd" id="8_cartas"]
 [ext_resource type="Resource" path="res://assets/cards/cartasConfig.tres" id="9_cfg"]
 [ext_resource type="Script" uid="uid://c03wvi3avfsnh" path="res://ecenes/players/quark/menu_debug.gd" id="10_dbg"]
+[ext_resource type="Script" uid="uid://55ggijcywijg" path="res://ecenes/players/quark/joystick_apuntado.gd" id="11_apuntado"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_xqmf3"]
 radius = 463.13
@@ -203,7 +204,7 @@ alignment = 1
 layout_mode = 2
 
 [node name="BarraVida" type="ProgressBar" parent="ui/margenUi/ContenedorVertical/FilaVida" index="0" unique_id=1067875394]
-custom_minimum_size = Vector2(360, 14)
+custom_minimum_size = Vector2(360, 20)
 layout_mode = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_mvreb")
 theme_override_styles/fill = SubResource("StyleBoxFlat_lx2x3")
@@ -238,12 +239,11 @@ theme_override_font_sizes/font_size = 40
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -56.0
-offset_bottom = 56.0
+offset_left = -124.0
+offset_top = 24.0
+offset_right = -28.0
+offset_bottom = 120.0
 grow_horizontal = 0
-scale = Vector2(2, 2)
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 100
 
 [node name="ajustes" type="Button" parent="ui/ajuste" index="0" unique_id=1655672500]
 modulate = Color(0, 1, 0.53333336, 1)
@@ -295,10 +295,14 @@ visible = false
 
 [node name="Joystick" type="VirtualJoystick" parent="controls" index="0" unique_id=309025352]
 z_index = -1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
 offset_left = 289.0
-offset_top = 634.0
+offset_top = -446.0
 offset_right = 546.0
-offset_bottom = 889.0
+offset_bottom = -191.0
+grow_vertical = 0
 joystick_mode = 2
 joystick_size = 345.0
 tip_size = 250.0
@@ -333,6 +337,10 @@ texture_pressed = SubResource("GradientTexture2D_fm6mt")
 shape = SubResource("CircleShape2D_v2d8e")
 action = "mega"
 
+[node name="JoystickApuntado" type="Control" parent="controls" index="2" unique_id=1477331095]
+visible = false
+script = ExtResource("11_apuntado")
+
 [node name="Cartas" type="CanvasLayer" parent="." index="13" unique_id=1700597704]
 layer = 100
 script = ExtResource("8_cartas")
@@ -340,7 +348,7 @@ config = ExtResource("9_cfg")
 
 [node name="MenuDebug" type="CanvasLayer" parent="." index="14" unique_id=2070407684]
 script = ExtResource("10_dbg")
-abrir_al_iniciar = true
+abrir_al_iniciar = false
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]

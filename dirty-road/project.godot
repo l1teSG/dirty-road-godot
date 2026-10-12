@@ -33,6 +33,7 @@ window/size/viewport_height=1080
 window/size/mode=3
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
+window/handheld/orientation=4
 window/bg_color=Color(0.37817338, 0.70103526, 0.57091427, 1)
 
 [dotnet]

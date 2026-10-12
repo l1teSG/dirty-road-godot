@@ -15,6 +15,7 @@ extends CanvasLayer
 
 @export_category("General")
 ## Si está en false, el menú no se crea (útil para builds de producción).
+## Además solo se crea en builds de depuración (OS.is_debug_build()).
 @export var activo: bool = true
 ## Tecla para abrir/cerrar el menú.
 @export var tecla_abrir: Key = KEY_F1
@@ -88,7 +89,7 @@ var _rutas_jefes: Array = []
 
 
 func _ready() -> void:
-	if not activo:
+	if not activo or not OS.is_debug_build():
 		set_process(false)
 		return
 	layer = 150
