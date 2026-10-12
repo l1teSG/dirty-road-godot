@@ -749,3 +749,18 @@ capa Enredadera #32cd32: -3,-4 -8,-1 -3,2
 capa Hoja #adff2f: -8,-1 -12,1 -8,4
 escala 1.0
 sombra 26 10 18 0.4
+---
+NOMBRE: Red Tupida
+capa RedFondo #4682b4: -16,-12 16,-12 13,18 -13,18
+capa CuerdaV1 #f5deb3: -16,-12 -8,18 -6,17 -14,-11
+capa CuerdaV2 #f5deb3: 16,-12 8,18 6,17 14,-11
+capa CuerdaH1 #deb887: -15,-4 15,-4 15,-2 -15,-2
+capa CuerdaH2 #deb887: -14,4 14,4 14,6 -14,6
+capa CuerdaH3 #deb887: -13,12 13,12 13,14 -13,14
+capa Nudo1 #cd853f: -9,-4 -6,-4 -6,-2 -9,-2
+capa Nudo2 #cd853f: 5,4 8,4 8,6 5,6
+capa Flotador1 #ff4500: -18,-14 -12,-14 -12,-10 -18,-10
+capa Flotador2 #ff4500: 18,-14 12,-14 12,-10 18,-10
+capa Brillo #e0ffff: -13,15 -10,15 -10,-11 -13,-11
+escala 1.2
+sombra 32 12 20 0.4
