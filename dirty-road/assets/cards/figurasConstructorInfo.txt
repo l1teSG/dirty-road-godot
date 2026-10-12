@@ -1170,3 +1170,16 @@ capa Viento1 #b0e0e6: -20,8 -8,6 2,8 -8,10
 capa Viento2 #87ceeb: -18,-8 -6,-10 4,-8 -6,-6
 escala 1.1
 sombra 22 8 18 0.3
+---
+NOMBRE: Bruma Purificadora
+capa NubeFondo #b0e0e6: 0,12 -18,4 -12,-8 0,-12 12,-8 18,4
+capa NubeMedia #e0ffff: 0,7 -12,2 -7,-5 0,-8 7,-5 12,2
+capa NubeFrente #ffffff: 0,3 -7,0 -3,-4 3,-4 7,0
+capa Gota1 #00bfff: -6,12 -4,17 -8,17
+capa Gota2 #1e90ff: 4,12 6,17 2,17
+capa Gota3 #00bfff: 0,15 -2,20 2,20
+capa Brillo1 #adff2f: -12,-2 -10,-6 -8,-2
+capa Brillo2 #adff2f: 10,-2 12,-6 14,-2
+capa Hoja #32cd32: -14,8 -18,4 -15,10
+escala 1.1
+sombra 24 8 16 0.3
