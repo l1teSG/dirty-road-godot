@@ -1,5 +1,7 @@
 ---
-// Barra de navegación fija y responsive (menú móvil con botón).
+// Dock de navegación flotante (H3): cápsula glassy centrada con indicador
+// deslizante, logo suelto a la izquierda, CTA a la derecha y auto-ocultado
+// al bajar (lo controla BaseLayout). La barra de progreso va en su borde inferior.
 const links = [
   { href: '#que-es', label: 'El proyecto' },
   { href: '#mecanicas', label: 'Mecánicas' },
@@ -9,48 +11,69 @@ const links = [
 ];
 ---
 
-<header id="site-nav" class="fixed inset-x-0 top-0 z-40 border-b border-line bg-bg/80 backdrop-blur">
-  <nav class="mx-auto flex max-w-6xl items-center gap-6 px-4 py-3">
-    <a href="#top" class="text-[1.05rem] font-bold tracking-tight text-bone">
+<header
+  id="site-nav"
+  class="fixed inset-x-0 top-0 z-40 px-3 pt-3 sm:px-4 sm:pt-4"
+>
+  <div class="mx-auto flex max-w-6xl items-center gap-3">
+    <a
+      href="#top"
+      class="shrink-0 rounded-full border border-line bg-bg/70 px-4 py-2 text-sm font-bold tracking-tight text-bone backdrop-blur"
+    >
       Dirty <span class="text-leaf">Road</span>
     </a>
 
-    <ul class="ml-auto hidden items-center gap-6 text-sm text-moss md:flex">
+    <nav
+      class="relative mx-auto hidden rounded-full border border-line bg-bg/70 p-1 backdrop-blur md:flex"
+      aria-label="Navegación principal"
+    >
+      <span
+        id="dock-indicator"
+        class="pointer-events-none absolute inset-y-1 left-0 rounded-full bg-surface-2 opacity-0 transition-[transform,width,opacity] duration-300 ease-out"
+        aria-hidden="true"
+      ></span>
       {links.map((l) => (
-        <li>
-          <a class="transition-colors hover:text-bone" href={l.href}>{l.label}</a>
-        </li>
+        <a
+          data-nav-link
+          href={l.href}
+          class="relative z-10 rounded-full px-4 py-2 text-sm text-moss transition-colors hover:text-bone"
+        >
+          {l.label}
+        </a>
       ))}
-    </ul>
+    </nav>
 
     <a
       href="#descargar"
-      class="ml-auto hidden rounded-[3px] bg-resin px-4 py-1.5 text-sm font-semibold text-bg transition-colors hover:bg-[#f0b451] md:ml-6 md:inline-block"
+      class="ml-auto hidden shrink-0 rounded-full bg-resin px-5 py-2 text-sm font-semibold text-bg shadow-glow-resin transition-colors hover:bg-[#f0b451] md:ml-0 md:inline-block"
     >
       Descargar
     </a>
 
     <button
       id="menu-btn"
-      class="ml-auto rounded-[3px] border border-line px-3 py-1.5 text-lg text-bone md:hidden"
+      class="ml-auto rounded-full border border-line bg-bg/70 px-4 py-2 text-lg leading-none text-bone backdrop-blur md:hidden"
       aria-label="Abrir menú"
     >
       ☰
     </button>
-  </nav>
+  </div>
 
-  <div id="menu-panel" class="hidden border-t border-line bg-bg md:hidden">
-    <ul class="flex flex-col gap-1 px-4 py-3 text-moss">
+  <div
+    id="menu-panel"
+    class="mx-auto mt-2 hidden max-w-6xl rounded-2xl border border-line bg-bg/90 p-2 backdrop-blur md:hidden"
+  >
+    <ul class="flex flex-col gap-1 text-moss">
       {links.map((l) => (
         <li>
-          <a class="block rounded-[3px] px-3 py-2.5 hover:bg-surface hover:text-bone" href={l.href}>
+          <a class="block rounded-xl px-3 py-2.5 transition-colors hover:bg-surface hover:text-bone" href={l.href}>
             {l.label}
           </a>
         </li>
       ))}
       <li>
         <a
-          class="mt-1 block rounded-[3px] bg-resin px-3 py-2.5 text-center font-semibold text-bg"
+          class="mt-1 block rounded-xl bg-resin px-3 py-2.5 text-center font-semibold text-bg"
           href="#descargar"
         >
           Descargar
@@ -59,16 +82,60 @@ const links = [
     </ul>
   </div>
 
-  <div id="scroll-progress" class="absolute inset-x-0 bottom-0 h-[2px] bg-leaf" aria-hidden="true"></div>
+  <div id="scroll-progress" class="mx-auto mt-2 h-[2px] max-w-6xl rounded-full bg-leaf" aria-hidden="true"></div>
 </header>
 
 <script>
+  // Menú móvil
   const btn = document.getElementById('menu-btn');
   const panel = document.getElementById('menu-panel');
   if (btn && panel) {
     btn.addEventListener('click', () => panel.classList.toggle('hidden'));
-    panel.querySelectorAll('a').forEach((a) =>
-      a.addEventListener('click', () => panel.classList.add('hidden')),
-    );
+    panel.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => panel.classList.add('hidden')));
   }
+
+  // Scrollspy + indicador deslizante del dock
+  const navLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-nav-link]'));
+  const indicator = document.getElementById('dock-indicator');
+  const targets = navLinks
+    .map((a) => ({ link: a, id: (a.getAttribute('href') || '').slice(1) }))
+    .filter((t) => t.id && document.getElementById(t.id));
+  let activeId = '';
+
+  const moveIndicator = () => {
+    if (!indicator) return;
+    const active = navLinks.find((a) => a.getAttribute('href') === `#${activeId}`);
+    if (!active) {
+      indicator.style.opacity = '0';
+      return;
+    }
+    indicator.style.opacity = '1';
+    indicator.style.width = `${active.offsetWidth}px`;
+    indicator.style.transform = `translateX(${active.offsetLeft}px)`;
+  };
+
+  const setActive = (id: string) => {
+    if (id === activeId) return;
+    activeId = id;
+    navLinks.forEach((a) => {
+      const on = a.getAttribute('href') === `#${id}`;
+      a.classList.toggle('text-bone', on);
+      a.classList.toggle('text-moss', !on);
+    });
+    moveIndicator();
+  };
+
+  const spy = () => {
+    const mid = window.innerHeight * 0.4;
+    let current = '';
+    for (const t of targets) {
+      const el = document.getElementById(t.id);
+      if (el && el.getBoundingClientRect().top <= mid) current = t.id;
+    }
+    setActive(current);
+  };
+
+  window.addEventListener('scroll', spy, { passive: true });
+  window.addEventListener('resize', moveIndicator);
+  spy();
 </script>

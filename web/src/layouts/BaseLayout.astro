@@ -100,6 +100,8 @@ const ogImage = new URL('/images/juego/og.png', Astro.site).href;
       );
       const progress = document.getElementById('scroll-progress');
       const nav = document.getElementById('site-nav');
+      const menuPanel = document.getElementById('menu-panel');
+      let lastY = 0;
 
       const updateOnScroll = () => {
         const vh = window.innerHeight || 1;
@@ -108,7 +110,14 @@ const ogImage = new URL('/images/juego/og.png', Astro.site).href;
         const docH = document.documentElement.scrollHeight - vh;
         const p = docH > 0 ? Math.min(Math.max(sy / docH, 0), 1) : 0;
         if (progress) progress.style.transform = `scaleX(${p})`;
-        if (nav) nav.classList.toggle('is-scrolled', sy > 8);
+
+        // Auto-ocultar el dock al bajar, mostrar al subir (salvo menú abierto).
+        if (nav) {
+          const menuOpen = menuPanel && !menuPanel.classList.contains('hidden');
+          if (sy < 80 || (sy < lastY && !menuOpen)) nav.classList.remove('is-hidden');
+          else if (sy > lastY && !menuOpen) nav.classList.add('is-hidden');
+        }
+        lastY = sy;
 
         if (reduce) return;
         for (const el of parallaxEls) {

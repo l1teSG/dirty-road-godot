@@ -149,15 +149,12 @@
   }
 }
 
-/* Barra de progreso de lectura + estado del nav al hacer scroll. */
+/* Dock flotante: se oculta al bajar y reaparece al subir. */
 #site-nav {
-  transition:
-    background-color 0.3s ease,
-    box-shadow 0.3s ease;
+  transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
-#site-nav.is-scrolled {
-  background-color: rgba(5, 10, 8, 0.85);
-  box-shadow: 0 10px 30px -22px rgba(0, 0, 0, 0.85);
+#site-nav.is-hidden {
+  transform: translateY(-140%);
 }
 #scroll-progress {
   transform: scaleX(0);
