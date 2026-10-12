@@ -4,8 +4,8 @@
  * (`etapa_01.astro` … `etapa_10.astro`) y solo aporta su contenido; la
  * presentación se mantiene idéntica entre todas.
  *
- * Cada etapa es una tarjeta con marco (borde + color de etapa en la cabecera) y
- * tres bloques, siempre en el mismo orden:
+ * Cada etapa es una tarjeta interactiva: entra animada con el scroll, reacciona
+ * al pasar el mouse y sus enemigos se despliegan. Tres bloques, siempre iguales:
  *   1. El problema  → qué pasa en el mundo real.
  *   2. Enemigos del juego → qué representa cada uno (desplegable con sus datos).
  *   3. Soluciones reales → qué se puede hacer de verdad.
@@ -34,21 +34,28 @@ const num = String(n).padStart(2, '0');
 <article
   id={`etapa-${n}`}
   data-tint={color}
-  class="scroll-mt-28 overflow-hidden rounded-[4px] border border-line bg-surface/50"
+  class="etapa-card group scroll-mt-28 overflow-hidden rounded-[4px] border border-line bg-surface/50"
+  style={`--etapa:${color}`}
 >
   <!-- Cabecera de la tarjeta -->
   <header
     class="flex items-center gap-4 border-b border-line px-5 py-4 sm:px-7"
     style={`border-top:2px solid ${color}`}
   >
-    <span class="text-3xl font-bold leading-none tabular-nums text-moss/60 sm:text-4xl">{num}</span>
-    <span class="h-3 w-3 shrink-0 rounded-[1px]" style={`background:${color}`} aria-hidden="true"></span>
+    <span class="text-3xl font-bold leading-none tabular-nums text-moss/60 transition-colors duration-300 sm:text-4xl group-hover:text-bone"
+      >{num}</span
+    >
+    <span
+      class="etapa-swatch h-3 w-3 shrink-0 rounded-[1px]"
+      style={`background:${color}`}
+      aria-hidden="true"
+    ></span>
     <h3 class="text-base font-semibold text-bone sm:text-lg">{nombre}</h3>
   </header>
 
   <div class="grid gap-8 p-5 sm:p-7 md:grid-cols-3 md:gap-6 lg:gap-10">
     <!-- 1 · El problema -->
-    <div data-reveal class="reveal">
+    <div class="etapa-col">
       <h4 class="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.14em] text-bone">
         <span class="h-px w-5" style={`background:${color}`} aria-hidden="true"></span>
         El problema
@@ -65,7 +72,7 @@ const num = String(n).padStart(2, '0');
     </div>
 
     <!-- 2 · Enemigos del juego (desplegables) -->
-    <div data-reveal class="reveal" style="transition-delay:90ms">
+    <div class="etapa-col">
       <h4 class="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.14em] text-bone">
         <span class="h-px w-5" style={`background:${color}`} aria-hidden="true"></span>
         Enemigos del juego
@@ -73,8 +80,8 @@ const num = String(n).padStart(2, '0');
       <ul class="mt-4 space-y-1">
         {enemigos.map((e) => (
           <li>
-            <details class="group border-t border-line first:border-t-0">
-              <summary class="flex cursor-pointer list-none items-start gap-3 py-3 [&::-webkit-details-marker]:hidden">
+            <details class="etapa-enemigo group border-t border-line first:border-t-0">
+              <summary class="flex cursor-pointer list-none items-start gap-3 rounded-[3px] py-3 transition-colors hover:text-bone [&::-webkit-details-marker]:hidden">
                 <span class="mt-1.5 h-2 w-2 shrink-0 rounded-[1px]" style={`background:${color}`} aria-hidden="true" />
                 <span class="flex-1">
                   <span class="block text-sm font-medium text-bone">{e.nombre}</span>
@@ -91,7 +98,7 @@ const num = String(n).padStart(2, '0');
                   <path d="m6 9 6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
               </summary>
-              <ul class="mb-2 space-y-1.5 pb-3 pl-5">
+              <ul class="etapa-datos mb-2 space-y-1.5 pb-3 pl-5">
                 {e.datos.map((d) => (
                   <li class="flex gap-2 text-xs leading-relaxed text-moss">
                     <span class="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-leaf" aria-hidden="true" />
@@ -106,7 +113,7 @@ const num = String(n).padStart(2, '0');
     </div>
 
     <!-- 3 · Soluciones reales -->
-    <div data-reveal class="reveal" style="transition-delay:180ms">
+    <div class="etapa-col">
       <h4 class="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.14em] text-bone">
         <span class="h-px w-5" style={`background:${color}`} aria-hidden="true"></span>
         Soluciones reales
