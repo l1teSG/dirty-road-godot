@@ -17,7 +17,7 @@ interminables de enemigos que representan **problemas ambientales reales**.
   mantiene vivo el ecosistema el mayor tiempo posible.
 - Jugador protagonista: **Renata** / **Quark** (el nodo jugable).
 - Contexto académico: **Articulación SENA (Desarrollo de Software)** con la
-  **I.E. Técnico Industrial "Julio Flórez"** (Sistemas Informáticos). Licencia MIT.
+  **I.E. Técnico Industrial "Julio Flórez"** (Sistemas Informáticos). Todos los derechos reservados (propietaria).
 
 **Pilares de diseño (del GDD):**
 
@@ -216,4 +216,4 @@ electrónicos · 7. Energía nuclear y radiación · 8. Pesticidas y agricultura
 - **Miguel Ángel Murcia Galindo** — investigación, revisión teórica/histórica y
   programación GDScript.
 - Institución: I.E. Técnico Industrial "Julio Flórez" · Programa: Articulación SENA,
-  Técnico en Desarrollo de Software. Licencia **MIT**.
+  Técnico en Desarrollo de Software. Licencia **propietaria** (todos los derechos reservados).

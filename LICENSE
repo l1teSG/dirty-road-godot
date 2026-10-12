@@ -1,21 +1,80 @@
-MIT License
+DIRTY ROAD — LICENCIA DE SOFTWARE PROPIETARIO
+Todos los derechos reservados · All Rights Reserved
 
-Copyright (c) 2026 juan felipe casas aguilar
+Copyright (c) 2026 Juan Felipe Casas Aguilar
+Copyright (c) 2026 Emmanuel Efrén Rosero Sánchez
+Copyright (c) 2026 Miguel Ángel Murcia Galindo
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+Todos los derechos reservados.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+Este software —incluyendo su código fuente, escenas, scripts, documentación,
+recursos gráficos, sonoros y cualquier otro material asociado (en adelante,
+"el Software")— es propiedad exclusiva de sus autores y está protegido por las
+leyes de derechos de autor aplicables.
+
+NO SE CONCEDE NINGÚN PERMISO NI LICENCIA, de forma expresa o implícita, para:
+
+  1. Usar, ejecutar o explotar el Software, total o parcialmente.
+  2. Copiar, reproducir o distribuir el Software o copias del mismo.
+  3. Modificar, adaptar, traducir o crear obras derivadas.
+  4. Sublicenciar, vender, alquilar, arrendar o transferir el Software.
+  5. Incorporar el Software, o cualquiera de sus partes, en otro producto,
+     ya sea de código abierto o de código cerrado.
+  6. Descompilar, desensamblar o aplicar ingeniería inversa sobre el Software.
+
+Queda expresamente prohibido el uso del Software por parte de terceros sin la
+autorización previa y por escrito de los titulares de los derechos. Cualquier
+uso no autorizado constituye una infracción de los derechos de autor y podrá
+dar lugar a las acciones legales que correspondan.
+
+Para solicitar permiso o una licencia, contacta a los autores a través del
+repositorio: https://github.com/l1teSG/dirty-road-godot
+
+EL SOFTWARE SE PROPORCIONA "TAL CUAL", SIN GARANTÍA DE NINGÚN TIPO, EXPRESA O
+IMPLÍCITA, INCLUYENDO, ENTRE OTRAS, LAS GARANTÍAS DE COMERCIABILIDAD, IDONEIDAD
+PARA UN PROPÓSITO PARTICULAR Y NO INFRACCIÓN. EN NINGÚN CASO LOS AUTORES SERÁN
+RESPONSABLES DE NINGUNA RECLAMACIÓN, DAÑO U OTRA RESPONSABILIDAD, YA SEA EN UNA
+ACCIÓN CONTRACTUAL, EXTRACONTRACTUAL O DE OTRO TIPO, QUE SURJA DE O ESTÉ
+RELACIONADA CON EL SOFTWARE O SU USO.
+
+═══════════════════════════════════════════════════════════════════════════════
+
+ENGLISH VERSION
+
+DIRTY ROAD — PROPRIETARY SOFTWARE LICENSE
+All Rights Reserved
+
+Copyright (c) 2026 Juan Felipe Casas Aguilar
+Copyright (c) 2026 Emmanuel Efrén Rosero Sánchez
+Copyright (c) 2026 Miguel Ángel Murcia Galindo
+
+All rights reserved.
+
+This software —including its source code, scenes, scripts, documentation,
+graphics, audio and any other associated material (the "Software")— is the
+exclusive property of its authors and is protected by applicable copyright law.
+
+NO PERMISSION OR LICENSE IS GRANTED, express or implied, to:
+
+  1. Use, run or exploit the Software, in whole or in part.
+  2. Copy, reproduce or distribute the Software or copies thereof.
+  3. Modify, adapt, translate or create derivative works.
+  4. Sublicense, sell, rent, lease or transfer the Software.
+  5. Incorporate the Software, or any part of it, into another product,
+     whether open source or closed source.
+  6. Decompile, disassemble or reverse engineer the Software.
+
+Use of the Software by third parties without the prior written authorization
+of the copyright holders is expressly prohibited. Any unauthorized use
+constitutes a copyright infringement and may give rise to the corresponding
+legal action.
+
+To request permission or a license, contact the authors through the
+repository: https://github.com/l1teSG/dirty-road-godot
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

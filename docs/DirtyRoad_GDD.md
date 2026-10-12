@@ -3,7 +3,7 @@
 **Prepared as:** AAA Game Design + UX + Educational Gamification + Godot 4.7 Technical Design Document
 
 **Version:** 10.0.0 beta · **Engine:** Godot 4.7 (Forward Plus, Jolt Physics) · **Language:** GDScript (+ C#)
-**License:** MIT · **Status:** In development (living document)
+**License:** Proprietary (All Rights Reserved) · **Status:** In development (living document)
 
 ---
 

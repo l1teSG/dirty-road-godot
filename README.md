@@ -10,7 +10,7 @@ Aprende jugando, no leyendo: cada enemigo representa un problema ambiental real.
 [![Godot](https://img.shields.io/badge/Godot-4.7-478cbf?style=for-the-badge&logo=godotengine&logoColor=white)](https://godotengine.org/)
 [![GDScript](https://img.shields.io/badge/GDScript-✓-355570?style=for-the-badge&logo=godotengine&logoColor=white)](https://docs.godotengine.org/en/stable/tutorials/scripting/gdscript/)
 [![Astro](https://img.shields.io/badge/Astro-7-ff5d01?style=for-the-badge&logo=astro&logoColor=white)](https://astro.build/)
-[![License](https://img.shields.io/badge/License-MIT-3fb950?style=for-the-badge)](LICENSE)
+[![License](https://img.shields.io/badge/License-Proprietary-d73a49?style=for-the-badge)](LICENSE)
 
 [![Estado](https://img.shields.io/badge/estado-10.0.0%20beta-yellow?style=flat-square)](#-estado-del-proyecto)
 [![Plataforma](https://img.shields.io/badge/plataforma-PC%20%7C%20Android-6aa84f?style=flat-square)](#-puesta-en-marcha)
@@ -53,7 +53,7 @@ vivo: su paleta, partículas y sonido reaccionan al estado del ecosistema.
 
 > 🎓 **Contexto académico.** Proyecto de la **Articulación SENA (Desarrollo de
 > Software)** con la **I.E. Técnico Industrial "Julio Flórez"** (Especialidad
-> Sistemas Informáticos). Distribuido bajo licencia **MIT**.
+> Sistemas Informáticos). **Todos los derechos reservados** (software propietario).
 
 ### 🧩 Pilares de diseño
 
@@ -337,7 +337,7 @@ Definición de cartas en `ecenes/cards/` (`CartasConfig.gd`, `MejorasConfig.gd`)
 | Lenguaje principal | GDScript (+ C# habilitado) |
 | Web | Astro 7 · React 19 · Tailwind 4 |
 | Control de versiones | Git / GitHub |
-| Licencia | MIT |
+| Licencia | Propietaria — todos los derechos reservados |
 
 ---
 
@@ -419,7 +419,10 @@ Input actions del proyecto: `super`, `mega`, `debug_kill` (tecla K), `debug`.
 
 ## 📄 Licencia
 
-Distribuido bajo la **Licencia MIT**. Consulta [`LICENSE`](LICENSE) para más detalles.
+**Todos los derechos reservados.** Este es un software **propietario**: no se concede
+permiso para usar, copiar, modificar, distribuir ni incorporar el código (ni total ni
+parcialmente) en otro producto, sea de código abierto o cerrado, sin autorización
+previa y por escrito de los autores. Consulta [`LICENSE`](LICENSE) para los términos completos.
 
 <div align="center">
 
