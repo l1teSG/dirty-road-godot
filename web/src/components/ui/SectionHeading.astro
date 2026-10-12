@@ -1,5 +1,7 @@
 ---
-// Encabezado de sección: kicker + título + descripción opcional.
+// Encabezado de sección con riel de bitácora: etiqueta corta a la izquierda,
+// título y descripción en la columna de contenido. Nada de eyebrows en
+// mayúsculas espaciadas.
 interface Props {
   kicker?: string;
   titulo: string;
@@ -8,14 +10,24 @@ interface Props {
 }
 const { kicker, titulo, descripcion, centrado = false } = Astro.props;
 ---
-<div class={centrado ? 'mx-auto max-w-3xl text-center' : 'max-w-3xl'}>
+
+<div class={centrado ? 'text-center' : 'grid gap-x-10 gap-y-3 md:grid-cols-[9rem_minmax(0,1fr)]'}>
   {kicker && (
-    <p class="mb-2 font-mono text-xs uppercase tracking-[0.3em] text-green">
-      {kicker}
-    </p>
+    <div class={`flex items-center gap-3 ${centrado ? 'justify-center' : 'md:pt-2.5'}`}>
+      <span class="h-px w-6 bg-leaf/60" />
+      <span class="text-sm font-medium text-moss">{kicker}</span>
+    </div>
   )}
-  <h2 class="text-3xl font-bold text-text-primary sm:text-4xl">{titulo}</h2>
-  {descripcion && (
-    <p class="mt-4 text-base leading-relaxed text-text-secondary">{descripcion}</p>
-  )}
+  <div class={centrado ? 'mx-auto mt-4 max-w-3xl' : ''}>
+    <h2
+      class="text-balance text-[clamp(1.9rem,4.2vw,3rem)] font-bold leading-[1.04] tracking-[-0.015em] text-bone"
+    >
+      {titulo}
+    </h2>
+    {descripcion && (
+      <p class={`mt-4 max-w-[62ch] text-[0.975rem] leading-relaxed text-moss ${centrado ? 'mx-auto' : ''}`}>
+        {descripcion}
+      </p>
+    )}
+  </div>
 </div>

@@ -1,34 +1,124 @@
 ---
-import Reveal from '../ui/Reveal.astro';
+// Héroe: el único momento orquestado de la página. A la izquierda, el título
+// como etiqueta de espécimen; a la derecha, el instrumento de anillos del
+// Árbol (dendrocronología) y el medidor de índice de contaminación.
+const anillos = [
+  { r: 24, w: 1.5, c: 'leaf', o: 0.95, d: '0.30s' },
+  { r: 44, w: 1, c: 'leaf', o: 0.6, d: '0.40s' },
+  { r: 60, w: 3, c: 'rust', o: 0.9, d: '0.50s' }, // un año malo
+  { r: 80, w: 1, c: 'leaf', o: 0.55, d: '0.60s' },
+  { r: 101, w: 1.5, c: 'leaf', o: 0.4, d: '0.70s' },
+  { r: 116, w: 1, c: 'leaf', o: 0.25, d: '0.80s' },
+];
+
+// Índice de contaminación de muestra (marca del instrumento, no un dato real).
+const indice = 7;
+const total = 10;
 ---
-<section id="top" class="relative flex min-h-screen flex-col items-center justify-center px-4 text-center">
-  <Reveal>
-    <p class="font-mono text-xs uppercase tracking-[0.4em] text-green">
-      Videojuego educativo ambiental
-    </p>
-    <h1 class="mt-5 text-5xl font-bold leading-none tracking-tight text-text-primary sm:text-7xl md:text-8xl">
-      DIRTY<span class="text-green-bright"> ROAD</span>
-    </h1>
-    <p class="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-text-secondary sm:text-lg">
-      Defiende el último árbol contra oleadas de contaminación. Recolecta, recicla,
-      reforesta y sobrevive en un shooter de supervivencia con temática ecológica.
-    </p>
-    <div class="mt-10 flex flex-wrap justify-center gap-4">
-      <a
-        href="#descargar"
-        class="rounded-full bg-green px-8 py-3 font-semibold text-bg shadow-glow-green transition-transform hover:scale-105"
+
+<section id="top" class="relative isolate overflow-hidden border-b border-line">
+  <div class="field-grid pointer-events-none absolute inset-0 opacity-30" aria-hidden="true"></div>
+
+  <div
+    class="mx-auto grid min-h-screen max-w-6xl items-center gap-14 px-4 pb-20 pt-28 md:grid-cols-[1.08fr_0.92fr]"
+  >
+    <div>
+      <p class="rise flex items-center gap-3 text-sm text-moss" style="animation-delay:.05s">
+        <span class="relative flex h-2 w-2">
+          <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-leaf opacity-60"></span>
+          <span class="relative inline-flex h-2 w-2 rounded-full bg-leaf"></span>
+        </span>
+        Ecosistema en observación
+      </p>
+
+      <h1
+        class="rise mt-6 text-[clamp(3.2rem,11vw,7.5rem)] font-bold leading-[0.86] tracking-[-0.03em]"
+        style="animation-delay:.12s"
       >
-        Descargar gratis
-      </a>
-      <a
-        href="#que-es"
-        class="rounded-full border border-green/40 px-8 py-3 font-semibold text-green-bright transition-colors hover:bg-green/10"
-      >
-        Descubre más
-      </a>
+        <span class="block text-bone">Dirty</span>
+        <span class="block text-leaf">Road</span>
+      </h1>
+
+      <p class="rise mt-7 max-w-[48ch] text-lg leading-relaxed text-moss" style="animation-delay:.22s">
+        Defiende el último árbol contra oleadas de contaminación. Recolecta, recicla y
+        reforesta en un <em class="not-italic text-bone">survival</em> infinito donde cada
+        enemigo es un problema ambiental real.
+      </p>
+
+      <div class="rise mt-9 flex flex-wrap items-center gap-x-8 gap-y-4" style="animation-delay:.32s">
+        <a
+          href="#descargar"
+          class="inline-flex items-center rounded-[3px] bg-resin px-7 py-3 font-semibold text-bg shadow-glow-resin transition-colors hover:bg-[#f0b451]"
+        >
+          Descargar gratis
+        </a>
+        <a href="#mecanicas" class="group inline-flex items-center gap-3 font-medium text-bone transition-colors hover:text-leaf">
+          Ver mecánicas
+          <span class="h-px w-8 bg-leaf transition-all duration-300 group-hover:w-14" aria-hidden="true"></span>
+        </a>
+      </div>
     </div>
-  </Reveal>
-  <div class="absolute bottom-10 animate-bounce font-mono text-xs text-text-secondary">
-    ↓ desliza
+
+    <div class="rise" style="animation-delay:.30s">
+      <div class="tile relative overflow-hidden p-6">
+        <div class="flex items-center justify-between">
+          <p class="text-sm font-medium text-bone">Árbol central</p>
+          <p class="text-sm text-moss">muestra viva</p>
+        </div>
+
+        <svg viewBox="0 0 240 240" class="mx-auto mt-2 w-full max-w-[280px]" role="img" aria-label="Corte transversal del tronco con sus anillos de crecimiento">
+          <g fill="none">
+            {anillos.map((a) => (
+              <circle
+                cx="120"
+                cy="120"
+                r={a.r}
+                stroke-width={a.w}
+                class="ring-in"
+                style={`stroke:var(--color-${a.c});opacity:${a.o};animation-delay:${a.d}`}
+              />
+            ))}
+          </g>
+          <!-- radios: el tronco leído como dato -->
+          <g stroke="var(--color-leaf)" stroke-width="1" opacity="0.28">
+            {[0, 45, 90, 135, 180, 225, 270, 315].map((deg) => (
+              <line
+                x1="120"
+                y1="120"
+                x2={120 + 116 * Math.cos((deg * Math.PI) / 180)}
+                y2={120 + 116 * Math.sin((deg * Math.PI) / 180)}
+              />
+            ))}
+          </g>
+          <circle cx="120" cy="120" r="5" fill="var(--color-leaf)" />
+        </svg>
+
+        <div class="mt-4">
+          <div class="flex items-baseline justify-between text-sm">
+            <span class="text-moss">Índice de contaminación</span>
+            <span class="font-semibold text-resin">{indice} / {total}</span>
+          </div>
+          <div class="mt-2 flex gap-[3px]" aria-hidden="true">
+            {Array.from({ length: total }).map((_, i) => (
+              <span class={`h-2 flex-1 rounded-[1px] ${i < indice ? 'bg-resin' : 'bg-surface-2'}`} />
+            ))}
+          </div>
+          <div class="mt-5 grid grid-cols-3 gap-4 border-t border-line pt-4 text-sm">
+            <div>
+              <p class="font-semibold text-bone">10</p>
+              <p class="text-moss">etapas</p>
+            </div>
+            <div>
+              <p class="font-semibold text-bone">100</p>
+              <p class="text-moss">oleadas</p>
+            </div>
+            <div>
+              <p class="font-semibold text-bone">40</p>
+              <p class="text-moss">enemigos</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>

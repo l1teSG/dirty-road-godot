@@ -3,8 +3,8 @@ import SectionHeading from '../ui/SectionHeading.astro';
 import Reveal from '../ui/Reveal.astro';
 import { metodologia } from '../../lib/apa';
 ---
-<section id="metodologia" class="px-4 py-24 sm:py-32">
-  <div class="mx-auto max-w-4xl text-center">
+<section id="metodologia" class="border-t border-line px-4 py-24 sm:py-28">
+  <div class="mx-auto max-w-4xl">
     <Reveal>
       <SectionHeading
         kicker="Capítulos 4-6"
@@ -13,10 +13,11 @@ import { metodologia } from '../../lib/apa';
         centrado
       />
     </Reveal>
-    <Reveal delay={120}>
-      <ul class="mt-10 flex flex-wrap justify-center gap-3">
+    <Reveal>
+      <ul class="mt-12 flex flex-wrap justify-center gap-x-8 gap-y-3">
         {metodologia.herramientas.map((h) => (
-          <li class="rounded-full border border-green/30 px-5 py-2 font-mono text-sm text-green-bright">
+          <li class="flex items-center gap-3 text-sm font-medium text-bone">
+            <span class="h-1.5 w-1.5 rounded-[1px] bg-leaf" aria-hidden="true" />
             {h}
           </li>
         ))}

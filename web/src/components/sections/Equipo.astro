@@ -2,36 +2,43 @@
 import SectionHeading from '../ui/SectionHeading.astro';
 import Reveal from '../ui/Reveal.astro';
 import { equipo } from '../../lib/apa';
+
+const iniciales = (nombre: string) =>
+  nombre
+    .split(' ')
+    .slice(0, 2)
+    .map((w) => w[0])
+    .join('');
 ---
-<section id="equipo" class="px-4 py-24 sm:py-32">
+<section id="equipo" class="border-t border-line px-4 py-24 sm:py-28">
   <div class="mx-auto max-w-6xl">
     <Reveal>
       <SectionHeading
         kicker="Recursos humanos"
         titulo="Equipo de desarrollo"
-        descripcion="Proyecto desarrollado en el marco de la Articulación SENA — Técnico en Desarrollo de Software."
+        descripcion="Proyecto desarrollado en el marco de la Articulación SENA, Técnico en Desarrollo de Software."
       />
     </Reveal>
-    <div class="mt-12 grid gap-6 sm:grid-cols-3">
-      {equipo.map((m, i) => (
-        <Reveal delay={i * 100}>
-          <article class="h-full rounded-2xl border border-white/5 bg-bg-alt/60 p-6">
-            <div class="mb-4 h-12 w-12 rounded-full border border-green/30 bg-green/10" />
-            <h3 class="text-base font-semibold text-text-primary">{m.nombre}</h3>
-            <p class="mt-2 text-sm leading-relaxed text-text-secondary">{m.rol}</p>
+    <div class="mt-14 grid gap-px overflow-hidden rounded-[3px] border border-line bg-line sm:grid-cols-3">
+      {equipo.map((m) => (
+        <Reveal class="h-full">
+          <article class="h-full bg-surface p-7">
+            <div
+              class="flex h-10 w-10 items-center justify-center rounded-[3px] border border-line-strong font-semibold text-leaf"
+            >
+              {iniciales(m.nombre)}
+            </div>
+            <h3 class="mt-4 font-semibold text-bone">{m.nombre}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-moss">{m.rol}</p>
           </article>
         </Reveal>
       ))}
     </div>
-    <Reveal delay={200}>
-      <div class="mt-10 rounded-2xl border border-white/5 bg-bg-alt/40 p-6 text-center">
-        <p class="text-sm text-text-secondary">
-          I.E. Técnico Industrial “Julio Flórez” · Especialidad Sistemas Informáticos
-        </p>
-        <p class="mt-1 text-sm text-text-secondary">
-          Articulación SENA — Técnico en Desarrollo de Software
-        </p>
-      </div>
+    <Reveal delay={150}>
+      <p class="mt-8 text-sm text-moss">
+        I.E. Técnico Industrial “Julio Flórez”, Especialidad Sistemas Informáticos. Articulación SENA,
+        Técnico en Desarrollo de Software.
+      </p>
     </Reveal>
   </div>
 </section>

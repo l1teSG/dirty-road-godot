@@ -50,20 +50,16 @@ export default function GitHubStats({ owner, repo }: Props) {
 
   if (loading) {
     return (
-      <div className="card flex items-center justify-center gap-4 p-6">
-        <div className="h-8 w-20 animate-pulse rounded bg-bg-alt" />
-        <div className="h-8 w-20 animate-pulse rounded bg-bg-alt" />
-        <div className="h-8 w-32 animate-pulse rounded bg-bg-alt" />
+      <div className="tile flex items-center justify-center gap-6 p-6">
+        <div className="h-6 w-20 animate-pulse rounded-[3px] bg-surface-2" />
+        <div className="h-6 w-20 animate-pulse rounded-[3px] bg-surface-2" />
+        <div className="h-6 w-32 animate-pulse rounded-[3px] bg-surface-2" />
       </div>
     );
   }
 
   if (error) {
-    return (
-      <div className="card p-6 text-center text-sm text-text-secondary">
-        {error}
-      </div>
-    );
+    return <div className="tile p-6 text-center text-sm text-moss">{error}</div>;
   }
 
   if (!stats) {
@@ -71,29 +67,31 @@ export default function GitHubStats({ owner, repo }: Props) {
   }
 
   return (
-    <div className="card flex flex-wrap items-center justify-center gap-6 p-6 text-sm text-text-secondary">
+    <div className="tile flex flex-wrap items-center justify-center gap-6 p-6 text-sm text-moss">
       <div className="flex items-center gap-2">
-        <Star className="h-4 w-4 text-yellow-400" aria-hidden="true" />
-        <span className="font-mono font-medium text-text-primary">
+        <Star className="h-4 w-4 text-resin" aria-hidden="true" />
+        <span className="font-medium tabular-nums text-bone">
           {stats.stargazers_count.toLocaleString()}
         </span>
         <span>estrellas</span>
       </div>
 
+      <span className="hidden h-4 w-px bg-line-strong sm:block" aria-hidden="true" />
+
       <div className="flex items-center gap-2">
-        <GitFork className="h-4 w-4 text-teal" aria-hidden="true" />
-        <span className="font-mono font-medium text-text-primary">
+        <GitFork className="h-4 w-4 text-rad" aria-hidden="true" />
+        <span className="font-medium tabular-nums text-bone">
           {stats.forks_count.toLocaleString()}
         </span>
         <span>forks</span>
       </div>
 
+      <span className="hidden h-4 w-px bg-line-strong sm:block" aria-hidden="true" />
+
       <div className="flex items-center gap-2">
-        <Clock className="h-4 w-4 text-muted" aria-hidden="true" />
+        <Clock className="h-4 w-4 text-moss" aria-hidden="true" />
         <span>Último commit:</span>
-        <span className="font-mono font-medium text-text-primary">
-          {formatDate(stats.pushed_at)}
-        </span>
+        <span className="font-medium text-bone">{formatDate(stats.pushed_at)}</span>
       </div>
     </div>
   );

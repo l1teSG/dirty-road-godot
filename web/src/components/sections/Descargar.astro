@@ -8,7 +8,7 @@ import Changelog from '../Changelog';
 const owner = 'l1teSG';
 const repo = 'dirty-road-godot';
 ---
-<section id="descargar" class="px-4 py-24 sm:py-32">
+<section id="descargar" class="border-t border-line px-4 py-24 sm:py-28">
   <div class="mx-auto max-w-3xl text-center">
     <Reveal>
       <SectionHeading
@@ -19,7 +19,7 @@ const repo = 'dirty-road-godot';
       />
     </Reveal>
     <Reveal delay={100}>
-      <div class="mx-auto mt-10 max-w-xl rounded-2xl border border-green/15 bg-bg-alt/60 p-8 backdrop-blur-sm">
+      <div class="tile mx-auto mt-12 max-w-xl p-8">
         <DownloadButton client:load owner={owner} repo={repo} />
       </div>
     </Reveal>
@@ -29,8 +29,8 @@ const repo = 'dirty-road-godot';
       </div>
     </Reveal>
     <Reveal delay={200}>
-      <div class="mx-auto mt-12 max-w-2xl text-left">
-        <h3 class="mb-4 text-center text-lg font-semibold text-green-bright">Novedades</h3>
+      <div class="mx-auto mt-14 max-w-2xl text-left">
+        <h3 class="mb-4 border-b border-line pb-3 text-lg font-semibold text-bone">Novedades</h3>
         <Changelog client:load owner={owner} repo={repo} />
       </div>
     </Reveal>
@@ -39,9 +39,10 @@ const repo = 'dirty-road-godot';
         href={`https://github.com/${owner}/${repo}/releases`}
         target="_blank"
         rel="noopener noreferrer"
-        class="mt-8 inline-block text-sm text-text-secondary underline underline-offset-4 hover:text-green-bright"
+        class="group mt-10 inline-flex items-center gap-3 text-sm text-moss transition-colors hover:text-bone"
       >
-        Ver todas las versiones en GitHub →
+        Ver todas las versiones en GitHub
+        <span class="h-px w-8 bg-leaf transition-all duration-300 group-hover:w-14" aria-hidden="true"></span>
       </a>
     </Reveal>
   </div>

@@ -57,18 +57,16 @@ export default function Changelog({ owner, repo }: Props) {
   if (loading) {
     return (
       <div className="space-y-3">
-        <div className="h-6 w-48 animate-pulse rounded bg-bg-alt" />
-        <div className="h-4 w-full animate-pulse rounded bg-bg-alt" />
-        <div className="h-4 w-3/4 animate-pulse rounded bg-bg-alt" />
-        <div className="h-4 w-5/6 animate-pulse rounded bg-bg-alt" />
+        <div className="h-6 w-48 animate-pulse rounded-[3px] bg-surface-2" />
+        <div className="h-4 w-full animate-pulse rounded-[3px] bg-surface-2" />
+        <div className="h-4 w-3/4 animate-pulse rounded-[3px] bg-surface-2" />
+        <div className="h-4 w-5/6 animate-pulse rounded-[3px] bg-surface-2" />
       </div>
     );
   }
 
   if (error) {
-    return (
-      <p className="text-sm text-text-secondary">{error}</p>
-    );
+    return <p className="text-sm text-moss">{error}</p>;
   }
 
   if (!release) {
@@ -78,12 +76,10 @@ export default function Changelog({ owner, repo }: Props) {
   const htmlContent = marked.parse(release.body ?? '') as string;
 
   return (
-    <div className="prose prose-invert max-w-none">
-      <h2 className="text-xl font-semibold text-text-primary">
-        {release.name || release.tag_name}
-      </h2>
+    <div className="max-w-none">
+      <h2 className="text-xl font-semibold text-bone">{release.name || release.tag_name}</h2>
       <div
-        className="mt-4 text-sm leading-relaxed text-text-secondary"
+        className="mt-4 space-y-3 text-sm leading-relaxed text-moss [&_a]:text-leaf [&_a]:underline [&_a]:underline-offset-4 [&_strong]:text-bone [&_ul]:list-disc [&_ul]:pl-5"
         dangerouslySetInnerHTML={{ __html: htmlContent }}
       />
     </div>

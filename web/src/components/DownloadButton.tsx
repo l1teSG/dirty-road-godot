@@ -25,6 +25,12 @@ interface Props {
   repo: string;
 }
 
+const primaryBtn =
+  'inline-flex items-center rounded-[3px] bg-resin px-6 py-3 text-sm font-semibold text-bg shadow-glow-resin transition-colors hover:bg-[#f0b451] focus:outline-none focus-visible:ring-2 focus-visible:ring-resin focus-visible:ring-offset-2 focus-visible:ring-offset-bg';
+
+const secondaryBtn =
+  'inline-flex items-center rounded-[3px] border border-line-strong px-6 py-3 text-sm font-semibold text-bone transition-colors hover:bg-surface focus:outline-none focus-visible:ring-2 focus-visible:ring-resin focus-visible:ring-offset-2 focus-visible:ring-offset-bg';
+
 export default function DownloadButton({ owner, repo }: Props) {
   const [release, setRelease] = useState<GitHubRelease | null>(null);
   const [asset, setAsset] = useState<GitHubAsset | null>(null);
@@ -68,8 +74,8 @@ export default function DownloadButton({ owner, repo }: Props) {
   if (loading) {
     return (
       <div className="flex flex-col items-center gap-4">
-        <div className="h-14 w-64 animate-pulse rounded-lg bg-bg-alt" />
-        <div className="h-4 w-48 animate-pulse rounded bg-bg-alt" />
+        <div className="h-12 w-64 animate-pulse rounded-[3px] bg-surface-2" />
+        <div className="h-4 w-48 animate-pulse rounded-[3px] bg-surface-2" />
       </div>
     );
   }
@@ -78,13 +84,8 @@ export default function DownloadButton({ owner, repo }: Props) {
   if (error) {
     return (
       <div className="flex flex-col items-center gap-3">
-        <p className="text-sm text-text-secondary">{error}</p>
-        <a
-          href={`https://github.com/${owner}/${repo}/releases`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 rounded-lg bg-magenta px-6 py-3 text-sm font-semibold text-white shadow-glow-magenta transition hover:bg-magenta-bright focus:outline-none focus-visible:ring-2 focus-visible:ring-magenta-bright focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
-        >
+        <p className="text-sm text-moss">{error}</p>
+        <a href={`https://github.com/${owner}/${repo}/releases`} target="_blank" rel="noopener noreferrer" className={secondaryBtn}>
           Ver releases en GitHub
         </a>
       </div>
@@ -93,31 +94,22 @@ export default function DownloadButton({ owner, repo }: Props) {
 
   // --- Estado: sin releases (defensivo) ---
   if (!release || !asset) {
-    return (
-      <p className="text-sm text-text-secondary">
-        Disponible pronto
-      </p>
-    );
+    return <p className="text-sm text-moss">Disponible pronto</p>;
   }
 
   // --- Estado: éxito ---
   return (
     <div className="flex flex-col items-center gap-3">
-      <a
-        href={asset.browser_download_url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-flex items-center gap-2 rounded-lg bg-magenta px-6 py-3 text-sm font-semibold text-white shadow-glow-magenta transition hover:bg-magenta-bright focus:outline-none focus-visible:ring-2 focus-visible:ring-magenta-bright focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
-      >
+      <a href={asset.browser_download_url} target="_blank" rel="noopener noreferrer" className={primaryBtn}>
         Descargar {asset.name}
       </a>
 
-      <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-text-secondary">
-        <span>v{release.tag_name}</span>
-        <span aria-hidden="true">·</span>
+      <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs text-moss">
+        <span className="tabular-nums">v{release.tag_name}</span>
+        <span className="h-3 w-px bg-line-strong" aria-hidden="true" />
         <span>{formatDate(release.published_at)}</span>
-        <span aria-hidden="true">·</span>
-        <span>{formatBytes(asset.size)}</span>
+        <span className="h-3 w-px bg-line-strong" aria-hidden="true" />
+        <span className="tabular-nums">{formatBytes(asset.size)}</span>
       </div>
     </div>
   );

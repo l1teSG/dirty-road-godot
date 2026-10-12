@@ -1,7 +1,7 @@
 ---
 // Barra de navegación fija y responsive (menú móvil con botón).
 const links = [
-  { href: '#que-es', label: '¿Qué es?' },
+  { href: '#que-es', label: 'El proyecto' },
   { href: '#mecanicas', label: 'Mecánicas' },
   { href: '#etapas', label: 'Etapas' },
   { href: '#galeria', label: 'Galería' },
@@ -9,41 +9,50 @@ const links = [
 ];
 ---
 
-<header class="fixed inset-x-0 top-0 z-40 border-b border-white/5 bg-bg/75 backdrop-blur">
-  <nav class="mx-auto flex max-w-6xl items-center gap-4 px-4 py-3">
-    <a href="#top" class="font-mono text-sm font-bold tracking-widest text-green-bright">
-      DIRTY&nbsp;ROAD
+<header class="fixed inset-x-0 top-0 z-40 border-b border-line bg-bg/80 backdrop-blur">
+  <nav class="mx-auto flex max-w-6xl items-center gap-6 px-4 py-3">
+    <a href="#top" class="text-[1.05rem] font-bold tracking-tight text-bone">
+      Dirty <span class="text-leaf">Road</span>
     </a>
 
-    <ul class="ml-auto hidden items-center gap-5 text-sm text-text-secondary md:flex">
+    <ul class="ml-auto hidden items-center gap-6 text-sm text-moss md:flex">
       {links.map((l) => (
-        <li><a class="transition-colors hover:text-green-bright" href={l.href}>{l.label}</a></li>
+        <li>
+          <a class="transition-colors hover:text-bone" href={l.href}>{l.label}</a>
+        </li>
       ))}
     </ul>
 
     <a
       href="#descargar"
-      class="ml-auto hidden rounded-full border border-green/40 px-4 py-1.5 text-sm font-semibold text-green-bright transition-colors hover:bg-green/10 md:ml-4 md:inline-block"
+      class="ml-auto hidden rounded-[3px] bg-resin px-4 py-1.5 text-sm font-semibold text-bg transition-colors hover:bg-[#f0b451] md:ml-6 md:inline-block"
     >
       Descargar
     </a>
 
     <button
       id="menu-btn"
-      class="ml-auto rounded-lg border border-white/10 px-3 py-1.5 text-lg text-green-bright md:hidden"
+      class="ml-auto rounded-[3px] border border-line px-3 py-1.5 text-lg text-bone md:hidden"
       aria-label="Abrir menú"
     >
       ☰
     </button>
   </nav>
 
-  <div id="menu-panel" class="hidden border-t border-white/5 bg-bg/95 md:hidden">
-    <ul class="flex flex-col gap-1 px-4 py-3 text-text-secondary">
+  <div id="menu-panel" class="hidden border-t border-line bg-bg md:hidden">
+    <ul class="flex flex-col gap-1 px-4 py-3 text-moss">
       {links.map((l) => (
-        <li><a class="block rounded-lg px-3 py-2.5 hover:bg-white/5 hover:text-green-bright" href={l.href}>{l.label}</a></li>
+        <li>
+          <a class="block rounded-[3px] px-3 py-2.5 hover:bg-surface hover:text-bone" href={l.href}>
+            {l.label}
+          </a>
+        </li>
       ))}
       <li>
-        <a class="mt-1 block rounded-lg border border-green/40 px-3 py-2.5 text-center font-semibold text-green-bright" href="#descargar">
+        <a
+          class="mt-1 block rounded-[3px] bg-resin px-3 py-2.5 text-center font-semibold text-bg"
+          href="#descargar"
+        >
           Descargar
         </a>
       </li>

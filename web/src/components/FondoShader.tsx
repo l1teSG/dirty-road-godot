@@ -37,9 +37,9 @@ void main() {
   float n2 = noise(uv * 6.0 - vec2(t * 0.5, t * 1.1));
   float m = clamp(n1 * 0.65 + n2 * 0.35, 0.0, 1.0);
 
-  vec3 color_a = vec3(0.0196, 0.0627, 0.0431);
-  vec3 color_b = vec3(0.0588, 0.1647, 0.1020);
-  vec3 color_brillo = vec3(0.6, 1.0, 0.2);
+  vec3 color_a = vec3(0.051, 0.0667, 0.0353);
+  vec3 color_b = vec3(0.0863, 0.1098, 0.0706);
+  vec3 color_brillo = vec3(0.5569, 0.7804, 0.2902);
 
   vec3 col = mix(color_a, color_b, m);
 

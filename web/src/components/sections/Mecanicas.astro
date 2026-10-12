@@ -2,16 +2,18 @@
 import SectionHeading from '../ui/SectionHeading.astro';
 import Reveal from '../ui/Reveal.astro';
 
+// El color marca el rol de cada mecánica: verde = vida, ámbar = progresión,
+// teal = sistemas, óxido = amenaza. No es decoración.
 const mecanicas = [
-  { icon: '♻️', t: 'Recolecta y recicla', d: 'Clasifica y recoge residuos para ganar biomasa que impulsa tu progreso.' },
-  { icon: '🌱', t: 'Reforesta', d: 'Siembra árboles y protege el árbol central: es la vida del ecosistema.' },
-  { icon: '🔫', t: 'Sobrevive', d: 'Shooter de supervivencia por oleadas; el árbol se defiende con tus decisiones.' },
-  { icon: '🤖', t: 'IA enemiga', d: 'Enemigos con patrones propios: orbitan, embisten, disparan y se dividen.' },
-  { icon: '🎴', t: 'Mejoras', d: 'Entre oleadas elige cartas para armar tu build: daño, tanque, velocidad o suerte.' },
-  { icon: '👹', t: 'Jefes', d: 'Un jefe por etapa con ataques telegrafiados y muy visuales.' },
+  { t: 'Recolecta y recicla', d: 'Clasifica y recoge residuos para ganar biomasa que impulsa tu progreso.', c: 'leaf' },
+  { t: 'Reforesta', d: 'Siembra árboles y protege el árbol central: es la vida del ecosistema.', c: 'leaf' },
+  { t: 'Sobrevive', d: 'Survival por oleadas; el árbol se defiende con tus decisiones.', c: 'rust' },
+  { t: 'IA enemiga', d: 'Enemigos con patrones propios: orbitan, embisten, disparan y se dividen.', c: 'rad' },
+  { t: 'Mejoras', d: 'Entre oleadas elige cartas para armar tu build: daño, tanque, velocidad o suerte.', c: 'resin' },
+  { t: 'Jefes', d: 'Un jefe por etapa con ataques telegrafiados y muy visuales.', c: 'rust' },
 ];
 ---
-<section id="mecanicas" class="px-4 py-24 sm:py-32">
+<section id="mecanicas" class="border-t border-line px-4 py-24 sm:py-28">
   <div class="mx-auto max-w-6xl">
     <Reveal>
       <SectionHeading
@@ -20,16 +22,22 @@ const mecanicas = [
         descripcion="Diseño visual 2D, interacción fluida con el entorno y una propuesta que conecta conceptos ecológicos con decisiones dentro del juego."
       />
     </Reveal>
-    <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {mecanicas.map((m, i) => (
-        <Reveal delay={(i % 3) * 100}>
-          <article class="h-full rounded-2xl border border-white/5 bg-bg-alt/60 p-6 backdrop-blur-sm transition-colors hover:border-green/30">
-            <div class="text-3xl">{m.icon}</div>
-            <h3 class="mt-4 text-lg font-semibold text-text-primary">{m.t}</h3>
-            <p class="mt-2 text-sm leading-relaxed text-text-secondary">{m.d}</p>
-          </article>
-        </Reveal>
-      ))}
-    </div>
+    <Reveal>
+      <ul class="mt-14 grid gap-x-14 sm:grid-cols-2">
+        {mecanicas.map((m) => (
+          <li class="flex gap-5 border-t border-line py-6">
+            <span
+              class="mt-1.5 h-2.5 w-2.5 shrink-0 rounded-[1px]"
+              style={`background:var(--color-${m.c})`}
+              aria-hidden="true"
+            />
+            <div>
+              <h3 class="font-semibold text-bone">{m.t}</h3>
+              <p class="mt-1.5 text-sm leading-relaxed text-moss">{m.d}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </Reveal>
   </div>
 </section>

@@ -3,7 +3,7 @@ import SectionHeading from '../ui/SectionHeading.astro';
 import Reveal from '../ui/Reveal.astro';
 import { marcoTecnico, referencias } from '../../lib/apa';
 ---
-<section id="marco" class="px-4 py-24 sm:py-32">
+<section id="marco" class="border-t border-line px-4 py-24 sm:py-28">
   <div class="mx-auto max-w-6xl">
     <Reveal>
       <SectionHeading
@@ -12,14 +12,12 @@ import { marcoTecnico, referencias } from '../../lib/apa';
         descripcion={marcoTecnico.texto}
       />
     </Reveal>
-    <div class="mt-12 grid gap-4 sm:grid-cols-2">
-      {referencias.map((r, i) => (
-        <Reveal delay={(i % 2) * 80}>
-          <p class="rounded-xl border-l-2 border-green/40 bg-bg-alt/40 py-3 pl-4 pr-3 text-sm leading-relaxed text-text-secondary">
-            {r}
-          </p>
-        </Reveal>
-      ))}
-    </div>
+    <Reveal>
+      <ul class="mt-14 grid gap-x-14 gap-y-5 sm:grid-cols-2">
+        {referencias.map((r) => (
+          <li class="border-l-2 border-leaf/40 pl-4 text-sm leading-relaxed text-moss">{r}</li>
+        ))}
+      </ul>
+    </Reveal>
   </div>
 </section>
