@@ -1071,3 +1071,17 @@ capa Brillo #ffffff: 8,-2 12,-4 14,-2
 capa Linea #e0ffff: -22,-2 0,-3 0,-1 -22,0
 escala 1.1
 sombra 20 8 12 0.2
+---
+NOMBRE: Bomba de Compost
+capa BolaFondo #4e342e: 0,16 -15,5 -15,-5 0,-16 15,-5 15,5
+capa BolaFrente #5c4033: 0,11 -10,3 -10,-3 0,-11 10,-3 10,3
+capa FacetaIzq #3e2723: -15,5 0,16 0,0 -15,0
+capa FacetaDer #6b4226: 15,5 0,16 0,0 15,0
+capa Mecha #a0522d: -2,-16 2,-16 1,-23 -1,-23
+capa Chispa #ffd700: -3,-23 0,-28 3,-23
+capa HojaSalida1 #32cd32: -1,-20 -6,-26 -2,-21
+capa HojaSalida2 #adff2f: 1,-20 6,-26 2,-21
+capa Resto1 #8b0000: -8,10 -4,10 -6,14
+capa Resto2 #ff8c00: 7,9 11,9 9,13
+escala 1.1
+sombra 24 8 18 0.4
