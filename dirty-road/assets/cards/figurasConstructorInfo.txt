@@ -1156,3 +1156,17 @@ capa RayoUV3 #ffd700: 20,-14 14,-20 16,-12
 capa Base #2e8b57: -10,20 10,20 8,23 -8,23
 escala 1.0
 sombra 26 10 18 0.3
+---
+NOMBRE: Ventisca Interior
+capa NucleoFondo #b0e0e6: 0,14 -12,4 -12,-4 0,-14 12,-4 12,4
+capa NucleoCristal #e0ffff: 0,10 -8,3 -8,-3 0,-10 8,-3 8,3
+capa CopoArriba #ffffff: -1,-14 1,-14 1,-4 -1,-4
+capa CopoIzq #ffffff: -14,-1 -14,1 -4,1 -4,-1
+capa CopoDer #ffffff: 4,-1 14,-1 14,1 4,1
+capa RamitaI #ffffff: -12,-4 -14,-6 -10,-6
+capa RamitaD #ffffff: 12,4 14,6 10,6
+capa Brillo #adff2f: -3,0 0,-3 3,0 0,3
+capa Viento1 #b0e0e6: -20,8 -8,6 2,8 -8,10
+capa Viento2 #87ceeb: -18,-8 -6,-10 4,-8 -6,-6
+escala 1.1
+sombra 22 8 18 0.3
