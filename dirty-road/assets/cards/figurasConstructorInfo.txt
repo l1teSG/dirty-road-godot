@@ -1142,3 +1142,17 @@ capa Pulso1 #ffff00: 0,-16 -6,-10 0,-6 6,-10
 capa Pulso2 #e0ffff: 0,-6 -3,-10 0,-14 3,-10
 escala 1.2
 sombra 24 10 18 0.4
+---
+NOMBRE: Escudo de Ozono Menor
+capa EscudoFondo #4682b4: 0,20 -18,0 0,-20 18,0
+capa EscudoFrente #87ceeb: 0,15 -13,0 0,-15 13,0
+capa FranjaSup #00ffff: -18,0 0,-20 0,-15 -13,0
+capa FranjaInf #1e90ff: 0,20 18,0 13,0 0,15
+capa Centro #e0ffff: 0,8 -8,0 0,-8 8,0
+capa BrilloCentro #ffffff: -2,0 0,-3 2,0 0,3
+capa RayoUV1 #ffd700: -20,-14 -14,-20 -16,-12
+capa RayoUV2 #ff4500: 0,-22 -3,-28 3,-28
+capa RayoUV3 #ffd700: 20,-14 14,-20 16,-12
+capa Base #2e8b57: -10,20 10,20 8,23 -8,23
+escala 1.0
+sombra 26 10 18 0.3
