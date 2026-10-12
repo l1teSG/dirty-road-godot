@@ -178,42 +178,8 @@
   animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
 
-/* Los anillos del árbol se despliegan al cargar. */
-@keyframes ring-in {
-  from {
-    opacity: 0;
-    transform: scale(0.72);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-.ring-in {
-  transform-origin: 120px 120px;
-  animation: ring-in 1.1s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-}
-
-/* El medidor de contaminación crece al cargar. */
-@keyframes meter-grow {
-  from {
-    transform: scaleX(0);
-  }
-  to {
-    transform: scaleX(1);
-  }
-}
-
-.meter-grow {
-  transform-origin: left center;
-  animation: meter-grow 1.4s 0.35s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .rise,
-  .ring-in,
-  .meter-grow {
+  .rise {
     animation: none;
   }
 }
