@@ -1100,3 +1100,17 @@ capa Brillo #e0ffff: -8,0 -5,-3 -3,0
 capa Rayo #ffff00: -14,14 -18,20 -15,20
 escala 1.2
 sombra 30 12 16 0.4
+---
+NOMBRE: Cráter de Raíces
+capa SueloFondo #4e342e: -22,16 22,16 16,0 8,-6 0,-4 -8,-6 -16,0
+capa SueloInterior #3e2723: -12,0 12,0 8,-8 0,-10 -8,-8
+capa RafagaRaiz1 #8b4513: -10,-2 -4,-16 -2,-6
+capa RafagaRaiz2 #a0522d: -2,-4 2,-20 4,-5
+capa RafagaRaiz3 #cd853f: 6,-3 12,-16 10,-6
+capa RaizIzq #7a5c3a: -16,2 -22,-8 -14,-1
+capa RaizDer #7a5c3a: 16,2 22,-8 14,-1
+capa Energia #32cd32: 0,-10 -3,-20 3,-20
+capa BrilloEnergia #adff2f: 0,-16 2,-22 -2,-20
+capa Grieta #271a17: -18,12 -6,10 4,12
+escala 1.1
+sombra 34 12 18 0.5
