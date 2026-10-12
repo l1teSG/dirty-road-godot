@@ -1,66 +1,96 @@
-# 🌿 Dirty Road
+<div align="center">
 
-> *Survival action 2D infinito y educativo, desarrollado en Godot 4, que usa oleadas de problemas ambientales reales para fomentar la conciencia ecológica en jóvenes mayores de 10 años mediante la gamificación.*
+# 🌿 DIRTY ROAD
 
-[![Godot](https://img.shields.io/badge/Godot-4.7-478cbf?logo=godotengine&logoColor=white)](https://godotengine.org/)
-[![GDScript](https://img.shields.io/badge/GDScript-✓-355570)](https://docs.godotengine.org/en/stable/tutorials/scripting/gdscript/)
-[![Astro](https://img.shields.io/badge/Astro-7-ff5d01?logo=astro&logoColor=white)](https://astro.build/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+### *Survival action 2D infinito · educativo · ambiental*
+
+**Defiende el último Árbol vivo de oleadas interminables de contaminación.**
+Aprende jugando, no leyendo: cada enemigo representa un problema ambiental real.
+
+[![Godot](https://img.shields.io/badge/Godot-4.7-478cbf?style=for-the-badge&logo=godotengine&logoColor=white)](https://godotengine.org/)
+[![GDScript](https://img.shields.io/badge/GDScript-✓-355570?style=for-the-badge&logo=godotengine&logoColor=white)](https://docs.godotengine.org/en/stable/tutorials/scripting/gdscript/)
+[![Astro](https://img.shields.io/badge/Astro-7-ff5d01?style=for-the-badge&logo=astro&logoColor=white)](https://astro.build/)
+[![License](https://img.shields.io/badge/License-MIT-3fb950?style=for-the-badge)](LICENSE)
+
+[![Estado](https://img.shields.io/badge/estado-10.0.0%20beta-yellow?style=flat-square)](#-estado-del-proyecto)
+[![Plataforma](https://img.shields.io/badge/plataforma-PC%20%7C%20Android-6aa84f?style=flat-square)](#-puesta-en-marcha)
+[![Institución](https://img.shields.io/badge/SENA-Julio%20Flórez-2b7a78?style=flat-square)](#-marco-académico)
+
+</div>
 
 ---
 
-## 📖 Sobre el proyecto
+<div align="center">
+
+**No hay final. No hay pantalla de victoria. No hay "jefe final de la contaminación".**
+La contaminación es sistémica y cíclica, como en la realidad:
+solo se gestiona, se ralentiza y se mantiene vivo el ecosistema el mayor tiempo posible.
+
+</div>
+
+---
+
+## 🧭 Índice
+
+| Sección | Sección | Sección |
+| :--- | :--- | :--- |
+| [🌍 ¿Qué es Dirty Road?](#-qué-es-dirty-road) | [🧩 Pilares de diseño](#-pilares-de-diseño) | [✨ Características](#-características-y-mecánicas) |
+| [🗂️ Estructura](#-estructura-del-repositorio) | [🚀 Puesta en marcha](#-puesta-en-marcha) | [🏗️ Arquitectura](#-arquitectura-del-juego) |
+| [🎯 Modelo de contenido](#-modelo-de-contenido) | [🎓 Sistema educativo](#-sistema-educativo-pilar-no-extra) | [🃏 Mejoras y economía](#-mejoras--economía) |
+| [🌐 Web](#-web-landing) | [🗺️ Mapa por tarea](#-mapa-dónde-mirar-por-tarea) | [🐞 Debug](#-debug) |
+| [🤝 Flujo de Git](#-flujo-de-trabajo-con-git) | [👥 Equipo](#-equipo-de-desarrollo) | [📄 Licencia](#-licencia) |
+
+---
+
+## 🌍 ¿Qué es Dirty Road?
 
 **Dirty Road** es un *survival action* top-down/2D **infinito** donde el jugador
 defiende un **Árbol vivo** —último símbolo de un ecosistema sano— de oleadas
 interminables de enemigos que representan **problemas ambientales reales**.
 
-No hay final, ni pantalla de victoria, ni "jefe final de la contaminación": la
-contaminación es sistémica y cíclica, igual que en la realidad. Solo se puede
-gestionar, ralentizar y mantener vivo el ecosistema el mayor tiempo posible.
-La travesía sigue a **Renata** y al nodo jugable **Quark**.
+La travesía sigue a **Renata** y al nodo jugable **Quark**. El mundo es un panel
+vivo: su paleta, partículas y sonido reaccionan al estado del ecosistema.
 
-El proyecto se desarrolla en el marco de la **Articulación SENA (Desarrollo de
-Software)** con la **I.E. Técnico Industrial "Julio Flórez"** (Especialidad
-Sistemas Informáticos) y se distribuye bajo licencia **MIT**.
+> 🎓 **Contexto académico.** Proyecto de la **Articulación SENA (Desarrollo de
+> Software)** con la **I.E. Técnico Industrial "Julio Flórez"** (Especialidad
+> Sistemas Informáticos). Distribuido bajo licencia **MIT**.
 
-### Pilares de diseño (del GDD)
+### 🧩 Pilares de diseño
 
-1. **Aprender jugando, no leyendo.** Los datos llegan vía feedback de combate y
-   popups cortos (nunca bloqueantes, ≤ 3–4 s).
-2. **Infinito, no repetitivo.** El mundo evoluciona (índice de contaminación,
-   eventos, mutadores) para que la hora 3 se sienta distinta de la hora 1.
-3. **Habilidad sobre grind.** La progresión es por maestría (timing de dash,
-   posición, rutas de combo) y desbloqueos cosméticos/informativos, no *power creep*.
-4. **Cada enemigo enseña algo.** Cada enemigo y jefe mapea 1:1 a un problema real.
-5. **El mundo reacciona a ti.** El estado visual y sonoro es un panel vivo del
-   ecosistema.
-
-### Estado del proyecto
-
-- Versión en `project.godot`: **`10.0.0 beta`** (Godot 4.7, `C#`, `Forward Plus`; física 3D con Jolt).
-- Escena principal: `ui/intro/intro.tscn`.
-- Contenido: 10 etapas × 10 oleadas (30 enemigos normales + 10 jefes).
-- Rama activa de desarrollo: `feature/10-update-wavemanager-enemis`.
-- APK de referencia (no versionado): `apk/dirtyRoad_V10.1.1.apk`.
+| # | Pilar | En una frase |
+| :-: | :--- | :--- |
+| 1 | **Aprender jugando, no leyendo** | Datos vía feedback de combate y popups cortos (nunca bloqueantes, ≤ 3–4 s). |
+| 2 | **Infinito, no repetitivo** | El mundo evoluciona para que la hora 3 se sienta distinta de la hora 1. |
+| 3 | **Habilidad sobre grind** | Progresión por maestría (timing, posición, combos), no *power creep*. |
+| 4 | **Cada enemigo enseña algo** | Cada enemigo y jefe mapea 1:1 a un problema real. |
+| 5 | **El mundo reacciona a ti** | El estado visual y sonoro es un panel vivo del ecosistema. |
 
 ---
 
 ## ✨ Características y mecánicas
 
-- 🎨 **Diseño visual 2D** con ambientación e interacción fluida, sin recurrir a pixel art.
-- 🌱 **Mecánicas sostenibles:** recolección/clasificación de residuos, reciclaje y
-  reforestación (siembra de árboles).
-- 🤖 **IA enemiga modular:** patrones autónomos, persecución y comportamientos
-  intercambiables (`ecenes/enemies/comportamientos/`).
-- 👹 **Jefes con ataques propios** (`BossAttackComponent`, `proyectil_jefe.gd`).
-- 🗺️ **10 etapas temáticas × 10 oleadas**, con escalado y ventana de aparición
-  por enemigo.
-- 🎯 **Sistema educativo** integrado al gameplay (Teoría del Aprendizaje
-  Significativo + Gamificación).
-- 💾 **Partidas por slots** (máx. 5) y ajustes globales persistentes.
-- 🃏 **Cartas / mejoras** acumulables que modifican los stats del jugador.
-- 📱 **Controles táctiles** para Android, además de teclado/ratón.
+| | Característica | Descripción |
+| :-: | :--- | :--- |
+| 🎨 | **Diseño 2D atmosférico** | Ambientación e interacción fluida, sin recurrir a pixel art. |
+| 🌱 | **Mecánicas sostenibles** | Recolección/clasificación de residuos, reciclaje y reforestación. |
+| 🤖 | **IA enemiga modular** | Patrones autónomos, persecución y comportamientos intercambiables. |
+| 👹 | **Jefes con ataques propios** | Un jefe por etapa, con patrones y proyectiles dedicados. |
+| 🗺️ | **10 etapas × 10 oleadas** | Escalado por oleada y ventana de aparición por enemigo. |
+| 🎓 | **Sistema educativo integrado** | Aprendizaje Significativo + Gamificación dentro del gameplay. |
+| 💾 | **Partidas por slots** | Hasta 5 partidas + ajustes globales persistentes. |
+| 🃏 | **Cartas acumulables** | Mejoras por rareza que modifican los stats del jugador. |
+| 📱 | **Controles táctiles** | Joysticks y botones para Android, además de teclado/ratón. |
+
+### 📌 Estado del proyecto
+
+| Campo | Valor |
+| :--- | :--- |
+| Versión (`project.godot`) | **`10.0.0 beta`** |
+| Motor | Godot 4.7 · Forward Plus · Jolt Physics |
+| Escena principal | `ui/intro/intro.tscn` |
+| Contenido | 10 etapas × 10 oleadas (30 enemigos normales + 10 jefes) |
+| Rama activa | `feature/10-update-wavemanager-enemis` |
+| APK de referencia | `apk/dirtyRoad_V10.1.1.apk` (no versionado) |
 
 ---
 
@@ -69,14 +99,17 @@ Sistemas Informáticos) y se distribuye bajo licencia **MIT**.
 Este repositorio contiene **dos subproyectos independientes**. No hay
 `package.json` ni build system en la raíz: cada uno se construye por separado.
 
-| Ruta | Qué es | Stack |
-| :--- | :--- | :--- |
-| `dirty-road/` | **El juego** (núcleo del proyecto) | Godot 4.7, GDScript (+ C#) |
-| `web/` | Landing/micrositio en español | Astro 7 + React 19 + Tailwind 4 |
-| `docs/` | `DirtyRoad_GDD.md` y `APA.docx` | — |
-| `apk/` | Builds Android exportados (no versionados) | — |
+```text
+dirty-road/
+├── dirty-road/        🎮 El juego (núcleo) — Godot 4.7 + GDScript (+ C#)
+├── web/               🌐 Landing/micrositio — Astro 7 + React 19 + Tailwind 4
+├── docs/              📄 GDD y documento APA
+├── apk/               📦 Builds Android exportados (no versionados)
+├── MEMORY.md          🧠 Conocimiento durable del proyecto
+└── AGENTS.md          🤖 Guía operativa para agentes
+```
 
-> ⚠️ `assets/` y `addons/` **no están en git** (ver `.gitignore`). Un clon limpio
+> ⚠️ **`assets/` y `addons/` no están en git** (ver `.gitignore`). Un clon limpio
 > no reproduce el juego hasta restaurarlos.
 
 ---
@@ -85,11 +118,11 @@ Este repositorio contiene **dos subproyectos independientes**. No hay
 
 ### Requisitos
 
-- **Godot Engine 4.7** (con soporte C# / .NET habilitado).
-- **Node.js ≥ 22.12** para la web.
-- Export Android: plantillas de exportación y SDK configurados en el editor.
+- 🎮 **Godot Engine 4.7** con soporte C# / .NET habilitado.
+- 🌐 **Node.js ≥ 22.12** para la web.
+- 📱 Export Android: plantillas de exportación y SDK configurados en el editor.
 
-### Juego (desde `dirty-road/`)
+### 🎮 Juego (desde `dirty-road/`)
 
 ```sh
 # Abrir el proyecto en el editor de Godot
@@ -105,10 +138,7 @@ godot --headless --script res://tools/generar_enemigos.gd
 godot --headless --script res://tools/verificar_enemigos.gd
 ```
 
-- Escena principal definida en `project.godot` (`run/main_scene`): `ui/intro/intro.tscn`.
-- Export Android configurado en `export_presets.cfg` (package `com.l1t3Sg.dirtyroad`).
-
-### Web (desde `web/`)
+### 🌐 Web (desde `web/`)
 
 ```sh
 npm install
@@ -128,7 +158,7 @@ astro dev stop | status | logs
 
 ## 🏗️ Arquitectura del juego
 
-### Autoloads (el orden importa)
+### ⚙️ Autoloads (el orden importa)
 
 | Autoload | Script | Responsabilidad |
 | :--- | :--- | :--- |
@@ -141,7 +171,7 @@ astro dev stop | status | logs
 > ⚠️ `SaveManager` **debe** ir antes que `BiomasaManager` (este último lee
 > `SaveManager` al arrancar).
 
-### Contratos clave (no romper)
+### 🔒 Contratos clave (no romper)
 
 - **`WaveManager` (`scripts/wave_manager.gd`) es la ÚNICA fuente de verdad** de
   oleadas, spawns y escalado. El reloj manda: matar enemigos **no** adelanta la oleada.
@@ -154,17 +184,19 @@ astro dev stop | status | logs
 - **No renombrar** `mult_vida`, `mult_velocidad` ni `mult_danio` en `EtapaConfig`:
   el WaveManager los lee por nombre exacto.
 
-### Persistencia
+### 💾 Persistencia
 
-- Partida por slots (máx. 5): `user://partida_1..5.save`.
-- Metadatos de slots: `user://slots.json` (oleada, etapa, biomasa, fecha, tiempo).
-- Ajustes globales: `user://ajustes.save` (no se borran con "Nueva partida").
+| Dato | Ruta |
+| :--- | :--- |
+| Partida por slot (máx. 5) | `user://partida_1..5.save` |
+| Metadatos de slots | `user://slots.json` (oleada, etapa, biomasa, fecha, tiempo) |
+| Ajustes globales | `user://ajustes.save` (no se borran con "Nueva partida") |
 
 ---
 
-## 🎮 Modelo de contenido
+## 🎯 Modelo de contenido
 
-### Etapas y oleadas
+### 🌊 Etapas y oleadas
 
 - **10 etapas × 10 oleadas.** Cada etapa tiene **3 enemigos normales + 1 jefe**
   = **30 normales + 10 jefes**.
@@ -174,21 +206,26 @@ astro dev stop | status | logs
 - `EnemigoOleadaConfig` define la ventana de aparición por enemigo
   (`oleada_minima`, `oleada_maxima` con `0 = sin límite`, `peso`, `max_simultaneos`).
 
-### Fórmulas de escalado (WaveManager)
+### 📐 Fórmulas de escalado (WaveManager)
 
+```text
+Vida       = base × etapa.mult_vida × cfg.mult_vida × (1 + (oleada−1) × escalado_vida)
+Daño       = base × etapa.mult_danio × (1 + (oleada−1) × escalado_danio)
+Velocidad  = base × etapa.mult_velocidad          (no escala por oleada)
+Duración   = base × (1 + aumento_micro × (N−1)) × (1 + aumento_macro × etapa)
 ```
-Vida      = base × etapa.mult_vida × cfg.mult_vida × (1 + (oleada−1) × escalado_vida)
-Daño      = base × etapa.mult_danio × (1 + (oleada−1) × escalado_danio)
-Velocidad = base × etapa.mult_velocidad          (no escala por oleada)
-Duración  = base × (1 + aumento_micro × (N−1)) × (1 + aumento_macro × etapa)
-```
 
-- `tiempo_entre_spawns` es **el knob de presión** (menor valor = más enemigos).
-- Valores por defecto: `escalado_vida_por_oleada = 0.07`, `escalado_danio_por_oleada = 0.04`,
-  `aumento_duracion_por_oleada = 0.10`, `tiempo_maximo_oleada = 40 s`,
-  `tiempo_descanso = 5 s`, `oleadas_por_etapa = 10`.
+| Parámetro | Defecto | Significado |
+| :--- | --: | :--- |
+| `tiempo_entre_spawns` | 1.2 s | **El knob de presión** (menor = más enemigos). |
+| `tiempo_maximo_oleada` | 40 s | Duración base de la oleada. |
+| `tiempo_descanso` | 5 s | Descanso entre oleadas. |
+| `aumento_duracion_por_oleada` | 0.10 | +10 % de duración por oleada dentro de la etapa. |
+| `escalado_vida_por_oleada` | 0.07 | +7 % de vida por oleada global. |
+| `escalado_danio_por_oleada` | 0.04 | +4 % de daño por oleada global. |
+| `oleadas_por_etapa` | 10 | Oleadas por etapa. |
 
-### Arquetipos de enemigo (`TIPO_DEF` en `tools/generar_enemigos.gd`)
+### 🤖 Arquetipos de enemigo (`TIPO_DEF`)
 
 | Tipo | Vida | Velocidad | Daño | Contacto |
 | :--- | --: | --: | --: | :--- |
@@ -198,7 +235,7 @@ Duración  = base × (1 + aumento_micro × (N−1)) × (1 + aumento_macro × eta
 | torreta | 90 | 60 | 12 | no |
 | embestida | 80 | 75 | 22 | sí |
 
-### Las 10 etapas
+### 🗺️ Las 10 etapas
 
 | # | Tema | Enemigos normales | Jefe |
 | --: | :--- | :--- | :--- |
@@ -213,7 +250,7 @@ Duración  = base × (1 + aumento_micro × (N−1)) × (1 + aumento_macro × eta
 | 9 | Deforestación | Talador · Motosierra · Incendio | Aserradero Andante |
 | 10 | Cambio climático | Ola de Calor · Tormenta · Deshielo | Calentamiento Global |
 
-### Jugador
+### 🧑‍🚀 Jugador
 
 - **`quark`** es el jugador principal; sus componentes se crean por código en `_ready`:
   `DashComponent`, `AnimacionQuark`, `EfectoRegeneracion`, `FlechaArbol`,
@@ -223,9 +260,9 @@ Duración  = base × (1 + aumento_micro × (N−1)) × (1 + aumento_macro × eta
   100 HP + regeneración tras unos segundos + i-frames de dash
   (`velocidad_dash`, `cooldown_dash`, `invulnerable_en_dash = true`).
 
-### Escenarios por etapa
+### 🖼️ Escenarios por etapa
 
-- "Mismo valle, distinta piel": **no se genera terreno nuevo**. La etapa 1 deja el
+- **"Mismo valle, distinta piel":** no se genera terreno nuevo. La etapa 1 deja el
   `valle` original intacto; las demás **recolorean** la geometría existente con la
   paleta del `TemaEtapa` (mismos límites/colisiones) y añaden props temáticos.
 - `GestorEtapa` aporta tinte de ambiente, partículas, banner "ETAPA N · TEMA" y
@@ -235,7 +272,9 @@ Duración  = base × (1 + aumento_micro × (N−1)) × (1 + aumento_macro × eta
 
 ## 🎓 Sistema educativo (pilar, no extra)
 
-- Basado en **Teoría del Aprendizaje Significativo + Gamificación**.
+> Basado en **Teoría del Aprendizaje Significativo + Gamificación**. Los datos se
+> entregan por feedback de combate y popups cortos, nunca bloqueantes.
+
 - `EducationManager` crea el popup en `_ready()`, detecta settings por grupo/tipo y
   usa `EducationDataStages` si no hay etapas embebidas. Es tolerante a fallos:
   **nunca crashea por propiedades ausentes** (usa `.get()`), y resuelve ids
@@ -252,14 +291,29 @@ Duración  = base × (1 + aumento_micro × (N−1)) × (1 + aumento_macro × eta
 
 ---
 
-## 🃏 Mejoras / cartas
+## 🃏 Mejoras y economía
 
-- `MejorasManager` mapea `id_carta → Array de [ruta_stat, op, valor]`:
-  - `pct` → `stat *= (1 + valor)` (p. ej. 0.20 = +20 %)
-  - `add` → `stat += valor`
-  - `mult` → `stat *= valor`
-- **Acumulable:** cada compra reaplica su delta (no hay mejoras "únicas").
-- Definición de cartas en `ecenes/cards/` (`CartasConfig.gd`, `MejorasConfig.gd`).
+**Biomasa** es la moneda: los enemigos sueltan orbes y el contador **no tiene tope**
+(es un costo, no un límite). El súper cuesta `10`.
+
+`MejorasManager` mapea `id_carta → Array de [ruta_stat, op, valor]`:
+
+| Operación | Efecto |
+| :--- | :--- |
+| `pct` | `stat *= (1 + valor)` — p. ej. `0.20` = +20 % |
+| `add` | `stat += valor` |
+| `mult` | `stat *= valor` |
+
+**Acumulable:** cada compra reaplica su delta (no hay mejoras "únicas").
+
+| Rareza | Peso | Costo | Oleada mín. |
+| :--- | --: | --: | --: |
+| Común | 100 | 20 | 1 |
+| Rara | 40 | 35 | 3 |
+| Épica | 12 | 60 | 6 |
+| Legendaria | 3 | 100 | 10 |
+
+Definición de cartas en `ecenes/cards/` (`CartasConfig.gd`, `MejorasConfig.gd`).
 
 ---
 
@@ -308,12 +362,16 @@ Duración  = base × (1 + aumento_micro × (N−1)) × (1 + aumento_macro × eta
 
 ## 🐞 Debug
 
-- **F9** muestra una carta de prueba del popup educativo.
-- **F10** invierte la posición; **F11** cicla el estilo del popup (solo builds debug).
-- `WaveManager`: exporta `debug_activo`, `debug_oleada_inicial`, `debug_no_guardar`,
-  `debug_spawnear_enemigos` para arrancar en una oleada concreta sin ensuciar el guardado.
-- `BiomasaManager`: `DEBUG` y `AUTOTEST_AL_INICIAR` imprimen quién cambia el contador.
-- Input actions del proyecto: `super`, `mega`, `debug_kill` (tecla K), `debug`.
+| Atajo / Flag | Efecto |
+| :--- | :--- |
+| **F9** | Muestra una carta de prueba del popup educativo. |
+| **F10** | Invierte la posición del popup (solo builds debug). |
+| **F11** | Cicla el estilo del popup (solo builds debug). |
+| `debug_activo` / `debug_oleada_inicial` | Arranca en una oleada concreta. |
+| `debug_no_guardar` / `debug_spawnear_enemigos` | Pruebas sin ensuciar el guardado. |
+| `BiomasaManager.DEBUG` / `AUTOTEST_AL_INICIAR` | Traza quién cambia el contador. |
+
+Input actions del proyecto: `super`, `mega`, `debug_kill` (tecla K), `debug`.
 
 ---
 
@@ -329,28 +387,44 @@ Duración  = base × (1 + aumento_micro × (N−1)) × (1 + aumento_macro × eta
 
 ## 👥 Equipo de desarrollo
 
-- **Juan Felipe Casas Aguilar** — Programación principal en GDScript, diseño de mecánicas e integración en Godot Engine.
-- **Emmanuel Efrén Rosero Sánchez** — Diseño principal de assets y programación en GDScript.
-- **Miguel Ángel Murcia Galindo** — Investigación, revisión teórica/histórica y programación en GDScript.
+| Rol | Integrante |
+| :--- | :--- |
+| 🧑‍💻 Programación principal GDScript, mecánicas e integración Godot | **Juan Felipe Casas Aguilar** |
+| 🎨 Diseño de assets y programación GDScript | **Emmanuel Efrén Rosero Sánchez** |
+| 🔬 Investigación, revisión teórica/histórica y programación GDScript | **Miguel Ángel Murcia Galindo** |
 
 ---
 
-## 🏫 Institución y marco académico
+## 🏫 Marco académico
 
-- **Institución Educativa:** I.E. Técnico Industrial "Julio Flórez"
-- **Especialidad:** Sistemas Informáticos
-- **Programa:** Articulación SENA – Técnico en Desarrollo de Software
+| | |
+| :--- | :--- |
+| **Institución Educativa** | I.E. Técnico Industrial "Julio Flórez" |
+| **Especialidad** | Sistemas Informáticos |
+| **Programa** | Articulación SENA – Técnico en Desarrollo de Software |
 
 ---
 
 ## 🔗 Enlaces
 
-- **Repositorio:** [github.com/l1teSG/dirty-road-godot](https://github.com/l1teSG/dirty-road-godot)
-- **Landing / micrositio:** código en [`web/`](web/)
-- **Documentación de diseño:** [`docs/DirtyRoad_GDD.md`](docs/DirtyRoad_GDD.md) *(en progreso)*
+| Recurso | Enlace |
+| :--- | :--- |
+| Repositorio | [github.com/l1teSG/dirty-road-godot](https://github.com/l1teSG/dirty-road-godot) |
+| Landing / micrositio | [`web/`](web/) |
+| Documentación de diseño | [`docs/DirtyRoad_GDD.md`](docs/DirtyRoad_GDD.md) |
+| Conocimiento durable | [`MEMORY.md`](MEMORY.md) |
+| Guía para agentes | [`AGENTS.md`](AGENTS.md) |
 
 ---
 
 ## 📄 Licencia
 
 Distribuido bajo la **Licencia MIT**. Consulta [`LICENSE`](LICENSE) para más detalles.
+
+<div align="center">
+
+**🌿 Dirty Road** · *Mantén vivo el ecosistema el mayor tiempo posible.*
+
+Hecho con 💚 en Godot · [I.E. Técnico Industrial "Julio Flórez"](https://github.com/l1teSG/dirty-road-godot)
+
+</div>
