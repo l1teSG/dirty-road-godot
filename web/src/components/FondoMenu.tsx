@@ -29,6 +29,7 @@ const FRAG_BASE = `
 precision mediump float;
 uniform vec2 u_res;
 uniform float u_time;
+uniform float u_scroll;
 
 float hash(vec2 p) {
   return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123);
@@ -45,6 +46,8 @@ float noise(vec2 p) {
 }
 void main() {
   vec2 uv = gl_FragCoord.xy / u_res;
+  // El fondo se desplaza con el scroll para ligarlo a la navegación.
+  uv += vec2(0.0, u_scroll * 0.12);
   float t = u_time * 0.06;
 
   // Dos capas de ruido en movimiento -> manchas orgánicas.
@@ -166,6 +169,7 @@ export default function FondoMenu() {
     const baseU = {
       res: gl.getUniformLocation(progBase, 'u_res'),
       time: gl.getUniformLocation(progBase, 'u_time'),
+      scroll: gl.getUniformLocation(progBase, 'u_scroll'),
     };
     const compU = progComp
       ? {
@@ -209,6 +213,7 @@ export default function FondoMenu() {
     const start = performance.now();
     const frame = (now: number) => {
       const t = (now - start) / 1000;
+      const scroll = window.scrollY / (window.innerHeight || 1);
 
       if (fboOk && progComp && compU && tex) {
         // Paso 1: shader -> framebuffer (media resolución).
@@ -217,6 +222,7 @@ export default function FondoMenu() {
         useProgram(progBase);
         gl.uniform2f(baseU.res, texW, texH);
         gl.uniform1f(baseU.time, t);
+        gl.uniform1f(baseU.scroll, scroll);
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 
         // Paso 2: bloom + composite -> pantalla.
@@ -235,6 +241,7 @@ export default function FondoMenu() {
         useProgram(progBase);
         gl.uniform2f(baseU.res, canvas.width, canvas.height);
         gl.uniform1f(baseU.time, t);
+        gl.uniform1f(baseU.scroll, scroll);
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
       }
     };
