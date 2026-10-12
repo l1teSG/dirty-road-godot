@@ -164,6 +164,8 @@ func _on_oleada_iniciada(num_oleada: int) -> void:
 ## Muestra el cartel "HORDA N" DESPUÉS de que termine el popup educativo
 ## (p. ej. "ETAPA 1"), para que los mensajes no aparezcan a la vez.
 func _mostrar_horda(num: int) -> void:
+	if SaveManager != null and not bool(SaveManager.get_ajuste("mostrar_cartel_horda", true)):
+		return
 	var t0 := Time.get_ticks_msec()
 	while is_inside_tree() and EducationManager != null and EducationManager.esta_mostrando():
 		if (Time.get_ticks_msec() - t0) / 1000.0 >= TIEMPO_MAX_ESPERA_HORDA:

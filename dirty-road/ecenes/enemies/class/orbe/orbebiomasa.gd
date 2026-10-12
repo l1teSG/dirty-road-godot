@@ -236,6 +236,10 @@ func _recoger() -> void:
 	var cantidad: int = maxi(1, roundi(valor))
 	BiomasaManager.sumar(cantidad)
 
+	if OS.has_feature("mobile") and SaveManager != null \
+			and bool(SaveManager.get_ajuste("vibracion", true)):
+		Input.vibrate_handheld(12)
+
 	var escena := get_tree().current_scene
 	if escena != null:
 		var fx := EfectoRecogida.new()

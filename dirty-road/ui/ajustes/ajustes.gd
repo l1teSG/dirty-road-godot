@@ -100,6 +100,12 @@ func _construir() -> void:
 	var cg := _tarjeta(g, "Interfaz")
 	_fila_check(cg, "Disparo automático", "disparo_automatico")
 	_fila_check(cg, "Fondo animado (shader)", "fondo_shader")
+	_fila_check(cg, "Mostrar FPS", "mostrar_fps")
+	_fila_check(cg, "Flecha hacia el árbol", "mostrar_flecha_arbol")
+	_fila_check(cg, "Cartel de oleada (HORDA)", "mostrar_cartel_horda")
+	_fila_check(cg, "Confirmar al comprar mejoras", "confirmar_compra")
+	_fila_check(cg, "Pausar al perder el foco", "pausa_al_perder_foco")
+	_fila_check(cg, "Pantalla completa (escritorio)", "pantalla_completa")
 
 	# ── Educación ──
 	var e := _tab(tabs, "Educación")
@@ -122,6 +128,19 @@ func _construir() -> void:
 	var cc := _tarjeta(c, "HUD (joystick y botones)")
 	_fila_slider(cc, "Tamaño del HUD", "hud_escala", 0.6, 1.2, 0.05, "mult")
 	_fila_slider(cc, "Opacidad del HUD", "hud_opacidad", 0.3, 1.0, 0.05, "pct")
+	_fila_slider(cc, "Zoom de cámara", "camara_zoom", 1.5, 3.0, 0.1, "mult")
+
+	var cb := _tarjeta(c, "Disparo manual (sin automático)")
+	_fila_check(cb, "Disparo continuo al apuntar", "disparo_continuo_manual")
+	_fila_slider(cb, "Asistencia de apuntado", "autoapuntado", 0.0, 1.0, 0.05, "pct")
+
+	# ── Accesibilidad ──
+	var ac := _tab(tabs, "Accesibilidad")
+	var cacc := _tarjeta(ac, "Accesibilidad")
+	_fila_check(cacc, "Reducir destellos", "reducir_flashes")
+	_fila_check(cacc, "Reducir partículas", "reducir_particulas")
+	_fila_check(cacc, "Vibración (móvil)", "vibracion")
+	_fila_check(cacc, "Silenciar audio en segundo plano", "audio_en_foco")
 
 	col.add_child(_footer())
 

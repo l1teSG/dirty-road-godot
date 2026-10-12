@@ -30,6 +30,24 @@ func _on_ajustes() -> void:
 	aplicar_volumenes()
 
 
+## Silencia el audio cuando la app pierde el foco (si el ajuste está activo).
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_APPLICATION_FOCUS_OUT:
+		_aplicar_mute_foco(true)
+	elif what == NOTIFICATION_APPLICATION_FOCUS_IN:
+		_aplicar_mute_foco(false)
+
+
+func _aplicar_mute_foco(sin_foco: bool) -> void:
+	var idx := AudioServer.get_bus_index(BUS_MASTER)
+	if idx < 0:
+		return
+	var activo := true
+	if SaveManager != null:
+		activo = bool(SaveManager.get_ajuste("audio_en_foco", true))
+	AudioServer.set_bus_mute(idx, sin_foco and activo)
+
+
 # ───────────── BUSES ─────────────
 
 func _asegurar_buses() -> void:

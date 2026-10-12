@@ -87,10 +87,15 @@ func _iniciar() -> void:
 		_tweens.append(tinte)
 
 	if _particulas != null:
-		_particulas.emitting = true
+		_particulas.emitting = not _reducir_particulas()
 
 	_pulsar_luz(_luz_base, _base_color0, _base_energia0, true)
 	_pulsar_luz(_luz_punta, _punta_color0, 0.0, false)
+
+
+## Accesibilidad: si "reducir_particulas" está activo, no se emiten partículas.
+func _reducir_particulas() -> bool:
+	return SaveManager != null and bool(SaveManager.get_ajuste("reducir_particulas", false))
 
 
 func _pulsar_luz(luz: PointLight2D, color0: Color, energia0: float, con_energia: bool) -> void:

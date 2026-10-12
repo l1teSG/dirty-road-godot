@@ -120,6 +120,22 @@ const AJUSTES_DEFECTO := {
 	"hud_escala": 1.0,
 	"hud_opacidad": 1.0,
 	"fondo_shader": true,
+	# ── General ──
+	"mostrar_fps": false,
+	"pausa_al_perder_foco": false,
+	"mostrar_cartel_horda": true,
+	"confirmar_compra": false,
+	"mostrar_flecha_arbol": true,
+	"pantalla_completa": false,
+	# ── Combate / controles ──
+	"disparo_continuo_manual": false,
+	"autoapuntado": 0.0,
+	"camara_zoom": 2.0,
+	# ── Accesibilidad ──
+	"reducir_flashes": false,
+	"reducir_particulas": false,
+	"vibracion": true,
+	"audio_en_foco": true,
 }
 
 # Rangos válidos de los ajustes (se aplican al cargar para sanear valores).
@@ -132,6 +148,8 @@ const RANGOS_AJUSTES := {
 	"vol_efectos": [0.0, 1.0],
 	"hud_escala": [0.6, 1.2],
 	"hud_opacidad": [0.3, 1.0],
+	"autoapuntado": [0.0, 1.0],
+	"camara_zoom": [1.5, 3.0],
 }
 
 var datos: Dictionary = DATOS_DEFECTO.duplicate(true)
@@ -158,6 +176,7 @@ func _ready() -> void:
 	add_child(_timer_ajustes)
 
 	cargar_ajustes()
+	aplicar_modo_pantalla()
 	# Recuerda el último slot usado si existía.
 	var meta := _leer_meta()
 	if meta.has("ultimo_slot"):
@@ -416,7 +435,18 @@ func set_ajuste(clave: String, valor: Variant) -> void:
 		_timer_ajustes.start()
 	else:
 		guardar_ajustes()
+	if clave == "pantalla_completa":
+		aplicar_modo_pantalla()
 	ajustes_cambiados.emit()
+
+
+## Aplica el ajuste de pantalla completa (solo escritorio).
+func aplicar_modo_pantalla() -> void:
+	if OS.has_feature("mobile"):
+		return
+	var full := bool(get_ajuste("pantalla_completa", false))
+	DisplayServer.window_set_mode(
+		DisplayServer.WINDOW_MODE_FULLSCREEN if full else DisplayServer.WINDOW_MODE_WINDOWED)
 
 
 ## Fuerza la escritura si hay cambios pendientes. Llamar al salir/pausar/cerrar.

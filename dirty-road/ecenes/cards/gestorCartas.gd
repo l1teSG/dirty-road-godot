@@ -5,6 +5,7 @@ signal mejora_comprada(id_mejora: String)
 
 ## Fuente base de nombre / rareza / precio (script sin class_name → preload).
 const CATALOGO_CARDS := preload("res://assets/cards/catalogoCards.gd")
+const CONFIRMACION := preload("res://ui/confirmacion.gd")
 
 @export_category("Referencias")
 @export var constructor: ConstructorCartas
@@ -24,6 +25,8 @@ var _contenido: Control
 var _biomasa_label: Label
 var _cerrando: bool = false
 var _pool: Array[InfoMejora] = []
+var _confirm = null
+var _pendiente: InfoMejora = null
 
 func _ready() -> void:
 	add_to_group("cartas")
@@ -33,6 +36,11 @@ func _ready() -> void:
 		config = CartasConfig.new()
 
 	_build_ui()
+
+	# Modal de confirmación de compra (ajuste "confirmar_compra").
+	_confirm = CONFIRMACION.new()
+	add_child(_confirm)
+	_confirm.confirmado.connect(_on_compra_confirmada)
 
 	if BiomasaManager != null and not BiomasaManager.biomasa_incrementada.is_connected(_on_biomasa_ui):
 		BiomasaManager.biomasa_incrementada.connect(_on_biomasa_ui)
@@ -308,6 +316,26 @@ func _animar_entrada_cartas() -> void:
 			hijos[i].call("animar_entrada", float(i) * 0.07)
 
 func _on_carta_elegida(info: InfoMejora) -> void:
+	# Confirmación opcional antes de gastar biomasa (ajuste "confirmar_compra").
+	if info.costo_orbes > 0 and SaveManager != null and _confirm != null \
+			and bool(SaveManager.get_ajuste("confirmar_compra", false)):
+		_pendiente = info
+		_confirm.abrir(
+			'¿Comprar "%s"?\nCoste: %d biomasa.' % [info.nombre, info.costo_orbes],
+			"COMPRAR", "CANCELAR", false)
+		return
+	_procesar_compra(info)
+
+
+func _on_compra_confirmada() -> void:
+	if _pendiente == null:
+		return
+	var info := _pendiente
+	_pendiente = null
+	_procesar_compra(info)
+
+
+func _procesar_compra(info: InfoMejora) -> void:
 	_log("Elegida: %s" % info.id)
 	var ok := false
 	if MejorasManager != null:

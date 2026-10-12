@@ -133,6 +133,10 @@ var _flecha: FlechaArbol
 var _super: SuperMeteoritos
 var _contador: ContadorRespawn
 var _selector := SelectorObjetivo.new()
+## Etiqueta de FPS opcional (ajuste "mostrar_fps").
+var _fps_label: Label = null
+## Última dirección de disparo manual (para "disparo_continuo_manual").
+var _ultima_dir: Vector2 = Vector2.RIGHT
 
 
 func _ready() -> void:
@@ -153,7 +157,32 @@ func _ready() -> void:
 		SaveManager.ajustes_cambiados.connect(_on_ajustes)
 	_estilizar_botones()
 	_configurar_hud()
+	_aplicar_ajustes_juego()
 	_configurar_dron()
+	_conectar_foco_ventana()
+
+
+## Pausa automática al perder el foco de la ventana (ajuste opcional).
+func _conectar_foco_ventana() -> void:
+	var win := get_window()
+	if win == null:
+		return
+	if not win.focus_exited.is_connected(_on_foco_perdido):
+		win.focus_exited.connect(_on_foco_perdido)
+
+
+func _on_foco_perdido() -> void:
+	if _muerto or SaveManager == null:
+		return
+	if not bool(SaveManager.get_ajuste("pausa_al_perder_foco", false)):
+		return
+	if pausa != null and pausa.has_method("abrir") and not get_tree().paused:
+		pausa.call("abrir")
+
+
+func _process(_delta: float) -> void:
+	if _fps_label != null and _fps_label.visible:
+		_fps_label.text = "FPS %d" % Engine.get_frames_per_second()
 
 
 # ── Stats desde SaveManager (fuente de verdad de la run) ──────────────
@@ -299,12 +328,36 @@ func _on_timer_timeout() -> void:
 	# Modo manual: dispara en la dirección del joystick derecho.
 	# (La mira la orienta _actualizar_aim cada frame; aquí solo se dispara.)
 	if _es_manual():
-		if _apuntado != null and _apuntado.activo and _apuntado.direccion.length() > 10.0:
-			_disparar_rafaga(_apuntado.direccion.normalized())
+		var activo: bool = _apuntado != null and _apuntado.activo and _apuntado.direccion.length() > 10.0
+		if activo:
+			_ultima_dir = _apuntado.direccion.normalized()
+		elif not bool(SaveManager.get_ajuste("disparo_continuo_manual", false)):
+			return
+		_disparar_rafaga(_asistir_apuntado(_ultima_dir))
 		return
 	_actualizar_objetivo()  # siempre apunta al más cercano actual
 	if onFire and disparoON:
 		shot(enemi)
+
+
+## Asistencia de apuntado en modo manual (ajuste "autoapuntado", 0-1):
+## imanta suavemente la dirección de disparo hacia el enemigo más cercano
+## cuando está dentro de un cono.
+func _asistir_apuntado(dir: Vector2) -> Vector2:
+	if SaveManager == null or not is_instance_valid(aim):
+		return dir
+	var fuerza := clampf(float(SaveManager.get_ajuste("autoapuntado", 0.0)), 0.0, 1.0)
+	if fuerza <= 0.0:
+		return dir
+	var obj := _selector.mas_cercano(aim.global_position)
+	if obj == null:
+		return dir
+	var a_obj := (obj.global_position - aim.global_position).normalized()
+	var cono := deg_to_rad(35.0)
+	var dif := absf(angle_difference(dir.angle(), a_obj.angle()))
+	if dif > cono:
+		return dir
+	return dir.lerp(a_obj, fuerza * (1.0 - dif / cono)).normalized()
 
 
 func _es_manual() -> bool:
@@ -316,6 +369,67 @@ func _es_manual() -> bool:
 
 func _on_ajustes() -> void:
 	_configurar_hud()
+	_aplicar_ajustes_juego()
+
+
+## Ajustes de juego que no dependen del joystick: cámara, flecha y FPS.
+func _aplicar_ajustes_juego() -> void:
+	if SaveManager == null:
+		return
+	_aplicar_camara()
+	_aplicar_flecha()
+	_aplicar_fps()
+
+
+func _aplicar_camara() -> void:
+	var cam := get_node_or_null("Camera2D") as Camera2D
+	if cam == null:
+		return
+	var z := clampf(float(SaveManager.get_ajuste("camara_zoom", 2.0)), 1.0, 4.0)
+	cam.zoom = Vector2.ONE * z
+
+
+func _aplicar_flecha() -> void:
+	if _flecha == null or _muerto:
+		return
+	_flecha.habilitada = bool(SaveManager.get_ajuste("mostrar_flecha_arbol", true))
+
+
+func _aplicar_fps() -> void:
+	var on := bool(SaveManager.get_ajuste("mostrar_fps", false))
+	if _fps_label == null:
+		if not on:
+			return
+		_fps_label = Label.new()
+		_fps_label.name = "FPS"
+		_fps_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_fps_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+		_fps_label.add_theme_font_size_override("font_size", 24)
+		_fps_label.add_theme_color_override("font_color", Color("99ff33"))
+		var ui := get_node_or_null("ui") as CanvasLayer
+		if ui != null:
+			ui.add_child(_fps_label)
+		else:
+			add_child(_fps_label)
+		_fps_label.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+		_fps_label.offset_left = -170.0
+		_fps_label.offset_top = 22.0
+		_fps_label.offset_right = -24.0
+		_fps_label.offset_bottom = 58.0
+	_fps_label.visible = on
+
+
+## ¿El usuario pidió reducir destellos? (accesibilidad)
+func _reducir_flashes() -> bool:
+	return SaveManager != null and bool(SaveManager.get_ajuste("reducir_flashes", false))
+
+
+## Vibración háptica corta (solo móvil, si el ajuste está activo).
+func _vibrar(ms: int) -> void:
+	if SaveManager == null or not bool(SaveManager.get_ajuste("vibracion", true)):
+		return
+	if OS.has_feature("mobile"):
+		Input.vibrate_handheld(ms)
 
 
 ## Rediseño de los botones de acción: quita la "luz" del poder y los deja
@@ -539,7 +653,9 @@ func take_damage(damage: int) -> void:
 		var armadura := clampf(SaveManager.get_stat("jugador.armadura", 0.0), 0.0, 0.9)
 		damage = int(round(float(damage) * (1.0 - armadura)))
 
-	_anim.flash_golpe(color_flash_golpe, duracion_flash_golpe)
+	if not _reducir_flashes():
+		_anim.flash_golpe(color_flash_golpe, duracion_flash_golpe)
+	_vibrar(60)
 
 	life -= damage
 	tiempo_sin_recibir_danio = 0.0
