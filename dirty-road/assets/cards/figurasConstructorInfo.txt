@@ -676,3 +676,18 @@ capa Chispa1 #ffffff: -6,-2 -3,-6 -4,-1
 capa Chispa2 #ffffff: 5,8 8,4 7,9
 escala 1.2
 sombra 18 6 20 0.4
+---
+NOMBRE: Flecha Perforante
+capa AstaFondo #8b4513: -2,20 2,20 2,-14 -2,-14
+capa AstaFrente #a0522d: -1,20 1,20 1,-14 -1,-14
+capa PuntaFondo #a9a9a9: -6,-14 6,-14 0,-28
+capa PuntaFrente #d3d3d3: -3,-14 3,-14 0,-26
+capa FacetaPunta #ffffff: 0,-14 3,-14 0,-26
+capa PlumaFondo1 #32cd32: -2,-14 -12,-20 -4,-16
+capa PlumaFondo2 #32cd32: 2,-14 12,-20 4,-16
+capa PlumaFrente1 #adff2f: -2,-18 -10,-24 -4,-20
+capa PlumaFrente2 #adff2f: 2,-18 10,-24 4,-20
+capa BrilloAsta #cd853f: -1,20 -1,-14 1,-14 1,20
+capa Nudo #3e2723: -3,18 3,18 3,16 -3,16
+escala 1.1
+sombra 16 5 20 0.4
