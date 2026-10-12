@@ -1014,3 +1014,18 @@ capa Chispa1 #ffffff: -16,-18 -13,-21 -12,-17
 capa Chispa2 #ffffff: 16,-18 13,-21 12,-17
 escala 1.2
 sombra 22 8 18 0.3
+---
+NOMBRE: Raíces Largas
+capa SueloFondo #4e342e: -20,10 20,10 16,16 -16,16
+capa Tronco #6b4226: -5,10 5,10 4,-6 -4,-6
+capa RaizCentral #8b4513: -4,10 4,10 0,-14
+capa RaizIzq1 #a0522d: -4,8 -14,16 -9,16
+capa RaizDer1 #a0522d: 4,8 14,16 9,16
+capa RaizIzq2 #cd853f: -3,4 -14,6 -9,9
+capa RaizDer2 #cd853f: 3,4 14,6 9,9
+capa EnergiaArriba #32cd32: -3,-14 3,-14 0,-24
+capa BrilloEnergia #adff2f: -3,-20 0,-26 3,-20
+capa FacetaTronco #7a5c3a: 0,10 5,10 4,-6 0,-6
+capa Grieta #271a17: -8,12 0,11 8,13
+escala 1.1
+sombra 30 12 18 0.5
