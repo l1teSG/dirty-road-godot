@@ -12,8 +12,8 @@ extends Node
 ##                                            interpreta 1+stat si es fracción)
 ##    op "mult" -> stat *= valor            (multiplicador absoluto)
 ##
-##  Los stats marcados "(hook pendiente)" se guardan pero aún no los consume
-##  ninguna mecánica; se irán conectando (proyectiles, auras, IA...).
+##  Todos los stats listados ya los consume alguna mecánica (proyectiles,
+##  auras, IA, dron, etc.); no quedan hooks pendientes.
 ## ══════════════════════════════════════════════════════════
 
 const EFECTOS: Dictionary = {
@@ -55,11 +55,11 @@ const EFECTOS: Dictionary = {
 	"injertobotanico": [["jugador.proyectiles_extra", "add", 1]],
 	"mangueradegoteo": [["jugador.alcance", "pct", 0.25]],
 	"semillagigante": [["jugador.tamano", "pct", 0.30]],
-	"hachaconfiscada": [["jugador.danio_elite", "add", 0.40]],  # hook pendiente
-	"reddelimpiezaoceanica": [["jugador.danio_acuaticos", "add", 0.30]],  # hook pendiente
-	"fertilizantenatural": [["jugador.danio_continuo", "add", 1]],  # hook pendiente
-	"biopesticida": [["jugador.danio_toxico", "add", 1]],  # hook pendiente
-	"bombadesemillas": [["jugador.detonar_prob", "add", 0.15]],  # hook pendiente
+	"hachaconfiscada": [["jugador.danio_elite", "add", 0.40]],
+	"reddelimpiezaoceanica": [["jugador.danio_acuaticos", "add", 0.30]],
+	"fertilizantenatural": [["jugador.danio_continuo", "add", 1]],
+	"biopesticida": [["jugador.danio_toxico", "add", 1]],
+	"bombadesemillas": [["jugador.detonar_prob", "add", 0.15]],
 
 	# ── Movimiento / utilidad ──
 	"bicicletaecologica": [["jugador.velocidad", "pct", 0.15]],
@@ -75,19 +75,19 @@ const EFECTOS: Dictionary = {
 		["jugador.regen", "add", 0.2],
 	],
 	"abonoorganico": [["jugador.xp_mult", "pct", 0.20]],
-	"electroimancasero": [["arbol.regen", "add", 0.2]],  # aprox.; hook real pendiente
-	"panelsolarportatil": [["jugador.regen", "add", 0.4]],  # aprox.; hook pendiente
-	"linternadedinamo": [["jugador.vision", "add", 1]],  # hook pendiente
-	"hongoluminiscente": [["jugador.ralentizar", "add", 0.20]],  # hook pendiente
+	"electroimancasero": [["arbol.regen", "add", 0.2]],
+	"panelsolarportatil": [["jugador.regen", "add", 0.4]],
+	"linternadedinamo": [["jugador.vision", "add", 1]],
+	"hongoluminiscente": [["jugador.ralentizar", "add", 0.20]],
 	"treboldecuatrohojas": [["jugador.suerte", "add", 1]],
 	"espejoparabolico": [["jugador.esquiva", "add", 0.10]],
-	"filtrodecarbon": [["jugador.inmunidad_nube", "add", 1]],  # hook pendiente
-	"raicesprofundas": [["jugador.bonus_quieto", "add", 0.50]],  # hook pendiente
-	"pararrayosreciclado": [["jugador.paralizar", "add", 1]],  # hook pendiente
-	"mantaignifuga": [["jugador.inmunidad_fuego", "add", 1]],  # hook pendiente
-	"alarmatemprana": [["jugador.aturdir", "add", 1]],  # hook pendiente
-	"dronconservacionista": [["jugador.dron", "add", 1]],  # hook pendiente
-	"semillasdetrueque": [["jugador.descuento", "add", 0.15]],  # hook pendiente
+	"filtrodecarbon": [["jugador.inmunidad_nube", "add", 1]],
+	"raicesprofundas": [["jugador.bonus_quieto", "add", 0.50]],
+	"pararrayosreciclado": [["jugador.paralizar", "add", 1]],
+	"mantaignifuga": [["jugador.inmunidad_fuego", "add", 1]],
+	"alarmatemprana": [["jugador.aturdir", "add", 1]],
+	"dronconservacionista": [["jugador.dron", "add", 1]],
+	"semillasdetrueque": [["jugador.descuento", "add", 0.15]],
 
 	# ── Legendaria mixta ──
 	"fuerzadelanaturaleza": [
