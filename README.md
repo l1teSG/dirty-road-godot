@@ -2,6 +2,8 @@
 
 # 🌿 DIRTY ROAD
 
+![Dirty Road — key art](dirty-road/banner.png)
+
 ### *Survival action 2D infinito · educativo · ambiental*
 
 **Defiende el último Árbol vivo de oleadas interminables de contaminación.**
