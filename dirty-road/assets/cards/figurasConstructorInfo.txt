@@ -863,3 +863,18 @@ capa PataDer #556b2f: 4,12 8,12 8,16 4,16
 capa Brillo #bdb76b: -10,-6 -6,-9 -4,-5
 escala 1.1
 sombra 26 10 18 0.4
+---
+NOMBRE: Respirador Natural
+capa MascaraFondo #2e8b57: 0,14 -12,4 -12,-6 0,-14 12,-6 12,4
+capa MascaraFrente #3cb371: 0,10 -8,3 -8,-4 0,-10 8,-4 8,3
+capa FiltroIzq #006400: -10,0 -5,0 -5,6 -10,6
+capa FiltroDer #006400: 5,0 10,0 10,6 5,6
+capa HojaFiltroI #32cd32: -10,3 -14,-1 -9,1
+capa HojaFiltroD #32cd32: 10,3 14,-1 9,1
+capa BandaIzq #4d4d4d: -12,4 -18,-4 -16,-6
+capa BandaDer #4d4d4d: 12,4 18,-4 16,-6
+capa Valvula #a9a9a9: 0,-14 -3,-10 3,-10
+capa Brillo #adff2f: -8,3 -4,3 -3,-4
+capa Aire #e0ffff: 0,14 -2,20 2,20
+escala 1.1
+sombra 22 8 16 0.4
