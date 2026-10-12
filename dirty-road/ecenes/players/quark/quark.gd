@@ -297,12 +297,10 @@ func _on_mega_pressed() -> void:
 
 func _on_timer_timeout() -> void:
 	# Modo manual: dispara en la dirección del joystick derecho.
+	# (La mira la orienta _actualizar_aim cada frame; aquí solo se dispara.)
 	if _es_manual():
 		if _apuntado != null and _apuntado.activo and _apuntado.direccion.length() > 10.0:
-			var dir: Vector2 = _apuntado.direccion.normalized()
-			if is_instance_valid(aim):
-				aim.rotation = lerp_angle(aim.rotation, dir.angle(), 0.5)
-			_disparar_rafaga(dir)
+			_disparar_rafaga(_apuntado.direccion.normalized())
 		return
 	_actualizar_objetivo()  # siempre apunta al más cercano actual
 	if onFire and disparoON:
@@ -310,6 +308,9 @@ func _on_timer_timeout() -> void:
 
 
 func _es_manual() -> bool:
+	# Sin joystick de apuntado no hay forma de apuntar: se cae a automático.
+	if _apuntado == null or not is_instance_valid(_apuntado):
+		return false
 	return SaveManager != null and not bool(SaveManager.get_ajuste("disparo_automatico", true))
 
 
@@ -462,6 +463,14 @@ func _actualizar_objetivo() -> void:
 
 func _actualizar_aim() -> void:
 	if not is_instance_valid(aim):
+		return
+	# Modo manual: la mira la manda el joystick de apuntado (o el movimiento),
+	# nunca el auto-objetivo (si no, la mira se enganchaba a los enemigos).
+	if _es_manual():
+		if _apuntado != null and _apuntado.activo and _apuntado.direccion.length() > 10.0:
+			aim.rotation = lerp_angle(aim.rotation, _apuntado.direccion.angle(), 0.5)
+		elif velocity != Vector2.ZERO:
+			aim.rotation = velocity.angle()
 		return
 	if is_instance_valid(enemi):
 		aim.rotation = (enemi.global_position - aim.global_position).angle()
