@@ -67,6 +67,7 @@ mov_orbita = 0.7
 radio_contacto = 38.0
 comportamiento_tipo = "rango"
 boca = NodePath("boca")
+proyectil_estilo = "humo"
 categoria = "nube"
 nombre_texto = "Humo de Fábrica"
 fuente_nombre = ExtResource("2_se4oh")

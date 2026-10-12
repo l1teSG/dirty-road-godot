@@ -48,6 +48,7 @@ mov_orbita = 0.7
 radio_contacto = 36.39607805437114
 comportamiento_tipo = "rango"
 boca = NodePath("boca")
+proyectil_estilo = "humo"
 categoria = "nube"
 nombre_texto = "Nube de Fumigación"
 fuente_nombre = ExtResource("2_12uha")
