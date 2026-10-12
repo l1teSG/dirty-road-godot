@@ -391,6 +391,10 @@ func _terminar_oleada_por_tiempo() -> void:
 func _cerrar_oleada(descanso: float) -> void:
 	if _cerrando_oleada:
 		return
+	# Si el nodo ya salió del árbol (cambio de escena), no hay nada que cerrar:
+	# evitar get_tree() == null (moría el árbol → Game Over).
+	if not is_inside_tree():
+		return
 	_cerrando_oleada = true
 
 	spawn_timer.stop()
@@ -481,10 +485,14 @@ func _on_ui_tick() -> void:
 
 
 func _limpiar_enemigos_vivos() -> void:
+	# Guarda: el nodo puede haber salido del árbol (cambio de escena).
+	var tree := get_tree()
+	if tree == null:
+		return
 	# Invalida los tree_exited pendientes de esta oleada.
 	_generacion += 1
 	var limpiados := 0
-	for e in get_tree().get_nodes_in_group("enemigos"):
+	for e in tree.get_nodes_in_group("enemigos"):
 		# Los sobrantes "mueren": sueltan orbes que persiguen al jugador.
 		if e.has_method("morir_por_fin_de_oleada"):
 			e.call("morir_por_fin_de_oleada")
@@ -492,8 +500,8 @@ func _limpiar_enemigos_vivos() -> void:
 			e.queue_free()
 		limpiados += 1
 	# Proyectiles enemigos que quedan volando.
-	var proyectiles := get_tree().get_nodes_in_group("proyectil_enemigo").size()
-	for p in get_tree().get_nodes_in_group("proyectil_enemigo"):
+	var proyectiles := tree.get_nodes_in_group("proyectil_enemigo").size()
+	for p in tree.get_nodes_in_group("proyectil_enemigo"):
 		p.queue_free()
 	if debug_imprimir_info:
 		print("[WaveManager] Cierre de oleada: %d enemigos limpiados (sueltan orbes), %d proyectiles." % [limpiados, proyectiles])
@@ -735,6 +743,9 @@ func _spawnear_jefe() -> void:
 func _on_jefe_muerto(nombre: String, generacion: int) -> void:
 	# Ignora avisos de generaciones cerradas (limpieza, cambio de escena).
 	if generacion != _generacion or jefe_actual == null:
+		return
+	# El manager puede haberse quedado fuera del árbol (Game Over): no cerrar.
+	if not is_inside_tree():
 		return
 	jefe_actual = null
 	oleada_de_jefe = false
