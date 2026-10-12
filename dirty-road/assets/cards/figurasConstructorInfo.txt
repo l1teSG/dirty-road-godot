@@ -706,3 +706,17 @@ capa Destello1 #ffff00: -14,-4 -11,-8 -10,-3
 capa Destello2 #ffff00: 14,-4 11,-8 10,-3
 escala 1.2
 sombra 26 10 16 0.4
+---
+NOMBRE: Caña Larga
+capa CañaFondo #556b2f: -4,25 4,25 4,-25 -4,-25
+capa CañaFrente #6b8e23: -2,25 2,25 2,-25 -2,-25
+capa Nudo1 #3e2723: -5,10 5,10 5,13 -5,13
+capa Nudo2 #3e2723: -5,-5 5,-5 5,-2 -5,-2
+capa Nudo3 #3e2723: -5,-20 5,-20 5,-17 -5,-17
+capa BrilloTallo #98fb98: -1,25 -1,-25 1,-25 1,25
+capa Hoja1 #32cd32: -4,-10 -14,-16 -6,-13
+capa Hoja2 #3cb371: 4,-6 14,-12 6,-9
+capa Hoja3 #228b22: -4,4 -12,0 -6,2
+capa PuntaHoja #adff2f: 4,-25 8,-30 6,-24
+escala 1.0
+sombra 14 5 20 0.5
