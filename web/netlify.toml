@@ -1,0 +1,55 @@
+# ══════════════════════════════════════════════════════════
+#  Netlify — landing de Dirty Road.
+#  La "base directory" del sitio debe ser `web` (este archivo vive aquí).
+#  Dominio primario: https://l1t3dev.com (apex)
+# ══════════════════════════════════════════════════════════
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+  # No reconstruir si el cambio no toca la web (el juego vive en ../dirty-road).
+  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- ."
+
+[build.environment]
+  NODE_VERSION = "22.12.0"
+
+# --- Cabeceras de caché ---------------------------------------------------
+# Los assets con hash de Astro son inmutables.
+[[headers]]
+  for = "/_astro/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/video/*"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000"
+
+[[headers]]
+  for = "/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000"
+
+[[headers]]
+  for = "/icon-192.png"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000"
+
+[[headers]]
+  for = "/icon-512.png"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000"
+
+# --- Seguridad (todo el sitio) --------------------------------------------
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Frame-Options = "SAMEORIGIN"
+    Permissions-Policy = "geolocation=(), microphone=(), camera=()"

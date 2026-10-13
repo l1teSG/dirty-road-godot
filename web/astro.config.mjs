@@ -9,7 +9,7 @@ import tailwindcss from '@tailwindcss/vite';
 // https://astro.build/config
 export default defineConfig({
   // Dominio de producción: necesario para URLs canónicas, OG absolutas y sitemap.
-  site: 'https://dirty-road-official.netlify.app',
+  site: 'https://l1t3dev.com',
 
   integrations: [react(), sitemap()],
 

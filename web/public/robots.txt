@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://dirty-road-official.netlify.app/sitemap-index.xml
+Sitemap: https://l1t3dev.com/sitemap-index.xml
