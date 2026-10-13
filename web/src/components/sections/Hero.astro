@@ -1,4 +1,9 @@
 ---
+import { getImage } from 'astro:assets';
+import posterEtapa from '../../media/juego/etapas/etapa_01.png';
+
+const posterHero = await getImage({ src: posterEtapa, format: 'webp', width: 1280 });
+
 // Héroe: el único momento orquestado de la página. A la izquierda, el título
 // como etiqueta de espécimen. A la derecha, una "ventana cinematográfica":
 // el gameplay ocupa el panel y encima va un HUD (medidor de contaminación vivo
@@ -59,7 +64,7 @@ const total = 10;
         <video
           class="aspect-video w-full object-cover"
           src="/video/trailer.mp4"
-          poster="/images/juego/etapas/etapa_01.png"
+          poster={posterHero.src}
           autoplay
           muted
           loop

@@ -1,16 +1,26 @@
 ---
+import { Image, getImage } from 'astro:assets';
 import SectionHeading from '../ui/SectionHeading.astro';
 import Reveal from '../ui/Reveal.astro';
 
 // Capturas reales del juego (generadas con tools/fotos_web.sh).
+import etapa01 from '../../media/juego/etapas/etapa_01.png';
+import etapa03 from '../../media/juego/etapas/etapa_03.png';
+import etapa05 from '../../media/juego/etapas/etapa_05.png';
+import etapa09 from '../../media/juego/etapas/etapa_09.png';
+import etapa10 from '../../media/juego/etapas/etapa_10.png';
+import boss05 from '../../media/juego/enemigos/boss_05_geiser.png';
+
 const capturas = [
-  { src: '/images/juego/etapas/etapa_01.png', t: 'El árbol central' },
-  { src: '/images/juego/etapas/etapa_03.png', t: 'Océanos y plástico' },
-  { src: '/images/juego/etapas/etapa_05.png', t: 'Lluvia ácida' },
-  { src: '/images/juego/etapas/etapa_09.png', t: 'Deforestación' },
-  { src: '/images/juego/etapas/etapa_10.png', t: 'Cambio climático' },
-  { src: '/images/juego/enemigos/boss_05_geiser.png', t: 'Jefe de etapa' },
+  { img: etapa01, t: 'El árbol central' },
+  { img: etapa03, t: 'Océanos y plástico' },
+  { img: etapa05, t: 'Lluvia ácida' },
+  { img: etapa09, t: 'Deforestación' },
+  { img: etapa10, t: 'Cambio climático' },
+  { img: boss05, t: 'Jefe de etapa' },
 ];
+
+const posterTrailer = await getImage({ src: etapa01, format: 'webp', width: 1280 });
 ---
 <section id="galeria" data-tint="#47c9b0" class="border-t border-line px-4 py-24 sm:py-28">
   <div class="mx-auto max-w-6xl">
@@ -26,7 +36,7 @@ const capturas = [
       <video
         class="mt-14 w-full rounded-[3px] border border-line"
         src="/video/trailer.mp4"
-        poster="/images/juego/etapas/etapa_01.png"
+        poster={posterTrailer.src}
         autoplay
         muted
         loop
@@ -40,11 +50,12 @@ const capturas = [
       {capturas.map((cap, i) => (
         <Reveal delay={(i % 3) * 90}>
           <figure>
-            <img
-              src={cap.src}
+            <Image
+              src={cap.img}
               alt={cap.t}
-              width="1360"
-              height="768"
+              widths={[480, 800, 1200]}
+              sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 92vw"
+              format="webp"
               loading="lazy"
               decoding="async"
               class="aspect-video w-full rounded-[3px] border border-line object-cover"

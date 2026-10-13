@@ -2,7 +2,7 @@
 # ══════════════════════════════════════════════════════════
 #  Fotos de las 10 etapas (+ jefes) para la web.
 #  Fuerza cada etapa con los overrides de debug del WaveManager y
-#  captura un PNG sin HUD (modo foto) → web/public/images/juego/.
+#  captura un PNG sin HUD (modo foto) → web/src/media/juego/.
 #
 #  Uso:  tools/fotos_web.sh [carpeta_salida]
 #  Requiere display/GPU (no headless).
@@ -11,7 +11,7 @@ set -euo pipefail
 
 GODOT="${GODOT:-/usr/bin/godot}"
 PROJ="$(cd "$(dirname "$0")/.." && pwd)"
-OUT="${1:-$PROJ/../web/public/images/juego}"
+OUT="${1:-$PROJ/../web/src/media/juego}"
 ESCENA="res://demo/level 1/niviel1.tscn"
 ESPERA="${ESPERA:-6}"
 RES="${RES:-1920x1080}"
