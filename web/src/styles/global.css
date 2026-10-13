@@ -95,15 +95,6 @@
     border-radius: 3px;
   }
 
-  /* Riel de instrumento: marcas de regla verticales muy tenues. */
-  .ticks {
-    background-image: repeating-linear-gradient(
-      to bottom,
-      var(--color-line-strong) 0 1px,
-      transparent 1px 14px
-    );
-  }
-
   /* Rejilla de campo de fondo. */
   .field-grid {
     background-image:

@@ -54,6 +54,8 @@ const links = [
       id="menu-btn"
       class="ml-auto rounded-full border border-line bg-bg/70 px-4 py-2 text-lg leading-none text-bone backdrop-blur md:hidden"
       aria-label="Abrir menú"
+      aria-controls="menu-panel"
+      aria-expanded="false"
     >
       ☰
     </button>
@@ -90,8 +92,13 @@ const links = [
   const btn = document.getElementById('menu-btn');
   const panel = document.getElementById('menu-panel');
   if (btn && panel) {
-    btn.addEventListener('click', () => panel.classList.toggle('hidden'));
-    panel.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => panel.classList.add('hidden')));
+    const setAbierto = (abierto: boolean) => {
+      panel.classList.toggle('hidden', !abierto);
+      btn.setAttribute('aria-expanded', String(abierto));
+      btn.setAttribute('aria-label', abierto ? 'Cerrar menú' : 'Abrir menú');
+    };
+    btn.addEventListener('click', () => setAbierto(panel.classList.contains('hidden')));
+    panel.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setAbierto(false)));
   }
 
   // Scrollspy + indicador deslizante del dock

@@ -43,6 +43,8 @@ const capturas = [
             <img
               src={cap.src}
               alt={cap.t}
+              width="1360"
+              height="768"
               loading="lazy"
               decoding="async"
               class="aspect-video w-full rounded-[3px] border border-line object-cover"
@@ -54,3 +56,23 @@ const capturas = [
     </div>
   </div>
 </section>
+
+<script>
+  // El trailer solo reproduce cuando está a la vista (ahorra CPU y batería).
+  const trailer = document.querySelector<HTMLVideoElement>('#galeria video');
+  if (trailer) {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      trailer.autoplay = false;
+      trailer.pause();
+    } else if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) void trailer.play().catch(() => {});
+          else trailer.pause();
+        },
+        { threshold: 0.25 },
+      );
+      io.observe(trailer);
+    }
+  }
+</script>
