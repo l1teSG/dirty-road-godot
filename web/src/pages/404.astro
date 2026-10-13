@@ -1,0 +1,35 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout
+  title="Página no encontrada — Dirty Road"
+  description="La página que buscas no existe o cambió de lugar."
+  noindex
+>
+  <main
+    id="contenido"
+    tabindex="-1"
+    class="field-grid relative flex min-h-screen flex-col items-center justify-center gap-6 px-4 text-center"
+  >
+    <p class="flex items-center gap-3 text-sm text-moss">
+      <span class="h-px w-6 bg-leaf" aria-hidden="true"></span>
+      Error 404
+    </p>
+
+    <h1 class="text-balance text-[clamp(3rem,12vw,7rem)] font-bold leading-[0.9] tracking-[-0.03em] text-bone">
+      Ruta <span class="text-leaf">perdida</span>
+    </h1>
+
+    <p class="max-w-md text-moss">
+      El sendero que buscabas no lleva a ningún árbol. Puede que el enlace haya cambiado
+      o ya no exista.
+    </p>
+
+    <a
+      href="/"
+      class="mt-2 inline-flex items-center rounded-[3px] bg-resin px-7 py-3 font-semibold text-bg shadow-glow-resin transition-colors hover:bg-[#f0b451]"
+    >
+      Volver al inicio
+    </a>
+  </main>
+</BaseLayout>
