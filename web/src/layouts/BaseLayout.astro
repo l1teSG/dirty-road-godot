@@ -9,16 +9,46 @@ import '../styles/global.css';
 export interface Props {
   title?: string;
   description?: string;
+  noindex?: boolean;
 }
 
 const {
   title = 'Dirty Road',
   description = 'Shooter de supervivencia minimalista con temática ecológica. Sobrevive a enemigos geométricos que representan la contaminación.',
+  noindex = false,
 } = Astro.props;
 
 // URLs absolutas para canónicas y tarjetas sociales (requieren `site` en astro.config).
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const ogImage = new URL('/images/juego/og.png', Astro.site).href;
+
+// Datos estructurados (schema.org) para resultados enriquecidos de Google.
+const jsonLd = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'VideoGame',
+  name: 'Dirty Road',
+  description,
+  url: canonical,
+  image: ogImage,
+  inLanguage: 'es',
+  genre: ['Survival', 'Educación ambiental'],
+  gamePlatform: ['Android', 'PC'],
+  applicationCategory: 'Game',
+  operatingSystem: 'Android',
+  playMode: 'SinglePlayer',
+  author: {
+    '@type': 'EducationalOrganization',
+    name: 'I.E. Técnico Industrial "Julio Flórez"',
+  },
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'COP',
+    availability: 'https://schema.org/InStock',
+  },
+  downloadUrl: 'https://github.com/l1teSG/dirty-road-godot/releases/latest',
+  sameAs: ['https://github.com/l1teSG/dirty-road-godot'],
+});
 ---
 
 <!DOCTYPE html>
@@ -26,21 +56,51 @@ const ogImage = new URL('/images/juego/og.png', Astro.site).href;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    <link rel="icon" type="image/png" href="/favicon.png" />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+    <!-- Iconos -->
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/favicon.png" sizes="64x64" />
+    <link rel="apple-touch-icon" href="/favicon.png" />
+    <meta name="theme-color" content="#050a08" />
+    <meta name="color-scheme" content="dark" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Dirty Road" />
+    <meta property="og:locale" content="es_ES" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Dirty Road — videojuego educativo ambiental" />
+
+    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
-    <title>{title}</title>
+
+    <!-- Fuente principal (evita el salto de texto) -->
+    <link rel="preload" href="/fonts/ChakraPetch-Regular.ttf" as="font" type="font/ttf" crossorigin />
+    <link rel="preload" href="/fonts/ChakraPetch-Bold.ttf" as="font" type="font/ttf" crossorigin />
+
+    <!-- Datos estructurados -->
+    <script type="application/ld+json" set:html={jsonLd} />
   </head>
   <body class="grain relative min-h-screen bg-bg font-display text-bone antialiased">
+    <a
+      href="#contenido"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-[3px] focus:bg-resin focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-bg"
+    >
+      Saltar al contenido
+    </a>
     <slot />
     <script>
       const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
