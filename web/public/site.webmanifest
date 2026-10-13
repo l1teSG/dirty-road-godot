@@ -1,0 +1,16 @@
+{
+  "name": "Dirty Road",
+  "short_name": "Dirty Road",
+  "description": "Videojuego educativo ambiental. Defiende el último árbol de las oleadas de contaminación.",
+  "lang": "es",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#050a08",
+  "theme_color": "#050a08",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}
