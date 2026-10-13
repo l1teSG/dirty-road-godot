@@ -233,6 +233,31 @@ details.etapa-enemigo[open] .etapa-datos {
   }
 }
 
+/* Foco al navegar: la sección de destino destella con su propio color. */
+.target-flash {
+  animation: section-flash 1.5s ease-out;
+}
+@keyframes section-flash {
+  0% {
+    background-color: transparent;
+    box-shadow: inset 0 0 0 0 transparent;
+  }
+  18% {
+    background-color: color-mix(in srgb, var(--flash, #8ec74a) 12%, transparent);
+    box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--flash, #8ec74a) 45%, transparent);
+  }
+  100% {
+    background-color: transparent;
+    box-shadow: inset 0 0 0 0 transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .target-flash {
+    animation: none;
+  }
+}
+
 /* Un solo momento orquestado: la carga del héroe. */
 @keyframes rise {
   from {

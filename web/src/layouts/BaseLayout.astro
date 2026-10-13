@@ -146,6 +146,51 @@ const ogImage = new URL('/images/juego/og.png', Astro.site).href;
       window.addEventListener('scroll', onScroll, { passive: true });
       window.addEventListener('resize', onScroll);
       updateOnScroll();
+
+      // 4) Al hacer clic en un enlace interno, la sección de destino "destella"
+      //    con su propio color cuando el scroll llega (sensación de foco).
+      let destino: HTMLElement | null = null;
+
+      const destellar = (el: HTMLElement) => {
+        const tint =
+          el.dataset.tint ||
+          el.closest<HTMLElement>('[data-tint]')?.dataset.tint ||
+          getComputedStyle(document.documentElement).getPropertyValue('--color-leaf').trim() ||
+          '#8ec74a';
+        el.style.setProperty('--flash', tint);
+        el.classList.remove('target-flash');
+        void el.offsetWidth; // reinicia la animación
+        el.classList.add('target-flash');
+        window.setTimeout(() => el.classList.remove('target-flash'), 1600);
+      };
+
+      document.addEventListener('click', (ev) => {
+        const a = (ev.target as Element | null)?.closest?.('a[href^="#"]');
+        if (!(a instanceof HTMLAnchorElement)) return;
+        const id = a.getAttribute('href')?.slice(1);
+        if (!id) return;
+        const el = document.getElementById(id);
+        if (el) destino = el;
+      });
+
+      const alTerminarScroll = () => {
+        if (!destino) return;
+        const el = destino;
+        destino = null;
+        if (!reduce) destellar(el);
+      };
+
+      // `scrollend` donde exista; y un debounce de respaldo para el resto.
+      window.addEventListener('scrollend', alTerminarScroll);
+      let espera: number | undefined;
+      window.addEventListener(
+        'scroll',
+        () => {
+          window.clearTimeout(espera);
+          espera = window.setTimeout(alTerminarScroll, 160);
+        },
+        { passive: true },
+      );
     </script>
   </body>
 </html>
