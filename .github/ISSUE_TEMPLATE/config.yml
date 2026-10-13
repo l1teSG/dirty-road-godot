@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: "🔐 Reportar una vulnerabilidad · Report a vulnerability"
+    url: "https://github.com/l1teSG/dirty-road-godot/security/advisories/new"
+    about: "Usa el reporte privado de GitHub para problemas de seguridad. No abras una issue pública. · Use GitHub's private reporting for security issues. Do not open a public issue."
+  - name: "🤝 Guía de contribución · Contributing guide"
+    url: "https://github.com/l1teSG/dirty-road-godot/blob/main/.github/CONTRIBUTING.md"
+    about: "Cómo reportar, reglas duras, estilo y flujo de Git. · How to report, hard rules, style and Git workflow."
+  - name: "📜 Código de Conducta · Code of Conduct"
+    url: "https://github.com/l1teSG/dirty-road-godot/blob/main/.github/CODE_OF_CONDUCT.md"
+    about: "Normas de convivencia de la comunidad. · Community standards of conduct."

@@ -1,0 +1,64 @@
+name: "✨ Sugerencia · Feature request"
+description: "Propón una idea, mejora o contenido nuevo. · Propose an idea, improvement or new content."
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ¡Gracias por contribuir con ideas! / Thanks for contributing ideas!
+        Cuéntanos el problema antes que la solución. / Tell us about the problem before the solution.
+
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: "🔎 Comprobaciones previas · Preflight checks"
+      options:
+        - label: "He buscado sugerencias duplicadas. · I searched for duplicate requests."
+          required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: "🧩 Ámbito · Area"
+      description: "¿A qué parte afecta? · Which part does it affect?"
+      options:
+        - "Juego: mecánicas · Gameplay"
+        - "Juego: contenido educativo · Educational content"
+        - "Juego: enemigos / jefes · Enemies / bosses"
+        - "Juego: interfaz / HUD · UI / HUD"
+        - "Web (Astro) · Website"
+        - "Documentación / repositorio · Docs / repository"
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: "🎯 ¿Qué problema resuelve? · What problem does it solve?"
+      placeholder: "Actualmente cuesta entender …"
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: "💡 Solución propuesta · Proposed solution"
+      description: "Describe la idea con el mayor detalle posible. · Describe the idea in as much detail as possible."
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: "🔀 Alternativas consideradas · Alternatives considered"
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: conduct
+    attributes:
+      label: "🤝 Código de Conducta · Code of Conduct"
+      options:
+        - label: "Acepto respetar el Código de Conducta del proyecto. · I agree to follow the project's Code of Conduct."
+          required: true

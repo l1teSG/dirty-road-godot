@@ -1,0 +1,89 @@
+name: "🐞 Reporte de error · Bug report"
+description: "Informa de un comportamiento incorrecto en el juego o la web. · Report incorrect behavior in the game or website."
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ¡Gracias por tomarte el tiempo de reportar un error! / Thanks for taking the time to report a bug!
+        Por favor, rellena la mayor cantidad de información posible. / Please fill in as much information as possible.
+
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: "🔎 Comprobaciones previas · Preflight checks"
+      options:
+        - label: "He buscado issues duplicadas. · I searched for duplicate issues."
+          required: true
+        - label: "Uso la última versión de `main`. · I am on the latest `main`."
+          required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: "🧩 Ámbito · Area"
+      description: "¿Dónde ocurre el error? · Where does the bug happen?"
+      options:
+        - "Juego (Godot) · Game"
+        - "Web (Astro) · Website"
+        - "Android (APK)"
+        - "Documentación / repositorio · Docs / repository"
+        - "No estoy seguro · Not sure"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: "📝 Descripción · Description"
+      description: "¿Qué ocurrió? ¿Qué esperabas que ocurriera? · What happened? What did you expect?"
+      placeholder: "Al comprar una mejora el contador de biomasa muestra un valor incorrecto…"
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: "🔁 Pasos para reproducir · Steps to reproduce"
+      placeholder: |
+        1. Abre el juego en la etapa …
+        2. Llega a la oleada …
+        3. …
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: "🏷️ Versión · Version"
+      description: "Versión de Dirty Road (p. ej. 10.1.2) y de Godot. · Dirty Road (e.g. 10.1.2) and Godot version."
+      placeholder: "Dirty Road 10.1.2 · Godot 4.7"
+    validations:
+      required: true
+
+  - type: input
+    id: environment
+    attributes:
+      label: "💻 Entorno · Environment"
+      description: "Sistema operativo y dispositivo. · OS and device."
+      placeholder: "Android 14 / Samsung Galaxy A54 · Windows 11 · …"
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: "📋 Registros / capturas · Logs / screenshots"
+      description: "Salida de la consola, stack trace o capturas. · Console output, stack trace or screenshots."
+      render: shell
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: conduct
+    attributes:
+      label: "🤝 Código de Conducta · Code of Conduct"
+      options:
+        - label: "Acepto respetar el Código de Conducta del proyecto. · I agree to follow the project's Code of Conduct."
+          required: true
