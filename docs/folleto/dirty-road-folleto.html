@@ -1,0 +1,581 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dirty Road · Folleto</title>
+
+<!-- ══════════════════════════════════════════════════════════════
+     DIRTY ROAD — Folleto mixto (práctico + escrito)
+     A4 · doble cara · listo para «Guardar como PDF».
+     Sistema visual heredado del micrositio (web/src/styles/global.css):
+     turba, clorofila, ámbar de peligro; tipografía Chakra Petch.
+     ══════════════════════════════════════════════════════════════ -->
+
+<style>
+  /* --- Tipografía del juego (Chakra Petch), copiada del proyecto --- */
+  @font-face{font-family:'Chakra Petch';src:url('assets/ChakraPetch-Regular.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
+  @font-face{font-family:'Chakra Petch';src:url('assets/ChakraPetch-Bold.ttf') format('truetype');font-weight:700;font-style:normal;font-display:swap}
+
+  :root{
+    --bg:#0d1109;            /* turba: negro cálido de bosque */
+    --surface:#161c12;
+    --surface-2:#1e2518;
+    --line:rgba(226,235,214,.10);
+    --line-strong:rgba(226,235,214,.24);
+    --leaf:#8ec74a;          /* clorofila */
+    --leaf-deep:#5d9636;
+    --resin:#e3a63b;         /* ámbar de peligro */
+    --rust:#b8562f;          /* óxido */
+    --rad:#47c9b0;           /* radiación */
+    --bone:#eef1e3;          /* tinta */
+    --moss:#97a58a;
+    --pad:11mm;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    background:#070a06;
+    color:var(--bone);
+    font-family:'Chakra Petch',ui-sans-serif,system-ui,sans-serif;
+    font-size:9.4pt;
+    line-height:1.52;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+  ::selection{background:var(--resin);color:var(--bg)}
+
+  /* --- Barra de herramientas (solo pantalla) --- */
+  .toolbar{
+    position:sticky;top:0;z-index:50;
+    display:flex;align-items:center;justify-content:center;gap:10px;
+    padding:10px 14px;
+    background:rgba(13,17,9,.86);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .toolbar p{color:var(--moss);font-size:11px;margin-right:auto}
+  .toolbar .tag{color:var(--leaf);font-weight:700}
+  .btn{
+    font:inherit;font-size:11px;cursor:pointer;
+    color:var(--bone);background:var(--surface-2);
+    border:1px solid var(--line-strong);border-radius:3px;
+    padding:7px 14px;transition:.18s;
+  }
+  .btn:hover{border-color:var(--leaf);color:var(--leaf)}
+  .btn--primary{background:var(--resin);color:var(--bg);border-color:transparent;font-weight:700}
+  .btn--primary:hover{background:#f0b451;color:var(--bg)}
+
+  /* --- Hoja / páginas A4 --- */
+  .sheet{
+    display:flex;flex-direction:column;align-items:center;
+    gap:10mm;padding:10mm 0 16mm;
+  }
+
+  .page{
+    position:relative;overflow:hidden;
+    width:210mm;height:297mm;
+    background:var(--bg);
+    display:flex;flex-direction:column;
+    box-shadow:0 30px 80px -40px #000,0 0 0 1px var(--line);
+  }
+  /* Rejilla de campo + grano sutil: tacto de instrumento, no plantilla. */
+  .field-grid{
+    position:absolute;inset:-40px;pointer-events:none;z-index:0;opacity:.30;
+    background-image:
+      linear-gradient(var(--line) 1px,transparent 1px),
+      linear-gradient(90deg,var(--line) 1px,transparent 1px);
+    background-size:22mm 22mm;
+  }
+  .grain::after{
+    content:'';position:absolute;inset:0;z-index:1;pointer-events:none;opacity:.05;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .page > *{position:relative;z-index:2}
+  .pad{flex:1;display:flex;flex-direction:column;padding:var(--pad)}
+
+  /* --- Cabecera de página --- */
+  .masthead{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    padding:6mm var(--pad) 3mm;
+  }
+  .brand{display:flex;align-items:center;gap:9px}
+  .brand img{width:9mm;height:9mm;border-radius:2px;object-fit:cover}
+  .brand b{font-size:11pt;letter-spacing:.14em;text-transform:uppercase;color:var(--bone)}
+  .brand span{color:var(--leaf)}
+  .mast-meta{text-align:right;font-size:7.6pt;letter-spacing:.08em;text-transform:uppercase;color:var(--moss);line-height:1.7}
+
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:7px;
+    font-size:7.6pt;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--leaf);
+  }
+  .pulse{position:relative;display:inline-flex;width:7px;height:7px}
+  .pulse i{position:absolute;inset:0;border-radius:50%;background:var(--leaf)}
+  .pulse i:first-child{opacity:.45}
+
+  /* --- Columnas --- */
+  .cols{flex:1;display:grid;grid-template-columns:1.02fr .98fr;gap:7mm;padding:0 var(--pad);align-items:start}
+  .cols--b{grid-template-columns:1fr 1fr}
+
+  h1.wordmark{
+    font-size:44pt;font-weight:700;line-height:.9;letter-spacing:-.02em;margin:4mm 0 3mm;
+  }
+  h1.wordmark span{display:block}
+  h1.wordmark .b{color:var(--bone)}
+  h1.wordmark .g{color:var(--leaf)}
+  .tagline{
+    font-size:9.6pt;color:var(--moss);letter-spacing:.02em;margin-bottom:5mm;
+    padding-bottom:4mm;border-bottom:1px solid var(--line);
+  }
+  .tagline b{color:var(--bone);font-weight:700}
+
+  blockquote.quote{
+    position:relative;
+    font-size:11pt;font-weight:700;line-height:1.35;color:var(--bone);
+    padding-left:5mm;margin:5mm 0;
+    border-left:2px solid var(--resin);
+  }
+  blockquote.quote em{color:var(--resin);font-style:normal}
+
+  h2{font-size:12.5pt;font-weight:700;letter-spacing:-.01em;margin:0 0 2.2mm;display:flex;align-items:center;gap:7px}
+  h2 .num{font-size:8pt;color:var(--resin);letter-spacing:.12em}
+  h2::after{content:'';flex:1;height:1px;background:var(--line-strong)}
+
+  p + p{margin-top:2.6mm}
+  .lead{font-size:10pt;line-height:1.55}
+  .muted{color:var(--moss)}
+  .k{color:var(--leaf);font-weight:700}
+  .kr{color:var(--resin);font-weight:700}
+
+  section.block{margin-bottom:4mm}
+  section.block:last-child{margin-bottom:0}
+
+  /* --- Pilares (banda escrita) --- */
+  .band{fill:1}
+  .pilares{
+    display:grid;grid-template-columns:repeat(5,1fr);gap:5mm;
+    margin:0 var(--pad) var(--pad);
+    padding-top:5mm;border-top:1px solid var(--line-strong);
+  }
+  .pilar .pn{font-size:8pt;font-weight:700;color:var(--resin);letter-spacing:.1em}
+  .pilar h3{font-size:9pt;font-weight:700;color:var(--bone);margin:1.5mm 0 1.5mm;line-height:1.25}
+  .pilar p{font-size:7.8pt;line-height:1.4;color:var(--moss)}
+
+  /* --- Columna visual --- */
+  .figure{
+    position:relative;border:1px solid var(--line);border-radius:3px;overflow:hidden;background:var(--surface);
+  }
+  .figure img{display:block;width:100%;height:auto}
+  .figure--tall img{aspect-ratio:4/3;object-fit:cover}
+  .figure figcaption{
+    position:absolute;left:0;right:0;bottom:0;
+    padding:3mm;font-size:7.4pt;letter-spacing:.06em;text-transform:uppercase;color:var(--bone);
+    background:linear-gradient(to top,rgba(5,10,8,.95),rgba(5,10,8,0));
+  }
+
+  .hud{
+    margin-top:4mm;border:1px solid var(--line);border-radius:3px;background:var(--surface);
+    padding:3.5mm 4mm;
+  }
+  .hud .bars{display:flex;gap:3px;margin-bottom:3mm}
+  .hud .bars span{height:5px;flex:1;border-radius:1px;background:var(--surface-2)}
+  .hud .bars span.on{background:var(--resin)}
+  .hud .tot{display:grid;grid-template-columns:repeat(3,1fr);gap:3mm}
+  .hud .tot b{display:block;font-size:20pt;font-weight:700;line-height:1;color:var(--bone)}
+  .hud .tot i{font-style:normal;font-size:7.6pt;letter-spacing:.12em;text-transform:uppercase;color:var(--moss)}
+  .hud .cap{font-size:7.6pt;color:var(--moss);display:flex;justify-content:space-between;margin-bottom:2.5mm}
+
+  .thumbs{display:grid;grid-template-columns:repeat(3,1fr);gap:3mm;margin-top:4mm;align-items:start}
+  .thumbs .t{border:1px solid var(--line);border-radius:3px;overflow:hidden;background:var(--surface)}
+  .thumbs .t img{display:block;width:100%;height:auto;object-fit:cover;aspect-ratio:16/9}
+  .thumbs .t p{font-size:6.6pt;letter-spacing:.06em;text-transform:uppercase;color:var(--moss);padding:1.3mm 2mm;line-height:1.25}
+
+  .chips{display:flex;flex-wrap:wrap;gap:2mm;margin-top:4mm}
+  .chip{
+    font-size:7.4pt;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--moss);border:1px solid var(--line-strong);border-radius:999px;
+    padding:1.4mm 3mm;
+  }
+  .chip b{color:var(--leaf);font-weight:700}
+
+  /* --- Mecánicas (tarjetas compactas) --- */
+  .mec{display:flex;flex-direction:column;gap:1.6mm}
+  .mec .card{
+    display:flex;gap:3mm;align-items:center;
+    border:1px solid var(--line);border-radius:3px;background:var(--surface);
+    padding:1.9mm 2.8mm;
+  }
+  .mec .ico{
+    flex:0 0 auto;width:6.6mm;height:6.6mm;border-radius:2px;
+    display:grid;place-items:center;color:var(--leaf);background:var(--surface-2);
+    border:1px solid var(--line);
+  }
+  .mec .ico svg{width:3.8mm;height:3.8mm}
+  .mec h4{font-size:8.6pt;font-weight:700}
+  .mec p{font-size:7.3pt;line-height:1.32;color:var(--moss);margin-top:.4mm}
+
+  /* --- Etapas (una línea por etapa) --- */
+  .etapas{display:flex;flex-direction:column;gap:0}
+  .etapa{
+    display:grid;grid-template-columns:4.6mm 1fr auto;align-items:center;gap:2.4mm;
+    padding:0.85mm 0;border-bottom:1px solid var(--line);
+  }
+  .etapa:last-child{border-bottom:none}
+  .etapa .sw{width:4.6mm;height:4.6mm;border-radius:2px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.25)}
+  .etapa .n{font-size:7.4pt;font-weight:700;color:var(--moss);letter-spacing:.06em;margin-right:1mm}
+  .etapa .th{font-size:8.2pt;font-weight:700;color:var(--bone);line-height:1.2}
+  .etapa .bo{font-size:7pt;color:var(--rust);text-align:right;line-height:1.2;white-space:nowrap}
+  .etapa .bo::before{content:'Jefe · ';color:var(--moss);font-size:6.3pt;letter-spacing:.06em;text-transform:uppercase}
+
+  /* --- Pie (banda de cierre, dos filas: Descargar / Equipo + Marco) --- */
+  .footer-band{
+    display:flex;flex-direction:column;gap:3.5mm;
+    margin:0 var(--pad) 3mm;
+    padding-top:3.5mm;border-top:1px solid var(--line-strong);
+  }
+  .footer-band h2{margin-bottom:2.6mm}
+  .dl-row{display:flex;align-items:center;justify-content:space-between;gap:9mm}
+  .dl-info{flex:1;min-width:0}
+  .repo{
+    font-size:10.5pt;font-weight:700;color:var(--leaf);word-break:break-all;
+    display:block;margin-bottom:2.6mm;text-decoration:none;
+  }
+  .dl-note{font-size:8.4pt;color:var(--moss);line-height:1.42;margin-bottom:3mm}
+  .platforms{display:flex;flex-wrap:wrap;gap:2.5mm}
+  .platforms .chip{font-size:8pt;padding:1.7mm 3.4mm}
+  .platforms .chip b{color:var(--resin)}
+  .qr{
+    flex:0 0 auto;width:28mm;height:28mm;border-radius:3px;
+    border:1px dashed var(--line-strong);background:var(--surface);
+    display:grid;place-items:center;text-align:center;
+    font-size:7pt;letter-spacing:.08em;text-transform:uppercase;color:var(--moss);
+    padding:3mm;line-height:1.4;
+  }
+  .fb-cols{
+    display:grid;grid-template-columns:1.35fr 1fr;gap:8mm;
+    padding-top:3.5mm;border-top:1px solid var(--line);
+  }
+  .team{display:flex;flex-direction:column;gap:2.4mm}
+  .team .m{border-left:2px solid var(--leaf-deep);padding-left:3mm}
+  .team .m b{font-size:9pt;color:var(--bone)}
+  .team .m p{font-size:8pt;color:var(--moss);line-height:1.38;margin-top:.5mm}
+  .academic p{font-size:8.4pt;color:var(--moss);line-height:1.48}
+  .academic p + p{margin-top:2.2mm}
+  .academic .inst{color:var(--bone);font-weight:700}
+  .academic .lic{font-size:7.4pt;color:var(--rust);letter-spacing:.04em}
+
+  .pagefoot{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:3mm var(--pad);border-top:1px solid var(--line);
+    font-size:7pt;letter-spacing:.1em;text-transform:uppercase;color:var(--moss);
+  }
+  .pagefoot b{color:var(--leaf)}
+
+  /* --- Impresión --- */
+  @page{size:A4;margin:0}
+  @media print{
+    body{background:#fff}
+    .toolbar{display:none}
+    .grain::after{display:none}   /* la textura de ruido no se ve en papel y engorda el PDF */
+    .sheet{gap:0;padding:0}
+    .page{box-shadow:none;margin:0;page-break-after:always;break-after:page;break-inside:avoid;page-break-inside:avoid}
+    .page:last-child{page-break-after:auto;break-after:auto}
+    *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  }
+  @media screen and (max-width:220mm){
+    .toolbar{justify-content:flex-start}
+    .sheet{padding:0}
+    .page{width:100%;height:auto;min-height:100vh;box-shadow:none}
+    .cols,.cols--b,.fb-cols{grid-template-columns:1fr}
+    .pilares{grid-template-columns:1fr 1fr}
+    .dl-row{flex-direction:column;align-items:flex-start}
+  }
+
+  /* --- Variante clara para imprimir en papel (opcional) --- */
+  body.light{
+    --bg:#f6f4ea;--surface:#ffffff;--surface-2:#ece9dc;
+    --line:rgba(30,37,24,.14);--line-strong:rgba(30,37,24,.30);
+    --bone:#1b210f;--moss:#5c6650;
+  }
+  body.light .field-grid{opacity:.5}
+  body.light .figure figcaption{background:linear-gradient(to top,rgba(246,244,234,.96),rgba(246,244,234,0))}
+</style>
+</head>
+
+<body>
+<!-- Barra utilísima en pantalla; desaparece al imprimir. -->
+<div class="toolbar">
+  <p><span class="tag">Folleto Dirty Road</span> · A4 doble cara · listo para PDF</p>
+  <button class="btn" id="theme">Versión clara</button>
+  <button class="btn btn--primary" onclick="window.print()">Imprimir / Guardar PDF</button>
+</div>
+
+<main class="sheet">
+
+  <!-- ════════════════ CARA A · EL PROYECTO ════════════════ -->
+  <section class="page grain" id="cara-a">
+    <div class="field-grid" aria-hidden="true"></div>
+
+    <header class="masthead">
+      <div class="brand">
+        <img src="assets/icono.png" alt="">
+        <b>Dirty <span>Road</span></b>
+      </div>
+      <div class="mast-meta">
+        Ficha de proyecto<br>v10.0.0 beta · Godot 4.7
+      </div>
+    </header>
+
+    <div class="cols">
+      <!-- Columna escrita -->
+      <div class="written">
+        <span class="eyebrow"><span class="pulse"><i></i><i></i></span> Ecosistema en observación</span>
+        <h1 class="wordmark"><span class="b">Dirty</span><span class="g">Road</span></h1>
+        <p class="tagline"><b>Survival action 2D infinito</b> · educativo · ambiental</p>
+
+        <blockquote class="quote">
+          No hay final. No hay pantalla de victoria.<br>
+          No hay <em>«jefe final de la contaminación»</em>.
+        </blockquote>
+
+        <section class="block">
+          <h2><span class="num">01</span> ¿Qué es Dirty Road?</h2>
+          <p class="lead">
+            Un <span class="k">survival action</span> top-down en 2D donde el jugador defiende un
+            <span class="k">Árbol vivo</span> —último símbolo de un ecosistema sano— frente a
+            oleadas interminables de enemigos que representan <b>problemas ambientales reales</b>.
+          </p>
+          <p class="muted">
+            La travesía sigue a <b>Renata</b> y al nodo jugable <b>Quark</b> por un valle que cambia de
+            piel en cada etapa: mismo terreno, nueva amenaza, nueva lección.
+          </p>
+        </section>
+
+        <section class="block">
+          <h2><span class="num">02</span> Un problema que no se derrota</h2>
+          <p>
+            La contaminación no es un monstruo con barra de vida final: es
+            <span class="kr">sistémica y cíclica</span>, como en la realidad. Por eso el juego no
+            termina. La única meta posible es gestionarla, ralentizarla y mantener vivo el
+            ecosistema <b>el mayor tiempo posible</b>.
+          </p>
+          <p class="muted">
+            La partida no se mide en victoria, sino en tiempo: oleada, etapa, biomasa y segundos
+            de ecosistema en pie.
+          </p>
+          <p>
+            Cada enemigo y cada jefe es un problema ambiental con forma —microplástico, humo de
+            fábrica, red fantasma, radiación, pesticidas—. Aprender a leerlos es aprender a leer
+            el mundo.
+          </p>
+        </section>
+
+        <div class="chips">
+          <span class="chip">Motor <b>Godot 4.7</b></span>
+          <span class="chip">Plataforma <b>PC &amp; Android</b></span>
+          <span class="chip">Público <b>10+</b></span>
+        </div>
+      </div>
+
+      <!-- Columna práctica -->
+      <div class="art">
+        <figure class="figure">
+          <img src="assets/banner.png" alt="Arte de Dirty Road: el último Árbol vivo bajo la contaminación">
+          <figcaption>Defiende el último Árbol vivo</figcaption>
+        </figure>
+
+        <div class="hud">
+          <div class="cap"><span>Índice de contaminación</span><span style="color:var(--resin);font-weight:700">7 / 10</span></div>
+          <div class="bars">
+            <span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span>
+            <span class="on"></span><span class="on"></span><span class="on"></span><span></span><span></span><span></span>
+          </div>
+          <div class="tot">
+            <div><b>10</b><i>etapas</i></div>
+            <div><b>100</b><i>oleadas</i></div>
+            <div><b>40</b><i>enemigos</i></div>
+          </div>
+        </div>
+
+        <div class="thumbs">
+          <div class="t"><img src="assets/etapa_01.png" alt="Etapa 1"><p>Etapa 1 · Suelo y aire</p></div>
+          <div class="t"><img src="assets/etapa_03.png" alt="Etapa 3"><p>Etapa 3 · Océanos</p></div>
+          <div class="t"><img src="assets/etapa_10.png" alt="Etapa 10"><p>Etapa 10 · Clima</p></div>
+          <div class="t"><img src="assets/etapa_05.png" alt="Etapa 5"><p>Etapa 5 · Lluvia ácida</p></div>
+          <div class="t"><img src="assets/etapa_07.png" alt="Etapa 7"><p>Etapa 7 · Nuclear</p></div>
+          <div class="t"><img src="assets/etapa_09.png" alt="Etapa 9"><p>Etapa 9 · Deforestación</p></div>
+        </div>
+
+        <figure class="figure figure--tall" style="margin-top:4mm">
+          <img src="assets/boss_01_excavadora.png" alt="Jefe de la Etapa 1: Excavadora Tóxica">
+          <figcaption>Jefe · Excavadora Tóxica</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <!-- Banda escrita: pilares -->
+    <div class="pilares">
+      <div class="pilar"><span class="pn">PILAR 1</span><h3>Aprender jugando, no leyendo</h3><p>Cada dato llega por feedback de combate y popups cortos, nunca bloqueantes (≤ 3–4 s).</p></div>
+      <div class="pilar"><span class="pn">PILAR 2</span><h3>Infinito, no repetitivo</h3><p>El mundo evoluciona para que la hora 3 se sienta distinta de la hora 1.</p></div>
+      <div class="pilar"><span class="pn">PILAR 3</span><h3>Habilidad sobre grind</h3><p>Progresión por maestría —timing de dash, posición, combos—, no por inflar números.</p></div>
+      <div class="pilar"><span class="pn">PILAR 4</span><h3>Cada enemigo enseña algo</h3><p>Ningún monstruo genérico: cada enemigo y jefe mapea 1:1 a un problema real.</p></div>
+      <div class="pilar"><span class="pn">PILAR 5</span><h3>El mundo reacciona a ti</h3><p>Paleta, partículas y sonido forman un panel vivo del estado del ecosistema.</p></div>
+    </div>
+
+    <div class="pagefoot"><span>Cara 1 / 2 · <b>El proyecto</b></span><span>Dirty Road · I.E. Técnico Industrial «Julio Flórez»</span></div>
+  </section>
+
+  <!-- ════════════════ CARA B · CÓMO SE JUEGA Y SE APRENDE ════════════════ -->
+  <section class="page grain" id="cara-b">
+    <div class="field-grid" aria-hidden="true"></div>
+
+    <header class="masthead">
+      <div class="brand">
+        <img src="assets/icono.png" alt="">
+        <b>Dirty <span>Road</span></b>
+      </div>
+      <div class="mast-meta">
+        Cara 2 · Cómo se juega<br>y cómo enseña
+      </div>
+    </header>
+
+    <div class="cols cols--b">
+      <!-- Columna escrita -->
+      <div class="written">
+        <section class="block">
+          <h2><span class="num">03</span> El ciclo de juego</h2>
+          <p>
+            El núcleo es un <span class="k">loop de defensa por bloques</span> que escala sin terminar.
+            Sobrevives una oleada cronometrada: los enemigos aparecen de forma continua mientras corre
+            el reloj. <b>Matarlos no adelanta la oleada</b> —el reloj manda—, así que sobrevivir y
+            proteger el Árbol importan tanto como eliminar.
+          </p>
+          <p>
+            Al cerrar la oleada llega un descanso breve y la opción de comprar mejoras con
+            <span class="k">biomasa</span>. Cada oleada dentro de la etapa es más larga y densa; la
+            <span class="kr">décima es de jefe</span>, sin reloj: solo termina cuando el jefe cae.
+          </p>
+          <p class="muted">
+            Al acabar la etapa el juego no avanza solo: espera a que <b>cruces la puerta</b> y vuelve a
+            empezar con el mismo valle, otra piel y enemigos heredados de etapas anteriores.
+          </p>
+        </section>
+
+        <section class="block">
+          <h2><span class="num">04</span> Aprender jugando</h2>
+          <p>
+            El sistema educativo es un <b>pilar, no un extra</b>. Se apoya en la
+            <span class="k">Teoría del Aprendizaje Significativo</span> y en la
+            <span class="k">gamificación</span> para entregar cada dato dentro de la acción: cartas de
+            enemigo al primer encuentro, mensajes de descanso, de muerte y datos de supervivencia.
+          </p>
+          <p>
+            Todo es breve y <b>ajustable</b> —escala, posición, duración y sonido— para no interrumpir
+            jamás. Y el mundo mismo enseña: su paleta, partículas y audio son un
+            <span class="kr">panel vivo</span> del estado del ecosistema.
+          </p>
+        </section>
+      </div>
+
+      <!-- Columna práctica -->
+      <div class="art">
+        <section class="block">
+          <h2><span class="num">05</span> Mecánicas clave</h2>
+          <div class="mec">
+            <div class="card">
+              <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg></span>
+              <div><h4>Combate a distancia</h4><p>Ataque automático con apuntado manual o segundo joystick; <b>dash con invulnerabilidad</b>.</p></div>
+            </div>
+            <div class="card">
+              <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M5 10l7-7 7 7"/></svg></span>
+              <div><h4>Biomasa</h4><p>Moneda <b>sin tope</b>: los enemigos sueltan orbes. El súper cuesta 10.</p></div>
+            </div>
+            <div class="card">
+              <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="13" height="16" rx="2"/><path d="M19 8v10"/></svg></span>
+              <div><h4>Cartas acumulables</h4><p>Mejoras por rareza que <b>reaplican su efecto</b> en cada compra.</p></div>
+            </div>
+            <div class="card">
+              <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a7 7 0 0 0-4 12.7V19h8v-3.3A7 7 0 0 0 12 3z"/><path d="M9 21h6"/></svg></span>
+              <div><h4>Jefes con identidad</h4><p>Uno por etapa, con <b>patrones y proyectiles propios</b>.</p></div>
+            </div>
+            <div class="card">
+              <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg></span>
+              <div><h4>Controles táctiles</h4><p>Doble joystick virtual y botones para Android; también <b>teclado y ratón</b>.</p></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="block">
+          <h2><span class="num">06</span> Las 10 etapas</h2>
+          <div class="etapas">
+            <div class="etapa"><span class="sw" style="background:#d9d1b8"></span><span><span class="n">01</span> <span class="th">Contaminación del suelo y el aire</span></span><span class="bo">Excavadora Tóxica</span></div>
+            <div class="etapa"><span class="sw" style="background:#c2c9b3"></span><span><span class="n">02</span> <span class="th">Basura y vertederos</span></span><span class="bo">Vertedero Viviente</span></div>
+            <div class="etapa"><span class="sw" style="background:#9ec7f5"></span><span><span class="n">03</span> <span class="th">Océanos y plástico</span></span><span class="bo">Isla de Plástico</span></div>
+            <div class="etapa"><span class="sw" style="background:#ccc9cc"></span><span><span class="n">04</span> <span class="th">Contaminación industrial</span></span><span class="bo">Chimenea Gigante</span></div>
+            <div class="etapa"><span class="sw" style="background:#ccdb99"></span><span><span class="n">05</span> <span class="th">Lluvia ácida</span></span><span class="bo">Géiser Ácido</span></div>
+            <div class="etapa"><span class="sw" style="background:#b8ccdb"></span><span><span class="n">06</span> <span class="th">Residuos electrónicos</span></span><span class="bo">Montaña de Chatarra</span></div>
+            <div class="etapa"><span class="sw" style="background:#bfe0b8"></span><span><span class="n">07</span> <span class="th">Energía nuclear y radiación</span></span><span class="bo">Reactor Roto</span></div>
+            <div class="etapa"><span class="sw" style="background:#cfd49e"></span><span><span class="n">08</span> <span class="th">Pesticidas y agricultura</span></span><span class="bo">Helicóptero Fumigador</span></div>
+            <div class="etapa"><span class="sw" style="background:#dbba94"></span><span><span class="n">09</span> <span class="th">Deforestación</span></span><span class="bo">Aserradero Andante</span></div>
+            <div class="etapa"><span class="sw" style="background:#ebbd9e"></span><span><span class="n">10</span> <span class="th">Cambio climático</span></span><span class="bo">Calentamiento Global</span></div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- Banda de cierre: descargar · equipo · marco académico -->
+    <div class="footer-band">
+      <div class="fb-download">
+        <h2><span class="num">07</span> Descargar</h2>
+        <div class="dl-row">
+          <div class="dl-info">
+            <a class="repo" href="https://github.com/l1teSG/dirty-road-godot">github.com/l1teSG/dirty-road-godot</a>
+            <p class="dl-note">Juego completo y <b>gratuito</b> · builds para PC y Android (APK). Escanea el código para bajar la última versión.</p>
+            <div class="platforms">
+              <span class="chip"><b>PC</b></span>
+              <span class="chip"><b>Android</b> · APK</span>
+              <span class="chip"><b>Gratis</b></span>
+            </div>
+          </div>
+          <div class="qr">Pega aquí<br>tu código QR</div>
+        </div>
+      </div>
+
+      <div class="fb-cols">
+        <div>
+          <h2><span class="num">08</span> Equipo</h2>
+          <div class="team">
+            <div class="m"><b>Juan Felipe Casas Aguilar</b><p>Programación principal GDScript, mecánicas e integración Godot.</p></div>
+            <div class="m"><b>Emmanuel Efrén Rosero Sánchez</b><p>Diseño de assets y programación GDScript.</p></div>
+            <div class="m"><b>Miguel Ángel Murcia Galindo</b><p>Investigación, revisión teórica e histórica y programación GDScript.</p></div>
+          </div>
+        </div>
+
+        <div class="academic">
+          <h2><span class="num">09</span> Marco académico</h2>
+          <p>
+            Proyecto de la <span class="inst">Articulación SENA</span> (Técnico en Desarrollo de Software)
+            con la <span class="inst">I.E. Técnico Industrial «Julio Flórez»</span>,
+            especialidad Sistemas Informáticos.
+          </p>
+          <p class="lic">Software propietario · todos los derechos reservados.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="pagefoot"><span>Cara 2 / 2 · <b>Cómo se juega y se aprende</b></span><span>Mantén vivo el ecosistema el mayor tiempo posible</span></div>
+  </section>
+
+</main>
+
+<script>
+  // Variante clara para imprimir en papel (solo pantalla).
+  const btn = document.getElementById('theme');
+  btn?.addEventListener('click', () => {
+    const claro = document.body.classList.toggle('light');
+    btn.textContent = claro ? 'Versión oscura' : 'Versión clara';
+  });
+</script>
+</body>
+</html>
