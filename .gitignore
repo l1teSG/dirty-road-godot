@@ -37,6 +37,9 @@ dirty-road/assets/*
 !dirty-road/assets/cards/
 !dirty-road/assets/cards/**
 
+# Excepción: assets del folleto (docs/folleto), versionados a propósito.
+!docs/folleto/assets/
+
 # Material generado por las herramientas (fotos/trailers).
 capturas/
 
