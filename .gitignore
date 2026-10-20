@@ -24,6 +24,11 @@ dirty-road/addons/godotty/bin/libgodotty.macos.dylib
 # Ignorar archivos ocultos o del sistema
 .DS_Store
 
+# Archivos temporales de LibreOffice/Word (locks) y derivados .odt de los
+# documentos de docs/: no se versionan, se regeneran al abrir/guardar.
+**/.~lock.*#
+*.odt
+
 apk/
 *.apk
 *.aab
