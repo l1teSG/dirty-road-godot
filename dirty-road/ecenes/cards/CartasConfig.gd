@@ -47,23 +47,23 @@ extends Resource
 @export var color_legendaria: Color = Color("ffd54a")
 
 @export_group("Layout")
-@export var tamano_carta: Vector2 = Vector2(300, 470)
-@export var alto_figura: float = 160.0
-@export var sep_cartas: int = 28
-@export var sep_vertical: int = 18
-@export var margen_carta: int = 18
+@export var tamano_carta: Vector2 = Vector2(340, 476)
+@export var alto_figura: float = 168.0
+@export var sep_cartas: int = 20
+@export var sep_vertical: int = 20
+@export var margen_carta: int = 20
 
 @export_group("Fuentes y tamaños")
 @export var fuente_titulo: Font = preload("res://themes/Chakra_Petch/ChakraPetch-Bold.ttf")
-@export var tam_titulo: int = 56
+@export var tam_titulo: int = 54
 @export var fuente_nombre: Font = preload("res://themes/Chakra_Petch/ChakraPetch-Bold.ttf")
-@export var tam_nombre: int = 24
+@export var tam_nombre: int = 26
 @export var fuente_rareza: Font = preload("res://themes/Chakra_Petch/ChakraPetch-SemiBold.ttf")
-@export var tam_rareza: int = 15
+@export var tam_rareza: int = 16
 @export var fuente_desc: Font = preload("res://themes/Chakra_Petch/ChakraPetch-Medium.ttf")
-@export var tam_desc: int = 16
+@export var tam_desc: int = 18
 @export var fuente_boton: Font = preload("res://themes/Chakra_Petch/ChakraPetch-SemiBold.ttf")
-@export var tam_boton: int = 20
+@export var tam_boton: int = 21
 
 @export_group("Colores")
 @export var color_fondo: Color = Color("0d2015")

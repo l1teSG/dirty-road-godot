@@ -100,7 +100,7 @@ func _draw() -> void:
 	if not activo:
 		# Base + perilla visibles en reposo: el jugador debe saber que existe
 		# el joystick de disparo (arriba de los botones super/mega).
-		base = Vector2(size.x * 0.5, size.y - 540.0)
+		base = Vector2(size.x * 0.5, size.y * 0.5)
 		draw_arc(base, radio, 0.0, TAU, 48, Color(c.r, c.g, c.b, 0.7), 4.0)
 		draw_circle(base, radio, Color(c.r, c.g, c.b, 0.12))
 		draw_circle(base, radio * 0.3, Color(c.r, c.g, c.b, 0.5))

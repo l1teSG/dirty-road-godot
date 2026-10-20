@@ -105,7 +105,7 @@ theme_override_font_sizes/font_size = 30
 text = "SALIR"
 
 [node name="CPUParticles2D" type="CPUParticles2D" parent="Contenedor"]
-position = Vector2(960, 540)
+position = Vector2(768, 432)
 amount = 80
 lifetime = 6.0
 emission_shape = 3
