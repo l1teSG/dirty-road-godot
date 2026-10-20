@@ -29,6 +29,13 @@ docs/drive/
 
 ## Notas
 
+- **Solo Android**: el juego se publica únicamente como APK. El manual, la
+  presentación, el folleto y el tríptico ya no mencionan PC (Windows/Linux) ni
+  controles de teclado/ratón.
+- **Capturas**: las imágenes del manual y de la presentación se generan con
+  `dirty-road/tools/generar_capturas_docs.sh` (modo captura del juego) y se
+  insertan en los `.docx`/`.pptx`.
+
 - **Fuentes incrustadas**: si guardas los `.docx` desde LibreOffice, revisa
   *Archivo → Propiedades → Fuente → “Incrustar fuentes en el documento”*. Con esa
   opción activa el archivo crece a decenas de MB.
