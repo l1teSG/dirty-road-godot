@@ -7,7 +7,7 @@ Este repositorio **Dirty Road** contiene **dos subproyectos independientes**. No
 | :--- | :--- | :--- |
 | `dirty-road/` | **El juego** (núcleo del proyecto) | Godot 4.7, GDScript (+ C# habilitado) |
 | `web/` | Landing/micrositio en español | Astro 7 + React 19 + Tailwind 4 |
-| `docs/` | `DirtyRoad_GDD.md` (incompleto) y `APA.docx` | — |
+| `docs/` | `DirtyRoad_GDD.md` (incompleto), `APA.docx` (2025, histórico) y los entregables en `docs/drive/` (`apa/`, `rae/`, `folleto/`, `manual/`, `poster/`, `presentacion/`) | — |
 | `apk/` | Builds Android exportados (no versionados) | — |
 
 Antes de trabajar, lee también `MEMORY.md` (arquitectura, fórmulas y estado actual).

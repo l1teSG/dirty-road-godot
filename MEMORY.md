@@ -201,6 +201,14 @@ electrónicos · 7. Energía nuclear y radiación · 8. Pesticidas y agricultura
   `raicesprofundas`, `pararrayosreciclado`, `mantaignifuga`, `alarmatemprana`,
   `dronconservacionista`, `semillasdetrueque`.
 - **Sincronía web ↔ juego**: `web/src/lib/etapas.ts` se mantiene a mano.
+- **Entregables en `docs/drive/`**: una carpeta por documento (`apa/`, `rae/`,
+  `folleto/`, `manual/`, `poster/`, `presentacion/`) con las copias vigentes; las
+  fuentes editables viven en `docs/`. Ver `docs/drive/README.md`.
+- **Congruencia documental**: el RAE (`docs/drive/rae/RAE.docx`) resume el proyecto
+  y debe mantenerse alineado con el APA vigente, el póster, la presentación, el
+  folleto y el manual. El APA vigente es `docs/drive/apa/APA.docx` (2026 ·
+  Godot 4.7 · licencia MIT); `docs/APA.docx` es el de 2025 (histórico) y todavía
+  lista controles inexistentes, "Sembrar (Espacio)" e "Inventario (Tab)".
 - Limpieza de addons no usados (`godot_rl_agents`, `godotty`) si se confirma que no
   aportan al gameplay.
 - `assets/` y `addons/` no están en git: un clon limpio no reproduce el juego
