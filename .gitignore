@@ -56,6 +56,8 @@ capturas/
 !dirty-road/tools/regenerar.sh
 !dirty-road/tools/montaje_video.sh
 !dirty-road/tools/generar_capturas_docs.sh
+!dirty-road/tools/grabar_trailer.sh
+!dirty-road/tools/generar_trailers.sh
 
 # Caché de Python (herramientas).
 __pycache__/

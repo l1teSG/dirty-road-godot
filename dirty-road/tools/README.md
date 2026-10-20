@@ -37,6 +37,33 @@ Generar/regenerar escenas de enemigos:
 godot --headless --script res://tools/generar_enemigos.gd
 ```
 
+## Modo trailer (dirigido por guion)
+
+Vídeos mudos a 60 fps generados desde un **guion JSON**, sin input y de forma
+determinista (Movie Maker de Godot → MP4 1080p).
+
+```sh
+python3 tools/generar_guiones_trailers.py   # (re)escribe tools/trailers/*.json
+tools/generar_trailers.sh                   # genera los 21 vídeos
+tools/generar_trailers.sh jefe              # solo los que contienen "jefe"
+tools/grabar_trailer.sh tools/trailers/general.json   # solo uno
+```
+
+Salida: `capturas/trailers/*.mp4` (fuera de git). Son 21: `general`,
+`etapa_01..10` y `jefe_01..10`.
+
+**Formato del guion** (`tools/trailers/<nombre>.json`):
+
+```json
+{ "nombre": "general", "fps": 60, "duracion": 46.3,
+  "pasos": [ { "t": 0.4, "accion": "titulo", "texto": "DIRTY ROAD", "sub": "SALVA EL BOSQUE", "dur": 2.6 } ] }
+```
+
+Acciones (`tools/reproductor_trailer.gd`, nodo `Trailer` en `niviel1.tscn`):
+`hud`, `pantalla` (menu/ajustes/off), `titulo`, `fundido`, `camara`, `encuadrar`,
+`spawn`, `formacion`, `matar`, `matar_todos`, `slowmo`, `cartas`, `popup_edu`,
+`pausar_ia`, `fin`. Las posiciones son **relativas al Árbol**.
+
 ## Capturas para los documentos
 
 ```sh

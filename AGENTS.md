@@ -80,7 +80,7 @@ Ver `web/AGENTS.md` para más detalle (es la guía de Astro del subproyecto web)
 | Etapas (temas, multiplicadores, jefe) | `scripts/etapa_config.gd`, `ecenes/enemies/etapas/etapa_*.tres` |
 | Ventana de oleadas por enemigo | `scripts/enemigo_oleada_config.gd` (`oleada_minima/maxima`, `peso`) |
 | Generar enemigos/jefes en masa | `tools/generar_enemigos.gd` (tablas `NORMALES`, `TIPO_DEF`) |
-| Capturas y trailers (herramienta) | `tools/modo_captura.gd`, `tools/generar_capturas_docs.sh`, `tools/montaje_video.sh`, `tools/README.md` |
+| Capturas y trailers (herramientas) | `tools/modo_captura.gd`, `tools/reproductor_trailer.gd`, `tools/trailers/*.json`, `tools/grabar_trailer.sh`, `tools/generar_trailers.sh`, `tools/README.md` |
 | Enemigo base y comportamientos | `ecenes/enemies/class/`, `.../comportamientos/` |
 | Jefe (ataques) | `ecenes/enemies/class/BossAttackComponent.gd`, `proyectil_jefe.gd` |
 | Contenido educativo | `scripts/education/` (`EducationManager`, `education_data_stages.gd`) |

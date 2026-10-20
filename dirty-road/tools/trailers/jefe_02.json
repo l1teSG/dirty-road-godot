@@ -1,0 +1,85 @@
+{
+  "nombre": "jefe_02",
+  "fps": 60,
+  "duracion": 11.8,
+  "pasos": [
+    {
+      "t": 0.0,
+      "accion": "fundido",
+      "color": "negro",
+      "dur": 0.5,
+      "salir": true
+    },
+    {
+      "t": 0.1,
+      "accion": "hud",
+      "valor": true
+    },
+    {
+      "t": 0.2,
+      "accion": "camara",
+      "pos": [
+        0,
+        -330
+      ],
+      "zoom": 1.18,
+      "dur": 1.6,
+      "ease": "out"
+    },
+    {
+      "t": 0.4,
+      "accion": "spawn",
+      "escena": "res://ecenes/enemies/main/11-20/boss/vertederoViviente_boss.tscn",
+      "pos": [
+        0,
+        -300
+      ],
+      "congelado": false
+    },
+    {
+      "t": 0.5,
+      "accion": "titulo",
+      "texto": "JEFE",
+      "sub": "vertederoViviente",
+      "dur": 2.0
+    },
+    {
+      "t": 3.4,
+      "accion": "camara",
+      "pos": [
+        0,
+        -230
+      ],
+      "zoom": 1.3,
+      "dur": 1.6,
+      "ease": "out"
+    },
+    {
+      "t": 3.6,
+      "accion": "slowmo",
+      "valor": 0.35,
+      "dur": 1.6
+    },
+    {
+      "t": 5.6,
+      "accion": "camara",
+      "pos": [
+        0,
+        -120
+      ],
+      "zoom": 1.45,
+      "dur": 1.6,
+      "ease": "out"
+    },
+    {
+      "t": 7.6,
+      "accion": "fundido",
+      "color": "negro",
+      "dur": 0.8
+    },
+    {
+      "t": 8.8,
+      "accion": "fin"
+    }
+  ]
+}
