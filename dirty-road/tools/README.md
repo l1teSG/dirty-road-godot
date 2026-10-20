@@ -37,6 +37,45 @@ Generar/regenerar escenas de enemigos:
 godot --headless --script res://tools/generar_enemigos.gd
 ```
 
+## Capturas para los documentos
+
+```sh
+tools/generar_capturas_docs.sh            # todas
+tools/generar_capturas_docs.sh hud        # solo una
+```
+
+Genera en `capturas/docs/` los PNG (1536×864) que usa el manual y la
+presentación: `intro`, `menu`, `slots`, `ajustes`, `dead`, `hud`, `jefe`,
+`cartas` (Movie Maker + modo captura).
+
+## Modo Captura / Trailer
+
+Herramienta interactiva (solo builds debug) para **montar escenas a mano** y
+sacar capturas y vídeo sin combatir. En `demo/level 1/niviel1.tscn` hay un nodo
+**ModoCaptura** (`tools/modo_captura.gd`):
+
+- **F2** abre/cierra el panel.
+- Elige **etapa → enemigo/jefe** y pulsa *Spawnear* (cualquiera de las 10 etapas).
+- **Clic** sobre un enemigo = seleccionar; **arrastrar** para moverlo; **flechas**
+  para ajuste fino; **D** duplicar; **Supr** borrar.
+- **G** congela/descongela la IA (los enemigos se quedan quietos en su pose).
+- **F** modo foto (oculta HUD y popups); *Ocultar jugador* lo esconde aparte.
+- *Cámara libre*: **WASD** panea, **+ / −** zoom.
+- **ESPACIO** pausa/reanuda la simulación.
+- **C** → PNG en `user://capturas/modo/`.
+- **R** → graba una secuencia de frames en `user://videos/grabacion_<fecha>/`.
+
+Las oleadas se desactivan solas (WaveManager en modo debug sin spawns) y no se
+guarda partida.
+
+### Convertir una grabación a MP4
+
+```sh
+tools/montaje_video.sh [carpeta_de_frames] [fps] [salida.mp4]
+# ej. (toma la última grabación)
+tools/montaje_video.sh
+```
+
 ## Fotos (capturas)
 
 ### En juego (manual)

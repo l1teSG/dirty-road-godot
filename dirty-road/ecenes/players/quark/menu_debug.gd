@@ -178,11 +178,20 @@ func _construir() -> void:
 		_btn_inmortal = _boton(grilla, _texto_inmortal(), _toggle_inmortal)
 	if btn_matar_jefe:
 		_boton(grilla, etq_matar_jefe, _matar_jefe)
+	_boton(grilla, "Modo captura", _abrir_captura)
 	if btn_cerrar:
 		_boton(grilla, etq_cerrar, _cerrar)
 
 	if btn_elegir:
 		_construir_elegir(vb)
+
+
+## Abre el MODO CAPTURA (tools/modo_captura.gd) si está en la escena.
+func _abrir_captura() -> void:
+	var escena := get_tree().current_scene
+	var mc := escena.get_node_or_null("ModoCaptura") if escena != null else null
+	if mc != null and mc.has_method("abrir"):
+		mc.call("abrir")
 
 
 func _construir_elegir(vb: VBoxContainer) -> void:
