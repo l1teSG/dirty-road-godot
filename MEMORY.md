@@ -187,10 +187,17 @@ electrónicos · 7. Energía nuclear y radiación · 8. Pesticidas y agricultura
   para que la interfaz se vea grande en móvil; `camara_zoom` por defecto **1.6**
   (mismo encuadre de mundo que antes). Tema en `themes/mainTheme.tres` y cartas en
   `ecenes/cards/CartasConfig.gd` (los defaults versionados; NO en `assets/`).
-- **Modo captura / trailer** (`tools/modo_captura.gd`, nodo `ModoCaptura` en
-  `niviel1.tscn`): spawn libre de enemigos/jefes, mover, congelar IA, cámara libre,
-  PNG (C) y grabación de frames (R → `tools/montaje_video.sh`). Capturas de docs
-  con `tools/generar_capturas_docs.sh` → `capturas/docs/`.
+- **Modo captura** (`tools/modo_captura.gd`, nodo `ModoCaptura` en `niviel1.tscn`):
+  spawn libre de enemigos/jefes, mover, congelar IA, cámara libre, PNG (C) y
+  grabación de frames (R → `tools/montaje_video.sh`). Capturas de docs con
+  `tools/generar_capturas_docs.sh` → `capturas/docs/`.
+- **Modo trailer dirigido por guion** (`tools/reproductor_trailer.gd`, nodo
+  `Trailer` en `niviel1.tscn`): ejecuta un guion JSON (`tools/trailers/*.json`,
+  21 guiones = `general` + 10 `etapa_XX` + 10 `jefe_XX`) sin input y de forma
+  determinista. Acciones: `hud`, `pantalla` (menú/ajustes), `titulo`, `fundido`,
+  `camara`, `spawn`, `formacion`, `slowmo`, `cartas`, `popup_edu`, `fin`…
+  Grabación: `tools/grabar_trailer.sh <guion>` o `tools/generar_trailers.sh`
+  (Movie Maker 60 fps mudo → MP4 1080p en `capturas/trailers/`, fuera de git).
 - Addons presentes: `godot_rl_agents` (RL), `phantom_camera` (cámara),
   `godotty` (terminal). Solo `phantom_camera` y `godot_rl_agents` están habilitados
   en `project.godot`; verificar si siguen teniendo uso en gameplay.
