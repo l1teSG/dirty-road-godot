@@ -183,6 +183,14 @@ electrónicos · 7. Energía nuclear y radiación · 8. Pesticidas y agricultura
   `feature/docs`, `feature/web`, `feature-upgrades`, `main`.
 - APK más reciente subido: `apk/dirtyRoad_V10.1.1.apk` (los APK **no** se versionan).
 - Escena principal: `ui/intro/intro.tscn`.
+- **UI**: resolución base del proyecto **1536×864** (stretch `canvas_items`/`expand`)
+  para que la interfaz se vea grande en móvil; `camara_zoom` por defecto **1.6**
+  (mismo encuadre de mundo que antes). Tema en `themes/mainTheme.tres` y cartas en
+  `ecenes/cards/CartasConfig.gd` (los defaults versionados; NO en `assets/`).
+- **Modo captura / trailer** (`tools/modo_captura.gd`, nodo `ModoCaptura` en
+  `niviel1.tscn`): spawn libre de enemigos/jefes, mover, congelar IA, cámara libre,
+  PNG (C) y grabación de frames (R → `tools/montaje_video.sh`). Capturas de docs
+  con `tools/generar_capturas_docs.sh` → `capturas/docs/`.
 - Addons presentes: `godot_rl_agents` (RL), `phantom_camera` (cámara),
   `godotty` (terminal). Solo `phantom_camera` y `godot_rl_agents` están habilitados
   en `project.godot`; verificar si siguen teniendo uso en gameplay.
