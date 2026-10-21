@@ -69,7 +69,7 @@ Ver `web/AGENTS.md` para más detalle (es la guía de Astro del subproyecto web)
    `jugador`, `enemi`, `arbol`, `player`, `fire_player`.
 7. `assets/` y `addons/` no están en git: si un cambio depende de un asset,
    **no asumas que existe en un clon limpio**.
-8. **`indicaciones/APA.md` es la fuente única de verdad del APA.** Siempre que se
+8. **`docs/indicaciones/APA.md` es la fuente única de verdad del APA.** Siempre que se
    hable del APA o de los documentos del proyecto, lee ese markdown (contiene el
    contenido literal de `docs/drive/apa/APA.docx`). No lo edites a mano: se
    regenera extrayendo el `.docx` sin alterar una sola letra.
