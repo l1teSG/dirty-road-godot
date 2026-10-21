@@ -12,6 +12,8 @@
 [ext_resource type="Resource" uid="uid://gbevvyqlsqel" path="res://ecenes/enemies/main/1-10/microPlastico/microPlastico.tres" id="10_1o1kr"]
 [ext_resource type="Script" uid="uid://7pv5w878iiq8" path="res://ui/barra_jefe.gd" id="10_bossbar"]
 [ext_resource type="Script" path="res://tools/capturar.gd" id="11_captura"]
+[ext_resource type="Script" path="res://tools/modo_captura.gd" id="12_modocap"]
+[ext_resource type="Script" path="res://tools/reproductor_trailer.gd" id="13_trailer"]
 [ext_resource type="Script" uid="uid://nbgw0apaidmu" path="res://ecenes/etapas/gestor_etapa.gd" id="10_gestor"]
 [ext_resource type="Resource" uid="uid://ca3fyboai1h7f" path="res://ecenes/enemies/main/1-10/nubeGas/nubeGas.tres" id="11_cc5k1"]
 [ext_resource type="Resource" uid="uid://bpfs2bj375lby" path="res://ecenes/enemies/main/1-10/petroleo/petroleo.tres" id="12_w7ccy"]
@@ -202,6 +204,12 @@ margen_superior = 70.0
 
 [node name="Captura" type="Node" parent="." unique_id=424242424]
 script = ExtResource("11_captura")
+
+[node name="ModoCaptura" type="CanvasLayer" parent="." unique_id=424242425]
+script = ExtResource("12_modocap")
+
+[node name="Trailer" type="Node" parent="." unique_id=424242426]
+script = ExtResource("13_trailer")
 
 [node name="GestorEtapa" type="Node" parent="." unique_id=1775243101]
 script = ExtResource("10_gestor")

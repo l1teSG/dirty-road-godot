@@ -117,7 +117,7 @@ const AJUSTES_DEFECTO := {
 	"vol_master": 1.0,
 	"vol_musica": 0.7,
 	"vol_efectos": 0.9,
-	"hud_escala": 1.0,
+	"hud_escala": 1.1,
 	"hud_opacidad": 1.0,
 	"hud_mano": 0,              # 0 diestro, 1 zurdo (espeja los controles)
 	"hud_botones_escala": 1.0,
@@ -140,7 +140,7 @@ const AJUSTES_DEFECTO := {
 	# ── Combate / controles ──
 	"disparo_continuo_manual": false,
 	"autoapuntado": 0.0,
-	"camara_zoom": 2.0,
+	"camara_zoom": 1.6,
 	# ── Accesibilidad ──
 	"reducir_flashes": false,
 	"reducir_particulas": false,
@@ -156,7 +156,7 @@ const RANGOS_AJUSTES := {
 	"vol_master": [0.0, 1.0],
 	"vol_musica": [0.0, 1.0],
 	"vol_efectos": [0.0, 1.0],
-	"hud_escala": [0.6, 1.2],
+	"hud_escala": [0.8, 1.6],
 	"hud_opacidad": [0.3, 1.0],
 	"hud_mano": [0, 1],
 	"hud_botones_escala": [0.5, 1.5],
@@ -167,7 +167,7 @@ const RANGOS_AJUSTES := {
 	"nombres_enemigos_escala": [0.5, 2.0],
 	"danio_flotante_escala": [0.5, 2.0],
 	"autoapuntado": [0.0, 1.0],
-	"camara_zoom": [1.5, 3.0],
+	"camara_zoom": [1.2, 3.0],
 }
 
 var datos: Dictionary = DATOS_DEFECTO.duplicate(true)

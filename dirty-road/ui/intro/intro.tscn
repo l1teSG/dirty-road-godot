@@ -26,7 +26,7 @@ grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
 [node name="Esporas" type="CPUParticles2D" parent="."]
-position = Vector2(960, 540)
+position = Vector2(768, 432)
 amount = 200
 lifetime = 4.0
 direction = Vector2(0, -1)

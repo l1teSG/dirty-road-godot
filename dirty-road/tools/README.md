@@ -37,6 +37,72 @@ Generar/regenerar escenas de enemigos:
 godot --headless --script res://tools/generar_enemigos.gd
 ```
 
+## Modo trailer (dirigido por guion)
+
+Vídeos mudos a 60 fps generados desde un **guion JSON**, sin input y de forma
+determinista (Movie Maker de Godot → MP4 1080p).
+
+```sh
+python3 tools/generar_guiones_trailers.py   # (re)escribe tools/trailers/*.json
+tools/generar_trailers.sh                   # genera los 21 vídeos
+tools/generar_trailers.sh jefe              # solo los que contienen "jefe"
+tools/grabar_trailer.sh tools/trailers/general.json   # solo uno
+```
+
+Salida: `capturas/trailers/*.mp4` (fuera de git). Son 21: `general`,
+`etapa_01..10` y `jefe_01..10`.
+
+**Formato del guion** (`tools/trailers/<nombre>.json`):
+
+```json
+{ "nombre": "general", "fps": 60, "duracion": 46.3,
+  "pasos": [ { "t": 0.4, "accion": "titulo", "texto": "DIRTY ROAD", "sub": "SALVA EL BOSQUE", "dur": 2.6 } ] }
+```
+
+Acciones (`tools/reproductor_trailer.gd`, nodo `Trailer` en `niviel1.tscn`):
+`hud`, `pantalla` (menu/ajustes/off), `titulo`, `fundido`, `camara`, `encuadrar`,
+`spawn`, `formacion`, `matar`, `matar_todos`, `slowmo`, `cartas`, `popup_edu`,
+`pausar_ia`, `fin`. Las posiciones son **relativas al Árbol**.
+
+## Capturas para los documentos
+
+```sh
+tools/generar_capturas_docs.sh            # todas
+tools/generar_capturas_docs.sh hud        # solo una
+```
+
+Genera en `capturas/docs/` los PNG (1536×864) que usa el manual y la
+presentación: `intro`, `menu`, `slots`, `ajustes`, `dead`, `hud`, `jefe`,
+`cartas` (Movie Maker + modo captura).
+
+## Modo Captura / Trailer
+
+Herramienta interactiva (solo builds debug) para **montar escenas a mano** y
+sacar capturas y vídeo sin combatir. En `demo/level 1/niviel1.tscn` hay un nodo
+**ModoCaptura** (`tools/modo_captura.gd`):
+
+- **F2** abre/cierra el panel.
+- Elige **etapa → enemigo/jefe** y pulsa *Spawnear* (cualquiera de las 10 etapas).
+- **Clic** sobre un enemigo = seleccionar; **arrastrar** para moverlo; **flechas**
+  para ajuste fino; **D** duplicar; **Supr** borrar.
+- **G** congela/descongela la IA (los enemigos se quedan quietos en su pose).
+- **F** modo foto (oculta HUD y popups); *Ocultar jugador* lo esconde aparte.
+- *Cámara libre*: **WASD** panea, **+ / −** zoom.
+- **ESPACIO** pausa/reanuda la simulación.
+- **C** → PNG en `user://capturas/modo/`.
+- **R** → graba una secuencia de frames en `user://videos/grabacion_<fecha>/`.
+
+Las oleadas se desactivan solas (WaveManager en modo debug sin spawns) y no se
+guarda partida.
+
+### Convertir una grabación a MP4
+
+```sh
+tools/montaje_video.sh [carpeta_de_frames] [fps] [salida.mp4]
+# ej. (toma la última grabación)
+tools/montaje_video.sh
+```
+
 ## Fotos (capturas)
 
 ### En juego (manual)

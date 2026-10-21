@@ -7,7 +7,7 @@ Este repositorio **Dirty Road** contiene **dos subproyectos independientes**. No
 | :--- | :--- | :--- |
 | `dirty-road/` | **El juego** (núcleo del proyecto) | Godot 4.7, GDScript (+ C# habilitado) |
 | `web/` | Landing/micrositio en español | Astro 7 + React 19 + Tailwind 4 |
-| `docs/` | `DirtyRoad_GDD.md` (incompleto) y `APA.docx` | — |
+| `docs/` | `DirtyRoad_GDD.md` (incompleto), `APA.docx` (2025, histórico) y los entregables en `docs/drive/` (`apa/`, `rae/`, `folleto/`, `manual/`, `poster/`, `presentacion/`) | — |
 | `apk/` | Builds Android exportados (no versionados) | — |
 
 Antes de trabajar, lee también `MEMORY.md` (arquitectura, fórmulas y estado actual).
@@ -69,6 +69,10 @@ Ver `web/AGENTS.md` para más detalle (es la guía de Astro del subproyecto web)
    `jugador`, `enemi`, `arbol`, `player`, `fire_player`.
 7. `assets/` y `addons/` no están en git: si un cambio depende de un asset,
    **no asumas que existe en un clon limpio**.
+8. **`indicaciones/APA.md` es la fuente única de verdad del APA.** Siempre que se
+   hable del APA o de los documentos del proyecto, lee ese markdown (contiene el
+   contenido literal de `docs/drive/apa/APA.docx`). No lo edites a mano: se
+   regenera extrayendo el `.docx` sin alterar una sola letra.
 
 ---
 
@@ -80,6 +84,7 @@ Ver `web/AGENTS.md` para más detalle (es la guía de Astro del subproyecto web)
 | Etapas (temas, multiplicadores, jefe) | `scripts/etapa_config.gd`, `ecenes/enemies/etapas/etapa_*.tres` |
 | Ventana de oleadas por enemigo | `scripts/enemigo_oleada_config.gd` (`oleada_minima/maxima`, `peso`) |
 | Generar enemigos/jefes en masa | `tools/generar_enemigos.gd` (tablas `NORMALES`, `TIPO_DEF`) |
+| Capturas y trailers (herramientas) | `tools/modo_captura.gd`, `tools/reproductor_trailer.gd`, `tools/trailers/*.json`, `tools/grabar_trailer.sh`, `tools/generar_trailers.sh`, `tools/README.md` |
 | Enemigo base y comportamientos | `ecenes/enemies/class/`, `.../comportamientos/` |
 | Jefe (ataques) | `ecenes/enemies/class/BossAttackComponent.gd`, `proyectil_jefe.gd` |
 | Contenido educativo | `scripts/education/` (`EducationManager`, `education_data_stages.gd`) |

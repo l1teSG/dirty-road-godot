@@ -528,6 +528,30 @@ func _aplicar_hud() -> void:
 		(_apuntado as Control).modulate = Color(1, 1, 1, op)
 		if _apuntado.has_method("set_lado"):
 			_apuntado.call("set_lado", zurdo)
+	_escalar_hud_ui(esc, op)
+
+
+## Escala la interfaz fija (vida, biomasa, oleada, respawn y botón de ajustes).
+## Cada control se escala en su sitio con un pivote en su ancla para que no se
+## salga de la pantalla (a diferencia del joystick/botones, que cuelgan del
+## CanvasLayer `controls`).
+func _escalar_hud_ui(k: float, op: float) -> void:
+	var ui := get_node_or_null("ui") as CanvasLayer
+	if ui == null:
+		return
+	var anclas := {
+		"margenUi": Vector2(0.0, 0.0),         # esquina superior izquierda
+		"ajuste": Vector2(1.0, 0.0),           # esquina superior derecha
+		"ContadorRespawn": Vector2(0.5, 0.5),  # centro
+		"MarginContainer": Vector2(0.5, 0.0),  # centro-arriba (temporizador)
+	}
+	for nombre in anclas.keys():
+		var c := ui.get_node_or_null(nombre) as Control
+		if c == null:
+			continue
+		c.pivot_offset = c.size * anclas[nombre]
+		c.scale = Vector2.ONE * k
+		c.modulate = Color(1, 1, 1, op)
 
 
 ## Espeja un control del HUD respecto al centro horizontal (modo zurdo).

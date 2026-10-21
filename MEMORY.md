@@ -183,6 +183,21 @@ electrónicos · 7. Energía nuclear y radiación · 8. Pesticidas y agricultura
   `feature/docs`, `feature/web`, `feature-upgrades`, `main`.
 - APK más reciente subido: `apk/dirtyRoad_V10.1.1.apk` (los APK **no** se versionan).
 - Escena principal: `ui/intro/intro.tscn`.
+- **UI**: resolución base del proyecto **1536×864** (stretch `canvas_items`/`expand`)
+  para que la interfaz se vea grande en móvil; `camara_zoom` por defecto **1.6**
+  (mismo encuadre de mundo que antes). Tema en `themes/mainTheme.tres` y cartas en
+  `ecenes/cards/CartasConfig.gd` (los defaults versionados; NO en `assets/`).
+- **Modo captura** (`tools/modo_captura.gd`, nodo `ModoCaptura` en `niviel1.tscn`):
+  spawn libre de enemigos/jefes, mover, congelar IA, cámara libre, PNG (C) y
+  grabación de frames (R → `tools/montaje_video.sh`). Capturas de docs con
+  `tools/generar_capturas_docs.sh` → `capturas/docs/`.
+- **Modo trailer dirigido por guion** (`tools/reproductor_trailer.gd`, nodo
+  `Trailer` en `niviel1.tscn`): ejecuta un guion JSON (`tools/trailers/*.json`,
+  21 guiones = `general` + 10 `etapa_XX` + 10 `jefe_XX`) sin input y de forma
+  determinista. Acciones: `hud`, `pantalla` (menú/ajustes), `titulo`, `fundido`,
+  `camara`, `spawn`, `formacion`, `slowmo`, `cartas`, `popup_edu`, `fin`…
+  Grabación: `tools/grabar_trailer.sh <guion>` o `tools/generar_trailers.sh`
+  (Movie Maker 60 fps mudo → MP4 1080p en `capturas/trailers/`, fuera de git).
 - Addons presentes: `godot_rl_agents` (RL), `phantom_camera` (cámara),
   `godotty` (terminal). Solo `phantom_camera` y `godot_rl_agents` están habilitados
   en `project.godot`; verificar si siguen teniendo uso en gameplay.
@@ -201,6 +216,18 @@ electrónicos · 7. Energía nuclear y radiación · 8. Pesticidas y agricultura
   `raicesprofundas`, `pararrayosreciclado`, `mantaignifuga`, `alarmatemprana`,
   `dronconservacionista`, `semillasdetrueque`.
 - **Sincronía web ↔ juego**: `web/src/lib/etapas.ts` se mantiene a mano.
+- **Entregables en `docs/drive/`**: una carpeta por documento (`apa/`, `rae/`,
+  `folleto/`, `manual/`, `poster/`, `presentacion/`) con las copias vigentes; las
+  fuentes editables viven en `docs/`. Ver `docs/drive/README.md`.
+- **Congruencia documental**: el RAE (`docs/drive/rae/RAE.docx`) resume el proyecto
+  y debe mantenerse alineado con el APA vigente, el póster, la presentación, el
+  folleto y el manual. El APA vigente es `docs/drive/apa/APA.docx` (2026 ·
+  Godot 4.7 · licencia MIT); `docs/APA.docx` es el de 2025 (histórico) y todavía
+  lista controles inexistentes, "Sembrar (Espacio)" e "Inventario (Tab)".
+- **Fuente de verdad del APA**: `indicaciones/APA.md` reproduce, sin cambiar una
+  letra, el contenido de `docs/drive/apa/APA.docx` en markdown para lectura directa
+  (estructura y tablas). Es obligatorio consultarlo al hablar del APA o de los
+  documentos; se regenera del `.docx`, no se edita a mano.
 - Limpieza de addons no usados (`godot_rl_agents`, `godotty`) si se confirma que no
   aportan al gameplay.
 - `assets/` y `addons/` no están en git: un clon limpio no reproduce el juego

@@ -204,7 +204,7 @@ alignment = 1
 layout_mode = 2
 
 [node name="BarraVida" type="ProgressBar" parent="ui/margenUi/ContenedorVertical/FilaVida" index="0" unique_id=1067875394]
-custom_minimum_size = Vector2(360, 20)
+custom_minimum_size = Vector2(420, 26)
 layout_mode = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_mvreb")
 theme_override_styles/fill = SubResource("StyleBoxFlat_lx2x3")
@@ -216,7 +216,7 @@ layout_mode = 2
 
 [node name="IconoBiomasa" type="Label" parent="ui/margenUi/ContenedorVertical/FilaBiomasa" index="0" unique_id=1934158973]
 layout_mode = 2
-theme_override_font_sizes/font_size = 40
+theme_override_font_sizes/font_size = 48
 text = "🌱"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -225,7 +225,7 @@ vertical_alignment = 1
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.93333334, 0.33333334, 1)
 theme_override_fonts/font = ExtResource("3_lx2x3")
-theme_override_font_sizes/font_size = 40
+theme_override_font_sizes/font_size = 48
 text = "0 / 10"
 script = ExtResource("6_tnb2i")
 
@@ -233,7 +233,7 @@ script = ExtResource("6_tnb2i")
 layout_mode = 2
 theme_override_colors/font_color = Color(0.61960787, 0.83137256, 0.2509804, 1)
 theme_override_fonts/font = ExtResource("7_ehraa")
-theme_override_font_sizes/font_size = 40
+theme_override_font_sizes/font_size = 48
 
 [node name="ajuste" type="MarginContainer" parent="ui" index="1" unique_id=1341644146]
 anchors_preset = 1
@@ -247,7 +247,7 @@ grow_horizontal = 0
 
 [node name="ajustes" type="Button" parent="ui/ajuste" index="0" unique_id=1655672500]
 modulate = Color(0, 1, 0.53333336, 1)
-custom_minimum_size = Vector2(40, 40)
+custom_minimum_size = Vector2(56, 56)
 layout_mode = 2
 icon = ExtResource("4_j4fag")
 
@@ -265,7 +265,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0, 1, 0.53333336, 1)
 theme_override_fonts/font = ExtResource("3_lx2x3")
-theme_override_font_sizes/font_size = 200
+theme_override_font_sizes/font_size = 220
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -285,7 +285,7 @@ grow_horizontal = 2
 layout_mode = 2
 theme_override_colors/font_color = Color(0.6, 1, 0.2, 1)
 theme_override_fonts/font = ExtResource("7_ehraa")
-theme_override_font_sizes/font_size = 100
+theme_override_font_sizes/font_size = 112
 
 [node name="Pausa" parent="." index="11" unique_id=565747821 instance=ExtResource("6_ycxd3")]
 layer = 200
@@ -339,6 +339,8 @@ action = "mega"
 
 [node name="JoystickApuntado" type="Control" parent="controls" index="2" unique_id=1477331095]
 visible = false
+layout_mode = 3
+anchors_preset = 0
 script = ExtResource("11_apuntado")
 
 [node name="Cartas" type="CanvasLayer" parent="." index="13" unique_id=1700597704]
@@ -348,7 +350,7 @@ config = ExtResource("9_cfg")
 
 [node name="MenuDebug" type="CanvasLayer" parent="." index="14" unique_id=2070407684]
 script = ExtResource("10_dbg")
-abrir_al_iniciar = false
+activo = false
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]

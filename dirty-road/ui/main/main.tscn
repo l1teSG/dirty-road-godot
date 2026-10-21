@@ -39,7 +39,7 @@ environment = SubResource("env")
 script = ExtResource("4_amb")
 
 [node name="Particulas" type="CPUParticles2D" parent="."]
-position = Vector2(960, 540)
+position = Vector2(768, 432)
 amount = 40
 lifetime = 6.0
 emission_shape = 3

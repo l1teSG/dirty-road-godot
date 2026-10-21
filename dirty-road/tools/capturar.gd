@@ -175,6 +175,11 @@ func _soltar_piloto() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	# Si está el MODO CAPTURA (tools/modo_captura.gd), él se encarga de C/V y
+	# del resto de atajos: no duplicamos capturas.
+	if get_tree().current_scene != null \
+			and get_tree().current_scene.get_node_or_null("ModoCaptura") != null:
+		return
 	if event is InputEventKey and event.pressed and not event.echo:
 		match event.keycode:
 			KEY_C:
