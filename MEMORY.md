@@ -224,7 +224,7 @@ electrónicos · 7. Energía nuclear y radiación · 8. Pesticidas y agricultura
   folleto y el manual. El APA vigente es `docs/drive/apa/APA.docx` (2026 ·
   Godot 4.7 · licencia MIT); `docs/APA.docx` es el de 2025 (histórico) y todavía
   lista controles inexistentes, "Sembrar (Espacio)" e "Inventario (Tab)".
-- **Fuente de verdad del APA**: `indicaciones/APA.md` reproduce, sin cambiar una
+- **Fuente de verdad del APA**: `docs/indicaciones/APA.md` reproduce, sin cambiar una
   letra, el contenido de `docs/drive/apa/APA.docx` en markdown para lectura directa
   (estructura y tablas). Es obligatorio consultarlo al hablar del APA o de los
   documentos; se regenera del `.docx`, no se edita a mano.

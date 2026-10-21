@@ -105,8 +105,7 @@ Este repositorio contiene **dos subproyectos independientes**. No hay
 dirty-road/
 ├── dirty-road/        🎮 El juego (núcleo) — Godot 4.7 + GDScript (+ C#)
 ├── web/               🌐 Landing/micrositio — Astro 7 + React 19 + Tailwind 4
-├── docs/              📄 GDD y documento APA
-├── apk/               📦 Builds Android exportados (no versionados)
+├── docs/              📄 GDD, APA, changelog y entregables
 ├── MEMORY.md          🧠 Conocimiento durable del proyecto
 └── AGENTS.md          🤖 Guía operativa para agentes
 ```
